@@ -2,6 +2,8 @@ package it.polimi.ingsw.am42.model;
 
 import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
+import it.polimi.ingsw.am42.model.evaluator.Evaluator;
+import it.polimi.ingsw.am42.model.evaluator.EvaluatorPoints;
 
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +32,7 @@ public class Back extends Face {
      */
     @Override
     public Evaluator getEvaluator() {
-        return EvaluatorPoints(0);
+        return new EvaluatorPoints(0);
     }
 
     /**

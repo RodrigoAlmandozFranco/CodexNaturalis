@@ -3,6 +3,7 @@ package it.polimi.ingsw.am42.model;
 import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.enumeration.Direction;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
+import it.polimi.ingsw.am42.model.evaluator.Evaluator;
 
 import java.util.List;
 import java.util.Map;
