@@ -1,21 +1,44 @@
 package it.polimi.ingsw.am42.model.enumeration;
+
+import it.polimi.ingsw.am42.model.Position;
 /**
  * Enumeration of the directions of the cards in the game
  * @author Rodrigo Almandoz Franco
  */
 public enum Direction {
-    UPRIGHT ("UPRIGHT"),
-    UPLEFT ("UPLEFT"),
-    DOWNRIGHT ("DOWNRIGHT"),
-    DOWNLEFT ("DOWNLEFT");
+    UPRIGHT, // (+1, 0)
+    UPLEFT, // (0, +1)
+    DOWNRIGHT, // (0, -1)
+    DOWNLEFT; // (-1, 0)
 
-    private final String direction;
 
-    Direction(String direction) {
-        this.direction = direction;
+    /**
+     * Returns the new position for every direction.
+     *
+     * @author Tommaso Crippa
+     * @return Position, which corresponds to the new position for every direction.
+     */
+    public Position getDirection() {
+        return switch (this) {
+            case UPRIGHT -> new Position(1, 0);
+            case UPLEFT -> new Position(0, 1);
+            case DOWNRIGHT -> new Position(0, -1);
+            case DOWNLEFT -> new Position(-1, 0);
+        };
     }
 
-    public String getDirection() {
-        return direction;
+    /**
+     * Returns the opposite direction of the current one
+     *
+     * @author Tommaso Crippa
+     * @return opposite direction of the current one
+     */
+    public Direction opposite() {
+        return switch (this) {
+            case UPRIGHT -> DOWNLEFT;
+            case UPLEFT -> DOWNRIGHT;
+            case DOWNRIGHT -> UPLEFT;
+            case DOWNLEFT -> UPRIGHT;
+        };
     }
 }
