@@ -1,31 +1,32 @@
-package it.polimi.ingsw.am42.model;
+package it.polimi.ingsw.am42.model.decks;
+import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 
-import it.polimi.ingsw.am42.model.cards.Card;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- * This class represents a deck of cards
- * It has a list of cards
+ * This class represents a deck of goal cards
+ * It has a list of goal cards
  * It can be shuffled
  * It can be drawn from the top
  * It can be checked if it's finished
- * @see Card
+ * @see GoalCard
  * @author Rodrigo Almandoz Franco
+ * @author Mattia Brandi
  */
 
-public class Deck {
-    private final List<Card> deck;
+public class GoalDeck {
+    private final List<GoalCard> deck;
 
-    public Deck() {
+    public GoalDeck() {
         deck = new ArrayList<>();
     }
     public void shuffle() {
         Collections.shuffle(deck);
     }
-    public Card getTop() {
+    public GoalCard getTop() {
         return deck.getFirst();
     }
     public boolean finished() {
@@ -36,7 +37,7 @@ public class Deck {
         deck.removeFirst();
     }
 
-    public void addCard(Card card) {
+    public void addCard(GoalCard card) {
         deck.add(card);
     }
 }
