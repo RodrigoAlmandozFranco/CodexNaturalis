@@ -1,7 +1,5 @@
 package it.polimi.ingsw.am42.model.cards.types;
 
-import it.polimi.ingsw.am42.model.Back;
-import it.polimi.ingsw.am42.model.Front;
 import it.polimi.ingsw.am42.model.cards.Card;
 
 /**

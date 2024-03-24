@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.model;
 
+import it.polimi.ingsw.am42.model.cards.types.Corner;
 import it.polimi.ingsw.am42.model.enumeration.CornerState;
 import it.polimi.ingsw.am42.model.enumeration.Direction;
 import it.polimi.ingsw.am42.model.enumeration.Resource;

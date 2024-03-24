@@ -1,6 +1,6 @@
 package it.polimi.ingsw.am42.model.evaluator;
 
-import it.polimi.ingsw.am42.model.Board;
+import it.polimi.ingsw.am42.model.structure.Board;
 
 public abstract class Evaluator {
     protected final int numPoints;

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.am42.model;
 
+import it.polimi.ingsw.am42.model.structure.Position;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**

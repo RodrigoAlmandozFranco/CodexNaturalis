@@ -1,4 +1,4 @@
-package it.polimi.ingsw.am42.model;
+package it.polimi.ingsw.am42.model.structure;
 
 /**
  * This class represents a position in the game board.

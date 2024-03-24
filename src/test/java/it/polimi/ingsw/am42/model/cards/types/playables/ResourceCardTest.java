@@ -1,8 +1,8 @@
 package it.polimi.ingsw.am42.model.cards.types.playables;
 
 import static org.junit.jupiter.api.Assertions.*;
-import it.polimi.ingsw.am42.model.Back;
-import it.polimi.ingsw.am42.model.Front;
+import it.polimi.ingsw.am42.model.cards.types.Back;
+import it.polimi.ingsw.am42.model.cards.types.Front;
 import it.polimi.ingsw.am42.model.enumeration.Color;
 
 /**

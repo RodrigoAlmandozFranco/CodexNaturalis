@@ -1,9 +1,13 @@
 package it.polimi.ingsw.am42.model;
 
+import it.polimi.ingsw.am42.model.cards.types.Back;
+import it.polimi.ingsw.am42.model.cards.types.Corner;
+import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.enumeration.CornerState;
 import it.polimi.ingsw.am42.model.enumeration.Direction;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
+import it.polimi.ingsw.am42.model.structure.Position;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.am42.model.enumeration;
 
-import it.polimi.ingsw.am42.model.Position;
+import it.polimi.ingsw.am42.model.structure.Position;
 /**
  * Enumeration of the directions of the cards in the game
  * @author Rodrigo Almandoz Franco

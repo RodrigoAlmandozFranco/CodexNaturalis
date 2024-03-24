@@ -1,12 +1,12 @@
-package it.polimi.ingsw.am42.model;
+package it.polimi.ingsw.am42.model.structure;
 
+import it.polimi.ingsw.am42.model.cards.types.Corner;
+import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.enumeration.CornerState;
 import it.polimi.ingsw.am42.model.enumeration.Direction;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
-import javafx.geometry.Pos;
 
 import java.util.*;
-import java.lang.Math;
 
 /**
  * This class represents the gaming board of a player, in which he can place cards.

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.am42.model;
+package it.polimi.ingsw.am42.model.cards.types;
 
 import it.polimi.ingsw.am42.model.enumeration.CornerState;
 import it.polimi.ingsw.am42.model.enumeration.Direction;

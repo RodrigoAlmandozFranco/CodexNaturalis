@@ -1,7 +1,7 @@
 package it.polimi.ingsw.am42.model.evaluator;
 
-import it.polimi.ingsw.am42.model.Board;
-import it.polimi.ingsw.am42.model.Face;
+import it.polimi.ingsw.am42.model.structure.Board;
+import it.polimi.ingsw.am42.model.cards.types.Face;
 
 public class EvaluatorPointsPerCorner extends Evaluator{
     public EvaluatorPointsPerCorner(int numPoints) {
