@@ -1,12 +1,11 @@
 package it.polimi.ingsw.am42.model;
 
-import it.polimi.ingsw.am42.model.cards.Card;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.exceptions.GameFullException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
-import it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException;
+
 
 import java.util.List;
 
@@ -31,5 +30,5 @@ public interface GameInterface {
     public void chosenCardToAddInHand (PlayableCard c);
     public List<GoalCard> getGoals();
     public List<Player> getStandings();
-    
+
 }
