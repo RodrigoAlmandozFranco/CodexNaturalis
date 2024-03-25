@@ -179,16 +179,21 @@ public class Game implements GameInterface {
         List<PlayableCard> l = new ArrayList<>();
         l.addAll(pickableResourceCards);
         l.addAll(pickableGoldCards);
-        PlayableCard r = resourceDeck.getTop();
-        l.add(r);
-        PlayableCard g = goldDeck.getTop();
-        l.add(g);
+        if(!resourceDeck.finished()) {
+            PlayableCard r = resourceDeck.getTop();
+            l.add(r);
+        }
+        if(!goldDeck.finished()) {
+            PlayableCard g = goldDeck.getTop();
+            l.add(g);
+        }
         return l;
     }
 
 
     /**
-     * This method inserts the chosen card in the player's hand, and it updates the decks.
+     * This method inserts the chosen card in the player's hand, and it updates the decks and the
+     * lists of pickable card.
      *
      * @param c the card chosen by the player
      */
@@ -203,16 +208,24 @@ public class Game implements GameInterface {
             }
         } else {
             if (c instanceof ResourceCard) {
-                p = resourceDeck.getTop();
-                pickableResourceCards.add(resourceDeck.getTop());
-                resourceDeck.remove();
+                pickableResourceCards.remove(c);
+                if(!resourceDeck.finished()) {
+                    p = resourceDeck.getTop();
+                    pickableResourceCards.add(resourceDeck.getTop());
+                    resourceDeck.remove();
+                    p.setVisibility(true);
+                }
             } else {
-                p = goldDeck.getTop();
-                pickableGoldCards.add(goldDeck.getTop());
-                goldDeck.remove();
+                pickableGoldCards.remove(c);
+                if(!goldDeck.finished()) {
+                    p = goldDeck.getTop();
+                    pickableGoldCards.add(goldDeck.getTop());
+                    goldDeck.remove();
+                    p.setVisibility(true);
+                }
             }
 
-            p.setVisibility(true);
+
         }
     }
 
