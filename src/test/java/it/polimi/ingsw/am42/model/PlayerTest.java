@@ -39,7 +39,7 @@ class PlayerTest {
     void getHand() {
         Player p = new Player("Tommy");
 
-        assertNull(p.getHand());
+        assertEquals(p.getHand(), new ArrayList<PlayableCard>());
 
         List<PlayableCard> hand = new ArrayList<PlayableCard>();
 
@@ -129,8 +129,8 @@ class PlayerTest {
         Player p = new Player("Tommy");
 
 
-        Front f = new Front("C://", null, null, null, null);
-        Back f2 = new Back("C://", null, null, null);
+        Front f = new Front("C://", new ArrayList<Corner>(), Color.GREEN, new HashMap<>(), new EvaluatorPoints(0));
+        Back f2 = new Back("C://", new ArrayList<Corner>(), Color.CYAN, Resource.ANIMALKINGDOM);
 
         PlayableCard c = new GoldCard(1, f, f2);
 
@@ -165,9 +165,8 @@ class PlayerTest {
     void removeCardFromHand() {
         Player p = new Player("Tommy");
 
-
-        Front f = new Front("C://", null, null, null, null);
-        Back f2 = new Back("C://", null, null, null);
+        Front f = new Front("C://", new ArrayList<Corner>(), Color.GREEN, new HashMap<>(), new EvaluatorPoints(0));
+        Back f2 = new Back("C://", new ArrayList<Corner>(), Color.CYAN, Resource.ANIMALKINGDOM);
 
         PlayableCard c = new GoldCard(1, f, f2);
 
