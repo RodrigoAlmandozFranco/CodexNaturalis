@@ -38,7 +38,7 @@ public class Position {
         if(getClass() != obj.getClass()) return false;
 
         Position other = (Position) obj;
-        return this.x == other.x && this.x == other.y;
+        return this.x == other.x && this.y == other.y;
     }
 
     /**
