@@ -13,12 +13,12 @@ import java.util.*;
  * @author Tommaso Crippa
  */
 public class Board {
-    private List<Face> faces;
-    private Map<Resource, Integer> totalResources;
+    private final List<Face> faces;
+    private final Map<Resource, Integer> totalResources;
     private Face lastPlacedFace;
 
     public Board() {
-        this.faces = null;
+        this.faces = new ArrayList<Face>();
         this.totalResources = new HashMap<Resource, Integer>();
         for (Resource r : Resource.values())
             this.totalResources.put(r, 0);

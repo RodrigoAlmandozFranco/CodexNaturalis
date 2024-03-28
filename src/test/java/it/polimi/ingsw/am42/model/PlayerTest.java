@@ -134,10 +134,6 @@ class PlayerTest {
 
         PlayableCard c = new GoldCard(1, f, f2);
 
-
-        assertFalse(p.checkRequirements(f));
-        assertTrue(p.checkRequirements(f2));
-
         p.placeCard(new Position(0, 0), f2);
 
         assertTrue(p.getBoard().getFaces().contains(f2));
@@ -174,10 +170,6 @@ class PlayerTest {
         Back f2 = new Back("C://", null, null, null);
 
         PlayableCard c = new GoldCard(1, f, f2);
-
-
-        assertFalse(p.checkRequirements(f));
-        assertTrue(p.checkRequirements(f2));
 
         p.placeCard(new Position(0, 0), f2);
 

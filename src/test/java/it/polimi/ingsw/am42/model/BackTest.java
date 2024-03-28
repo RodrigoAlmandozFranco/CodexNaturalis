@@ -7,6 +7,7 @@ import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.enumeration.CornerState;
 import it.polimi.ingsw.am42.model.enumeration.Direction;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
+import it.polimi.ingsw.am42.model.evaluator.EvaluatorPoints;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -29,9 +30,9 @@ class BackTest {
         corners.add(new Corner(Resource.QUILLOBJECT, CornerState.OPEN, Direction.DOWNLEFT));
         corners.add(new Corner(Resource.QUILLOBJECT, CornerState.OPEN, Direction.DOWNRIGHT));
 
-        Face face = new Back(src, corners, Color.CYAN, null);
+        Face face = new Back(src, corners, Color.CYAN, Resource.ANIMALKINGDOM);
 
-        assertEquals(EvaluatorPoints(0), face.getRequirements());
+        assertEquals(new EvaluatorPoints(0), face.getEvaluator());
     }
 
     @Test
@@ -49,7 +50,7 @@ class BackTest {
 
         Face face = new Back(src, corners, Color.CYAN, null);
 
-        assertEquals(EvaluatorPoints(0), face.getRequirements());
+        assertEquals(new HashMap<Resource, Integer>(), face.getRequirements());
     }
 
     @Test

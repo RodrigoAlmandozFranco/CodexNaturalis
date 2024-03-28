@@ -78,7 +78,7 @@ class FrontTest {
         resources.put(Resource.QUILLOBJECT, 2);
 
 
-        Face face = new Front(src, corners, Color.CYAN, null, null);
+        Face face = new Front(src, corners, Color.CYAN, resources, null);
 
         assertEquals(resources, face.getRequirements());
     }

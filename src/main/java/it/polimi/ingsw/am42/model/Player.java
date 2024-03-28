@@ -10,6 +10,7 @@ import it.polimi.ingsw.am42.model.evaluator.Evaluator;
 import it.polimi.ingsw.am42.model.structure.Board;
 import it.polimi.ingsw.am42.model.structure.Position;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class Player {
     public Player(String nickname) {
         this.nickname = nickname;
         this.points = 0;
-        this.hand = null;
+        this.hand = new ArrayList<PlayableCard>();
         Random random = new Random();
         this.color = Color.values()[random.nextInt(Color.values().length)];
         this.board = new Board();
@@ -45,7 +46,7 @@ public class Player {
     public Player(String nickname, Color color) {
         this.nickname = nickname;
         this.points = 0;
-        this.hand = null;
+        this.hand = new ArrayList<PlayableCard>();
         this.color = color;
         this.board = new Board();
         this.personalGoal = null;

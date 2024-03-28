@@ -1,5 +1,7 @@
 package it.polimi.ingsw.am42.model.structure;
 
+import java.util.Objects;
+
 /**
  * This class represents a position in the game board.
  * @author Rodrigo Almandoz Franco
@@ -46,6 +48,6 @@ public class Position {
      * @return the hash code of the position.
      */
     public int hashCode() {
-        return super.hashCode();
+        return Objects.hash(x, y);
     }
 }
