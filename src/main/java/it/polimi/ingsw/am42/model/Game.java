@@ -199,7 +199,7 @@ public class Game implements GameInterface {
      */
     public void chosenCardToAddInHand(PlayableCard c) {
         PlayableCard p;
-        currentPlayer.insertCard(c);
+        currentPlayer.insertPickedCard(c);
         if (!c.getVisibility()) {
             if (c instanceof ResourceCard) {
                 resourceDeck.remove();
@@ -274,7 +274,6 @@ public class Game implements GameInterface {
     private void setPlayer(String nickname) {
         Player p = new Player(nickname);
         players.add(p);
-        numberGoalsAwarded.add(0);
     }
 
     /**
