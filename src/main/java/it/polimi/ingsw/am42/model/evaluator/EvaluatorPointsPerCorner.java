@@ -11,6 +11,8 @@ public class EvaluatorPointsPerCorner extends Evaluator{
     @Override
     public int getPoints(Board board) {
         Face lastFace = board.getLastPlacedFace();
+        if (lastFace == null)
+            return 0;
         int cornerCovered = board.getNearbyFaces(lastFace.getPosition()).size();
 
         return cornerCovered*numPoints;
