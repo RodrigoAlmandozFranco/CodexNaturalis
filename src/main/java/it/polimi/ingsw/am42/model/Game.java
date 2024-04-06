@@ -259,7 +259,6 @@ public class Game implements GameInterface {
      * This method inserts the chosen card in the player's hand, and it updates the decks.
      *
      * @param c the card chosen by the player
-     * @return
      */
     public void chosenCardToAddInHand(PlayableCard c) {
         PlayableCard p;
