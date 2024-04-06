@@ -22,4 +22,8 @@ public class StartingCard extends PlayableCard {
         super(id, front, back);
         resources = res;
     }
+
+    public List<Resource> getResources() {
+        return resources;
+    }
 }
