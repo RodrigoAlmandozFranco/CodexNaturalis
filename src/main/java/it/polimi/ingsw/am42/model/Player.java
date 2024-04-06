@@ -121,11 +121,10 @@ public class Player {
     public int getGoalsAchieved() {return numberGoalsAchieved;}
 
     /**
-     * Sets the initial hand and goal of the player, used at the start of the game
+     * Sets the initial hand of the player, used at the start of the game
      *
-     * @author Tommaso Crippa
+     * @author Rodrigo Almandoz Franco
      * @param hand the initial starting hand
-     * @param goal the player's private goal
      */
     public void setHandAndGoal(List<PlayableCard> hand, GoalCard goal) {
         this.hand = hand;
