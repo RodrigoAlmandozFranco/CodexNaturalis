@@ -16,7 +16,7 @@ import java.util.List;
 
 public interface GameInterface {
 
-    public void initializeDecks();
+    public void initializeGame();
     public boolean checkEndGamePoints();
     public boolean checkEndGameDecks();
     public List<Player> getWinner();
@@ -26,9 +26,12 @@ public interface GameInterface {
                                                     NicknameInvalidException;
     public List<Player> getPlayers();
     public Player getCurrentPlayer();
+    public Player getNextPlayer();
     public List<PlayableCard> getPickableCards();
     public void chosenCardToAddInHand (PlayableCard c);
     public List<GoalCard> getGoals();
     public List<Player> getStandings();
+    public List<GoalCard> choosePersonalGoal();
+    public void initializeGameForPlayers();
 
 }
