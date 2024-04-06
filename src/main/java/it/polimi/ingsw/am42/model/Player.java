@@ -126,8 +126,18 @@ public class Player {
      * @author Rodrigo Almandoz Franco
      * @param hand the initial starting hand
      */
-    public void setHandAndGoal(List<PlayableCard> hand, GoalCard goal) {
+
+    public void setHand(List<PlayableCard> hand) {
         this.hand = hand;
+    }
+
+    /**
+     * Sets the initial goal of the player
+     *
+     * @author Mattia Brandi
+     * @param goal the player's private goal
+     */
+    public void setGoal(GoalCard goal) {
         this.personalGoal = goal;
     }
 
