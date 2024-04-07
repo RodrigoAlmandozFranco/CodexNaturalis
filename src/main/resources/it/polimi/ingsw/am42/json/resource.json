@@ -1,5 +1,6 @@
 [
   {
+      "type" : "ResourceCard",
       "id": 1,
       "front": {
         "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/1.png",
@@ -61,7 +62,8 @@
       }
     },
   {
-      "id": 2,
+    "type" : "ResourceCard",
+    "id": 2,
       "front": {
         "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/2.png",
         "color": "RED",
@@ -122,6 +124,7 @@
       }
     },
   {
+    "type" : "ResourceCard",
     "id": 3,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/3.png",
@@ -183,6 +186,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 4,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/4.png",
@@ -244,6 +248,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 5,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/5.png",
@@ -305,6 +310,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 6,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/6.png",
@@ -366,6 +372,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 7,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/7.png",
@@ -427,6 +434,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 8,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/8.png",
@@ -488,6 +496,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 9,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/9.png",
@@ -549,6 +558,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 10,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/10.png",
@@ -610,6 +620,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 11,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/11.png",
@@ -671,6 +682,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 12,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/12.png",
@@ -732,6 +744,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 13,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/13.png",
@@ -793,6 +806,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 14,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/14.png",
@@ -854,6 +868,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 15,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/15.png",
@@ -915,6 +930,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 16,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/16.png",
@@ -976,6 +992,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 17,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/17.png",
@@ -1037,6 +1054,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 18,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/18.png",
@@ -1098,6 +1116,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 19,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/19.png",
@@ -1159,6 +1178,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 20,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/20.png",
@@ -1220,67 +1240,69 @@
     }
   },
   {
-  "id": 21,
-  "front": {
-    "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/21.png",
-    "color": "CYAN",
-    "requirements": null,
-    "evaluator": {
-      "type": "EvaluatorPoints",
-      "numPoints": 0
+    "type" : "ResourceCard",
+    "id": 21,
+    "front": {
+      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/21.png",
+      "color": "CYAN",
+      "requirements": null,
+      "evaluator": {
+        "type": "EvaluatorPoints",
+        "numPoints": 0
+      },
+      "corners": [
+        {
+          "resource": "ANIMALKINGDOM",
+          "state": "OPEN",
+          "direction": "UPLEFT"
+        },
+        {
+          "resource": "ANIMALKINGDOM",
+          "state": "OPEN",
+          "direction": "UPRIGHT"
+        },
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "DOWNLEFT"
+        },
+        {
+          "resource": null,
+          "state": "CLOSED",
+          "direction": "DOWNRIGHT"
+        }
+      ]
     },
-    "corners": [
-      {
-        "resource": "ANIMALKINGDOM",
-        "state": "OPEN",
-        "direction": "UPLEFT"
-      },
-      {
-        "resource": "ANIMALKINGDOM",
-        "state": "OPEN",
-        "direction": "UPRIGHT"
-      },
-      {
-        "resource": null,
-        "state": "OPEN",
-        "direction": "DOWNLEFT"
-      },
-      {
-        "resource": null,
-        "state": "CLOSED",
-        "direction": "DOWNRIGHT"
-      }
-    ]
+    "back": {
+      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/21_back.png",
+      "corners": [
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "UPLEFT"
+        },
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "UPRIGHT"
+        },
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "DOWNLEFT"
+        },
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "DOWNRIGHT"
+        }
+      ],
+      "color": "CYAN",
+      "resource": "ANIMALKINGDOM"
+    }
   },
-  "back": {
-    "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/21_back.png",
-    "corners": [
-      {
-        "resource": null,
-        "state": "OPEN",
-        "direction": "UPLEFT"
-      },
-      {
-        "resource": null,
-        "state": "OPEN",
-        "direction": "UPRIGHT"
-      },
-      {
-        "resource": null,
-        "state": "OPEN",
-        "direction": "DOWNLEFT"
-      },
-      {
-        "resource": null,
-        "state": "OPEN",
-        "direction": "DOWNRIGHT"
-      }
-    ],
-    "color": "CYAN",
-    "resource": "ANIMALKINGDOM"
-  }
-},
   {
+    "type" : "ResourceCard",
     "id": 22,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/22.png",
@@ -1342,6 +1364,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 23,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/23.png",
@@ -1403,6 +1426,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 24,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/24.png",
@@ -1464,6 +1488,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 25,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/25.png",
@@ -1480,7 +1505,7 @@
           "direction": "UPLEFT"
         },
         {
-          "resource": "INSECTOBJECT",
+          "resource": "INSECTKINGDOM",
           "state": "OPEN",
           "direction": "UPRIGHT"
         },
@@ -1525,6 +1550,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 26,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/26.png",
@@ -1586,6 +1612,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 27,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/27.png",
@@ -1647,6 +1674,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 28,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/28.png",
@@ -1708,6 +1736,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 29,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/29.png",
@@ -1769,6 +1798,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 30,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/30.png",
@@ -1830,67 +1860,69 @@
     }
   },
   {
-  "id": 31,
-  "front": {
-    "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/31.png",
-    "color": "PURPLE",
-    "requirements": null,
-    "evaluator": {
-      "type": "EvaluatorPoints",
-      "numPoints": 0
+    "type" : "ResourceCard",
+    "id": 31,
+    "front": {
+      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/31.png",
+      "color": "PURPLE",
+      "requirements": null,
+      "evaluator": {
+        "type": "EvaluatorPoints",
+        "numPoints": 0
+      },
+      "corners": [
+        {
+          "resource": "INSECTKINGDOM",
+          "state": "OPEN",
+          "direction": "UPLEFT"
+        },
+        {
+          "resource": "INSECTKINGDOM",
+          "state": "OPEN",
+          "direction": "UPRIGHT"
+        },
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "DOWNLEFT"
+        },
+        {
+          "resource": null,
+          "state": "CLOSED",
+          "direction": "DOWNRIGHT"
+        }
+      ]
     },
-    "corners": [
-      {
-        "resource": "INSECTKINGDOM",
-        "state": "OPEN",
-        "direction": "UPLEFT"
-      },
-      {
-        "resource": "INSECTKINGDOM",
-        "state": "OPEN",
-        "direction": "UPRIGHT"
-      },
-      {
-        "resource": null,
-        "state": "OPEN",
-        "direction": "DOWNLEFT"
-      },
-      {
-        "resource": null,
-        "state": "CLOSED",
-        "direction": "DOWNRIGHT"
-      }
-    ]
+    "back": {
+      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/31_back.png",
+      "corners": [
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "UPLEFT"
+        },
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "UPRIGHT"
+        },
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "DOWNLEFT"
+        },
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "DOWNRIGHT"
+        }
+      ],
+      "color": "PURPLE",
+      "resource": "INSECTKINGDOM"
+    }
   },
-  "back": {
-    "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/31_back.png",
-    "corners": [
-      {
-        "resource": null,
-        "state": "OPEN",
-        "direction": "UPLEFT"
-      },
-      {
-        "resource": null,
-        "state": "OPEN",
-        "direction": "UPRIGHT"
-      },
-      {
-        "resource": null,
-        "state": "OPEN",
-        "direction": "DOWNLEFT"
-      },
-      {
-        "resource": null,
-        "state": "OPEN",
-        "direction": "DOWNRIGHT"
-      }
-    ],
-    "color": "PURPLE",
-    "resource": "INSECTKINGDOM"
-  }
-},
   {
+    "type" : "ResourceCard",
     "id": 32,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/32.png",
@@ -1952,6 +1984,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 33,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/33.png",
@@ -2013,6 +2046,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 34,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/34.png",
@@ -2074,6 +2108,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 35,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/35.png",
@@ -2135,6 +2170,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 36,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/36.png",
@@ -2196,6 +2232,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 37,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/37.png",
@@ -2257,6 +2294,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 38,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/38.png",
@@ -2318,6 +2356,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 39,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/39.png",
@@ -2379,6 +2418,7 @@
     }
   },
   {
+    "type" : "ResourceCard",
     "id": 40,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/40.png",

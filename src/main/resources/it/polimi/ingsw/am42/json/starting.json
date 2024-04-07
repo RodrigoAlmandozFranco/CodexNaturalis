@@ -1,5 +1,6 @@
 [
   {
+    "type" : "StartingCard",
     "id": 81,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/81.png",
@@ -62,6 +63,7 @@
     "resources": ["INSECTKINGDOM"]
   },
   {
+    "type" : "StartingCard",
     "id": 82,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/82.png",
@@ -124,6 +126,7 @@
     "resources": ["FUNGIKINGDOM"]
   },
   {
+    "type" : "StartingCard",
     "id": 83,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/83.png",
@@ -186,6 +189,7 @@
     "resources": ["PLANTKINGDOM", "FUNGIKINGDOM"]
   },
   {
+    "type" : "StartingCard",
     "id": 84,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/84.png",
@@ -248,6 +252,7 @@
     "resources": ["ANIMALKINGDOM", "INSECTKINGDOM"]
   },
   {
+    "type" : "StartingCard",
     "id": 85,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/85.png",
@@ -310,6 +315,7 @@
     "resources": ["ANIMALKINGDOM", "INSECTKINGDOM", "PLANTKINGDOM"]
   },
   {
+    "type" : "StartingCard",
     "id": 86,
     "front": {
       "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/86.png",

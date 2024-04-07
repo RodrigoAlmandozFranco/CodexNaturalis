@@ -1,28 +1,21 @@
 package it.polimi.ingsw.am42.model;
 
-//import com.google.gson.stream.JsonReader;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
+import it.polimi.ingsw.am42.gson.backGson.BackDeserializer;
+import it.polimi.ingsw.am42.gson.cornerGson.CornerDeserializer;
+import it.polimi.ingsw.am42.gson.evaluatorGson.EvaluatorDeserializer;
+import it.polimi.ingsw.am42.gson.frontGson.FrontDeserializer;
+import it.polimi.ingsw.am42.gson.goalCardGson.GoalCardDeserializer;
+import it.polimi.ingsw.am42.gson.playableCardGson.PlayableCardDeserializer;
 import it.polimi.ingsw.am42.model.cards.Card;
-import it.polimi.ingsw.am42.model.cards.types.GoalCard;
-import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
-import it.polimi.ingsw.am42.model.cards.types.playables.GoldCard;
+import it.polimi.ingsw.am42.model.cards.types.*;
 import it.polimi.ingsw.am42.model.cards.types.playables.ResourceCard;
-import it.polimi.ingsw.am42.model.cards.types.playables.StartingCard;
 import it.polimi.ingsw.am42.model.decks.GoalDeck;
 import it.polimi.ingsw.am42.model.decks.PlayableDeck;
-import it.polimi.ingsw.am42.model.enumeration.Direction;
-import it.polimi.ingsw.am42.model.enumeration.Resource;
 import it.polimi.ingsw.am42.model.evaluator.Evaluator;
-import it.polimi.ingsw.am42.model.evaluator.EvaluatorPoints;
-import it.polimi.ingsw.am42.model.evaluator.EvaluatorPointsPerCorner;
-import it.polimi.ingsw.am42.model.evaluator.EvaluatorPointsPerResource;
 import it.polimi.ingsw.am42.model.exceptions.GameFullException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
@@ -31,15 +24,8 @@ import it.polimi.ingsw.am42.model.structure.Board;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.lang.reflect.Type;
 import java.util.*;
 import java.util.stream.Collectors;
-
-
-// TODO : nel caso in cui un solo deck sia finito.
-
-
-
 
 
 /**
@@ -379,23 +365,29 @@ public class Game implements GameInterface {
      * This method initializes the decks of the game.
      * It reads the json files and creates the cards.
      * It shuffles the decks.
+     * It uses GsonBuilder with registerTypeAdapter.
+     * It uses the classes in the gson package.
      */
 
     private void initializeDecks() {
         Gson gson = new GsonBuilder()
                         .registerTypeAdapter(Evaluator.class, new EvaluatorDeserializer())
+                        .registerTypeAdapter(Front.class, new FrontDeserializer())
+                        .registerTypeAdapter(Back.class, new BackDeserializer())
+                        .registerTypeAdapter(Corner.class, new CornerDeserializer())
+                        .registerTypeAdapter(PlayableCard.class, new PlayableCardDeserializer())
+                        .registerTypeAdapter(GoalCard.class, new GoalCardDeserializer())
                         .create();
 
         String resource = "src/main/resources/it/polimi/ingsw/am42/json/resource.json";
 
-        try {
+        try{
             FileReader reader = new FileReader(resource);
             JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
 
             for(int i = 0; i < jsonArray.size(); i++) {
                 JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
-                Type type = new TypeToken<ResourceCard>(){}.getType();
-                PlayableCard card = gson.fromJson(jsonObject, type);
+                PlayableCard card = gson.fromJson(jsonObject, PlayableCard.class);
                 resourceDeck.addCard(card);
             }
         } catch (FileNotFoundException e)   {
@@ -411,8 +403,7 @@ public class Game implements GameInterface {
 
             for(int i = 0; i < jsonArray.size(); i++) {
                 JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
-                Type type = new TypeToken<GoldCard>(){}.getType();
-                PlayableCard card = gson.fromJson(jsonObject, type);
+                PlayableCard card = gson.fromJson(jsonObject, PlayableCard.class);
                 goldDeck.addCard(card);
             }
         } catch (FileNotFoundException e)   {
@@ -427,24 +418,23 @@ public class Game implements GameInterface {
 
             for(int i = 0; i < jsonArray.size(); i++) {
                 JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
-                Type type = new TypeToken<StartingCard>(){}.getType();
-                PlayableCard card = gson.fromJson(jsonObject, type);
+                PlayableCard card = gson.fromJson(jsonObject, PlayableCard.class);
                 startingDeck.addCard(card);
             }
         } catch (FileNotFoundException e)   {
             throw new RuntimeException(e);
         }
 
+
         String goal = "src/main/resources/it/polimi/ingsw/am42/json/goal.json";
 
         try {
-            FileReader reader = new FileReader(gold);
+            FileReader reader = new FileReader(goal);
             JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
 
             for(int i = 0; i < jsonArray.size(); i++) {
                 JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
-                Type type = new TypeToken<GoalCard>(){}.getType();
-                GoalCard card = gson.fromJson(jsonObject, type);
+                GoalCard card = gson.fromJson(jsonObject, GoalCard.class);
                 goalDeck.addCard(card);
             }
         } catch (FileNotFoundException e)   {
@@ -455,7 +445,6 @@ public class Game implements GameInterface {
         goldDeck.shuffle();
         startingDeck.shuffle();
         goalDeck.shuffle();
-
     }
 
 
@@ -539,53 +528,4 @@ public class Game implements GameInterface {
         return possibleWinners.subList(0, numWinners);
     }
 
-}
-
-
-/**
- * This class is a custom deserializer for the Evaluator class.
- * It is used to deserialize the Evaluator objects from the JSON file.
- * It is used in the initializeDecks method of the Game class.
- */
-
-class EvaluatorDeserializer implements JsonDeserializer<Evaluator> {
-    @Override
-    public Evaluator deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-        JsonObject jsonObject = json.getAsJsonObject();
-        String evaluatorType = jsonObject.get("type").getAsString();
-
-        int numPoints = jsonObject.get("numPoints").getAsInt();
-
-        if (evaluatorType.equals("EvaluatorPoints")) {
-                return new EvaluatorPoints(numPoints);
-        }
-        else if(evaluatorType.equals("EvaluatorPointsPerCorner")) {
-            return new EvaluatorPointsPerCorner(numPoints);
-        }
-        else if(evaluatorType.equals("EvaluatorPointsPerResource")) {
-            Map<Resource, Integer> resourceMap = new HashMap<>();
-            JsonObject resourceJson = jsonObject.getAsJsonObject("resourceMap");
-            for (Map.Entry<String, JsonElement> entry : resourceJson.entrySet()) {
-                Resource resource = Resource.valueOf(entry.getKey());
-                int value = entry.getValue().getAsInt();
-                resourceMap.put(resource, value);
-            }
-            return new EvaluatorPointsPerResource(numPoints, resourceMap);
-        }
-
-        else if(evaluatorType.equals("EvaluatorPointsPerStair")) {
-            Resource kingdom = Resource.valueOf(jsonObject.get("kingdom").getAsString());
-            Direction direction = Direction.valueOf(jsonObject.get("direction").getAsString());
-            return new EvaluatorPointsPerStair(numPoints, kingdom, direction);
-        }
-        else if(evaluatorType.equals("EvaluatorPointsPerChair")) {
-            Resource kingdom1 = Resource.valueOf(jsonObject.get("kingdom1").getAsString());
-            Resource kingdom2 = Resource.valueOf(jsonObject.get("kingdom2").getAsString());
-            Direction direction = Direction.valueOf(jsonObject.get("direction").getAsString());
-            return new EvaluatorPointsPerChair(numPoints, kingdom1, kingdom2, direction);
-        }
-        else {
-            return null;
-        }
-    }
 }
