@@ -64,7 +64,7 @@ public class Front extends Face {
         for (Corner c: corners) {
             r = c.getResource();
             if (r != null) {
-                if (resources.containsKey(r))
+                if (!resources.containsKey(r))
                     resources.put(r, 0);
                 resources.put(r, resources.get(r)+1);
             }

@@ -63,8 +63,13 @@ public class Board {
      */
     public Set<Position> getPossiblePositions(){
         Set<Position> availablePositions = new HashSet<Position>();
-        Map<Direction, Face> futurenearby;
-        boolean x;
+        Map<Direction, Face> futureNearby;
+        boolean check;
+
+        if (faces.isEmpty()){
+            availablePositions.add(new Position(0,0));
+            return availablePositions;
+        }
 
         for(Face f: faces){
             Map<Direction, Face>nearbyFaces = getNearbyFaces(f.getPosition());
@@ -72,13 +77,13 @@ public class Board {
                 for(Direction d: Direction.values())
                     if(!nearbyFaces.containsKey(d)) {
                         Position possiblePos = d.getPosition(f.getPosition());
-                        futurenearby = getNearbyFaces(possiblePos);
-                        x = true;
-                        for (Direction possible: futurenearby.keySet()){
-                            if(futurenearby.get(d).getCorner(d.opposite()).getState() == CornerState.CLOSED)
-                                x = false;
+                        futureNearby = getNearbyFaces(possiblePos);
+                        check = true;
+                        for (Direction possible: futureNearby.keySet()){
+                            if(futureNearby.get(possible).getCorner(possible.opposite()).getState() == CornerState.CLOSED)
+                                check = false;
                         }
-                        if(x) availablePositions.add(possiblePos);
+                        if(check) availablePositions.add(possiblePos);
                     }
             }
         }
@@ -129,7 +134,7 @@ public class Board {
      *
      * @author Alessandro Di Maria
      */
-    public void updateResources(){
+    private void updateResources(){
         Map<Resource, Integer> totResLast = lastPlacedFace.getResources();
         for(Resource r: totResLast.keySet())
             totalResources.put(r, totalResources.get(r)+totResLast.get(r));
