@@ -45,7 +45,7 @@ class PlayerTest {
 
         hand.add(new GoldCard(1, null, null));
 
-        p.setHandAndGoal(hand, null);
+        p.setHand(hand);
 
         assertEquals(hand, p.getHand());
 
@@ -65,7 +65,7 @@ class PlayerTest {
 
         GoalCard c = new GoalCard(1, new EvaluatorPoints(0));
 
-        p.setHandAndGoal(null, c);
+        p.setGoal(c);
 
         assertEquals(p.getPersonalGoal(), c);
 
@@ -93,7 +93,8 @@ class PlayerTest {
 
         GoalCard c = new GoalCard(1, new EvaluatorPoints(0));
 
-        p.setHandAndGoal(hand, c);
+        p.setHand(hand);
+        p.setGoal(c);
 
 
         assertEquals(p.getHand(), hand);

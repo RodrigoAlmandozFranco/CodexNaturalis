@@ -310,7 +310,7 @@ public class Game implements GameInterface {
      * @return the list of players sorted by the number of goals achieved
      */
     public List<Player> getStandings() {
-        return players.stream().sorted(Comparator.comparingInt(Player::getPoints))
+        return players.stream().sorted(Comparator.comparingInt(Player::getPoints).reversed())
                 .collect(Collectors.toList());
     }
 
@@ -356,9 +356,65 @@ public class Game implements GameInterface {
             globalGoals.add(goalDeck.getTop());
             goalDeck.remove();
         }
+
+
     }
 
+    public List<Integer> getGlobalGoals() {
+        List<Integer> goals = new ArrayList<>();
+        for(GoalCard g : globalGoals){
+            goals.add(g.getId());
+        }
+        return goals;
+    }
 
+    public List<Integer> getGoalDeck() {
+        List<Integer> goals = new ArrayList<>();
+        for(GoalCard g : globalGoals){
+            goals.add(g.getId());
+        }
+        return goals;
+    }
+
+    public List<Integer> getResourceDeck() {
+        List<Integer> resource = new ArrayList<>();
+        for(PlayableCard c : resourceDeck){
+            resource.add(c.getId());
+        }
+        return resource;
+    }
+
+    public List<Integer> getGoldDeck() {
+        List<Integer> gold = new ArrayList<>();
+        for(PlayableCard c : goldDeck){
+            gold.add(c.getId());
+        }
+        return gold;
+    }
+
+    public List<Integer> getStartingDeck() {
+        List<Integer> s = new ArrayList<>();
+        for(PlayableCard c : startingDeck){
+            s.add(c.getId());
+        }
+        return s;
+    }
+
+    public List<Integer> getPickableResourceCards() {
+        List<Integer> pr = new ArrayList<>();
+        for(PlayableCard c : pickableResourceCards){
+            pr.add(c.getId());
+        }
+        return pr;
+    }
+
+    public List<Integer> getPickableGoldCards() {
+        List<Integer> pg = new ArrayList<>();
+        for(PlayableCard c : pickableGoldCards){
+            pg.add(c.getId());
+        }
+        return pg;
+    }
 
 
     /**
@@ -445,6 +501,8 @@ public class Game implements GameInterface {
         goldDeck.shuffle();
         startingDeck.shuffle();
         goalDeck.shuffle();
+
+
     }
 
 
@@ -480,7 +538,7 @@ public class Game implements GameInterface {
      * @return the list of players sorted by the number of goals achieved
      */
     private List<Player> getStandingsGoals(List<Player> players) {
-        return players.stream().sorted(Comparator.comparingInt(Player::getGoalsAchieved))
+        return players.stream().sorted(Comparator.comparingInt(Player::getGoalsAchieved).reversed())
                 .collect(Collectors.toList());
     }
 
