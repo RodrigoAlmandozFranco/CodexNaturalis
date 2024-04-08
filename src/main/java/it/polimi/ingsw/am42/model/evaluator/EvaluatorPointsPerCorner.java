@@ -8,6 +8,12 @@ public class EvaluatorPointsPerCorner extends Evaluator{
         super(numPoints);
     }
 
+    /**
+     * Returns the number of points proportionate to the nymber of points covered by lastPlacedFace
+     * @param board the current board
+     * @return numPoints proportionate to the number of corners near lastPlacedFace
+     * @author Tommaso Crippa
+     */
     @Override
     public int getPoints(Board board) {
         Face lastFace = board.getLastPlacedFace();
