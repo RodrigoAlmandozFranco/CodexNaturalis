@@ -5,6 +5,7 @@ import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -18,8 +19,8 @@ import java.util.List;
  * @author Mattia Brandi
  */
 
-public class PlayableDeck {
-    private final List<PlayableCard> deck;
+public class PlayableDeck implements Iterable<PlayableCard>{
+    private List<PlayableCard> deck;
 
     public PlayableDeck() {
         deck = new ArrayList<>();
@@ -40,5 +41,10 @@ public class PlayableDeck {
 
     public void addCard(PlayableCard card) {
         deck.add(card);
+    }
+
+    @Override
+    public Iterator<PlayableCard> iterator() {
+        return deck.iterator();
     }
 }
