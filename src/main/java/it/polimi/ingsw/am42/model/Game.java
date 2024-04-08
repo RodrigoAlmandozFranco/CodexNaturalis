@@ -1,21 +1,32 @@
 package it.polimi.ingsw.am42.model;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import it.polimi.ingsw.am42.gson.backGson.BackDeserializer;
+import it.polimi.ingsw.am42.gson.cornerGson.CornerDeserializer;
+import it.polimi.ingsw.am42.gson.evaluatorGson.EvaluatorDeserializer;
+import it.polimi.ingsw.am42.gson.frontGson.FrontDeserializer;
+import it.polimi.ingsw.am42.gson.goalCardGson.GoalCardDeserializer;
+import it.polimi.ingsw.am42.gson.playableCardGson.PlayableCardDeserializer;
 import it.polimi.ingsw.am42.model.cards.Card;
-import it.polimi.ingsw.am42.model.cards.types.GoalCard;
-import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
+import it.polimi.ingsw.am42.model.cards.types.*;
 import it.polimi.ingsw.am42.model.cards.types.playables.ResourceCard;
 import it.polimi.ingsw.am42.model.decks.GoalDeck;
 import it.polimi.ingsw.am42.model.decks.PlayableDeck;
+import it.polimi.ingsw.am42.model.evaluator.Evaluator;
 import it.polimi.ingsw.am42.model.exceptions.GameFullException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
 import it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException;
 import it.polimi.ingsw.am42.model.structure.Board;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.*;
 import java.util.stream.Collectors;
+
 
 /**
  * This class represents a Game
@@ -28,7 +39,6 @@ import java.util.stream.Collectors;
  * @author Mattia Brandi
  * @author Rodrigo Almandoz Franco
 */
-
 
 public class Game implements GameInterface {
 
@@ -62,19 +72,33 @@ public class Game implements GameInterface {
             pickableResourceCards = new ArrayList<>();
             pickableGoldCards = new ArrayList<>();
             globalGoals = new ArrayList<>();
+            currentPlayer = null;
             this.numberPlayers = numberPlayers;
         }
     }
 
+
     /**
-     * This method initializes all the Decks
+     * This method initializes the game.
+     * It creates the decks and initializes the pickable cards.
      */
-    //TODO
-    public void initializeDecks() {
-        /*this method uses the json library*/
+    @Override
+    public void initializeGame() {
+        initializeDecks();
 
+        for(int i = 0; i < 2; i++) {
+            PlayableCard r = resourceDeck.getTop();
+            PlayableCard g = goldDeck.getTop();
+
+            r.setVisibility(true);
+            g.setVisibility(true);
+
+            pickableGoldCards.add(g);
+            goldDeck.remove();
+            pickableResourceCards.add(r);
+            resourceDeck.remove();
+        }
     }
-
 
     /**
      * This method checks if the game has to end in the next turn
@@ -123,7 +147,7 @@ public class Game implements GameInterface {
             p.add(tmp.getFirst());
             return p;
         } else {
-            return checkOtherConditions(tmp.subList(0, numWinners));
+            return checkOtherWinningConditions(tmp.subList(0, numWinners));
         }
     }
 
@@ -167,11 +191,27 @@ public class Game implements GameInterface {
      * @return the current Player
      */
     public Player getCurrentPlayer() {
+        if(currentPlayer == null) {
+            currentPlayer = players.getFirst();
+        }
         return currentPlayer;
     }
 
     /**
-     * This method returns the list of the visible cards and the top cards of resource and gold deck
+     * This method modifies the currentPlayer attribute to the next player
+     * @return the next player, the one that has to play now
+     */
+    public Player getNextPlayer() {
+        if(currentPlayer == null) {
+            currentPlayer = players.getFirst();
+        }
+        return players.get((players.indexOf(currentPlayer) + 1) % players.size());
+    }
+
+    /**
+     * This method returns the list of the visible cards and the top cards of resource and gold deck.
+     * If a deck is finished, it returns the top card of the other deck.
+     * If the two decks are finished, it returns only the pickable cards (pickableResourceCards, pickableGoldCards).
      *
      * @return the list of possible cards that the player can choose
      */
@@ -182,25 +222,37 @@ public class Game implements GameInterface {
         if(!resourceDeck.finished()) {
             PlayableCard r = resourceDeck.getTop();
             l.add(r);
+        } else {
+            if(!goldDeck.finished()) {
+                PlayableCard g = goldDeck.getTop();
+                l.add(g);
+            }
         }
         if(!goldDeck.finished()) {
             PlayableCard g = goldDeck.getTop();
             l.add(g);
+        } else {
+            if(!resourceDeck.finished()) {
+                PlayableCard r = resourceDeck.getTop();
+                l.add(r);
+            }
         }
         return l;
     }
 
 
     /**
-     * This method inserts the chosen card in the player's hand, and it updates the decks and the
-     * lists of pickable card.
+     * This method inserts the chosen card in the player's hand, and it updates the decks.
      *
      * @param c the card chosen by the player
      */
     public void chosenCardToAddInHand(PlayableCard c) {
         PlayableCard p;
+        boolean visibility = c.getVisibility();
+
+        c.setVisibility(true);
         currentPlayer.insertPickedCard(c);
-        if (!c.getVisibility()) {
+        if (!visibility) {
             if (c instanceof ResourceCard) {
                 resourceDeck.remove();
             } else {
@@ -209,23 +261,35 @@ public class Game implements GameInterface {
         } else {
             if (c instanceof ResourceCard) {
                 pickableResourceCards.remove(c);
-                if(!resourceDeck.finished()) {
+                if (!resourceDeck.finished()) {
                     p = resourceDeck.getTop();
                     pickableResourceCards.add(resourceDeck.getTop());
                     resourceDeck.remove();
                     p.setVisibility(true);
+                } else {
+                    if (!goldDeck.finished()) {
+                        p = goldDeck.getTop();
+                        pickableGoldCards.add(goldDeck.getTop());
+                        goldDeck.remove();
+                        p.setVisibility(true);
+                    }
                 }
             } else {
                 pickableGoldCards.remove(c);
-                if(!goldDeck.finished()) {
+                if (!goldDeck.finished()) {
                     p = goldDeck.getTop();
                     pickableGoldCards.add(goldDeck.getTop());
                     goldDeck.remove();
                     p.setVisibility(true);
+                } else {
+                    if (!resourceDeck.finished()) {
+                        p = resourceDeck.getTop();
+                        pickableResourceCards.add(resourceDeck.getTop());
+                        resourceDeck.remove();
+                        p.setVisibility(true);
+                    }
                 }
             }
-
-
         }
     }
 
@@ -248,6 +312,139 @@ public class Game implements GameInterface {
     public List<Player> getStandings() {
         return players.stream().sorted(Comparator.comparingInt(Player::getPoints))
                 .collect(Collectors.toList());
+    }
+
+
+    /**
+     * This method returns the list containing two goals from which a single player must choose his own goal.
+     * @return the list of two goals
+     */
+    public List<GoalCard> choosePersonalGoal(){
+        List<GoalCard> goals = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            goals.add(goalDeck.getTop());
+            goalDeck.remove();
+        }
+        return goals;
+    }
+
+
+    /**
+     * This method initializes the game and the hands of each player.
+     * It shuffles the players list and assigns the first player.
+     * It sets the global goals for the game.
+     * Controller calls this method when the number of players is equal to the size of the list of players.
+     */
+
+    public void initializeGameForPlayers() {
+        Collections.shuffle(players);
+        currentPlayer = players.getFirst();
+
+        for (Player p : players) {
+            List<PlayableCard> list = new ArrayList<>();
+            for (int i = 0; i < 2; i++) {
+                list.add(resourceDeck.getTop());
+                resourceDeck.remove();
+            }
+            list.add(goldDeck.getTop());
+            goldDeck.remove();
+
+            p.setHand(list);
+        }
+
+        for (int i = 0; i < 2; i++) {
+            globalGoals.add(goalDeck.getTop());
+            goalDeck.remove();
+        }
+    }
+
+
+
+
+    /**
+     * This method initializes the decks of the game.
+     * It reads the json files and creates the cards.
+     * It shuffles the decks.
+     * It uses GsonBuilder with registerTypeAdapter.
+     * It uses the classes in the gson package.
+     */
+
+    private void initializeDecks() {
+        Gson gson = new GsonBuilder()
+                        .registerTypeAdapter(Evaluator.class, new EvaluatorDeserializer())
+                        .registerTypeAdapter(Front.class, new FrontDeserializer())
+                        .registerTypeAdapter(Back.class, new BackDeserializer())
+                        .registerTypeAdapter(Corner.class, new CornerDeserializer())
+                        .registerTypeAdapter(PlayableCard.class, new PlayableCardDeserializer())
+                        .registerTypeAdapter(GoalCard.class, new GoalCardDeserializer())
+                        .create();
+
+        String resource = "src/main/resources/it/polimi/ingsw/am42/json/resource.json";
+
+        try{
+            FileReader reader = new FileReader(resource);
+            JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
+
+            for(int i = 0; i < jsonArray.size(); i++) {
+                JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
+                PlayableCard card = gson.fromJson(jsonObject, PlayableCard.class);
+                resourceDeck.addCard(card);
+            }
+        } catch (FileNotFoundException e)   {
+            throw new RuntimeException(e);
+        }
+
+
+        String gold = "src/main/resources/it/polimi/ingsw/am42/json/gold.json";
+
+        try {
+            FileReader reader = new FileReader(gold);
+            JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
+
+            for(int i = 0; i < jsonArray.size(); i++) {
+                JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
+                PlayableCard card = gson.fromJson(jsonObject, PlayableCard.class);
+                goldDeck.addCard(card);
+            }
+        } catch (FileNotFoundException e)   {
+            throw new RuntimeException(e);
+        }
+
+        String starting = "src/main/resources/it/polimi/ingsw/am42/json/starting.json";
+
+        try {
+            FileReader reader = new FileReader(starting);
+            JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
+
+            for(int i = 0; i < jsonArray.size(); i++) {
+                JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
+                PlayableCard card = gson.fromJson(jsonObject, PlayableCard.class);
+                startingDeck.addCard(card);
+            }
+        } catch (FileNotFoundException e)   {
+            throw new RuntimeException(e);
+        }
+
+
+        String goal = "src/main/resources/it/polimi/ingsw/am42/json/goal.json";
+
+        try {
+            FileReader reader = new FileReader(goal);
+            JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
+
+            for(int i = 0; i < jsonArray.size(); i++) {
+                JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
+                GoalCard card = gson.fromJson(jsonObject, GoalCard.class);
+                goalDeck.addCard(card);
+            }
+        } catch (FileNotFoundException e)   {
+            throw new RuntimeException(e);
+        }
+
+        resourceDeck.shuffle();
+        goldDeck.shuffle();
+        startingDeck.shuffle();
+        goalDeck.shuffle();
     }
 
 
@@ -316,7 +513,7 @@ public class Game implements GameInterface {
      * @param possibleWinners the list of players that have the same number of points
      * @return the list of winner/winners
      */
-    private List<Player> checkOtherConditions(List<Player> possibleWinners) {
+    private List<Player> checkOtherWinningConditions(List<Player> possibleWinners) {
         possibleWinners = getStandingsGoals(possibleWinners);
 
         int numWinners = 1;
@@ -332,4 +529,3 @@ public class Game implements GameInterface {
     }
 
 }
-

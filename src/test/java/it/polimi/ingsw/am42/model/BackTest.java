@@ -7,6 +7,7 @@ import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.enumeration.CornerState;
 import it.polimi.ingsw.am42.model.enumeration.Direction;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
+import it.polimi.ingsw.am42.model.evaluator.Evaluator;
 import it.polimi.ingsw.am42.model.evaluator.EvaluatorPoints;
 import org.junit.jupiter.api.Test;
 
@@ -32,7 +33,8 @@ class BackTest {
 
         Face face = new Back(src, corners, Color.CYAN, Resource.ANIMALKINGDOM);
 
-        assertEquals(new EvaluatorPoints(0), face.getEvaluator());
+        Evaluator other = new EvaluatorPoints(0);
+        assertEquals(other.getPoints(null), face.getEvaluator().getPoints(null));
     }
 
     @Test
