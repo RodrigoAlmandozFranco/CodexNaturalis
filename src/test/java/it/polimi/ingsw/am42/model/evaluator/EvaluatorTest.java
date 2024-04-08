@@ -1,13 +1,19 @@
 package it.polimi.ingsw.am42.model.evaluator;
 
 import it.polimi.ingsw.am42.model.cards.types.Back;
+import it.polimi.ingsw.am42.model.cards.types.Corner;
 import it.polimi.ingsw.am42.model.cards.types.Face;
+import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.CornerState;
+import it.polimi.ingsw.am42.model.enumeration.Direction;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
 import it.polimi.ingsw.am42.model.structure.Board;
 import it.polimi.ingsw.am42.model.structure.Position;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -100,5 +106,70 @@ class EvaluatorTest {
         f6.setPosition(new Position(1, 1));
         b.addFace(f6);
         assertEquals(2*numPoints, e.getPoints(b));
+    }
+
+    @Test
+    void EvaluatorPointsPerChair() {
+        Board b = new Board();
+
+        int numPoints = 2;
+        Color color1 = Color.GREEN;
+        Color color2 = Color.RED;
+        Direction direction = Direction.UPRIGHT;
+
+        Evaluator e = new EvaluatorPointsPerChair(numPoints, color1, color2, direction);
+
+        List<Corner> cornerList = new ArrayList<Corner>();
+
+        for (Direction d : Direction.values()) {
+            cornerList.add(new Corner(Resource.ANIMALKINGDOM, CornerState.OPEN, d));
+        }
+
+        assertEquals(0, e.getPoints(b));
+
+        Face f = new Back("default", cornerList, color1, Resource.ANIMALKINGDOM);
+        f.setPosition(new Position(1, 1));
+        b.addFace(f);
+
+
+        f = new Back("default", cornerList, color1, Resource.ANIMALKINGDOM);
+        f.setPosition(new Position(0, 0));
+        b.addFace(f);
+
+
+        f = new Back("default", cornerList, color2, Resource.ANIMALKINGDOM);
+        f.setPosition(new Position(1, 0));
+        b.addFace(f);
+
+
+        f = new Back("default", cornerList, color2, Resource.ANIMALKINGDOM);
+        f.setPosition(new Position(2, 1));
+        b.addFace(f);
+
+        assertEquals(numPoints, e.getPoints(b));
+
+        f = new Back("default", cornerList, color2, Resource.ANIMALKINGDOM);
+        f.setPosition(new Position(3, 2));
+        b.addFace(f);
+
+
+        f = new Back("default", cornerList, color1, Resource.ANIMALKINGDOM);
+        f.setPosition(new Position(3, 3));
+        b.addFace(f);
+
+
+        f = new Back("default", cornerList, color1, Resource.ANIMALKINGDOM);
+        f.setPosition(new Position(2, 2));
+        b.addFace(f);
+
+        assertEquals(numPoints, e.getPoints(b));
+
+
+        f = new Back("default", cornerList, color2, Resource.ANIMALKINGDOM);
+        f.setPosition(new Position(4, 3));
+        b.addFace(f);
+
+        assertEquals(2*numPoints, e.getPoints(b));
+
     }
 }
