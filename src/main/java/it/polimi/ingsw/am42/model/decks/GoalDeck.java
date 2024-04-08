@@ -1,9 +1,11 @@
 package it.polimi.ingsw.am42.model.decks;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
+import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -17,8 +19,8 @@ import java.util.List;
  * @author Mattia Brandi
  */
 
-public class GoalDeck {
-    private final List<GoalCard> deck;
+public class GoalDeck implements Iterable<GoalCard>{
+    private List<GoalCard> deck;
 
     public GoalDeck() {
         deck = new ArrayList<>();
@@ -39,5 +41,9 @@ public class GoalDeck {
 
     public void addCard(GoalCard card) {
         deck.add(card);
+    }
+
+    public Iterator<GoalCard> iterator() {
+        return deck.iterator();
     }
 }
