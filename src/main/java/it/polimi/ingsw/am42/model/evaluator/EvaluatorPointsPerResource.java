@@ -14,6 +14,12 @@ public class EvaluatorPointsPerResource extends Evaluator{
         this.resourceMap = resourceMap;
     }
 
+    /**
+     * Returns the number of points given the requested resources the number of resources on the board
+     * @param board the current board
+     * @return numPoints proportionate to the requested resources and the number of resources on the board
+     * @author Tommaso Crippa
+     */
     @Override
     public int getPoints(Board board) {
 
