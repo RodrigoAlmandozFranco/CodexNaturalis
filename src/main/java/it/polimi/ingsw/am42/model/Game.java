@@ -52,6 +52,7 @@ public class Game implements GameInterface {
     private List<PlayableCard> pickableGoldCards;
     private Player currentPlayer;
     private final int numberPlayers;
+    private boolean turnFinal;
 
 
     /**
@@ -74,6 +75,7 @@ public class Game implements GameInterface {
             globalGoals = new ArrayList<>();
             currentPlayer = null;
             this.numberPlayers = numberPlayers;
+            turnFinal = false;
         }
     }
 
@@ -209,6 +211,22 @@ public class Game implements GameInterface {
     }
 
     /**
+     * This method returns the number of Players
+     * @return number of players
+     */
+    public int getNumberPlayers(){
+        return numberPlayers;
+    }
+
+    /**
+     * With this method Controller sets the current Player
+     * @param p
+     */
+    public void setCurrentPlayer(Player p){
+        currentPlayer = p;
+    }
+
+    /**
      * This method returns the list of the visible cards and the top cards of resource and gold deck.
      * If a deck is finished, it returns the top card of the other deck.
      * If the two decks are finished, it returns only the pickable cards (pickableResourceCards, pickableGoldCards).
@@ -328,6 +346,23 @@ public class Game implements GameInterface {
         return goals;
     }
 
+    /**
+     * This method sets the turnFinal.
+     * In this way the controller can understand when to switch from the normal turn
+     * state to the final turn state
+     * @param v
+     */
+    public void setTurnFinal(boolean v){
+        turnFinal = v;
+    }
+
+    /**
+     * This method returns the turnFinal
+     * @return the boolean turn Final
+     */
+    public boolean getTurnFinal(){
+        return turnFinal;
+    }
 
     /**
      * This method initializes the game and the hands of each player.
