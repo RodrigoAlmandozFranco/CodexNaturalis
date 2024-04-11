@@ -13,8 +13,10 @@ import it.polimi.ingsw.am42.gson.playableCardGson.PlayableCardDeserializer;
 import it.polimi.ingsw.am42.model.cards.Card;
 import it.polimi.ingsw.am42.model.cards.types.*;
 import it.polimi.ingsw.am42.model.cards.types.playables.ResourceCard;
+import it.polimi.ingsw.am42.model.cards.types.playables.StartingCard;
 import it.polimi.ingsw.am42.model.decks.GoalDeck;
 import it.polimi.ingsw.am42.model.decks.PlayableDeck;
+import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.evaluator.Evaluator;
 import it.polimi.ingsw.am42.model.exceptions.GameFullException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
@@ -53,6 +55,7 @@ public class Game implements GameInterface {
     private Player currentPlayer;
     private final int numberPlayers;
     private boolean turnFinal;
+    private List<Color> availableColors;
 
 
     /**
@@ -65,6 +68,7 @@ public class Game implements GameInterface {
         if (numberPlayers < 2 || numberPlayers > 4) {
             throw new NumberPlayerWrongException("Number of players must be between 2 and 4");
         } else {
+            this.numberPlayers = numberPlayers;
             players = new ArrayList<>();
             resourceDeck = new PlayableDeck();
             goldDeck = new PlayableDeck();
@@ -74,8 +78,9 @@ public class Game implements GameInterface {
             pickableGoldCards = new ArrayList<>();
             globalGoals = new ArrayList<>();
             currentPlayer = null;
-            this.numberPlayers = numberPlayers;
             turnFinal = false;
+            availableColors = new ArrayList<Color>();
+            availableColors.addAll(Arrays.asList(Color.values()));
         }
     }
 
@@ -111,6 +116,7 @@ public class Game implements GameInterface {
         this.pickableGoldCards = pickableGoldCards;
         this.currentPlayer = currentPlayer;
         this.numberPlayers = numberPlayers;
+        this.availableColors = null;
     }
 
     /**
@@ -191,13 +197,14 @@ public class Game implements GameInterface {
      * This method adds the new Player to the game calling the private method setPlayer
      * It checks if the game is full
      * It checks if the nickname could be used
+     * It also gives the player his starting card
      *
      * @param nickname the nickname of the Player
      */
     @Override
     public void addToGame(String nickname) throws GameFullException,
-            NicknameAlreadyInUseException,
-            NicknameInvalidException {
+                                                  NicknameAlreadyInUseException,
+                                                  NicknameInvalidException {
         if (players.size() == numberPlayers) {
             throw new GameFullException("Game is full");
         } else {
@@ -209,6 +216,11 @@ public class Game implements GameInterface {
                 throw new NicknameAlreadyInUseException("Nickname already in use");
             }
         }
+
+        Player p = players.getLast();
+        List<PlayableCard> hand = new ArrayList<PlayableCard>();
+        hand.add(startingDeck.getTop());
+        p.setHand(hand);
     }
 
     /**
@@ -469,6 +481,16 @@ public class Game implements GameInterface {
         }
         return pg;
     }
+
+    public List<Color> getAvailableColors() {
+        return availableColors;
+    }
+
+
+    public void removeColor(Color c) {
+        availableColors.remove(c);
+    }
+
 
 
     /**
