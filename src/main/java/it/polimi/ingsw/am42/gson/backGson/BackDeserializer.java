@@ -35,10 +35,13 @@ public class BackDeserializer implements JsonDeserializer<Back> {
         }
 
         Color color = Color.valueOf(jsonObject.get("color").getAsString());
-        Resource resource = null;
 
-        if(!jsonObject.get("resource").isJsonNull()){
-            resource = Resource.valueOf(jsonObject.get("resource").getAsString());
+        List<Resource> resource = new ArrayList<>();
+        jsonArray = jsonObject.get("resource").getAsJsonArray();
+
+        for(int i = 0; i < jsonArray.size(); i++) {
+            Resource r = Resource.valueOf(jsonArray.get(i).getAsString());
+            resource.add(r);
         }
         return new Back(srcImage, corners, color, resource);
     }
