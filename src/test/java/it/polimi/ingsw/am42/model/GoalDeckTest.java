@@ -17,7 +17,7 @@ class GoalDeckTest {
 
     @org.junit.jupiter.api.Test
     void getTop() {
-        GoalCard card = new GoalCard(1,null);
+        GoalCard card = new GoalCard(1,null, null);
         GoalDeck deck = new GoalDeck();
         deck.addCard(card);
         assertEquals(card, deck.getTop());
@@ -25,7 +25,7 @@ class GoalDeckTest {
 
     @org.junit.jupiter.api.Test
     void Remove() {
-        GoalCard card = new GoalCard(1, null);
+        GoalCard card = new GoalCard(1, null, null);
         GoalDeck deck = new GoalDeck();
         deck.addCard(card);
         deck.remove();

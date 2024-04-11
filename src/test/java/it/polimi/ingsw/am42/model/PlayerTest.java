@@ -46,7 +46,6 @@ class PlayerTest {
         hand.add(new GoldCard(1, null, null));
 
         p.setHand(hand);
-        p.setGoal(null);
 
         assertEquals(hand, p.getHand());
 
@@ -64,9 +63,8 @@ class PlayerTest {
 
         Player p = new Player("Tommy");
 
-        GoalCard c = new GoalCard(1, new EvaluatorPoints(0));
+        GoalCard c = new GoalCard(1, null, new EvaluatorPoints(0));
 
-        p.setHand(null);
         p.setGoal(c);
 
         assertEquals(p.getPersonalGoal(), c);
@@ -93,10 +91,11 @@ class PlayerTest {
 
         hand.add(new GoldCard(1, null, null));
 
-        GoalCard c = new GoalCard(1, new EvaluatorPoints(0));
+        GoalCard c = new GoalCard(1, null, new EvaluatorPoints(0));
 
         p.setHand(hand);
         p.setGoal(c);
+
 
         assertEquals(p.getHand(), hand);
 
@@ -140,6 +139,7 @@ class PlayerTest {
 
         assertTrue(p.getBoard().getFaces().contains(f2));
 
+        assertFalse(p.getHand().contains(c));
 
     }
 
@@ -164,25 +164,6 @@ class PlayerTest {
     }
 
     @Test
-    void removeCardFromHand() {
-        Player p = new Player("Tommy");
-
-        Front f = new Front("C://", new ArrayList<Corner>(), Color.GREEN, new HashMap<>(), new EvaluatorPoints(0));
-        Back f2 = new Back("C://", new ArrayList<Corner>(), Color.CYAN, Resource.ANIMALKINGDOM);
-
-        PlayableCard c = new GoldCard(1, f, f2);
-
-        p.placeCard(new Position(0, 0), f2);
-
-        assertTrue(p.getBoard().getFaces().contains(f2));
-
-        p.removeCardFromHand(f2);
-
-        assertFalse(p.getBoard().getFaces().contains(f2));
-
-    }
-
-    @Test
     void insertPickedCard() {
         Player p = new Player("Tommy");
 
@@ -197,9 +178,5 @@ class PlayerTest {
         p.insertPickedCard(c);
 
         assertTrue(p.getHand().contains(c));
-
-        p.removeCardFromHand(f2);
-
-        assertFalse(p.getBoard().getFaces().contains(f2));
     }
 }

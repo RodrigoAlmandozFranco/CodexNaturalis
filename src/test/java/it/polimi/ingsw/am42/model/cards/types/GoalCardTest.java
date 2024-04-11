@@ -12,7 +12,7 @@ class GoalCardTest {
 
         @org.junit.jupiter.api.Test
         void getEvaluator() {
-            GoalCard goalCard = new GoalCard(1, null);
+            GoalCard goalCard = new GoalCard(1, null, null);
             assertNull(goalCard.getEvaluator());
         }
 }

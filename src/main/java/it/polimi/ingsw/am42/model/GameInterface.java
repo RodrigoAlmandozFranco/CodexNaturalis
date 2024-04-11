@@ -27,23 +27,23 @@ public interface GameInterface {
     public List<Player> getPlayers();
     public Player getCurrentPlayer();
     public Player getNextPlayer();
-    public void setCurrentPlayer(Player p);
-    public void setTurnFinal(boolean v);
-    public boolean getTurnFinal();
-    public List<PlayableCard> getPickableCards();
     public int getNumberPlayers();
+    public void setCurrentPlayer(Player p);
+    public List<PlayableCard> getPickableCards();
     public void chosenCardToAddInHand (PlayableCard c);
     public List<GoalCard> getGoals();
     public List<Player> getStandings();
     public List<GoalCard> choosePersonalGoal();
+    public void setTurnFinal(boolean v);
+    public boolean getTurnFinal();
     public void initializeGameForPlayers();
-    public List<Integer> getGlobalGoals();
     public List<Integer> getGoalDeck();
     public List<Integer> getResourceDeck();
     public List<Integer> getGoldDeck();
     public List<Integer> getStartingDeck();
     public List<Integer> getPickableResourceCards();
     public List<Integer> getPickableGoldCards();
+
 
 
 }

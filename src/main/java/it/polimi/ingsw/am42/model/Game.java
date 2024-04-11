@@ -81,6 +81,39 @@ public class Game implements GameInterface {
 
 
     /**
+     * Constructor of the class Player for the reconstruction
+     * of the game after network disconnections.
+     * @see it.polimi.ingsw.am42.gson.gameGson.GameDeserializer
+     * @param numberPlayers
+     * @param players
+     * @param globalGoals
+     * @param resourceDeck
+     * @param goldDeck
+     * @param startingDeck
+     * @param goalDeck
+     * @param pickableResourceCards
+     * @param pickableGoldCards
+     * @param currentPlayer
+     */
+
+
+    public Game(int numberPlayers, List<Player> players, List<GoalCard> globalGoals, PlayableDeck resourceDeck,
+                PlayableDeck goldDeck, PlayableDeck startingDeck, GoalDeck goalDeck,
+                List<PlayableCard> pickableResourceCards, List<PlayableCard> pickableGoldCards, Player currentPlayer) {
+
+        this.players = players;
+        this.globalGoals = globalGoals;
+        this.resourceDeck = resourceDeck;
+        this.goldDeck = goldDeck;
+        this.startingDeck = startingDeck;
+        this.goalDeck = goalDeck;
+        this.pickableResourceCards = pickableResourceCards;
+        this.pickableGoldCards = pickableGoldCards;
+        this.currentPlayer = currentPlayer;
+        this.numberPlayers = numberPlayers;
+    }
+
+    /**
      * This method initializes the game.
      * It creates the decks and initializes the pickable cards.
      */
@@ -211,29 +244,21 @@ public class Game implements GameInterface {
     }
 
     /**
-     * This method sets the current Player
+     * This method returns the number of Players
+     * @return number of players
+     */
+    public int getNumberPlayers(){
+        return numberPlayers;
+    }
+
+    /**
+     * With this method Controller sets the current Player
      * @param p
      */
     public void setCurrentPlayer(Player p){
         currentPlayer = p;
     }
 
-    /**
-     * This method sets the turnFinal variable, so the controller can understand
-     * when it has to switch from the normal turn state to the last turn state
-     * @param v
-     */
-    public void setTurnFinal(boolean v){
-        turnFinal = v;
-    }
-
-    /**
-     * This method returns the turnFinal
-     * @return boolean
-     */
-    public boolean getTurnFinal(){
-        return turnFinal;
-    }
     /**
      * This method returns the list of the visible cards and the top cards of resource and gold deck.
      * If a deck is finished, it returns the top card of the other deck.
@@ -265,14 +290,6 @@ public class Game implements GameInterface {
         }
         return l;
     }
-    /**
-     * This method returns the number of Players
-     *
-     * @return the number of Players
-     */
-    public int getNumberPlayers(){
-        return numberPlayers;
-    }
 
 
     /**
@@ -283,45 +300,39 @@ public class Game implements GameInterface {
     public void chosenCardToAddInHand(PlayableCard c) {
         PlayableCard p;
         boolean visibility = c.getVisibility();
+        PlayableDeck deck1, deck2;
+        List<PlayableCard> list1, list2;
+
+        if (c instanceof ResourceCard) {
+            deck1 = resourceDeck;
+            list1 = pickableResourceCards;
+            deck2 = goldDeck;
+            list2 = pickableGoldCards;
+        } else {
+            deck1 = goldDeck;
+            list1 = pickableGoldCards;
+            deck2 = resourceDeck;
+            list2 = pickableResourceCards;
+        }
 
         c.setVisibility(true);
         currentPlayer.insertPickedCard(c);
-        if (!visibility) {
-            if (c instanceof ResourceCard) {
-                resourceDeck.remove();
-            } else {
-                goldDeck.remove();
-            }
+
+        if(!visibility){
+            deck1.remove();
         } else {
-            if (c instanceof ResourceCard) {
-                pickableResourceCards.remove(c);
-                if (!resourceDeck.finished()) {
-                    p = resourceDeck.getTop();
-                    pickableResourceCards.add(resourceDeck.getTop());
-                    resourceDeck.remove();
-                    p.setVisibility(true);
-                } else {
-                    if (!goldDeck.finished()) {
-                        p = goldDeck.getTop();
-                        pickableGoldCards.add(goldDeck.getTop());
-                        goldDeck.remove();
-                        p.setVisibility(true);
-                    }
-                }
+            list1.remove(c);
+            if(!deck1.finished()){
+                p = deck1.getTop();
+                list1.add(deck1.getTop());
+                deck1.remove();
+                p.setVisibility(true);
             } else {
-                pickableGoldCards.remove(c);
-                if (!goldDeck.finished()) {
-                    p = goldDeck.getTop();
-                    pickableGoldCards.add(goldDeck.getTop());
-                    goldDeck.remove();
+                if(!deck2.finished()){
+                    p = deck2.getTop();
+                    list2.add(deck2.getTop());
+                    deck2.remove();
                     p.setVisibility(true);
-                } else {
-                    if (!resourceDeck.finished()) {
-                        p = resourceDeck.getTop();
-                        pickableResourceCards.add(resourceDeck.getTop());
-                        resourceDeck.remove();
-                        p.setVisibility(true);
-                    }
                 }
             }
         }
@@ -362,6 +373,23 @@ public class Game implements GameInterface {
         return goals;
     }
 
+    /**
+     * This method sets the turnFinal.
+     * In this way the controller can understand when to switch from the normal turn
+     * state to the final turn state
+     * @param v
+     */
+    public void setTurnFinal(boolean v){
+        turnFinal = v;
+    }
+
+    /**
+     * This method returns the turnFinal
+     * @return the boolean turn Final
+     */
+    public boolean getTurnFinal(){
+        return turnFinal;
+    }
 
     /**
      * This method initializes the game and the hands of each player.
@@ -394,17 +422,9 @@ public class Game implements GameInterface {
 
     }
 
-    public List<Integer> getGlobalGoals() {
-        List<Integer> goals = new ArrayList<>();
-        for(GoalCard g : globalGoals){
-            goals.add(g.getId());
-        }
-        return goals;
-    }
-
     public List<Integer> getGoalDeck() {
         List<Integer> goals = new ArrayList<>();
-        for(GoalCard g : globalGoals){
+        for(GoalCard g : goalDeck){
             goals.add(g.getId());
         }
         return goals;
@@ -461,60 +481,44 @@ public class Game implements GameInterface {
 
     private void initializeDecks() {
         Gson gson = new GsonBuilder()
-                        .registerTypeAdapter(Evaluator.class, new EvaluatorDeserializer())
-                        .registerTypeAdapter(Front.class, new FrontDeserializer())
-                        .registerTypeAdapter(Back.class, new BackDeserializer())
-                        .registerTypeAdapter(Corner.class, new CornerDeserializer())
-                        .registerTypeAdapter(PlayableCard.class, new PlayableCardDeserializer())
-                        .registerTypeAdapter(GoalCard.class, new GoalCardDeserializer())
-                        .create();
+                .registerTypeAdapter(Evaluator.class, new EvaluatorDeserializer())
+                .registerTypeAdapter(Front.class, new FrontDeserializer())
+                .registerTypeAdapter(Back.class, new BackDeserializer())
+                .registerTypeAdapter(Corner.class, new CornerDeserializer())
+                .registerTypeAdapter(PlayableCard.class, new PlayableCardDeserializer())
+                .registerTypeAdapter(GoalCard.class, new GoalCardDeserializer())
+                .create();
+
+        PlayableDeck d;
 
         String resource = "src/main/resources/it/polimi/ingsw/am42/json/resource.json";
-
-        try{
-            FileReader reader = new FileReader(resource);
-            JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
-
-            for(int i = 0; i < jsonArray.size(); i++) {
-                JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
-                PlayableCard card = gson.fromJson(jsonObject, PlayableCard.class);
-                resourceDeck.addCard(card);
-            }
-        } catch (FileNotFoundException e)   {
-            throw new RuntimeException(e);
-        }
-
-
         String gold = "src/main/resources/it/polimi/ingsw/am42/json/gold.json";
-
-        try {
-            FileReader reader = new FileReader(gold);
-            JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
-
-            for(int i = 0; i < jsonArray.size(); i++) {
-                JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
-                PlayableCard card = gson.fromJson(jsonObject, PlayableCard.class);
-                goldDeck.addCard(card);
-            }
-        } catch (FileNotFoundException e)   {
-            throw new RuntimeException(e);
-        }
-
         String starting = "src/main/resources/it/polimi/ingsw/am42/json/starting.json";
 
-        try {
-            FileReader reader = new FileReader(starting);
-            JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
+        List<String> sources = new ArrayList<>();
+        sources.add(resource);
+        sources.add(gold);
+        sources.add(starting);
 
-            for(int i = 0; i < jsonArray.size(); i++) {
-                JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
-                PlayableCard card = gson.fromJson(jsonObject, PlayableCard.class);
-                startingDeck.addCard(card);
+        for(String src : sources) {
+            try{
+                if(src.contains("resource.json")) d = resourceDeck;
+                else if(src.contains(("gold"))) d = goldDeck;
+                else d = startingDeck;
+
+
+                FileReader reader = new FileReader(src);
+                JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
+
+                for(int i = 0; i < jsonArray.size(); i++) {
+                    JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
+                    PlayableCard card = gson.fromJson(jsonObject, PlayableCard.class);
+                    d.addCard(card);
+                }
+            } catch (FileNotFoundException e)   {
+                throw new RuntimeException(e);
             }
-        } catch (FileNotFoundException e)   {
-            throw new RuntimeException(e);
         }
-
 
         String goal = "src/main/resources/it/polimi/ingsw/am42/json/goal.json";
 
@@ -535,10 +539,7 @@ public class Game implements GameInterface {
         goldDeck.shuffle();
         startingDeck.shuffle();
         goalDeck.shuffle();
-
-
     }
-
 
     /**
      * This method checks if the nickname is already in use

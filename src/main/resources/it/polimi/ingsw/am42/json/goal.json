@@ -1,0 +1,176 @@
+[
+  {
+    "id" : 87,
+    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/87.png",
+    "evaluator" : {
+      "type" : "EvaluatorPointsPerStair",
+      "numPoints" : 2,
+      "color" : "RED",
+      "direction" : "UPRIGHT"
+    }
+  },
+  {
+    "id" : 88,
+    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/88.png",
+    "evaluator" : {
+      "type" : "EvaluatorPointsPerStair",
+      "numPoints" : 2,
+      "color" : "GREEN",
+      "direction" : "UPLEFT"
+    }
+  },
+  {
+    "id" : 89,
+    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/89.png",
+    "evaluator" : {
+      "type" : "EvaluatorPointsPerStair",
+      "numPoints" : 2,
+      "color" : "CYAN",
+      "direction" : "UPRIGHT"
+    }
+  },
+  {
+    "id" : 90,
+    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/90.png",
+    "evaluator" : {
+      "type" : "EvaluatorPointsPerStair",
+      "numPoints" : 2,
+      "color" : "PURPLE",
+      "direction" : "UPLEFT"
+    }
+  },
+  {
+    "id" : 91,
+    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/91.png",
+    "evaluator" : {
+      "type" : "EvaluatorPointsPerChair",
+      "numPoints" : 3,
+      "color1" : "RED",
+      "color2" : "GREEN",
+      "direction" : "DOWNRIGHT"
+    }
+  },
+  {
+    "id" : 92,
+    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/92.png",
+    "evaluator" : {
+      "type" : "EvaluatorPointsPerChair",
+      "numPoints" : 3,
+      "color1" : "GREEN",
+      "color2" : "PURPLE",
+      "direction" : "DOWNLEFT"
+    }
+  },
+  {
+    "id" : 93,
+    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/93.png",
+    "evaluator" : {
+      "type" : "EvaluatorPointsPerChair",
+      "numPoints" : 3,
+      "color1" : "CYAN",
+      "color2" : "RED",
+      "direction" : "UPRIGHT"
+    }
+  },
+  {
+    "id" : 94,
+    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/94.png",
+    "evaluator" : {
+      "type" : "EvaluatorPointsPerChair",
+      "numPoints" : 3,
+      "color1" : "PURPLE",
+      "color2" : "CYAN",
+      "direction" : "UPLEFT"
+    }
+  },
+  {
+    "id" : 95,
+    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/95.png",
+    "evaluator" : {
+      "type" : "EvaluatorPointsPerResource",
+      "numPoints" : 2,
+      "resourceMap" : {
+        "FUNGIKINGDOM" : 3
+      }
+    }
+  },
+  {
+    "id" : 96,
+    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/96.png",
+    "evaluator" : {
+      "type" : "EvaluatorPointsPerResource",
+      "numPoints" : 2,
+      "resourceMap" : {
+        "PLANTKINGDOM" : 3
+      }
+    }
+  },
+  {
+    "id" : 97,
+    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/97.png",
+    "evaluator" : {
+      "type" : "EvaluatorPointsPerResource",
+      "numPoints" : 2,
+      "resourceMap" : {
+        "ANIMALKINGDOM" : 3
+      }
+    }
+  },
+  {
+    "id" : 98,
+    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/98.png",
+    "evaluator" : {
+      "type" : "EvaluatorPointsPerResource",
+      "numPoints" : 2,
+      "resourceMap" : {
+        "INSECTKINGDOM" : 3
+      }
+    }
+  },
+  {
+    "id" : 99,
+    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/99.png",
+    "evaluator" : {
+      "type" : "EvaluatorPointsPerResource",
+      "numPoints" : 3,
+      "resourceMap" : {
+        "QUILLOBJECT" : 1,
+        "INKWELLOBJECT" : 1,
+        "MANUSCRIPTOBJECT" : 1
+      }
+    }
+  },
+  {
+    "id" : 100,
+    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/100.png",
+    "evaluator" : {
+      "type" : "EvaluatorPointsPerResource",
+      "numPoints" : 2,
+      "resourceMap" : {
+        "MANUSCRIPTOBJECT" : 2
+      }
+    }
+  },
+  {
+    "id" : 101,
+    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/101.png",
+    "evaluator" : {
+      "type" : "EvaluatorPointsPerResource",
+      "numPoints" : 2,
+      "resourceMap" : {
+        "INKWELLOBJECT" : 2
+      }
+    }
+  },
+  {
+    "id" : 102,
+    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/102.png",
+    "evaluator" : {
+      "type" : "EvaluatorPointsPerResource",
+      "numPoints" : 2,
+      "resourceMap" : {
+        "QUILLOBJECT" : 2
+      }
+    }
+  }
+]

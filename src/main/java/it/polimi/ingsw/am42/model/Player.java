@@ -31,6 +31,33 @@ public class Player {
     private GoalCard personalGoal;
     private int numberGoalsAchieved;
 
+    /**
+     * Constructor of the class Player for the reconstruction
+     * of the game after network disconnections.
+     * @see it.polimi.ingsw.am42.gson.gameGson.GameDeserializer
+     * @param nickname
+     * @param points
+     * @param hand
+     * @param color
+     * @param board
+     * @param personalGoal
+     * @param numberGoalsAchieved
+     *
+     * @author Rodrigo Almandoz Franco
+     */
+
+    public Player(String nickname, int points, List<PlayableCard> hand, Color color, Board board,
+                  GoalCard personalGoal, int numberGoalsAchieved) {
+
+        this.nickname = nickname;
+        this.points = points;
+        this.hand = hand;
+        this.color = color;
+        this.board = board;
+        this.personalGoal = personalGoal;
+        this.numberGoalsAchieved = numberGoalsAchieved;
+    }
+
 
     public Player(String nickname) {
         this.nickname = nickname;
@@ -51,6 +78,18 @@ public class Player {
         this.board = new Board();
         this.personalGoal = null;
         this.numberGoalsAchieved = 0;
+    }
+
+    /**
+     * Sets the player's personal goal.
+     * The player chooses the goal at the beginning of the game and then here it is registered.
+     * @param goal the goal to set
+     *
+     * @author Rodrigo Almandoz Franco
+     */
+
+    public void setPersonalGoal(GoalCard goal) {
+        this.personalGoal = goal;
     }
 
     /**
@@ -169,6 +208,7 @@ public class Player {
 
         face.setPosition(position);
         board.addFace(face);
+        removeCardFromHand(face);
     }
 
     /**
@@ -199,7 +239,7 @@ public class Player {
      * @author Tommaso Crippa
      * @param face the face of the card that needs to be removed
      */
-    public void removeCardFromHand(Face face) {
+    private void removeCardFromHand(Face face) {
         for (PlayableCard c : hand) {
             if (face.equals((c.getFront())) || face.equals(c.getBack())) {
                 hand.remove(c);

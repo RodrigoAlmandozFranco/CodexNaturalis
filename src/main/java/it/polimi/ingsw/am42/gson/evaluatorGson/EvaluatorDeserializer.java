@@ -5,12 +5,10 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.enumeration.Direction;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
-import it.polimi.ingsw.am42.model.evaluator.Evaluator;
-import it.polimi.ingsw.am42.model.evaluator.EvaluatorPoints;
-import it.polimi.ingsw.am42.model.evaluator.EvaluatorPointsPerCorner;
-import it.polimi.ingsw.am42.model.evaluator.EvaluatorPointsPerResource;
+import it.polimi.ingsw.am42.model.evaluator.*;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
@@ -51,15 +49,15 @@ public class EvaluatorDeserializer implements JsonDeserializer<Evaluator> {
                 return new EvaluatorPointsPerResource(numPoints, resourceMap);
 
             case "EvaluatorPointsPerStair":
-                Resource kingdom = Resource.valueOf(jsonObject.get("kingdom").getAsString());
+                Color color = Color.valueOf(jsonObject.get("color").getAsString());
                 direction = Direction.valueOf(jsonObject.get("direction").getAsString());
-                return new EvaluatorPointsPerStair(numPoints, kingdom, direction);
+                return new EvaluatorPointsPerStair(numPoints, color, direction);
 
             case "EvaluatorPointsPerChair":
-                Resource kingdom1 = Resource.valueOf(jsonObject.get("kingdom1").getAsString());
-                Resource kingdom2 = Resource.valueOf(jsonObject.get("kingdom2").getAsString());
+                Color color1 = Color.valueOf(jsonObject.get("color1").getAsString());
+                Color color2 = Color.valueOf(jsonObject.get("color2").getAsString());
                 direction = Direction.valueOf(jsonObject.get("direction").getAsString());
-                return new EvaluatorPointsPerChair(numPoints, kingdom1, kingdom2, direction);
+                return new EvaluatorPointsPerChair(numPoints, color1, color2, direction);
 
             default:
                 return null;
