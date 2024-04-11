@@ -26,7 +26,7 @@ public class Player {
     private int points;
     private final String nickname;
     private List<PlayableCard> hand;
-    private final Color color;
+    private Color color;
     private final Board board;
     private GoalCard personalGoal;
     private int numberGoalsAchieved;
@@ -64,17 +64,7 @@ public class Player {
         this.points = 0;
         this.hand = new ArrayList<PlayableCard>();
         Random random = new Random();
-        this.color = Color.values()[random.nextInt(Color.values().length)];
-        this.board = new Board();
-        this.personalGoal = null;
-        this.numberGoalsAchieved = 0;
-    }
-
-    public Player(String nickname, Color color) {
-        this.nickname = nickname;
-        this.points = 0;
-        this.hand = new ArrayList<PlayableCard>();
-        this.color = color;
+        this.color = null;
         this.board = new Board();
         this.personalGoal = null;
         this.numberGoalsAchieved = 0;
@@ -178,6 +168,17 @@ public class Player {
      */
     public void setGoal(GoalCard goal) {
         this.personalGoal = goal;
+    }
+
+
+    /**
+     * Sets the player's color
+     *
+     * @author Tommaso Crippa
+     * @param color the player's color
+     */
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     /**
