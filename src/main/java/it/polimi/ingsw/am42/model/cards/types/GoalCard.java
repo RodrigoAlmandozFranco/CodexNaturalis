@@ -12,8 +12,11 @@ import it.polimi.ingsw.am42.model.evaluator.Evaluator;
 
 public class GoalCard extends Card {
     private Evaluator evaluator;
-    public GoalCard(int id, Evaluator evaluator) {
+    private String srcImage;
+
+    public GoalCard(int id, String srcImage, Evaluator evaluator) {
         super(id);
+        this.srcImage = srcImage;
         this.evaluator = evaluator;
     }
 
@@ -23,6 +26,10 @@ public class GoalCard extends Card {
      */
     public Evaluator getEvaluator() {
         return evaluator;
+    }
+
+    public String getSrcImage() {
+        return srcImage;
     }
 
 }

@@ -37,7 +37,6 @@ public interface GameInterface {
     public void setTurnFinal(boolean v);
     public boolean getTurnFinal();
     public void initializeGameForPlayers();
-    public List<Integer> getGlobalGoals();
     public List<Integer> getGoalDeck();
     public List<Integer> getResourceDeck();
     public List<Integer> getGoldDeck();
