@@ -19,7 +19,7 @@ class StartingCardTest {
     void getFront() {
         Front front = new Front("front", null, Color.RED, null, null);
         Back back = new Back("back", null, Color.RED, null);
-        PlayableCard card = new StartingCard(1, front, back, null);
+        PlayableCard card = new StartingCard(1, front, back);
         assertEquals(front, card.getFront());
     }
 
@@ -27,7 +27,7 @@ class StartingCardTest {
     void getBack() {
         Front front = new Front("front", null, Color.RED, null, null);
         Back back = new Back("back", null, Color.RED, null);
-        PlayableCard card = new StartingCard(1, front, back, null);
+        PlayableCard card = new StartingCard(1, front, back);
         assertEquals(back, card.getBack());
     }
 
@@ -35,7 +35,7 @@ class StartingCardTest {
     void setVisibility() {
         Front front = new Front("front", null, Color.RED, null, null);
         Back back = new Back("back", null, Color.RED, null);
-        PlayableCard card = new StartingCard(1, front, back, null);
+        PlayableCard card = new StartingCard(1, front, back);
         card.setVisibility(true);
         assertTrue(card.getVisibility());
     }
@@ -44,7 +44,7 @@ class StartingCardTest {
     void getVisibility() {
         Front front = new Front("front", null, Color.RED, null, null);
         Back back = new Back("back", null, Color.RED, null);
-        PlayableCard card = new StartingCard(1, front, back, null);
+        PlayableCard card = new StartingCard(1, front, back);
         assertFalse(card.getVisibility());
     }
 }

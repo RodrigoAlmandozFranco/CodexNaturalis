@@ -15,10 +15,10 @@ import java.util.Map;
  */
 public class Back extends Face {
 
-    private final Resource resource;
+    private final List<Resource> resource;
 
 
-    public Back(String src, List<Corner> corners, Color color, Resource resource) {
+    public Back(String src, List<Corner> corners, Color color, List<Resource> resource) {
         super(src, corners, color);
 
         this.resource = resource;
@@ -56,10 +56,24 @@ public class Back extends Face {
     public Map<Resource, Integer> getResources() {
 
         Map<Resource, Integer> resources = new HashMap<Resource, Integer>();
-        resources.put(resource, 1);
+
+        Resource r;
+        for (Corner c: corners) {
+            r = c.getResource();
+            if (r != null) {
+                if (!resources.containsKey(r))
+                    resources.put(r, 0);
+                resources.put(r, resources.get(r)+1);
+            }
+        }
+
+        for (Resource res : resource){
+            if (!resources.containsKey(res))
+                resources.put(res, 0);
+            resources.put(res, resources.get(res)+1);
+        }
 
         return resources;
-
     }
 }
 
