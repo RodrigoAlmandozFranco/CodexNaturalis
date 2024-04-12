@@ -28,20 +28,43 @@ public class GameDB {
         path = "src/main/resources/it/polimi/ingsw/am42/gamePersistence/game.json";
     }
 
+    /**
+     * This method saves the game in the json file located at path. The file is always updated.
+     * If the gameStarted boolean is false, it returns as a string the entire json.
+     * If the gameStarted boolean is true, it returns as a string only the changes made by the current player.
+     * @param gameStarted boolean that points out if the game has started or not.
+     * @return the string which contains all the game or only the changes.
+     */
 
-    public void saveGame() {
+    public String saveGame(boolean gameStarted) {
+
+        JsonObject jo = new JsonObject();
+
         Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Game.class, new GameSerializer())
-                .create();
+                        .registerTypeAdapter(Game.class, new GameSerializer(gameStarted, jo))
+                        .create();
+
 
         String json = gson.toJson(game);
+        String changes = jo.toString();
+
+        if(gameStarted) {
+            return changes;
+        }
 
         try (FileWriter writer = new FileWriter(path)) {
             writer.write(json);
+            return json;
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
+
+    /**
+     * This method loads the Game contained in the json file path.
+     * @return the game contained in the json file already loaded.
+     */
 
     public Game loadGame() {
         Gson gson = new GsonBuilder()
