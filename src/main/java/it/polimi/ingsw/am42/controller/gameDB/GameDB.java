@@ -1,4 +1,4 @@
-package it.polimi.ingsw.am42.controller;
+package it.polimi.ingsw.am42.controller.gameDB;
 
 import com.google.gson.*;
 import it.polimi.ingsw.am42.gson.gameGson.GameDeserializer;
@@ -61,11 +61,25 @@ public class GameDB {
         return null;
     }
 
+
+    /**
+     * This method returns the json file as a string.
+     * @return the json file as a string.
+     */
+    public String jsonToString() {
+        try {
+            JsonElement jsonElement = JsonParser.parseReader(new FileReader(path));
+            return jsonElement.toString();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     /**
      * This method loads the Game contained in the json file path.
      * @return the game contained in the json file already loaded.
      */
-
     public Game loadGame() {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Game.class, new GameDeserializer())

@@ -30,8 +30,8 @@ import java.util.List;
  * The private methods are used to write the different attributes of the game object.
  *
  * All the changes made by the current player are saved in the jo JsonObject.
- * In the GameDB class, the jo will be transformed in a string and passed to the client
- * Afterward, the client can easily get that string in JsonObject format by the following line of code:
+ * In the GameDB class, the jo will be transformed to a string and passed to the client
+ * Afterward, the client can easily get that string to JsonObject format by the following line of code:
  *                          JsonObject object = JsonParser.parseString(string).getAsJsonObject();
  *
  * @author Rodrigo Almandoz Franco
@@ -379,7 +379,9 @@ public class GameSerializer extends TypeAdapter<Game> {
             out.name("points").value(player.getPoints());
             out.name("hand");
             writeHand(out, player.getHand());
-            out.name("color").value(player.getColor().toString());
+            if(player.getColor() != null)
+                out.name("color").value(player.getColor().toString());
+            else out.name("color").value("-1");
             out.name("board");
             writeBoard(out, player.getBoard());
             if(player.getPersonalGoal() != null) {
