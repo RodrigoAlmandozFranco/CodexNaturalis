@@ -5,10 +5,7 @@ import it.polimi.ingsw.am42.gson.gameGson.GameDeserializer;
 import it.polimi.ingsw.am42.gson.gameGson.GameSerializer;
 import it.polimi.ingsw.am42.model.Game;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 
 /**
@@ -73,6 +70,29 @@ public class GameDB {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+
+    public boolean jsonExists() {
+        File file = new File(path);
+        return file.exists();
+    }
+
+    public boolean jsonCreate() {
+        File file = new File(path);
+        try {
+            return file.createNewFile();
+        } catch (IOException e) {
+            return false;
+        }
+    }
+
+    public boolean jsonDelete() {
+        File file = new File(path);
+        if(file.exists()) {
+            return file.delete();
+        }
+        return false;
     }
 
 
