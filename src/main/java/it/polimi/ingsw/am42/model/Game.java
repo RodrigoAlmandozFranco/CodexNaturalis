@@ -13,7 +13,6 @@ import it.polimi.ingsw.am42.gson.playableCardGson.PlayableCardDeserializer;
 import it.polimi.ingsw.am42.model.cards.Card;
 import it.polimi.ingsw.am42.model.cards.types.*;
 import it.polimi.ingsw.am42.model.cards.types.playables.ResourceCard;
-import it.polimi.ingsw.am42.model.cards.types.playables.StartingCard;
 import it.polimi.ingsw.am42.model.decks.GoalDeck;
 import it.polimi.ingsw.am42.model.decks.PlayableDeck;
 import it.polimi.ingsw.am42.model.enumeration.Color;
@@ -243,7 +242,14 @@ public class Game implements GameInterface {
         }
         return currentPlayer;
     }
-
+    /**
+     *
+     * With this method Controller sets the current Player
+     * @param p
+     */
+    public void setCurrentPlayer(Player p){
+        currentPlayer = p;
+    }
     /**
      * This method modifies the currentPlayer attribute to the next player
      * @return the next player, the one that has to play now
@@ -263,13 +269,7 @@ public class Game implements GameInterface {
         return numberPlayers;
     }
 
-    /**
-     * With this method Controller sets the current Player
-     * @param p
-     */
-    public void setCurrentPlayer(Player p){
-        currentPlayer = p;
-    }
+
 
     /**
      * This method returns the list of the visible cards and the top cards of resource and gold deck.

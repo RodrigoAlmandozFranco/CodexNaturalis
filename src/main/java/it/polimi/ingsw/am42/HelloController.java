@@ -1,11 +1,11 @@
 package it.polimi.ingsw.am42;
 
 import it.polimi.ingsw.am42.controller.*;
+import it.polimi.ingsw.am42.controller.state.*;
 import it.polimi.ingsw.am42.model.Game;
 import it.polimi.ingsw.am42.model.Player;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import it.polimi.ingsw.am42.model.Game;
 
 public class HelloController {
     @FXML
