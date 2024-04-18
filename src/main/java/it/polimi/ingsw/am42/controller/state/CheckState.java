@@ -1,9 +1,9 @@
-package it.polimi.ingsw.am42.controller;
+package it.polimi.ingsw.am42.controller.state;
 
 import it.polimi.ingsw.am42.model.Game;
 import it.polimi.ingsw.am42.model.Player;
 
-public class CheckState implements State{
+public class CheckState implements State {
     private Game g;
 
     public CheckState(Game g){
