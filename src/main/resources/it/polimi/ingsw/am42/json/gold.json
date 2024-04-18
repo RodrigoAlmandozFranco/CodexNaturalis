@@ -64,7 +64,7 @@
         }
       ],
       "color": "RED",
-      "resource": "FUNGIKINGDOM"
+      "resource": ["FUNGIKINGDOM"]
     }
   },
   {
@@ -132,7 +132,7 @@
         }
       ],
       "color": "RED",
-      "resource": "FUNGIKINGDOM"
+      "resource": ["FUNGIKINGDOM"]
     }
   },
   {
@@ -200,7 +200,7 @@
         }
       ],
       "color": "RED",
-      "resource": "FUNGIKINGDOM"
+      "resource": ["FUNGIKINGDOM"]
     }
   },
   {
@@ -265,7 +265,7 @@
         }
       ],
       "color": "RED",
-      "resource": "FUNGIKINGDOM"
+      "resource": ["FUNGIKINGDOM"]
     }
   },
   {
@@ -330,7 +330,7 @@
         }
       ],
       "color": "RED",
-      "resource": "FUNGIKINGDOM"
+      "resource": ["FUNGIKINGDOM"]
     }
   },
   {
@@ -395,7 +395,7 @@
         }
       ],
       "color": "RED",
-      "resource": "FUNGIKINGDOM"
+      "resource": ["FUNGIKINGDOM"]
     }
   },
   {
@@ -459,7 +459,7 @@
         }
       ],
       "color": "RED",
-      "resource": "FUNGIKINGDOM"
+      "resource": ["FUNGIKINGDOM"]
     }
   },
   {
@@ -523,7 +523,7 @@
         }
       ],
       "color": "RED",
-      "resource": "FUNGIKINGDOM"
+      "resource": ["FUNGIKINGDOM"]
     }
   },
   {
@@ -587,7 +587,7 @@
         }
       ],
       "color": "RED",
-      "resource": "FUNGIKINGDOM"
+      "resource": ["FUNGIKINGDOM"]
     }
   },
   {
@@ -651,7 +651,7 @@
         }
       ],
       "color": "RED",
-      "resource": "FUNGIKINGDOM"
+      "resource": ["FUNGIKINGDOM"]
     }
   },
   {
@@ -719,7 +719,7 @@
         }
       ],
       "color": "GREEN",
-      "resource": "PLANTKINGDOM"
+      "resource": ["PLANTKINGDOM"]
     }
   },
   {
@@ -787,7 +787,7 @@
         }
       ],
       "color": "GREEN",
-      "resource": "PLANTKINGDOM"
+      "resource": ["PLANTKINGDOM"]
     }
   },
   {
@@ -855,7 +855,7 @@
         }
       ],
       "color": "GREEN",
-      "resource": "PLANTKINGDOM"
+      "resource": ["PLANTKINGDOM"]
     }
   },
   {
@@ -920,7 +920,7 @@
         }
       ],
       "color": "GREEN",
-      "resource": "PLANTKINGDOM"
+      "resource": ["PLANTKINGDOM"]
     }
   },
   {
@@ -985,7 +985,7 @@
         }
       ],
       "color": "GREEN",
-      "resource": "PLANTKINGDOM"
+      "resource": ["PLANTKINGDOM"]
     }
   },
   {
@@ -1050,7 +1050,7 @@
         }
       ],
       "color": "GREEN",
-      "resource": "PLANTKINGDOM"
+      "resource": ["PLANTKINGDOM"]
     }
   },
   {
@@ -1114,7 +1114,7 @@
         }
       ],
       "color": "GREEN",
-      "resource": "PLANTKINGDOM"
+      "resource": ["PLANTKINGDOM"]
     }
   },
   {
@@ -1178,7 +1178,7 @@
         }
       ],
       "color": "GREEN",
-      "resource": "PLANTKINGDOM"
+      "resource": ["PLANTKINGDOM"]
     }
   },
   {
@@ -1242,7 +1242,7 @@
         }
       ],
       "color": "GREEN",
-      "resource": "PLANTKINGDOM"
+      "resource": ["PLANTKINGDOM"]
     }
   },
   {
@@ -1306,7 +1306,7 @@
         }
       ],
       "color": "GREEN",
-      "resource": "PLANTKINGDOM"
+      "resource": ["PLANTKINGDOM"]
     }
   },
   {
@@ -1374,7 +1374,7 @@
         }
       ],
       "color": "CYAN",
-      "resource": "ANIMALKINGDOM"
+      "resource": ["ANIMALKINGDOM"]
     }
   },
   {
@@ -1442,7 +1442,7 @@
         }
       ],
       "color": "CYAN",
-      "resource": "ANIMALKINGDOM"
+      "resource": ["ANIMALKINGDOM"]
     }
   },
   {
@@ -1510,7 +1510,7 @@
         }
       ],
       "color": "CYAN",
-      "resource": "ANIMALKINGDOM"
+      "resource": ["ANIMALKINGDOM"]
     }
   },
   {
@@ -1575,7 +1575,7 @@
         }
       ],
       "color": "CYAN",
-      "resource": "ANIMALKINGDOM"
+      "resource": ["ANIMALKINGDOM"]
     }
   },
   {
@@ -1640,7 +1640,7 @@
         }
       ],
       "color": "CYAN",
-      "resource": "ANIMALKINGDOM"
+      "resource": ["ANIMALKINGDOM"]
     }
   },
   {
@@ -1705,7 +1705,7 @@
         }
       ],
       "color": "CYAN",
-      "resource": "ANIMALKINGDOM"
+      "resource": ["ANIMALKINGDOM"]
     }
   },
   {
@@ -1769,7 +1769,7 @@
         }
       ],
       "color": "CYAN",
-      "resource": "ANIMALKINGDOM"
+      "resource": ["ANIMALKINGDOM"]
     }
   },
   {
@@ -1833,7 +1833,7 @@
         }
       ],
       "color": "CYAN",
-      "resource": "ANIMALKINGDOM"
+      "resource": ["ANIMALKINGDOM"]
     }
   },
   {
@@ -1897,7 +1897,7 @@
         }
       ],
       "color": "CYAN",
-      "resource": "ANIMALKINGDOM"
+      "resource": ["ANIMALKINGDOM"]
     }
   },
   {
@@ -1961,7 +1961,7 @@
         }
       ],
       "color": "CYAN",
-      "resource": "ANIMALKINGDOM"
+      "resource": ["ANIMALKINGDOM"]
     }
   },
   {
@@ -2029,7 +2029,7 @@
         }
       ],
       "color": "PURPLE",
-      "resource": "INSECTKINGDOM"
+      "resource": ["INSECTKINGDOM"]
     }
   },
   {
@@ -2097,7 +2097,7 @@
         }
       ],
       "color": "PURPLE",
-      "resource": "INSECTKINGDOM"
+      "resource": ["INSECTKINGDOM"]
     }
   },
   {
@@ -2165,7 +2165,7 @@
         }
       ],
       "color": "PURPLE",
-      "resource": "INSECTKINGDOM"
+      "resource": ["INSECTKINGDOM"]
     }
   },
   {
@@ -2230,7 +2230,7 @@
         }
       ],
       "color": "PURPLE",
-      "resource": "INSECTKINGDOM"
+      "resource": ["INSECTKINGDOM"]
     }
   },
   {
@@ -2295,7 +2295,7 @@
         }
       ],
       "color": "PURPLE",
-      "resource": "INSECTKINGDOM"
+      "resource": ["INSECTKINGDOM"]
     }
   },
   {
@@ -2360,7 +2360,7 @@
         }
       ],
       "color": "PURPLE",
-      "resource": "INSECTKINGDOM"
+      "resource": ["INSECTKINGDOM"]
     }
   },
   {
@@ -2424,7 +2424,7 @@
         }
       ],
       "color": "PURPLE",
-      "resource": "INSECTKINGDOM"
+      "resource": ["INSECTKINGDOM"]
     }
   },
   {
@@ -2488,7 +2488,7 @@
         }
       ],
       "color": "PURPLE",
-      "resource": "INSECTKINGDOM"
+      "resource": ["INSECTKINGDOM"]
     }
   },
   {
@@ -2552,7 +2552,7 @@
         }
       ],
       "color": "PURPLE",
-      "resource": "INSECTKINGDOM"
+      "resource": ["INSECTKINGDOM"]
     }
   },
   {
@@ -2616,7 +2616,7 @@
         }
       ],
       "color": "PURPLE",
-      "resource": "INSECTKINGDOM"
+      "resource": ["INSECTKINGDOM"]
     }
   }
 ]

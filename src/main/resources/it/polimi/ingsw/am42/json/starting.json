@@ -12,31 +12,6 @@
       },
       "corners": [
         {
-          "resource": null,
-          "state": "OPEN",
-          "direction": "UPLEFT"
-        },
-        {
-          "resource": "PLANTKINGDOM",
-          "state": "OPEN",
-          "direction": "UPRIGHT"
-        },
-        {
-          "resource": "INSECTKINGDOM",
-          "state": "OPEN",
-          "direction": "DOWNLEFT"
-        },
-        {
-          "resource": null,
-          "state": "OPEN",
-          "direction": "DOWNRIGHT"
-        }
-      ]
-    },
-    "back": {
-      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/81_back.png",
-      "corners": [
-        {
           "resource": "FUNGIKINGDOM",
           "state": "OPEN",
           "direction": "UPLEFT"
@@ -56,11 +31,35 @@
           "state": "OPEN",
           "direction": "DOWNRIGHT"
         }
+      ]
+    },
+    "back": {
+      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/81_back.png",
+      "corners": [
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "UPLEFT"
+        },
+        {
+          "resource": "PLANTKINGDOM",
+          "state": "OPEN",
+          "direction": "UPRIGHT"
+        },
+        {
+          "resource": "INSECTKINGDOM",
+          "state": "OPEN",
+          "direction": "DOWNLEFT"
+        },
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "DOWNRIGHT"
+        }
       ],
       "color": "WHITE",
-      "resource": null
-    },
-    "resources": ["INSECTKINGDOM"]
+      "resource": ["INSECTKINGDOM"]
+    }
   },
   {
     "type" : "StartingCard",
@@ -75,31 +74,6 @@
       },
       "corners": [
         {
-          "resource": "ANIMALKINGDOM",
-          "state": "OPEN",
-          "direction": "UPLEFT"
-        },
-        {
-          "resource": null,
-          "state": "OPEN",
-          "direction": "UPRIGHT"
-        },
-        {
-          "resource": null,
-          "state": "OPEN",
-          "direction": "DOWNLEFT"
-        },
-        {
-          "resource": "FUNGIKINGDOM",
-          "state": "OPEN",
-          "direction": "DOWNRIGHT"
-        }
-      ]
-    },
-    "back": {
-      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/82_back.png",
-      "corners": [
-        {
           "resource": "PLANTKINGDOM",
           "state": "OPEN",
           "direction": "UPLEFT"
@@ -119,11 +93,35 @@
           "state": "OPEN",
           "direction": "DOWNRIGHT"
         }
+      ]
+    },
+    "back": {
+      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/82_back.png",
+      "corners": [
+        {
+          "resource": "ANIMALKINGDOM",
+          "state": "OPEN",
+          "direction": "UPLEFT"
+        },
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "UPRIGHT"
+        },
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "DOWNLEFT"
+        },
+        {
+          "resource": "FUNGIKINGDOM",
+          "state": "OPEN",
+          "direction": "DOWNRIGHT"
+        }
       ],
       "color": "WHITE",
-      "resource": null
-    },
-    "resources": ["FUNGIKINGDOM"]
+      "resource": ["FUNGIKINGDOM"]
+    }
   },
   {
     "type" : "StartingCard",
@@ -138,31 +136,6 @@
       },
       "corners": [
         {
-          "resource": null,
-          "state": "OPEN",
-          "direction": "UPLEFT"
-        },
-        {
-          "resource": null,
-          "state": "OPEN",
-          "direction": "UPRIGHT"
-        },
-        {
-          "resource": null,
-          "state": "OPEN",
-          "direction": "DOWNLEFT"
-        },
-        {
-          "resource": null,
-          "state": "OPEN",
-          "direction": "DOWNRIGHT"
-        }
-      ]
-    },
-    "back": {
-      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/83_back.png",
-      "corners": [
-        {
           "resource": "INSECTKINGDOM",
           "state": "OPEN",
           "direction": "UPLEFT"
@@ -182,11 +155,35 @@
           "state": "OPEN",
           "direction": "DOWNRIGHT"
         }
+      ]
+    },
+    "back": {
+      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/83_back.png",
+      "corners": [
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "UPLEFT"
+        },
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "UPRIGHT"
+        },
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "DOWNLEFT"
+        },
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "DOWNRIGHT"
+        }
       ],
       "color": "WHITE",
-      "resource": null
-    },
-    "resources": ["PLANTKINGDOM", "FUNGIKINGDOM"]
+      "resource": ["PLANTKINGDOM", "FUNGIKINGDOM"]
+    }
   },
   {
     "type" : "StartingCard",
@@ -201,31 +198,6 @@
       },
       "corners": [
         {
-          "resource": null,
-          "state": "OPEN",
-          "direction": "UPLEFT"
-        },
-        {
-          "resource": null,
-          "state": "OPEN",
-          "direction": "UPRIGHT"
-        },
-        {
-          "resource": null,
-          "state": "OPEN",
-          "direction": "DOWNLEFT"
-        },
-        {
-          "resource": null,
-          "state": "OPEN",
-          "direction": "DOWNRIGHT"
-        }
-      ]
-    },
-    "back": {
-      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/84_back.png",
-      "corners": [
-        {
           "resource": "PLANTKINGDOM",
           "state": "OPEN",
           "direction": "UPLEFT"
@@ -245,11 +217,35 @@
           "state": "OPEN",
           "direction": "DOWNRIGHT"
         }
+      ]
+    },
+    "back": {
+      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/84_back.png",
+      "corners": [
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "UPLEFT"
+        },
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "UPRIGHT"
+        },
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "DOWNLEFT"
+        },
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "DOWNRIGHT"
+        }
       ],
       "color": "WHITE",
-      "resource": null
-    },
-    "resources": ["ANIMALKINGDOM", "INSECTKINGDOM"]
+      "resource": ["ANIMALKINGDOM", "INSECTKINGDOM"]
+    }
   },
   {
     "type" : "StartingCard",
@@ -264,31 +260,6 @@
       },
       "corners": [
         {
-          "resource": null,
-          "state": "OPEN",
-          "direction": "UPLEFT"
-        },
-        {
-          "resource": null,
-          "state": "OPEN",
-          "direction": "UPRIGHT"
-        },
-        {
-          "resource": null,
-          "state": "CLOSED",
-          "direction": "DOWNLEFT"
-        },
-        {
-          "resource": null,
-          "state": "CLOSED",
-          "direction": "DOWNRIGHT"
-        }
-      ]
-    },
-    "back": {
-      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/85_back.png",
-      "corners": [
-        {
           "resource": "INSECTKINGDOM",
           "state": "OPEN",
           "direction": "UPLEFT"
@@ -308,11 +279,35 @@
           "state": "OPEN",
           "direction": "DOWNRIGHT"
         }
+      ]
+    },
+    "back": {
+      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/85_back.png",
+      "corners": [
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "UPLEFT"
+        },
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "UPRIGHT"
+        },
+        {
+          "resource": null,
+          "state": "CLOSED",
+          "direction": "DOWNLEFT"
+        },
+        {
+          "resource": null,
+          "state": "CLOSED",
+          "direction": "DOWNRIGHT"
+        }
       ],
       "color": "WHITE",
-      "resource": null
-    },
-    "resources": ["ANIMALKINGDOM", "INSECTKINGDOM", "PLANTKINGDOM"]
+      "resource": ["ANIMALKINGDOM", "INSECTKINGDOM", "PLANTKINGDOM"]
+    }
   },
   {
     "type" : "StartingCard",
@@ -327,31 +322,6 @@
       },
       "corners": [
         {
-          "resource": null,
-          "state": "OPEN",
-          "direction": "UPLEFT"
-        },
-        {
-          "resource": null,
-          "state": "OPEN",
-          "direction": "UPRIGHT"
-        },
-        {
-          "resource": null,
-          "state": "CLOSED",
-          "direction": "DOWNLEFT"
-        },
-        {
-          "resource": null,
-          "state": "CLOSED",
-          "direction": "DOWNRIGHT"
-        }
-      ]
-    },
-    "back": {
-      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/86_back.png",
-      "corners": [
-        {
           "resource": "FUNGIKINGDOM",
           "state": "OPEN",
           "direction": "UPLEFT"
@@ -371,10 +341,34 @@
           "state": "OPEN",
           "direction": "DOWNRIGHT"
         }
+      ]
+    },
+    "back": {
+      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/86_back.png",
+      "corners": [
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "UPLEFT"
+        },
+        {
+          "resource": null,
+          "state": "OPEN",
+          "direction": "UPRIGHT"
+        },
+        {
+          "resource": null,
+          "state": "CLOSED",
+          "direction": "DOWNLEFT"
+        },
+        {
+          "resource": null,
+          "state": "CLOSED",
+          "direction": "DOWNRIGHT"
+        }
       ],
       "color": "WHITE",
-      "resource": null
-    },
-    "resources": ["PLANTKINGDOM", "ANIMALKINGDOM", "FUNGIKINGDOM"]
+      "resource": ["PLANTKINGDOM", "ANIMALKINGDOM", "FUNGIKINGDOM"]
+    }
   }
 ]

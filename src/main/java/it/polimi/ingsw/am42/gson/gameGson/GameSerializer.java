@@ -3,7 +3,6 @@ package it.polimi.ingsw.am42.gson.gameGson;
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
-import it.polimi.ingsw.am42.controller.Turn;
 import it.polimi.ingsw.am42.model.Game;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
@@ -14,7 +13,9 @@ import it.polimi.ingsw.am42.model.structure.Board;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,21 +29,29 @@ import java.util.List;
  * It receives a JsonWriter object and a Game object as parameters.
  * The private methods are used to write the different attributes of the game object.
  *
+ * All the changes made by the current player are saved in the jo JsonObject.
+ * In the GameDB class, the jo will be transformed to a string and passed to the client
+ * Afterward, the client can easily get that string to JsonObject format by the following line of code:
+ *                          JsonObject object = JsonParser.parseString(string).getAsJsonObject();
+ *
  * @author Rodrigo Almandoz Franco
  */
 
 public class GameSerializer extends TypeAdapter<Game> {
 
-    //todo: create a class method that has a public boolean hasGameStarted() method that
-    //      returns true if the game has started, and false otherwise.
-
-    private Turn turn = new Turn();
     private String path = "src/main/resources/it/polimi/ingsw/am42/gamePersistence/game.json";
+    private boolean gameStarted;
+    private JsonObject jo;
+
+    public GameSerializer(boolean gs, JsonObject jo) {
+        this.gameStarted = gs;
+        this.jo = jo;
+    }
 
 
     public void write(JsonWriter out, Game game) throws IOException {
 
-        if (!turn.hasGameStarted()) {
+        if (!gameStarted) {
             writeEntireGame(out, game);
         } else {
             writeChangesGame(game);
@@ -61,6 +70,7 @@ public class GameSerializer extends TypeAdapter<Game> {
             FileReader reader = new FileReader(path);
             JsonReader jsonReader = new JsonReader(reader);
             JsonObject jsonObject = JsonParser.parseReader(jsonReader).getAsJsonObject();
+
             writeChangesPlayer(game, jsonObject.get("players").getAsJsonArray());
 
             writeChangesPlayableDeck(game, jsonObject.get("resourceDeck").getAsJsonArray(), "resourceDeck");
@@ -71,7 +81,11 @@ public class GameSerializer extends TypeAdapter<Game> {
 
             jsonObject.addProperty("currentPlayer", game.getNextPlayer().getNickname());
 
+
             jsonReader.close();
+            FileWriter writer = new FileWriter(path);
+            writer.write(jsonObject.toString());
+            writer.close();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -89,12 +103,19 @@ public class GameSerializer extends TypeAdapter<Game> {
         if(str.equals("pickableResourceCards")) picks = game.getPickableResourceCards();
         else picks = game.getPickableGoldCards();
 
+        JsonArray pickable = new JsonArray();
+
         for(int i = 0; i < jsonArray.size(); i++) {
             JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
             if(jsonObject.get("id").getAsInt() != picks.get(i)) {
                 jsonObject.addProperty("id", picks.get(i));
             }
+            JsonObject idcard = new JsonObject();
+            idcard.addProperty("id", picks.get(i));
+            pickable.add(idcard);
         }
+
+        jo.add(str, pickable);
     }
 
 
@@ -109,10 +130,12 @@ public class GameSerializer extends TypeAdapter<Game> {
         if(str.equals("resourceDeck")) ids = game.getResourceDeck();
         else ids = game.getGoldDeck();
 
+
         int id = ids.getFirst();
         if(jsonArray.get(0).getAsJsonObject().get("id").getAsInt() != id) {
             jsonArray.remove(0);
         }
+        jo.addProperty(str.concat("IdFirstCard"), ids.getFirst());
     }
 
 
@@ -123,15 +146,24 @@ public class GameSerializer extends TypeAdapter<Game> {
      * @param jsonArray the JsonArray object that contains the players' information saved before.
      */
     private void writeChangesPlayer(Game game, JsonArray jsonArray) {
+        JsonArray ja = new JsonArray();
+        JsonObject points = new JsonObject();
+        JsonObject numberGoals = new JsonObject();
+
         for(int i = 0; i < jsonArray.size(); i++) {
-            JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
-            if(game.getCurrentPlayer().getNickname().equals(jsonObject.get("nickname").getAsString())) {
-                jsonObject.addProperty("points", game.getCurrentPlayer().getPoints());
-                writeChangesHand(jsonObject.get("hand").getAsJsonArray(), game);
-                writeChangesBoard(jsonObject.get("board").getAsJsonArray(), game);
-                jsonObject.addProperty("numberGoalsAchieved", game.getCurrentPlayer().getGoalsAchieved());
+            JsonObject json = jsonArray.get(i).getAsJsonObject();
+            if(game.getCurrentPlayer().getNickname().equals(json.get("nickname").getAsString())) {
+                json.addProperty("points", game.getCurrentPlayer().getPoints());
+                points.addProperty("points", game.getCurrentPlayer().getPoints());
+                ja.add(points);
+                writeChangesHand(json.get("hand").getAsJsonArray(), game, ja);
+                writeChangesBoard(json.get("board").getAsJsonArray(), game, ja);
+                json.addProperty("numberGoalsAchieved", game.getCurrentPlayer().getGoalsAchieved());
+                numberGoals.addProperty("numberGoalsAchieved", game.getCurrentPlayer().getGoalsAchieved());
+                ja.add(numberGoals);
             }
         }
+        jo.add(game.getCurrentPlayer().getNickname(), ja);
     }
 
 
@@ -140,13 +172,21 @@ public class GameSerializer extends TypeAdapter<Game> {
      * @param jsonArray the JsonArray object that contains the hand's information saved before.
      * @param game the Game object to be serialized, which contains the hand's information.
      */
-    private void writeChangesHand(JsonArray jsonArray, Game game) {
+    private void writeChangesHand(JsonArray jsonArray, Game game, JsonArray ja) {
+        JsonArray hand = new JsonArray();
+
         for(int i = 0; i < jsonArray.size(); i++) {
-            JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
-            if(jsonObject.get("id").getAsInt() != game.getCurrentPlayer().getHand().get(i).getId()) {
-                jsonObject.addProperty("id", game.getCurrentPlayer().getHand().get(i).getId());
+            JsonObject json = jsonArray.get(i).getAsJsonObject();
+            if(json.get("id").getAsInt() != game.getCurrentPlayer().getHand().get(i).getId()) {
+                json.addProperty("id", game.getCurrentPlayer().getHand().get(i).getId());
             }
+            JsonObject cardId = new JsonObject();
+            cardId.addProperty("id", game.getCurrentPlayer().getHand().get(i).getId());
+            hand.add(cardId);
         }
+        JsonObject handObject = new JsonObject();
+        handObject.add("hand", hand);
+        ja.add(handObject);
     }
 
 
@@ -155,18 +195,43 @@ public class GameSerializer extends TypeAdapter<Game> {
      * @param jsonArray the JsonArray object that contains the board's information saved before.
      * @param game the Game object to be serialized, which contains the board's information.
      */
-    private void writeChangesBoard(JsonArray jsonArray, Game game) {
+    private void writeChangesBoard(JsonArray jsonArray, Game game, JsonArray ja) {
+        JsonArray board = new JsonArray();
+
         Face face = game.getCurrentPlayer().getBoard().getLastPlacedFace();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("srcImage", face.getSrcImage());
+        JsonObject src = new JsonObject();
+        src.addProperty("srcImage", face.getSrcImage());
+        board.add(src);
+
+        JsonObject type = new JsonObject();
+
         if(face instanceof Front) {
             jsonObject.addProperty("type", "front");
+            type.addProperty("type", "front");
         } else {
             jsonObject.addProperty("type", "back");
+            type.addProperty("type", "back");
         }
+        board.add(type);
+
+        JsonObject x = new JsonObject();
+        x.addProperty("x", face.getPosition().getX());
+        board.add(x);
+
+        JsonObject y = new JsonObject();
+        y.addProperty("y", face.getPosition().getY());
+        board.add(y);
+
         jsonObject.addProperty("x", face.getPosition().getX());
         jsonObject.addProperty("y", face.getPosition().getY());
+
         jsonArray.add(jsonObject);
+
+        JsonObject boardObject = new JsonObject();
+        boardObject.add("board", board);
+        ja.add(boardObject);
     }
 
 
@@ -314,7 +379,9 @@ public class GameSerializer extends TypeAdapter<Game> {
             out.name("points").value(player.getPoints());
             out.name("hand");
             writeHand(out, player.getHand());
-            out.name("color").value(player.getColor().toString());
+            if(player.getColor() != null)
+                out.name("color").value(player.getColor().toString());
+            else out.name("color").value("-1");
             out.name("board");
             writeBoard(out, player.getBoard());
             if(player.getPersonalGoal() != null) {

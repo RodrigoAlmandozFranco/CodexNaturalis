@@ -22,6 +22,7 @@ import java.io.FileReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class handles the deserialization from json to java.
@@ -103,7 +104,10 @@ public class GameDeserializer implements JsonDeserializer<Game> {
             String nickname = jsonObject.get("nickname").getAsString();
             int points = jsonObject.get("points").getAsInt();
             List<PlayableCard> handPlayer = getHand(jsonObject.get("hand").getAsJsonArray());
-            Color color = Color.valueOf(jsonObject.get("color").getAsString());
+            Color color;
+            if(!Objects.equals(jsonObject.get("color").getAsString(), "-1"))
+                color = Color.valueOf(jsonObject.get("color").getAsString());
+            else color = null;
             Board board = getBoard(jsonObject.get("board").getAsJsonArray());
 
             GoalCard personalGoal = getPersonalGoal(jsonObject.get("personalGoal").getAsInt());

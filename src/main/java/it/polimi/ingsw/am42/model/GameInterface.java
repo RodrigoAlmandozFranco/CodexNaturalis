@@ -2,6 +2,7 @@ package it.polimi.ingsw.am42.model;
 
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
+import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.exceptions.GameFullException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
@@ -15,35 +16,32 @@ import java.util.List;
  */
 
 public interface GameInterface {
-
     public void initializeGame();
+    public void initializeGameForPlayers();
     public boolean checkEndGamePoints();
     public boolean checkEndGameDecks();
     public List<Player> getWinner();
-
     public void addToGame(String nickname) throws   GameFullException,
                                                     NicknameAlreadyInUseException,
                                                     NicknameInvalidException;
     public List<Player> getPlayers();
     public Player getCurrentPlayer();
     public Player getNextPlayer();
-    public int getNumberPlayers();
     public void setCurrentPlayer(Player p);
+    public int getNumberPlayers();
     public List<PlayableCard> getPickableCards();
-    public void chosenCardToAddInHand (PlayableCard c);
     public List<GoalCard> getGoals();
     public List<Player> getStandings();
+    public void chosenCardToAddInHand (PlayableCard c);
     public List<GoalCard> choosePersonalGoal();
     public void setTurnFinal(boolean v);
     public boolean getTurnFinal();
-    public void initializeGameForPlayers();
     public List<Integer> getGoalDeck();
     public List<Integer> getResourceDeck();
     public List<Integer> getGoldDeck();
     public List<Integer> getStartingDeck();
     public List<Integer> getPickableResourceCards();
     public List<Integer> getPickableGoldCards();
-
-
-
+    public List<Color> getAvailableColors();
+    public void removeColor(Color c);
 }
