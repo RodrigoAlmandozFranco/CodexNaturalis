@@ -6,6 +6,7 @@ import it.polimi.ingsw.am42.model.Game;
 import it.polimi.ingsw.am42.model.Player;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import it.polimi.ingsw.am42.model.Game;
 
 public class HelloController {
     @FXML
@@ -25,23 +26,70 @@ public class HelloController {
         } catch (it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException e) {
             throw new RuntimeException(e);
         }
-        Controller gameController = new Controller(g);
+        Hub hub = new Hub();
+        Controller gameController = new Controller(g, hub);
+        hub.setController(gameController);
 
-        gameController.executionOfState();
-        gameController.setState(new SetHandsState(g));
-        gameController.executionOfState();
-        while (!(g.getTurnFinal() && g.getCurrentPlayer()==g.getPlayers().getFirst())){
-            gameController.setState(new TurnState(g));
+        gameController.setState(new InitialState(g,hub));
+        try{
             gameController.executionOfState();
-            gameController.setState(new CheckState(g));
-            gameController.executionOfState();
+        }catch (RuntimeException e) {
+            throw new RuntimeException(e);
         }
+
+        gameController.setState(new SetHandsState(g, hub));
+        try{
+            gameController.executionOfState();
+        }catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+
+        gameController.setState(new StartingCardState(g, hub));
+        try{
+            gameController.executionOfState();
+        }catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
+
+        while (!(g.getTurnFinal() && g.getCurrentPlayer()==g.getPlayers().getFirst())){
+
+            gameController.setState(new PlaceState(g, hub));
+            try{
+                gameController.executionOfState();
+            }catch (RuntimeException e) {
+                throw new RuntimeException(e);
+            }
+
+            gameController.setState(new PickState(g, hub));
+            try{
+                gameController.executionOfState();
+            }catch (RuntimeException e) {
+                throw new RuntimeException(e);
+            }
+
+            gameController.setState(new CheckState(g, hub));
+            try{
+                gameController.executionOfState();
+            }catch (RuntimeException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
         for(Player p : g.getPlayers()){
             gameController.setState(new LastTurnState(g));
-            gameController.executionOfState();
+            try{
+                gameController.executionOfState();
+            }catch (RuntimeException e) {
+                throw new RuntimeException(e);
+            }
         }
+
         gameController.setState(new FinalState(g));
-        gameController.executionOfState();
+        try{
+            gameController.executionOfState();
+        }catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 }
