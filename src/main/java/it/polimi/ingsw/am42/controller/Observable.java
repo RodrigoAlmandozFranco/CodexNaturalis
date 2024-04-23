@@ -5,17 +5,17 @@ import java.util.List;
 
 public abstract class Observable {
     List<MessageListener> listeners = new ArrayList<>();
-    public addListener(MessageListener l) {
+    public void addListener(MessageListener l) {
         listeners.add(l);
     }
-    public removeListener(MessageListener l) {
+    public void removeListener(MessageListener l) {
         listeners.remove(l);
     }
-    protected updateAll(Message message){
+    protected void updateAll(Message message){
         for(MessageListener l : listeners)
             l.update(message);
     }
-    protected update(Message message, String id){
+    protected void update(Message message, String id){
         for(MessageListener l : listeners)
             if (l.getId().equals(id))
                 l.update(message);

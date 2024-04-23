@@ -27,10 +27,10 @@ public class HelloController {
             throw new RuntimeException(e);
         }
         Hub hub = new Hub();
-        Controller gameController = new Controller(g, hub);
+        Controller gameController = new Controller(g);
         hub.setController(gameController);
 
-        gameController.setState(new InitialState(g,hub));
+        gameController.setState(new InitialState(g));
         try{
             gameController.executionOfState();
         }catch (RuntimeException e) {

@@ -1,42 +1,76 @@
 package it.polimi.ingsw.am42.controller;
 
-import it.polimi.ingsw.am42.controller.state.InitialState;
+import it.polimi.ingsw.am42.controller.gameDB.GameDB;
 import it.polimi.ingsw.am42.controller.state.State;
 import it.polimi.ingsw.am42.model.Game;
+import it.polimi.ingsw.am42.model.cards.types.Face;
+import it.polimi.ingsw.am42.model.cards.types.GoalCard;
+import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
+import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.exceptions.GameFullException;
+import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
+import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
+import it.polimi.ingsw.am42.model.structure.Position;
 
-public class Controller {
-    private final Game g;
-    private final Hub hub;
+import java.util.List;
+
+public class Controller extends Observable implements RMISpeaker  {
+    private final Game game;
     private State currentState;
+    private GameDB gameDB;
 
-    public Controller(Game g, Hub hub) {
-        this.g = g;
-        this.hub = hub;
+    public Controller(Game game) {
+        this.game = game;
+    }
+
+    @Override
+    public String getGameInfo() {
+        return null;
+    }
+
+    @Override
+    public String createGame(MessageListener l, String nickname, int numPlayers) {
+        return null;
+    }
+
+    @Override
+    public boolean connect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+        return false;
+    }
+
+    @Override
+    public boolean reconnect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+        return false;
+    }
+
+    @Override
+    public List<Position> getAvailablePosition(String p) {
+        return null;
+    }
+
+    @Override
+    public boolean place(String p, Face face, Position position) throws NoRequirementsException {
+        return false;
+    }
+
+    @Override
+    public void pick(String p, PlayableCard card) {
 
     }
 
-    /**
-     * This method is called by main and it changes the currentState
-     *
-     * @param currentState
-     * @author Mattia Brandi
-     */
-    public void setState(State currentState) {
-        this.currentState = currentState;
+    @Override
+    public void chooseColor(String p, Color color) {
+
     }
 
-    /**
-     * This method is called by main, and it executes the method handleAction on the right
-     * currentState
-     *
-     * @author Mattia Brandi
-     */
-    public void executionOfState () throws RuntimeException {
-        try {
-            currentState.handleAction();
-        } catch (RuntimeException e) {
-            throw new RuntimeException(e);
-        }
+    @Override
+    public List<GoalCard> getGoals(String p) {
+        return null;
+    }
+
+    @Override
+    public void chooseGoal(String p, GoalCard goal) {
+
     }
 }
 

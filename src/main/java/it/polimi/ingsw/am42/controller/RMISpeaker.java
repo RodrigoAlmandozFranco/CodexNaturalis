@@ -1,9 +1,47 @@
 package it.polimi.ingsw.am42.controller;
 
+import it.polimi.ingsw.am42.model.cards.types.Face;
+import it.polimi.ingsw.am42.model.cards.types.GoalCard;
+import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
+import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.exceptions.GameFullException;
+import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
+import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
+import it.polimi.ingsw.am42.model.structure.Position;
+
 import java.rmi.Remote;
+import java.util.List;
 
 public interface RMISpeaker extends Remote {
 
-    public void addAction(Action a);
+
+    public String getGameInfo();
+
+    public String createGame(MessageListener l, String nickname, int numPlayers);
+
+    public boolean connect(MessageListener l, String nickname, int gameId)
+                                 throws GameFullException,
+                                        NicknameInvalidException,
+                                        NicknameAlreadyInUseException;
+
+    public boolean reconnect(MessageListener l, String nickname, int gameId)
+                                 throws GameFullException,
+                                        NicknameInvalidException,
+                                        NicknameAlreadyInUseException;
+
+
+    public List<Position> getAvailablePosition(String p);
+
+    public boolean place(String p, Face face, Position position)
+                                throws  NoRequirementsException;
+
+    public void pick(String p, PlayableCard card);
+
+    public void chooseColor(String p, Color color);
+
+    public List<GoalCard> getGoals(String p);
+
+    public void chooseGoal(String p, GoalCard goal);
+
 
 }

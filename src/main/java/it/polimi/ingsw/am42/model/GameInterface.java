@@ -32,7 +32,7 @@ public interface GameInterface {
     public List<PlayableCard> getPickableCards();
     public List<GoalCard> getGoals();
     public List<Player> getStandings();
-    public void chosenCardToAddInHand (PlayableCard c);
+    public void chosenCardToAddInHand(PlayableCard c);
     public List<GoalCard> choosePersonalGoal();
     public void setTurnFinal(boolean v);
     public boolean getTurnFinal();
