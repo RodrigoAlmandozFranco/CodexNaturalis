@@ -1,15 +1,20 @@
 package it.polimi.ingsw.am42.controller;
 
 
+import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.exceptions.GameFullException;
+import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
+import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
 import it.polimi.ingsw.am42.model.structure.Position;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.List;
+import java.util.Set;
 
 public class RMIClient extends Client implements MessageListener{
 
@@ -32,45 +37,57 @@ public class RMIClient extends Client implements MessageListener{
 
     public String getGameInfo(){return stub.getGameInfo();}
 
-    public boolean createGame(MessageListener l, String nickname, int numPlayers){
-        return stub.createGame(MessageListener l, String nickname, int numPlayers);
+    public String createGame(MessageListener l, String nickname, int numPlayers){
+        return stub.createGame(l,  nickname,  numPlayers);
     }
 
-    public boolean connect(MessageListener l, String nickname, int gameId){
-        return stub.connect(MessageListener l, String nickname, int gameId);
+    public boolean connect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+        return stub.connect(l, nickname, gameId);
     }
 
-    public boolean reconnect(MessageListener l, String nickname, int gameId){
-        return stub.reconnect(MessageListener l, String nickname, int gameId);
+    public boolean reconnect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+        return stub.reconnect( l, nickname, gameId);
     }
 
-    public List<Position> getAvailablePositions(String p){
-        return stub.List<Position> getAvailablePositions(String p);
+    public Set<Position> getAvailablePositions(String p){
+        return stub.getAvailablePositions(p);
     }
 
     public boolean place(String p, Face face, Position pos){
-        return stub.place(String p, Face face, Position pos);
+        return stub.place( p, face, pos);
     }
 
     public List<Color> getAvailableColors(String p){
-        return stub.getAvailableColors(String p);
+        return stub.getAvailableColors( p);
     }
 
-    public boolean chooseColor(String p, Color color){
-        return stub.chooseColor(String p, Color color);
+    public void chooseColor(String p, Color color){
+        stub.chooseColor(p, color);
     }
 
     public List<GoalCard> getGoals(String p){
-        return stub.getGoals(String p);
+        return stub.getGoals( p);
     }
 
-    public boolean chooseGoal(String p, GoalCard goal){
-        return stub.chooseGoal(String p, GoalCard goal);
+    public void chooseGoal(String p, GoalCard goal){stub.chooseGoal( p, goal);
     }
 
-    public boolean pick(String p, PlayableCard card){
-        return stub.pick(String p, PlayableCard card);
+    public void pick(String p, PlayableCard card){
+         stub.pick(p, card);
     }
 
 
+    @Override
+    public String getId() {
+        return null;
+    }
+
+    public List<Player> getWinner() {
+        return stub.getWinner();
+    }
+
+    @Override
+    public void update(Message message) {
+
+    }
 }

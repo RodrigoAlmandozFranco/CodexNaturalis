@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.controller;
 
+import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
@@ -11,6 +12,7 @@ import it.polimi.ingsw.am42.model.structure.Position;
 
 import java.rmi.Remote;
 import java.util.List;
+import java.util.Set;
 
 public interface RMISpeaker extends Remote {
 
@@ -30,10 +32,9 @@ public interface RMISpeaker extends Remote {
                                         NicknameAlreadyInUseException;
 
 
-    public List<Position> getAvailablePosition(String p);
+    public Set<Position> getAvailablePositions(String p);
 
-    public boolean place(String p, Face face, Position position)
-                                throws  NoRequirementsException;
+    public boolean place(String p, Face face, Position position);
 
     public void pick(String p, PlayableCard card);
 
@@ -43,5 +44,7 @@ public interface RMISpeaker extends Remote {
 
     public void chooseGoal(String p, GoalCard goal);
 
+    public List<Player> getWinner();
 
+    public List<Color> getAvailableColors(String p);
 }
