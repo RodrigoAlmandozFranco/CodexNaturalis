@@ -34,6 +34,7 @@ public class Controller extends Observable implements RMISpeaker {
     @Override
     public String createGame(MessageListener l, String nickname, int numPlayers) throws NumberPlayerWrongException, GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         //TODO
+        //TODO createGame should call the connect for the first player
 
         this.currentState = this.currentState.changeState(this.game);
 

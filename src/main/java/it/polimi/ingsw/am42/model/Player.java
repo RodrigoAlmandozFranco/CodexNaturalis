@@ -189,13 +189,12 @@ public class Player {
      * @param face the face that we are checking if it can be inserted
      * @return boolean value, if true the face can be placed, otherwise it cannot
      */
-    public boolean checkRequirements(Face face) {
+    public void checkRequirements(Face face) throws RequirementsNotMetException{
         Map<Resource, Integer> requirements = face.getRequirements();
         for (Resource r : requirements.keySet()) {
             if (requirements.get(r) > board.getTotalResources().get(r))
                 throw new RequirementsNotMetException("Requirements not met");
         }
-        return true;
     }
 
     /**
