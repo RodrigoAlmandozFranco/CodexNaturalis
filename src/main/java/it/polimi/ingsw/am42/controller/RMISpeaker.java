@@ -5,9 +5,7 @@ import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
-import it.polimi.ingsw.am42.model.exceptions.GameFullException;
-import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
-import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
+import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.model.structure.Position;
 
 import java.rmi.Remote;
@@ -19,7 +17,10 @@ public interface RMISpeaker extends Remote {
 
     public String getGameInfo();
 
-    public String createGame(MessageListener l, String nickname, int numPlayers);
+    public String createGame(MessageListener l, String nickname, int numPlayers) throws NumberPlayerWrongException,
+                                                                                        GameFullException,
+                                                                                        NicknameInvalidException,
+                                                                                        NicknameAlreadyInUseException;
 
     public boolean connect(MessageListener l, String nickname, int gameId)
                                  throws GameFullException,
@@ -34,7 +35,7 @@ public interface RMISpeaker extends Remote {
 
     public Set<Position> getAvailablePositions(String p);
 
-    public boolean place(String p, Face face, Position position);
+    public boolean place(String p, Face face, Position position) throws RequirementsNotMetException;
 
     public void pick(String p, PlayableCard card);
 

@@ -164,6 +164,7 @@ public class GameSerializer extends TypeAdapter<Game> {
             }
         }
         jo.add(game.getCurrentPlayer().getNickname(), ja);
+        jo.addProperty("futurePlayer", game.getNextPlayer().getNickname());
     }
 
 
@@ -177,13 +178,31 @@ public class GameSerializer extends TypeAdapter<Game> {
 
         for(int i = 0; i < jsonArray.size(); i++) {
             JsonObject json = jsonArray.get(i).getAsJsonObject();
-            if(json.get("id").getAsInt() != game.getCurrentPlayer().getHand().get(i).getId()) {
+
+            if(game.getCurrentPlayer().getHand().size() <= i) {
+                jsonArray.remove(i);
+                continue;
+            }
+
+            if (json.get("id").getAsInt() != game.getCurrentPlayer().getHand().get(i).getId()) {
                 json.addProperty("id", game.getCurrentPlayer().getHand().get(i).getId());
             }
+
             JsonObject cardId = new JsonObject();
             cardId.addProperty("id", game.getCurrentPlayer().getHand().get(i).getId());
             hand.add(cardId);
         }
+
+        for(int i = jsonArray.size(); i < game.getCurrentPlayer().getHand().size(); i++){
+            JsonObject json = new JsonObject();
+            json.addProperty("id", game.getCurrentPlayer().getHand().get(i).getId());
+            jsonArray.add(json);
+            JsonObject cardId = new JsonObject();
+            cardId.addProperty("id", game.getCurrentPlayer().getHand().get(i).getId());
+            hand.add(cardId);
+        }
+
+
         JsonObject handObject = new JsonObject();
         handObject.add("hand", hand);
         ja.add(handObject);
@@ -200,7 +219,10 @@ public class GameSerializer extends TypeAdapter<Game> {
 
         Face face = game.getCurrentPlayer().getBoard().getLastPlacedFace();
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("srcImage", face.getSrcImage());
+
+        if(face.getSrcImage() != null)
+            jsonObject.addProperty("srcImage", face.getSrcImage());
+        else jsonObject.addProperty("srcImage", "-1");
         JsonObject src = new JsonObject();
         src.addProperty("srcImage", face.getSrcImage());
         board.add(src);

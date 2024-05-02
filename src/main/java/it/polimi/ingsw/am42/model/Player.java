@@ -7,6 +7,7 @@ import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
 import it.polimi.ingsw.am42.model.evaluator.Evaluator;
+import it.polimi.ingsw.am42.model.exceptions.RequirementsNotMetException;
 import it.polimi.ingsw.am42.model.structure.Board;
 import it.polimi.ingsw.am42.model.structure.Position;
 
@@ -192,7 +193,7 @@ public class Player {
         Map<Resource, Integer> requirements = face.getRequirements();
         for (Resource r : requirements.keySet()) {
             if (requirements.get(r) > board.getTotalResources().get(r))
-                return false;
+                throw new RequirementsNotMetException("Requirements not met");
         }
         return true;
     }

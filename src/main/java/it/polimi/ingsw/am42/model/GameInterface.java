@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.model;
 
+import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
@@ -44,4 +45,7 @@ public interface GameInterface {
     public List<Integer> getPickableGoldCards();
     public List<Color> getAvailableColors();
     public void removeColor(Color c);
+    public Face getFace(String srcImage);
+    public PlayableCard getPlayableCard(int id);
+    public GoalCard getGoalCard(int id);
 }

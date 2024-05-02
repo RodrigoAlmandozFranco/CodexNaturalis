@@ -492,6 +492,54 @@ public class Game implements GameInterface {
     }
 
 
+    public Face getFace(String srcImage){
+
+        for (PlayableCard card : currentPlayer.getHand()) {
+            if (card.getFront().getSrcImage().equals(srcImage)) {
+                return card.getFront();
+            }
+            if (card.getBack().getSrcImage().equals(srcImage)) {
+                return card.getBack();
+            }
+        }
+        return null;
+    }
+
+    public PlayableCard getPlayableCard(int id){
+        PlayableDeck deck;
+        List<PlayableCard> pickable;
+
+        if(id <= 40){
+            deck = resourceDeck;
+            pickable = pickableResourceCards;
+        }
+        else {
+            deck = goldDeck;
+            pickable = pickableGoldCards;
+        }
+
+        if(deck.getTop().getId() == id) {
+            return deck.getTop();
+        }
+
+        for(PlayableCard card : pickable) {
+            if(card.getId() == id)
+                return card;
+        }
+
+        return null;
+    }
+
+    public GoalCard getGoalCard(int id){
+        for(GoalCard card : goalDeck) {
+            if(card.getId() == id) {
+                return card;
+            }
+        }
+        return null;
+    }
+
+
 
     /**
      * This method initializes the decks of the game.

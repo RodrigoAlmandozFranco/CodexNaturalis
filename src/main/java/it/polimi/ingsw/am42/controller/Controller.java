@@ -8,9 +8,7 @@ import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
-import it.polimi.ingsw.am42.model.exceptions.GameFullException;
-import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
-import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
+import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.model.structure.Position;
 
 import java.util.List;
@@ -34,7 +32,7 @@ public class Controller extends Observable implements RMISpeaker {
 
     //TODO
     @Override
-    public String createGame(MessageListener l, String nickname, int numPlayers) {
+    public String createGame(MessageListener l, String nickname, int numPlayers) throws NumberPlayerWrongException, GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         //TODO
 
         this.currentState = this.currentState.changeState(this.game);
@@ -68,18 +66,18 @@ public class Controller extends Observable implements RMISpeaker {
     }
 
     @Override
-    public boolean place(String p, Face face, Position position){
-        boolean returnedValue = game.getCurrentPlayer().checkRequirements(face);
-        if(returnedValue) {
-            String diff;
-            game.getCurrentPlayer().placeCard(position, face);
-            this.currentState = this.currentState.changeState(this.game);
-            if(game.getTurnFinal())
-                game.setCurrentPlayer(game.getNextPlayer());
-            diff = gameDB.saveGame(true, this.currentState);
-            updateAll(new Message(diff));
-        }
-        return returnedValue;
+    public boolean place(String p, Face face, Position position) throws RequirementsNotMetException {
+        game.getCurrentPlayer().checkRequirements(face);
+
+        String diff;
+        game.getCurrentPlayer().placeCard(position, face);
+        this.currentState = this.currentState.changeState(this.game);
+        if(game.getTurnFinal())
+            game.setCurrentPlayer(game.getNextPlayer());
+        diff = gameDB.saveGame(true, this.currentState);
+        updateAll(new Message(diff));
+
+        return true;
     }
 
     @Override
