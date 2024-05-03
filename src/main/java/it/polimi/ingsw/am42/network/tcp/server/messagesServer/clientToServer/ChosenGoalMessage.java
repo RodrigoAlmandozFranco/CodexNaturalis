@@ -20,7 +20,8 @@ public class ChosenGoalMessage extends Messages {
 
         controller.chooseGoal(nickname, goal);
 
-        return new InfoMessage().execute();
+        //return new InfoMessage().execute();
+        return null;
     }
 
 }

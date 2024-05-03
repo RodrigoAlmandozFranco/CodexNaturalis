@@ -31,7 +31,8 @@ public class PlaceMessage extends Messages {
             return new NoRequirementsErrorMessage().execute();
         }
 
-        return new InfoMessage().execute();
+        //return new InfoMessage().execute();
+        return null;
 
     }
 

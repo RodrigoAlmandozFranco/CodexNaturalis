@@ -18,7 +18,8 @@ public class ChosenColorMessage extends Messages {
 
         controller.chooseColor(nickname, color);
 
-        return new InfoMessage().execute();
+        //return new InfoMessage().execute();
+        return null;
     }
 
 }

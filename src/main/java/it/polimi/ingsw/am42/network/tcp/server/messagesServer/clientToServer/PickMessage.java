@@ -21,6 +21,7 @@ public class PickMessage extends Messages {
 
         controller.pick(nickname, card);
 
-        return new InfoMessage().execute();
+        //return new InfoMessage().execute();
+        return null;
     }
 }

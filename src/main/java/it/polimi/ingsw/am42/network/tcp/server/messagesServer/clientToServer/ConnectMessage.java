@@ -3,6 +3,7 @@ import com.google.gson.JsonObject;
 import it.polimi.ingsw.am42.model.exceptions.GameFullException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
+import it.polimi.ingsw.am42.network.tcp.server.ClientHandler;
 import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Messages;
 import it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient.InfoMessage;
 import it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient.NicknameAlreadyInUseErrorMessage;
@@ -12,9 +13,11 @@ import it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient.Gam
 
 public class ConnectMessage extends Messages {
     private JsonObject object;
+    private ClientHandler l;
 
-    public ConnectMessage(JsonObject object){
+    public ConnectMessage(JsonObject object, ClientHandler l){
         this.object = object;
+        this.l = l;
     }
 
     public String execute() {

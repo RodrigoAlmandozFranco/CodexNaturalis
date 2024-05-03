@@ -44,6 +44,7 @@ public class Controller extends Observable implements RMISpeaker {
     @Override
     public boolean connect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         //TODO
+        //TODO the controller calls the addListener function
 
         this.currentState = this.currentState.changeState(this.game);
 

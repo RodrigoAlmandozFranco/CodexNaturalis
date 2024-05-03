@@ -1,18 +1,22 @@
 package it.polimi.ingsw.am42.network.tcp.server.messagesServer.clientToServer;
 
 import com.google.gson.JsonObject;
+import it.polimi.ingsw.am42.controller.MessageListener;
 import it.polimi.ingsw.am42.model.exceptions.GameFullException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
 import it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException;
+import it.polimi.ingsw.am42.network.tcp.server.ClientHandler;
 import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Messages;
 import it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient.*;
 
 public class FirstConnectionMessage extends Messages {
-    JsonObject object;
+    private JsonObject object;
+    private ClientHandler l;
 
-    public FirstConnectionMessage(JsonObject o) {
+    public FirstConnectionMessage(JsonObject o, ClientHandler l) {
         object = o;
+        this.l = l;
     }
 
     public String execute() {
@@ -20,7 +24,7 @@ public class FirstConnectionMessage extends Messages {
         int numPlayers = object.get("numPlayers").getAsInt();
 
         try {
-            controller.createGame(null, nickname, numPlayers);
+            controller.createGame(l, nickname, numPlayers);
         } catch (NumberPlayerWrongException e) {
             return new NumberPlayersWrongMessage().execute();
         } catch (GameFullException e) {
