@@ -3,11 +3,11 @@ package it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import it.polimi.ingsw.am42.model.structure.Position;
-import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Messages;
+import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Message;
 
 import java.util.Set;
 
-public class SendAvailablePositionMessage extends Messages {
+public class SendAvailablePositionMessage extends Message {
     private JsonObject object;
 
     public SendAvailablePositionMessage(JsonObject object){

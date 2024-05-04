@@ -3,11 +3,11 @@ package it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import it.polimi.ingsw.am42.model.enumeration.Color;
-import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Messages;
+import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Message;
 
 import java.util.List;
 
-public class SendAvailableColorsMessage extends Messages {
+public class SendAvailableColorsMessage extends Message {
     private JsonObject object;
 
 

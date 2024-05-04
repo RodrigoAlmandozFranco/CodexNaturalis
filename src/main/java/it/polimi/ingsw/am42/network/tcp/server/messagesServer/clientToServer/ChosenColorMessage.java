@@ -2,10 +2,10 @@ package it.polimi.ingsw.am42.network.tcp.server.messagesServer.clientToServer;
 
 import com.google.gson.JsonObject;
 import it.polimi.ingsw.am42.model.enumeration.Color;
-import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Messages;
+import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Message;
 import it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient.InfoMessage;
 
-public class ChosenColorMessage extends Messages {
+public class ChosenColorMessage extends Message {
     private JsonObject object;
 
     public ChosenColorMessage(JsonObject object){

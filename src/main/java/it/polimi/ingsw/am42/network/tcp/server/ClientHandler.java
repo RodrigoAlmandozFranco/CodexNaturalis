@@ -9,7 +9,7 @@ import com.google.gson.JsonParser;
 import it.polimi.ingsw.am42.controller.Controller;
 import it.polimi.ingsw.am42.controller.MessageListener;
 import it.polimi.ingsw.am42.model.Game;
-import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Messages;
+import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Message;
 import it.polimi.ingsw.am42.network.tcp.server.messagesServer.clientToServer.*;
 import it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient.SendAvailableColorsMessage;
 import it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient.SendAvailablePositionMessage;
@@ -19,14 +19,15 @@ import it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient.Sen
 public class ClientHandler implements Runnable, MessageListener {
     private Socket socket;
     private Controller controller;
-    private Messages messages;
+    private Message messages;
+    private PrintWriter out;
 
 
-    public ClientHandler(Socket socket, Controller controller, Game game){
+    public ClientHandler(Socket socket, Controller controller, Game game) throws IOException {
         this.socket = socket;
         this.controller = controller;
-        messages = new Messages(controller, game);
-
+        messages = new Message(controller, game);
+        out = new PrintWriter(socket.getOutputStream());
     }
 
     public void run() {
@@ -90,12 +91,12 @@ public class ClientHandler implements Runnable, MessageListener {
         }
     }
 
-    public void update(Messages message){
+    public void update(Message message){
         //TODO serialize the message
         //JsonObject result = new JsonObject();
 
-        out.println(result);
-        out.flush();
+        //out.println(result);
+        //out.flush();
     }
 
     public void update (String result){

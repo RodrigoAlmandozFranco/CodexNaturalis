@@ -7,10 +7,10 @@ import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
 import it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException;
 import it.polimi.ingsw.am42.network.tcp.server.ClientHandler;
-import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Messages;
+import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Message;
 import it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient.*;
 
-public class FirstConnectionMessage extends Messages {
+public class FirstConnectionMessage extends Message {
     private JsonObject object;
     private ClientHandler l;
 
@@ -26,7 +26,7 @@ public class FirstConnectionMessage extends Messages {
         try {
             controller.createGame(l, nickname, numPlayers);
         } catch (NumberPlayerWrongException e) {
-            return new NumberPlayersWrongMessage().execute();
+            return new NumberPlayersWrongErrorMessage().execute();
         } catch (GameFullException e) {
             return new GameFullErrorMessage().execute();
         } catch (NicknameInvalidException e){

@@ -2,10 +2,10 @@ package it.polimi.ingsw.am42.network.tcp.server.messagesServer.clientToServer;
 
 import com.google.gson.JsonObject;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
-import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Messages;
+import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Message;
 import it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient.InfoMessage;
 
-public class ChosenGoalMessage extends Messages {
+public class ChosenGoalMessage extends Message {
     private JsonObject object;
 
     public ChosenGoalMessage(JsonObject object){

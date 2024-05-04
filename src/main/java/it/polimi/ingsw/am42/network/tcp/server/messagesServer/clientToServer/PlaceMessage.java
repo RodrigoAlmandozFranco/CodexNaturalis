@@ -5,10 +5,10 @@ import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.exceptions.RequirementsNotMetException;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient.NoRequirementsErrorMessage;
-import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Messages;
+import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Message;
 import it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient.InfoMessage;
 
-public class PlaceMessage extends Messages {
+public class PlaceMessage extends Message {
     private JsonObject object;
 
     public PlaceMessage(JsonObject object){

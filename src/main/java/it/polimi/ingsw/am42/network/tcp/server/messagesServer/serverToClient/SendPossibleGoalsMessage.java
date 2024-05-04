@@ -3,11 +3,11 @@ package it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
-import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Messages;
+import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Message;
 
 import java.util.List;
 
-public class SendPossibleGoalsMessage extends Messages {
+public class SendPossibleGoalsMessage extends Message {
     private JsonObject object;
 
     public SendPossibleGoalsMessage(JsonObject object){
