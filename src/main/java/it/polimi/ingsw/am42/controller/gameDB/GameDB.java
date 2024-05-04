@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am42.controller.gameDB;
 
 import com.google.gson.*;
+import it.polimi.ingsw.am42.controller.state.State;
 import it.polimi.ingsw.am42.gson.gameGson.GameDeserializer;
 import it.polimi.ingsw.am42.gson.gameGson.GameSerializer;
 import it.polimi.ingsw.am42.model.Game;
@@ -33,17 +34,17 @@ public class GameDB {
      * @return the string which contains all the game or only the changes.
      */
 
-    public String saveGame(boolean gameStarted) {
+    public String saveGame(boolean gameStarted, State state) {
 
-        JsonObject jo = new JsonObject();
+        JsonObject object = new JsonObject();
 
         Gson gson = new GsonBuilder()
-                        .registerTypeAdapter(Game.class, new GameSerializer(gameStarted, jo))
+                        .registerTypeAdapter(Game.class, new GameSerializer(gameStarted, object, state))
                         .create();
 
 
         String json = gson.toJson(game);
-        String changes = jo.toString();
+        String changes = object.toString();
 
         if(gameStarted) {
             return changes;

@@ -3,6 +3,7 @@ package it.polimi.ingsw.am42.gson.gameGson;
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
+import it.polimi.ingsw.am42.controller.state.State;
 import it.polimi.ingsw.am42.model.Game;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
@@ -29,8 +30,8 @@ import java.util.List;
  * It receives a JsonWriter object and a Game object as parameters.
  * The private methods are used to write the different attributes of the game object.
  *
- * All the changes made by the current player are saved in the jo JsonObject.
- * In the GameDB class, the jo will be transformed to a string and passed to the client
+ * All the changes made by the current player are saved in the object JsonObject.
+ * In the GameDB class, the object will be transformed to a string and passed to the client
  * Afterward, the client can easily get that string to JsonObject format by the following line of code:
  *                          JsonObject object = JsonParser.parseString(string).getAsJsonObject();
  *
@@ -41,11 +42,13 @@ public class GameSerializer extends TypeAdapter<Game> {
 
     private String path = "src/main/resources/it/polimi/ingsw/am42/gamePersistence/game.json";
     private boolean gameStarted;
-    private JsonObject jo;
+    private JsonObject object;
+    private State state;
 
-    public GameSerializer(boolean gs, JsonObject jo) {
+    public GameSerializer(boolean gs, JsonObject object, State state) {
         this.gameStarted = gs;
-        this.jo = jo;
+        this.object = object;
+        this.state = state;
     }
 
 
@@ -81,6 +84,9 @@ public class GameSerializer extends TypeAdapter<Game> {
 
             jsonObject.addProperty("currentPlayer", game.getNextPlayer().getNickname());
 
+            jsonObject.addProperty("currentState", state.toString());
+            object.addProperty("currentState", state.toString());
+
 
             jsonReader.close();
             FileWriter writer = new FileWriter(path);
@@ -115,7 +121,7 @@ public class GameSerializer extends TypeAdapter<Game> {
             pickable.add(idcard);
         }
 
-        jo.add(str, pickable);
+        object.add(str, pickable);
     }
 
 
@@ -135,7 +141,7 @@ public class GameSerializer extends TypeAdapter<Game> {
         if(jsonArray.get(0).getAsJsonObject().get("id").getAsInt() != id) {
             jsonArray.remove(0);
         }
-        jo.addProperty(str.concat("IdFirstCard"), ids.getFirst());
+        object.addProperty(str.concat("IdFirstCard"), ids.getFirst());
     }
 
 
@@ -163,8 +169,8 @@ public class GameSerializer extends TypeAdapter<Game> {
                 ja.add(numberGoals);
             }
         }
-        jo.add(game.getCurrentPlayer().getNickname(), ja);
-        jo.addProperty("futurePlayer", game.getNextPlayer().getNickname());
+        object.add(game.getCurrentPlayer().getNickname(), ja);
+        object.addProperty("futurePlayer", game.getNextPlayer().getNickname());
     }
 
 
@@ -275,6 +281,7 @@ public class GameSerializer extends TypeAdapter<Game> {
         writePickableCards(out, game, "pickableGoldCards");
         writeCurrentPlayer(out, game);
         writeNumberPlayers(out, game);
+        out.name("currentState").value(state.toString());
         out.endObject();
     }
 
