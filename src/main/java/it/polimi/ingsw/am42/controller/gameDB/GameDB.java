@@ -19,11 +19,12 @@ import java.io.*;
 
 public class GameDB {
     private Game game;
-    private String path;
+    private static final String path = "src/main/resources/it/polimi/ingsw/am42/gamePersistence/game.json";
 
-    public GameDB(Game g) {
-        this.game = g;
-        path = "src/main/resources/it/polimi/ingsw/am42/gamePersistence/game.json";
+    public GameDB() {}
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     /**
@@ -46,17 +47,14 @@ public class GameDB {
         String json = gson.toJson(game);
         String changes = object.toString();
 
-        if(gameStarted) {
-            return changes;
-        }
-
         try (FileWriter writer = new FileWriter(path)) {
             writer.write(json);
-            return json;
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+
+        return gameStarted ? changes: json;
+
     }
 
 
@@ -107,7 +105,8 @@ public class GameDB {
                 .create();
         try {
             FileReader reader = new FileReader(path);
-            return gson.fromJson(reader, Game.class);
+            setGame(gson.fromJson(reader, Game.class));
+            return this.game;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

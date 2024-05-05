@@ -7,7 +7,7 @@ import java.util.Scanner;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import it.polimi.ingsw.am42.controller.Controller;
-import it.polimi.ingsw.am42.controller.MessageListener;
+import it.polimi.ingsw.am42.network.MessageListener;
 import it.polimi.ingsw.am42.model.Game;
 import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Message;
 import it.polimi.ingsw.am42.network.tcp.server.messagesServer.clientToServer.*;

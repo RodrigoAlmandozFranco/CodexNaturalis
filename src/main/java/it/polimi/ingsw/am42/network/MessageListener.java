@@ -1,4 +1,4 @@
-package it.polimi.ingsw.am42.controller;
+package it.polimi.ingsw.am42.network;
 
 import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Message;
 

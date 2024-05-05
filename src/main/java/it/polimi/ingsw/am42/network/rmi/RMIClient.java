@@ -1,22 +1,23 @@
-package it.polimi.ingsw.am42.controller;
+package it.polimi.ingsw.am42.network.rmi;
 
 
+import it.polimi.ingsw.am42.model.exceptions.*;
+import it.polimi.ingsw.am42.network.MessageListener;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
-import it.polimi.ingsw.am42.model.exceptions.GameFullException;
-import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
-import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
 import it.polimi.ingsw.am42.model.structure.Position;
+import it.polimi.ingsw.am42.network.Client;
+import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Message;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.List;
 import java.util.Set;
 
-public class RMIClient extends Client implements MessageListener{
+public class RMIClient extends Client implements MessageListener {
 
     private View view;
     Registry registry;
@@ -37,7 +38,7 @@ public class RMIClient extends Client implements MessageListener{
 
     public String getGameInfo(){return stub.getGameInfo();}
 
-    public String createGame(MessageListener l, String nickname, int numPlayers){
+    public int createGame(MessageListener l, String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException {
         return stub.createGame(l,  nickname,  numPlayers);
     }
 
@@ -53,7 +54,7 @@ public class RMIClient extends Client implements MessageListener{
         return stub.getAvailablePositions(p);
     }
 
-    public boolean place(String p, Face face, Position pos){
+    public boolean place(String p, Face face, Position pos) throws RequirementsNotMetException {
         return stub.place( p, face, pos);
     }
 
@@ -88,6 +89,6 @@ public class RMIClient extends Client implements MessageListener{
 
     @Override
     public void update(Message message) {
-
+        //TODO view.update(Message);
     }
 }

@@ -10,18 +10,20 @@ import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.model.structure.Position;
+import it.polimi.ingsw.am42.network.MessageListener;
+import it.polimi.ingsw.am42.network.rmi.RMISpeaker;
+import it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient.UpdateMessage;
 
 import java.util.List;
 import java.util.Set;
 
 public class Controller extends Observable implements RMISpeaker {
-    private final Game game;
+    private Game game;
     private State currentState;
     private final GameDB gameDB;
 
-    public Controller(Game game) {
-        this.game = game;
-        this.gameDB = new GameDB(game);
+    public Controller() {
+        this.gameDB = new GameDB();
         this.currentState = State.INITIAL;
     }
 
@@ -32,19 +34,26 @@ public class Controller extends Observable implements RMISpeaker {
 
     //TODO
     @Override
-    public String createGame(MessageListener l, String nickname, int numPlayers) throws NumberPlayerWrongException, GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
-        //TODO
-        //TODO createGame should call the connect for the first player
+    public int createGame(MessageListener l, String nickname, int numPlayers) throws NumberPlayerWrongException, GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+
+        this.game = new Game(numPlayers);
+        gameDB.setGame(this.game);
+
+        this.addListener(l);
+
+        this.game.addToGame(nickname);
 
         this.currentState = this.currentState.changeState(this.game);
 
-        return null;
+        //TODO return gameid;
+        return 1;
     }
 
     @Override
     public boolean connect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
-        //TODO
-        //TODO the controller calls the addListener function
+        this.addListener(l);
+
+        this.game.addToGame(nickname);
 
         this.currentState = this.currentState.changeState(this.game);
 
@@ -53,7 +62,10 @@ public class Controller extends Observable implements RMISpeaker {
 
     @Override
     public boolean reconnect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
-        //TODO
+        this.game = this.gameDB.loadGame();
+        this.addListener(l);
+
+        this.game.addToGame(nickname);
 
         this.currentState = this.currentState.changeState(this.game);
 
@@ -77,7 +89,7 @@ public class Controller extends Observable implements RMISpeaker {
         if(game.getTurnFinal())
             game.setCurrentPlayer(game.getNextPlayer());
         diff = gameDB.saveGame(true, this.currentState);
-        updateAll(new Message(diff));
+        updateAll(new UpdateMessage(diff));
 
         return true;
     }
@@ -88,7 +100,7 @@ public class Controller extends Observable implements RMISpeaker {
         this.currentState = this.currentState.changeState(this.game);
         game.setCurrentPlayer(game.getNextPlayer());
         String diff = gameDB.saveGame(true, this.currentState);
-        updateAll(new Message(diff));
+        updateAll(new UpdateMessage(diff));
     }
 
     @Override
@@ -97,7 +109,7 @@ public class Controller extends Observable implements RMISpeaker {
         game.removeColor(color);
         this.currentState = this.currentState.changeState(this.game);
         String diff = gameDB.saveGame(false, this.currentState);
-        updateAll(new Message(diff));
+        updateAll(new UpdateMessage(diff));
     }
 
     @Override
@@ -111,7 +123,7 @@ public class Controller extends Observable implements RMISpeaker {
         this.currentState = this.currentState.changeState(game);
         game.setCurrentPlayer(game.getNextPlayer());
         String diff = gameDB.saveGame(false, this.currentState);
-        updateAll(new Message(diff));
+        updateAll(new UpdateMessage(diff));
     }
 
     @Override

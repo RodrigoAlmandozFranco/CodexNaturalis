@@ -1,5 +1,6 @@
-package it.polimi.ingsw.am42.controller;
+package it.polimi.ingsw.am42.network.rmi;
 
+import it.polimi.ingsw.am42.network.MessageListener;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
@@ -17,7 +18,7 @@ public interface RMISpeaker extends Remote {
 
     public String getGameInfo();
 
-    public String createGame(MessageListener l, String nickname, int numPlayers) throws NumberPlayerWrongException,
+    public int createGame(MessageListener l, String nickname, int numPlayers) throws NumberPlayerWrongException,
                                                                                         GameFullException,
                                                                                         NicknameInvalidException,
                                                                                         NicknameAlreadyInUseException;
