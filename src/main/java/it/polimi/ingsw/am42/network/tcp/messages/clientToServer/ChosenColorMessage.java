@@ -2,11 +2,11 @@ package it.polimi.ingsw.am42.network.tcp.messages.clientToServer;
 
 import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.network.tcp.messages.ClientToServerMessage;
-import it.polimi.ingsw.am42.network.tcp.messages.ServerToClientMessage;
+import it.polimi.ingsw.am42.network.tcp.messages.Message;
 
 /**
  * Message sent by the client to the server to choose a color
- * @see it.polimi.ingsw.am42.network.tcp.messages.ServerToClientMessage
+ * @see it.polimi.ingsw.am42.network.tcp.messages.Message
  * @see it.polimi.ingsw.am42.network.tcp.messages.ClientToServerMessage
  * @see it.polimi.ingsw.am42.network.tcp.server.ClientHandler
  *
@@ -23,7 +23,7 @@ public class ChosenColorMessage extends ClientToServerMessage {
         color = c;
     }
 
-    public ServerToClientMessage execute() {
+    public Message execute() {
         controller.chooseColor(nickname, color);
         return null;
     }

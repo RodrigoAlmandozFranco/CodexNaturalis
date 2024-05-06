@@ -1,26 +1,55 @@
 package it.polimi.ingsw.am42.network.tcp.client;
 
+import it.polimi.ingsw.am42.controller.gameDB.Change;
+import it.polimi.ingsw.am42.model.Player;
+import it.polimi.ingsw.am42.model.cards.types.Face;
+import it.polimi.ingsw.am42.model.cards.types.GoalCard;
+import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
+import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.exceptions.*;
+import it.polimi.ingsw.am42.model.structure.Position;
+import it.polimi.ingsw.am42.network.Client;
+import it.polimi.ingsw.am42.network.MessageListener;
+import it.polimi.ingsw.am42.network.tcp.messages.Message;
+import it.polimi.ingsw.am42.network.tcp.messages.clientToServer.*;
+import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.*;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.Set;
 
-public class ClientTCP {
+public class ClientTCP extends Client {
 
     private static String ip = "";
-    private final int port;
+    private static int port;
     private ObjectInputStream input;
     private ObjectOutputStream output;
+    private ServerHandler serverHandler;
 
-    public ClientTCP(String ip, int port) {
-        this.ip = ip;
-        this.port = port;
+    public ClientTCP(String ip, int port) throws IOException {
+        ClientTCP.ip = ip;
+        ClientTCP.port = port;
+        final Socket socket = new Socket(ip, port);
+        input = new ObjectInputStream(socket.getInputStream());
+        output = new ObjectOutputStream(socket.getOutputStream());
     }
 
-    public static void main(String[] args) {
-        final ClientTCP client = new ClientTCP(ip, 2345);
+    public static void main(String[] args) throws IOException {
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("-p") && i + 1 < args.length) {
+                port = Integer.parseInt(args[i + 1]);
+                i++;
+            } else if (args[i].equals("-ip") && i + 1 < args.length) {
+                ip = args[i + 1];
+                i++;
+            }
+        }
+        ClientTCP client = new ClientTCP(ip, port);
         try {
             client.startClient();
         } catch (final IOException e) {
@@ -29,26 +58,150 @@ public class ClientTCP {
     }
 
     public void startClient() throws IOException {
-        final Socket socket = new Socket(ip, port);
-        input = new ObjectInputStream(socket.getInputStream());
-        output = new ObjectOutputStream(socket.getOutputStream());
+
         final Scanner stdin = new Scanner(System.in);
+        Message messageReceived;
+        serverHandler = new ServerHandler(input, this);
+        new Thread(serverHandler).start();
 
         try {
             while (true) {
-                final String inputLine = stdin.nextLine();
-                socketOut.println(inputLine);
-                socketOut.flush();
-                final String socketLine = socketIn.nextLine();
-                System.out.println(socketLine);
+
             }
         } catch (final NoSuchElementException e) {
             System.out.println("Connection closed");
-        } finally {
-            stdin.close();
-            socketIn.close();
-            socketOut.close();
+        } finally{
             socket.close();
         }
     }
+
+    private void sendMessage(Message message) {
+        try {
+            output.writeObject(message);
+            output.flush();
+        } catch (final IOException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    @Override
+    public String getGameInfo() {
+        return "";
+    }
+
+    @Override
+    public int createGame(MessageListener l, String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException {
+        Message message = new FirstConnectionMessage(nickname, numPlayers);
+        sendMessage(message);
+        Message answer = serverHandler.getMessage();
+        if (answer instanceof NumberPlayersWrongErrorMessage) {
+            throw new NumberPlayerWrongException("Number Player Wrong");
+        } else if (answer instanceof NicknameInvalidErrorMessage) {
+            throw new NicknameInvalidException("Nickname is invalid");
+        } else if (answer instanceof NicknameAlreadyInUseErrorMessage) {
+            throw new NicknameAlreadyInUseException("Nickname is already in use");
+        } else {
+                return 1;
+        }
+    }
+
+    @Override
+    public boolean connect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+        Message message = new ConnectMessage(gameId, nickname);
+        sendMessage(message);
+        Message answer = serverHandler.getMessage();
+        return switch (answer) {
+            case GameFullErrorMessage gameFullErrorMessage -> throw new GameFullException("Game is full");
+            case NicknameInvalidErrorMessage nicknameInvalidErrorMessage ->
+                    throw new NicknameInvalidException("Nickname is invalid");
+            case NicknameAlreadyInUseErrorMessage nicknameAlreadyInUseErrorMessage ->
+                    throw new NicknameAlreadyInUseException("Nickname is already in use");
+            case null, default -> true;
+        };
+    }
+
+    @Override
+    public boolean reconnect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+        Message message = new ReconnectMessage(gameId, nickname);
+        sendMessage(message);
+        Message answer = serverHandler.getMessage();
+        return switch (answer) {
+            case GameFullErrorMessage gameFullErrorMessage -> throw new GameFullException("Game is full");
+            case NicknameInvalidErrorMessage nicknameInvalidErrorMessage ->
+                    throw new NicknameInvalidException("Nickname is invalid");
+            case NicknameAlreadyInUseErrorMessage nicknameAlreadyInUseErrorMessage ->
+                    throw new NicknameAlreadyInUseException("Nickname is already in use");
+            case null, default -> true;
+        };
+    }
+
+    @Override
+    public Set<Position> getAvailablePositions(String p) {
+        Message message = new GetAvailablePositionMessage(p);
+        sendMessage(message);
+        SendAvailablePositionMessage answer = (SendAvailablePositionMessage) serverHandler.getMessage();
+        return answer.getPositions();
+    }
+
+    @Override
+    public boolean place(String p, Face face, Position pos) throws RequirementsNotMetException {
+        Message message = new PlaceMessage(p, face, pos);
+        sendMessage(message);
+        Message answer = serverHandler.getMessage();
+        if (answer instanceof NoRequirementsErrorMessage) {
+            throw new RequirementsNotMetException("Requirements are not met");
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public List<Color> getAvailableColors(String p) {
+        Message message = new GetColorsMessage(p);
+        sendMessage(message);
+        SendAvailableColorsMessage answer = (SendAvailableColorsMessage) serverHandler.getMessage();
+        return answer.getColors();
+    }
+
+    @Override
+    public void chooseColor(String p, Color color) {
+        Message message = new ChosenColorMessage(p, color);
+        sendMessage(message);
+    }
+
+    @Override
+    public List<GoalCard> getGoals(String p) {
+        Message message = new GetGoalsMessage(p);
+        sendMessage(message);
+        SendPossibleGoalsMessage answer = (SendPossibleGoalsMessage) serverHandler.getMessage();
+        return answer.getGoals();
+
+    }
+
+    @Override
+    public void chooseGoal(String p, GoalCard goal) {
+        Message message = new ChosenGoalMessage(p, goal);
+        sendMessage(message);
+    }
+
+    @Override
+    public void pick(String p, PlayableCard card) {
+        Message message = new PickMessage(p, card);
+        sendMessage(message);
+    }
+
+    @Override
+    public List<Player> getWinner() {
+        Message message = new GetWinnerMessage();
+        sendMessage(message);
+        SendWinnerMessage answer = (SendWinnerMessage) serverHandler.getMessage();
+        return answer.getWinners();
+    }
+
+    @Override
+    public void update(Change change) {
+        view.update(change);
+    }
 }
+
+

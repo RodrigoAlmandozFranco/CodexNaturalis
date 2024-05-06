@@ -48,9 +48,7 @@ public class GameDB {
 
             outputStream.close();
 
-            if(gs) return new Change(game, state);
-
-            return null;
+            return new Change(game, state, gs);
 
         } catch (IOException e) {
             e.printStackTrace();

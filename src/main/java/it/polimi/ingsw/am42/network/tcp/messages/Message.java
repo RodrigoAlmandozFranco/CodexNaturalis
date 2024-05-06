@@ -9,7 +9,6 @@ import java.io.Serializable;
  * This class represents a generic message that can be sent through the network
  * It is used to send messages between the server and the client
  *
- * @see ServerToClientMessage
  * @see ClientToServerMessage
  * @see ChatMessage
  *
@@ -21,11 +20,9 @@ public class Message  implements Serializable {
     public Message() {
     }
 
-    public Message executeServer() {
+    public Message execute() {
         return null;
     }
 
-    public void executeClient() {
-    }
 }
 

@@ -4,7 +4,6 @@ import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
 import it.polimi.ingsw.am42.network.tcp.messages.ClientToServerMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
-import it.polimi.ingsw.am42.network.tcp.messages.ServerToClientMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.NicknameAlreadyInUseErrorMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.NicknameInvalidErrorMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GameFullErrorMessage;
@@ -12,7 +11,7 @@ import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GameFullErrorMes
 /**
  * Message sent by the client to the server to connect to a standby game
  * The executeServer method calls a controller method in order to achieve the goal of the message
- * @see it.polimi.ingsw.am42.network.tcp.messages.ServerToClientMessage
+ * @see it.polimi.ingsw.am42.network.tcp.messages.Message
  * @see it.polimi.ingsw.am42.network.tcp.messages.ClientToServerMessage
  * @see it.polimi.ingsw.am42.network.tcp.server.ClientHandler
  *
@@ -30,7 +29,7 @@ public class ConnectMessage extends ClientToServerMessage {
         nickname = n;
     }
 
-    public Message executeServer() {
+    public Message execute() {
 
         try {
             controller.connect(clientHandler, nickname, idGame);

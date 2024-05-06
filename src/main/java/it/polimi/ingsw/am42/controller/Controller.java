@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.controller;
 
+import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.controller.gameDB.GameDB;
 import it.polimi.ingsw.am42.controller.state.State;
 import it.polimi.ingsw.am42.model.Game;
@@ -10,6 +11,8 @@ import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.model.structure.Position;
+import it.polimi.ingsw.am42.network.MessageListener;
+import it.polimi.ingsw.am42.network.rmi.RMISpeaker;
 
 
 import java.util.List;
@@ -81,7 +84,7 @@ public class Controller extends Observable implements RMISpeaker {
     public boolean place(String p, Face face, Position position) throws RequirementsNotMetException {
         game.getCurrentPlayer().checkRequirements(face);
 
-        Message change;
+        Change change;
         game.getCurrentPlayer().placeCard(position, face);
         this.currentState = this.currentState.changeState(this.game);
         if(game.getTurnFinal())
@@ -97,7 +100,7 @@ public class Controller extends Observable implements RMISpeaker {
         game.chosenCardToAddInHand(card);
         this.currentState = this.currentState.changeState(this.game);
         game.setCurrentPlayer(game.getNextPlayer());
-        Message change = gameDB.saveGame(true, this.currentState);
+        Change change = gameDB.saveGame(true, this.currentState);
         updateAll(change);
     }
 
@@ -106,7 +109,7 @@ public class Controller extends Observable implements RMISpeaker {
         game.getCurrentPlayer().setColor(color);
         game.removeColor(color);
         this.currentState = this.currentState.changeState(this.game);
-        Message change = gameDB.saveGame(false, this.currentState);
+        Change change = gameDB.saveGame(false, this.currentState);
         updateAll(change);
     }
 
@@ -120,7 +123,7 @@ public class Controller extends Observable implements RMISpeaker {
         game.getCurrentPlayer().setPersonalGoal(goal);
         this.currentState = this.currentState.changeState(game);
         game.setCurrentPlayer(game.getNextPlayer());
-        Message change = gameDB.saveGame(false, this.currentState);
+        Change change = gameDB.saveGame(false, this.currentState);
         updateAll(change);
     }
 

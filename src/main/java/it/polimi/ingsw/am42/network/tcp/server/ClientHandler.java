@@ -6,9 +6,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import it.polimi.ingsw.am42.controller.Controller;
-import it.polimi.ingsw.am42.controller.Observable;
 import it.polimi.ingsw.am42.controller.gameDB.Change;
-import it.polimi.ingsw.am42.model.Game;
 import it.polimi.ingsw.am42.network.MessageListener;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.ClientToServerMessage;
@@ -54,7 +52,7 @@ public class ClientHandler implements Runnable, MessageListener {
                         controller.getChatMessage(chatMessage);
                         answer = null;
                     } else {
-                        answer = message.executeServer();
+                        answer = message.execute();
                     }
                     if(answer != null) {
                         sendMessage(answer);

@@ -2,7 +2,9 @@ package it.polimi.ingsw.am42.controller.gameDB;
 
 import it.polimi.ingsw.am42.controller.state.State;
 import it.polimi.ingsw.am42.model.Game;
+import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
+import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 
@@ -23,8 +25,9 @@ public class Change extends Message implements Serializable {
     private int pointsPlayer;
     private int numberGoalsAchieved;
     private String futurePlayer;
-    //TODO aggiungere quando il flag è false List<PlayerView> players; List<GoalCard> globalGoals;
-    // int numberPlayers; e un flag
+    private List<Player> players;
+    private List<GoalCard> globalGoals;
+    private int numberPlayers;
     private List<PlayableCard> hand;
     private Face lastPlacedFace;
     private PlayableCard firstResourceCard;
@@ -32,9 +35,10 @@ public class Change extends Message implements Serializable {
     private List<PlayableCard> pickableResourceCards;
     private List<PlayableCard> pickableGoldCards;
     private State currentState;
+    private boolean gameStarted;
 
 
-    public Change(Game game, State state){
+    public Change(Game game, State state, boolean gameStarted){
 
         pointsPlayer = game.getCurrentPlayer().getPoints();
         numberGoalsAchieved = game.getCurrentPlayer().getGoalsAchieved();
@@ -46,7 +50,35 @@ public class Change extends Message implements Serializable {
         pickableResourceCards = game.getPickableResourceCards();
         pickableGoldCards = game.getPickableGoldCards();
         currentState = state;
+        players = null;
+        globalGoals = null;
+        numberPlayers = 0;
+        this.gameStarted = gameStarted;
+
+        if(!gameStarted){
+            players = game.getPlayers();
+            globalGoals = game.getGoals();
+            numberPlayers = game.getNumberPlayers();
+        }
     }
+
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public List<GoalCard> getGlobalGoals() {
+        return globalGoals;
+    }
+
+    public int getNumberPlayers() {
+        return numberPlayers;
+    }
+
+    public boolean isGameStarted() {
+        return gameStarted;
+    }
+
 
     public int getPointsPlayer() {
         return pointsPlayer;
@@ -83,6 +115,8 @@ public class Change extends Message implements Serializable {
     public List<PlayableCard> getPickableGoldCards() {
         return pickableGoldCards;
     }
+
+
 
     public State getCurrentState() {
         return currentState;
