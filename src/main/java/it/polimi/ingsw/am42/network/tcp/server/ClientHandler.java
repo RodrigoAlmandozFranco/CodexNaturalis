@@ -34,10 +34,10 @@ public class ClientHandler implements Runnable, MessageListener {
     private ObjectOutputStream output;
 
 
-    public ClientHandler(Socket socket, Controller controller, Game game) throws IOException {
+    public ClientHandler(Socket socket, Controller controller) throws IOException {
         this.socket = socket;
         this.controller = controller;
-        message = new ClientToServerMessage(controller, game, this);
+        message = new ClientToServerMessage(controller, this);
         out = new PrintWriter(socket.getOutputStream());
         input = new ObjectInputStream(socket.getInputStream());
         output = new ObjectOutputStream(socket.getOutputStream());

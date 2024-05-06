@@ -16,12 +16,10 @@ import java.io.Serializable;
 
 public class ClientToServerMessage extends Message {
     protected Controller controller;
-    protected Game game;
     protected ClientHandler clientHandler;
 
-    public ClientToServerMessage(Controller controller, Game game, ClientHandler c) {
+    public ClientToServerMessage(Controller controller, ClientHandler c) {
         this.controller = controller;
-        this.game = game;
         this.clientHandler = c;
     }
 
