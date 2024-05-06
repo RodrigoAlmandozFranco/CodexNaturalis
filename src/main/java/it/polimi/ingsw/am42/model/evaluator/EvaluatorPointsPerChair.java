@@ -71,4 +71,25 @@ public class EvaluatorPointsPerChair extends Evaluator{
     }
 
 
+    public String toString(boolean small) {
+        if (small)
+            return numPoints + " | L" ;
+        else
+            return toString();
+    }
+    @Override
+    public String toString() {
+        String to_print = "\u001B[33m";
+
+        to_print += "+-----------------------+\n";
+
+        // TODO
+
+        to_print += "+-----------------------+";
+
+
+        to_print += Color.WHITE.toString();
+        return to_print;
+    }
+
 }

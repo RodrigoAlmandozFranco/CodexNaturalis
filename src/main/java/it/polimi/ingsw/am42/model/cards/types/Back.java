@@ -75,5 +75,37 @@ public class Back extends Face {
 
         return resources;
     }
+
+    @Override
+    protected String middlePart() {
+        String to_print = color.toString();
+        if (resource.isEmpty())
+            for (int i=0; i<3; i++)
+                to_print += "|                       |\n";
+        else {
+            // 1
+            to_print += "|" + " ".repeat(5 - resource.size())
+                    + "+-" + "--".repeat(resource.size()) + "+"
+                    + " ".repeat(5 - resource.size()) + "|\n";
+            // 2
+            to_print += "|" + " ".repeat(5 - resource.size())
+                    + "| ";
+            for (Resource r : resource)
+                to_print += r + " ";
+            to_print += "|"+ " ".repeat(5 - resource.size()) + "|\n";
+            // 3
+            to_print += "|" + " ".repeat(5 - resource.size())
+                    + "+-" + "--".repeat(resource.size()) + "+"
+                    + " ".repeat(5 - resource.size()) + "|\n";
+        }
+
+
+
+        to_print += Color.WHITE.toString();
+        return to_print;
+
+
+    }
+
 }
 

@@ -10,9 +10,7 @@ import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.model.structure.Position;
-import it.polimi.ingsw.am42.network.MessageListener;
-import it.polimi.ingsw.am42.network.rmi.RMISpeaker;
-import it.polimi.ingsw.am42.network.tcp.messages.Message;
+
 
 import java.util.List;
 import java.util.Set;

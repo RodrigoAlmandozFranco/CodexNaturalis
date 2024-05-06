@@ -17,10 +17,8 @@ public enum State {
 
     PICK,
 
-
     LAST;
 
-    // TODO: make next state for every subclass
     public State changeState(Game game){
          switch (this){
              case INITIAL:

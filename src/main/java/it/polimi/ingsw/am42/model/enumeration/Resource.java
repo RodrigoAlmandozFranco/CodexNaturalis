@@ -12,5 +12,20 @@ public enum Resource {
     INSECTKINGDOM,
     QUILLOBJECT,
     INKWELLOBJECT,
-    MANUSCRIPTOBJECT
+    MANUSCRIPTOBJECT;
+
+
+    public String toString() {
+        return switch (this) {
+            case PLANTKINGDOM -> "P";
+            case ANIMALKINGDOM -> "A";
+            case FUNGIKINGDOM -> "F";
+            case INSECTKINGDOM -> "I";
+            case QUILLOBJECT -> "Q";
+            case INKWELLOBJECT -> "I";
+            case MANUSCRIPTOBJECT -> "M";
+            default -> "?";
+        };
+    }
 }
+

@@ -112,4 +112,29 @@ class FaceTest {
 
         assertEquals(src, face.getSrcImage());
     }
+
+    @Test
+    void toStringTest() {
+
+
+        String src = "C:/.../face1";
+
+        List<Corner> corners = new ArrayList<Corner>();
+
+        corners.add(new Corner(Resource.ANIMALKINGDOM, CornerState.OPEN, Direction.UPLEFT));
+        corners.add(new Corner(null, CornerState.CLOSED, Direction.UPRIGHT));
+        corners.add(new Corner(Resource.QUILLOBJECT, CornerState.OPEN, Direction.DOWNLEFT));
+        corners.add(new Corner(Resource.QUILLOBJECT, CornerState.OPEN, Direction.DOWNRIGHT));
+
+        List<Resource> lst = new ArrayList<>();
+
+        lst.add(Resource.INSECTKINGDOM);
+
+
+        Face face = new Back(src, corners, Color.CYAN, lst);
+
+
+        System.out.println(face);
+
+    }
 }

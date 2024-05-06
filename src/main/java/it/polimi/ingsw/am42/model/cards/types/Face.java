@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am42.model.cards.types;
 
 import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.CornerState;
 import it.polimi.ingsw.am42.model.enumeration.Direction;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
 import it.polimi.ingsw.am42.model.evaluator.Evaluator;
@@ -18,7 +19,7 @@ public abstract class Face implements Serializable {
     private final String srcImage;
     protected final List<Corner> corners;
     private Position position;
-    private final Color color;
+    protected final Color color;
 
     public Face(String src, List<Corner> corners, Color color){
         this.srcImage = src;
@@ -111,6 +112,116 @@ public abstract class Face implements Serializable {
      */
     public String getSrcImage() {
         return srcImage;
+    }
+
+
+    private String upperPart() {
+
+        String to_print = color.toString();
+
+        // 1
+        to_print += "+---+---------------+---+\n";
+
+        // 2
+        if (getCorner(Direction.UPLEFT).getState().equals(CornerState.CLOSED))
+            to_print += "|    ";
+        else
+            to_print += "| " + getCorner(Direction.UPLEFT).getResource().toString() + " |";
+        if (getEvaluator().equals(null))
+            to_print += "               ";
+        else
+            to_print += "     " + getEvaluator().toString(true) + "     ";
+        if (getCorner(Direction.UPRIGHT).getState().equals(CornerState.CLOSED))
+            to_print += "    |\n";
+        else
+            to_print += "| " + getCorner(Direction.UPRIGHT).getResource().toString() + " |\n";
+
+        // 3
+        if (getCorner(Direction.UPLEFT).getState().equals(CornerState.CLOSED))
+            to_print += "|    ";
+        else
+            to_print += "+---+";
+        to_print += "               ";
+        if (getCorner(Direction.UPRIGHT).getState().equals(CornerState.CLOSED))
+            to_print += "    |\n";
+        else
+            to_print += "+---+\n";
+
+        to_print += Color.WHITE.toString();
+        return to_print;
+    }
+
+
+    protected String middlePart() {
+        String to_print = color.toString();
+        for (int i=0; i<3; i++)
+            to_print += "|                       |\n";
+
+        to_print += Color.WHITE.toString();
+        return to_print;
+    }
+
+    private String finalPart() {
+
+
+        String to_print = color.toString();
+
+        // 1
+        if (getCorner(Direction.UPLEFT).getState().equals(CornerState.CLOSED))
+            to_print += "|    ";
+        else
+            to_print += "+---+";
+        to_print += "               ";
+        if (getCorner(Direction.UPRIGHT).getState().equals(CornerState.CLOSED))
+            to_print += "    |\n";
+        else
+            to_print += "+---+\n";
+
+
+        // 2
+        if (getCorner(Direction.UPLEFT).getState().equals(CornerState.CLOSED))
+            to_print += "|    ";
+        else
+            to_print += "| " + getCorner(Direction.UPLEFT).getResource().toString() + " |";
+        if (getRequirements().equals(null))
+            to_print += "               ";
+        else {
+            int totalValues = 0;
+            for (int value : getRequirements().values()) {
+                totalValues += value;
+            }
+
+            to_print += " ".repeat(7 - totalValues) + "|";
+            for (Resource r : getRequirements().keySet())
+                for (int i=0; i< getRequirements().get(r); i++)
+                    to_print += r.toString() + "|";
+            to_print += " ".repeat(7 - totalValues);
+        }
+        if (getCorner(Direction.UPRIGHT).getState().equals(CornerState.CLOSED))
+            to_print += "    |\n";
+        else
+            to_print += "| " + getCorner(Direction.UPRIGHT).getResource().toString() + " |\n";
+
+
+        // 3
+        to_print += "+---+---------------+---+\n";
+
+        to_print += Color.WHITE.toString();
+        return to_print;
+
+    }
+
+    @Override
+    public String toString() {
+
+        String to_print = "";
+
+        to_print += upperPart();
+        to_print += middlePart();
+        to_print += finalPart();
+
+
+        return  to_print;
     }
 }
 

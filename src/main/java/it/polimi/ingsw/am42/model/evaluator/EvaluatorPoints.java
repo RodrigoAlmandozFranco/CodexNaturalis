@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.model.evaluator;
 
+import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.structure.Board;
 
 public class EvaluatorPoints extends Evaluator{
@@ -17,5 +18,27 @@ public class EvaluatorPoints extends Evaluator{
     @Override
     public int getPoints(Board board) {
         return numPoints;
+    }
+
+
+    public String toString(boolean small) {
+        if (small)
+            return "  " + numPoints + "  ";
+        else
+            return toString();
+    }
+    @Override
+    public String toString() {
+        String to_print = "\u001B[33m";
+
+        to_print += "+-----------------------+\n";
+
+        // TODO
+
+        to_print += "+-----------------------+";
+
+
+        to_print += Color.WHITE.toString();
+        return to_print;
     }
 }
