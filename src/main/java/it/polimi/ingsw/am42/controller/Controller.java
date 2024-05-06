@@ -1,6 +1,5 @@
 package it.polimi.ingsw.am42.controller;
 
-import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.controller.gameDB.GameDB;
 import it.polimi.ingsw.am42.controller.state.State;
 import it.polimi.ingsw.am42.model.Game;

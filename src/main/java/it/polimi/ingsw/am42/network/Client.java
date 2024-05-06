@@ -7,11 +7,16 @@ import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.model.structure.Position;
+import it.polimi.ingsw.am42.network.tcp.messages.Message;
+import it.polimi.ingsw.am42.view.View;
 
 import java.util.List;
 import java.util.Set;
 
 public abstract class Client {
+
+    protected View view;
+
     public abstract String getGameInfo();
 
     public abstract int createGame(MessageListener l, String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException;
@@ -36,4 +41,5 @@ public abstract class Client {
 
     public abstract List<Player> getWinner();
 
+    public abstract void update(Message message);
 }

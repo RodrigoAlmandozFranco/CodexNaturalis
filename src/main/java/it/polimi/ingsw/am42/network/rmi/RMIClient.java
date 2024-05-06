@@ -11,6 +11,7 @@ import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
+import it.polimi.ingsw.am42.view.View;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -18,11 +19,10 @@ import java.util.List;
 import java.util.Set;
 
 public class RMIClient extends Client implements MessageListener {
-    private View view;
     Registry registry;
     RMISpeaker stub;
     private RMIClient(String host) {
-        //TODO da riga di comando ricevo se volgio un view GUI o TUI
+        //TODO da riga di comando ricevo se voglio un view GUI o TUI
         //this.view = new View(this);
         try {
             this.registry = LocateRegistry.getRegistry(host);
@@ -88,6 +88,6 @@ public class RMIClient extends Client implements MessageListener {
 
     @Override
     public void update(Message message) {
-        //TODO view.update(Message);
+        view.update(message);
     }
 }
