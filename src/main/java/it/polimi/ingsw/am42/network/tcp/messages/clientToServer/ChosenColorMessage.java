@@ -1,0 +1,30 @@
+package it.polimi.ingsw.am42.network.tcp.messages.clientToServer;
+
+import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.network.tcp.messages.ClientToServerMessage;
+import it.polimi.ingsw.am42.network.tcp.messages.ServerToClientMessage;
+
+/**
+ * Message sent by the client to the server to choose a color
+ * @see it.polimi.ingsw.am42.network.tcp.messages.ServerToClientMessage
+ * @see it.polimi.ingsw.am42.network.tcp.messages.ClientToServerMessage
+ * @see it.polimi.ingsw.am42.network.tcp.server.ClientHandler
+ *
+ * @author Rodrigo Almandoz Franco
+ * @author Mattia Brandi
+ */
+
+public class ChosenColorMessage extends ClientToServerMessage {
+    private String nickname;
+    private Color color;
+
+    public ChosenColorMessage(String n, Color c){
+        nickname = n;
+        color = c;
+    }
+
+    public ServerToClientMessage execute() {
+        controller.chooseColor(nickname, color);
+        return null;
+    }
+}

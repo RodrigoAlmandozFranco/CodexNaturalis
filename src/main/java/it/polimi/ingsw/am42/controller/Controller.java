@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.controller;
 
+import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.controller.gameDB.GameDB;
 import it.polimi.ingsw.am42.controller.state.State;
 import it.polimi.ingsw.am42.model.Game;
@@ -12,7 +13,7 @@ import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.MessageListener;
 import it.polimi.ingsw.am42.network.rmi.RMISpeaker;
-import it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient.UpdateMessage;
+import it.polimi.ingsw.am42.network.tcp.messages.Message;
 
 import java.util.List;
 import java.util.Set;
@@ -83,13 +84,13 @@ public class Controller extends Observable implements RMISpeaker {
     public boolean place(String p, Face face, Position position) throws RequirementsNotMetException {
         game.getCurrentPlayer().checkRequirements(face);
 
-        String diff;
+        Message change;
         game.getCurrentPlayer().placeCard(position, face);
         this.currentState = this.currentState.changeState(this.game);
         if(game.getTurnFinal())
             game.setCurrentPlayer(game.getNextPlayer());
-        diff = gameDB.saveGame(true, this.currentState);
-        updateAll(new UpdateMessage(diff));
+        change = gameDB.saveGame(true, this.currentState);
+        updateAll(change);
 
         return true;
     }
@@ -99,8 +100,8 @@ public class Controller extends Observable implements RMISpeaker {
         game.chosenCardToAddInHand(card);
         this.currentState = this.currentState.changeState(this.game);
         game.setCurrentPlayer(game.getNextPlayer());
-        String diff = gameDB.saveGame(true, this.currentState);
-        updateAll(new UpdateMessage(diff));
+        Message change = gameDB.saveGame(true, this.currentState);
+        updateAll(change);
     }
 
     @Override
@@ -108,8 +109,8 @@ public class Controller extends Observable implements RMISpeaker {
         game.getCurrentPlayer().setColor(color);
         game.removeColor(color);
         this.currentState = this.currentState.changeState(this.game);
-        String diff = gameDB.saveGame(false, this.currentState);
-        updateAll(new UpdateMessage(diff));
+        Message change = gameDB.saveGame(false, this.currentState);
+        updateAll(change);
     }
 
     @Override
@@ -122,8 +123,8 @@ public class Controller extends Observable implements RMISpeaker {
         game.getCurrentPlayer().setPersonalGoal(goal);
         this.currentState = this.currentState.changeState(game);
         game.setCurrentPlayer(game.getNextPlayer());
-        String diff = gameDB.saveGame(false, this.currentState);
-        updateAll(new UpdateMessage(diff));
+        Message change = gameDB.saveGame(false, this.currentState);
+        updateAll(change);
     }
 
     @Override

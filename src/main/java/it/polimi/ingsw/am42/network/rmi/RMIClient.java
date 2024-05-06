@@ -10,7 +10,7 @@ import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.Client;
-import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Message;
+import it.polimi.ingsw.am42.network.tcp.messages.Message;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Set;
 
 public class RMIClient extends Client implements MessageListener {
-
     private View view;
     Registry registry;
     RMISpeaker stub;

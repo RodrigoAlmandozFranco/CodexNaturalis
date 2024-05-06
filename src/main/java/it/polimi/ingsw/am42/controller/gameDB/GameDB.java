@@ -1,10 +1,8 @@
 package it.polimi.ingsw.am42.controller.gameDB;
 
-import com.google.gson.*;
 import it.polimi.ingsw.am42.controller.state.State;
-import it.polimi.ingsw.am42.gson.gameGson.GameDeserializer;
-import it.polimi.ingsw.am42.gson.gameGson.GameSerializer;
 import it.polimi.ingsw.am42.model.Game;
+import it.polimi.ingsw.am42.network.tcp.messages.Message;
 
 import java.io.*;
 
@@ -12,14 +10,14 @@ import java.io.*;
 /**
  * This class is responsible for saving and loading the game state.
  * It implements the Persistence advance functionality.
- * It uses GSON to serialize and deserialize the game state.
+ * It uses ObjectOutputStream and ObjectInputStream to save and load the game state.
  *
  * @author Rodrigo Almandoz Franco
  */
-
 public class GameDB {
-    private Game game;
-    private static final String path = "src/main/resources/it/polimi/ingsw/am42/gamePersistence/game.json";
+    protected Game game;
+    private static final String path = "src/main/resources/it/polimi/ingsw/am42/gamePersistence/game.dat";
+    protected State state;
 
     public GameDB() {}
 
@@ -27,66 +25,55 @@ public class GameDB {
         this.game = game;
     }
 
+
     /**
-     * This method saves the game in the json file located at path. The file is always updated.
-     * If the gameStarted boolean is false, it returns as a string the entire json.
-     * If the gameStarted boolean is true, it returns as a string only the changes made by the current player.
-     * @param gameStarted boolean that points out if the game has started or not.
+     * This method saves the game in the file located at path. The file is always updated.
+     * If the gameStarted boolean is false, it returns null.
+     * If the gameStarted boolean is true, it returns a Change class which contains the
+     * changes made by the current player.
+     * @param gs boolean that points out if the game has started or not.
+     * @param s the state of the game.
      * @return the string which contains all the game or only the changes.
      */
+    public Message saveGame(boolean gs, State s) {
 
-    public String saveGame(boolean gameStarted, State state) {
+        try {
+            state = s;
 
-        JsonObject object = new JsonObject();
+            if (fileExists()) fileDelete();
 
-        Gson gson = new GsonBuilder()
-                        .registerTypeAdapter(Game.class, new GameSerializer(gameStarted, object, state))
-                        .create();
+            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(path));
 
+            outputStream.writeObject(game);
 
-        String json = gson.toJson(game);
-        String changes = object.toString();
+            outputStream.close();
 
-        try (FileWriter writer = new FileWriter(path)) {
-            writer.write(json);
+            if(gs) return new Change(game, state);
+
+            return null;
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        return gameStarted ? changes: json;
-
+        return null;
     }
 
 
     /**
-     * This method returns the json file as a string.
-     * @return the json file as a string.
+     * This method checks if the file exists.
+     * @return true if the file exists, false otherwise.
      */
-    public String jsonToString() {
-        try {
-            JsonElement jsonElement = JsonParser.parseReader(new FileReader(path));
-            return jsonElement.toString();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    public boolean jsonExists() {
+    private boolean fileExists() {
         File file = new File(path);
         return file.exists();
     }
 
-    public boolean jsonCreate() {
-        File file = new File(path);
-        try {
-            return file.createNewFile();
-        } catch (IOException e) {
-            return false;
-        }
-    }
 
-    public boolean jsonDelete() {
+    /**
+     * This method deletes the file located at path.
+     * @return true if the file was deleted, false otherwise.
+     */
+    private boolean fileDelete() {
         File file = new File(path);
         if(file.exists()) {
             return file.delete();
@@ -96,20 +83,22 @@ public class GameDB {
 
 
     /**
-     * This method loads the Game contained in the json file path.
-     * @return the game contained in the json file already loaded.
+     * This method loads the Game contained in the file path.
+     * @return the game contained in the file already loaded.
      */
     public Game loadGame() {
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapter(Game.class, new GameDeserializer())
-                .create();
         try {
-            FileReader reader = new FileReader(path);
-            setGame(gson.fromJson(reader, Game.class));
-            return this.game;
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+            ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(path));
+
+            Game game = (Game) inputStream.readObject();
+
+            inputStream.close();
+            return game;
+
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
+        return null;
     }
 }
 

@@ -1,4 +1,4 @@
-package it.polimi.ingsw.am42.gson.frontGson;
+package it.polimi.ingsw.am42.gson;
 
 import com.google.gson.*;
 import it.polimi.ingsw.am42.model.cards.types.Corner;

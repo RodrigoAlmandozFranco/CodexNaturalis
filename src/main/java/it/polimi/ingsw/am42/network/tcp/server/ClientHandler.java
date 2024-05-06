@@ -1,107 +1,91 @@
 package it.polimi.ingsw.am42.network.tcp.server;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import it.polimi.ingsw.am42.controller.Controller;
-import it.polimi.ingsw.am42.network.MessageListener;
+import it.polimi.ingsw.am42.controller.Observable;
+import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.model.Game;
-import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Message;
-import it.polimi.ingsw.am42.network.tcp.server.messagesServer.clientToServer.*;
-import it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient.SendAvailableColorsMessage;
-import it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient.SendAvailablePositionMessage;
-import it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient.SendPossibleGoalsMessage;
-import it.polimi.ingsw.am42.network.tcp.server.messagesServer.serverToClient.SendWinnerMessage;
+import it.polimi.ingsw.am42.network.MessageListener;
+import it.polimi.ingsw.am42.network.chat.ChatMessage;
+import it.polimi.ingsw.am42.network.tcp.messages.ClientToServerMessage;
+import it.polimi.ingsw.am42.network.tcp.messages.Message;
+
+/**
+ * This class is responsible for handling the connection with the client.
+ * It receives messages from the client and sends them to the controller.
+ * It also sends messages to the client.
+ * The answers of the ClientHandler could be to a singleClient or to all the clients
+ * thanks to the updateAll() in MessageListener.
+ *
+ * @author Rodrigo Almandoz Franco
+ * @author Mattia Brandi
+ */
 
 public class ClientHandler implements Runnable, MessageListener {
     private Socket socket;
     private Controller controller;
-    private Message messages;
+    private ClientToServerMessage message;
     private PrintWriter out;
+    private ObjectInputStream input;
+    private ObjectOutputStream output;
 
 
     public ClientHandler(Socket socket, Controller controller, Game game) throws IOException {
         this.socket = socket;
         this.controller = controller;
-        messages = new Message(controller, game);
+        message = new ClientToServerMessage(controller, game, this);
         out = new PrintWriter(socket.getOutputStream());
+        input = new ObjectInputStream(socket.getInputStream());
+        output = new ObjectOutputStream(socket.getOutputStream());
     }
 
     public void run() {
         try {
-            Scanner in = new Scanner(socket.getInputStream());
-            final PrintWriter out = new PrintWriter(socket.getOutputStream());
             while(true) {
-                if(in.hasNextLine()) {
-                    String message = in.nextLine();
-                    JsonObject object = JsonParser.parseString(message).getAsJsonObject();
+                if(socket.getInputStream().available() > 0) {
+                    Message message = (Message) input.readObject();
+                    Message answer;
 
-                    String result;
-                    switch (object.get("type").getAsString()) {
-
-                        case "FirstConnectionMessage":
-                            result = new FirstConnectionMessage(object, this).execute();
-                            break;
-                        case "ConnectMessage":
-                            result = new ConnectMessage(object, this).execute();
-                            break;
-                        case "ReconnectMessage":
-                            result = new ReconnectMessage(object, this).execute();
-                            break;
-                        case "GetColorsMessage":
-                            result = new SendAvailableColorsMessage(object).execute();
-                            this.update(result);
-                            break;
-                        case "ChosenColorMessage":
-                            result = new ChosenColorMessage(object).execute();
-                            break;
-                        case "GetGoalsMessage":
-                            result = new SendPossibleGoalsMessage(object).execute();
-                            this.update(result);
-                            break;
-                        case "ChosenGoalMessage":
-                            result = new ChosenGoalMessage(object).execute();
-                            break;
-                        case "GetAvailablePositionMessage":
-                            result = new SendAvailablePositionMessage(object).execute();
-                            this.update(result);
-                            break;
-                        case "PlaceMessage":
-                            result = new PlaceMessage(object).execute();
-                            break;
-                        case "PickMessage":
-                            result = new PickMessage(object).execute();
-                            break;
-                        case "GetWinnerMessage":
-                            result = new SendWinnerMessage(object).execute();
-                            this.update(result);
-                            break;
-                        default:
-                            result = "Error";
-                            break;
-                    };
-
+                    if(message instanceof ChatMessage) {
+                        controller.getChatMessage(chatMessage);
+                        answer = null;
+                    } else {
+                        answer = message.executeServer();
+                    }
+                    if(answer != null) {
+                        sendMessage(answer);
+                    }
                 }
             }
+        } catch (IOException e) {
+            playerDisconnected();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void sendMessage(Message answer) {
+        try {
+            output.writeObject(answer);
+            output.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void update(Message message){
-        //TODO serialize the message
-        //JsonObject result = new JsonObject();
-
-        //out.println(result);
-        //out.flush();
+    public void playerDisconnected() {
+        controller.playerDisconnected();
+        //todo controller creerà un messaggio di disconnessione e chiamerò la updateAll()
     }
 
-    public void update (String result){
-        out.println(result);
-        out.flush();
+    public void update(String s){}
+
+    public void update (Message change) {
+        sendMessage(change);
     }
     public String getId(){
         return null;
