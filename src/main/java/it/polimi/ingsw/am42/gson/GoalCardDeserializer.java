@@ -1,10 +1,9 @@
-package it.polimi.ingsw.am42.gson.goalCardGson;
+package it.polimi.ingsw.am42.gson;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import it.polimi.ingsw.am42.model.cards.types.Back;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.evaluator.Evaluator;
 

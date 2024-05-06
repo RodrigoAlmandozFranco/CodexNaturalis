@@ -4,12 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import it.polimi.ingsw.am42.gson.backGson.BackDeserializer;
-import it.polimi.ingsw.am42.gson.cornerGson.CornerDeserializer;
-import it.polimi.ingsw.am42.gson.evaluatorGson.EvaluatorDeserializer;
-import it.polimi.ingsw.am42.gson.frontGson.FrontDeserializer;
-import it.polimi.ingsw.am42.gson.goalCardGson.GoalCardDeserializer;
-import it.polimi.ingsw.am42.gson.playableCardGson.PlayableCardDeserializer;
+import it.polimi.ingsw.am42.gson.BackDeserializer;
+import it.polimi.ingsw.am42.gson.CornerDeserializer;
+import it.polimi.ingsw.am42.gson.EvaluatorDeserializer;
+import it.polimi.ingsw.am42.gson.FrontDeserializer;
+import it.polimi.ingsw.am42.gson.GoalCardDeserializer;
+import it.polimi.ingsw.am42.gson.PlayableCardDeserializer;
 import it.polimi.ingsw.am42.model.cards.Card;
 import it.polimi.ingsw.am42.model.cards.types.*;
 import it.polimi.ingsw.am42.model.cards.types.playables.ResourceCard;
@@ -25,6 +25,7 @@ import it.polimi.ingsw.am42.model.structure.Board;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -41,7 +42,7 @@ import java.util.stream.Collectors;
  * @author Rodrigo Almandoz Franco
 */
 
-public class Game implements GameInterface {
+public class Game implements GameInterface, Serializable {
 
     private List<Player> players;
     private final List<GoalCard> globalGoals;
@@ -87,7 +88,6 @@ public class Game implements GameInterface {
     /**
      * Constructor of the class Player for the reconstruction
      * of the game after network disconnections.
-     * @see it.polimi.ingsw.am42.gson.gameGson.GameDeserializer
      * @param numberPlayers
      * @param players
      * @param globalGoals
@@ -434,53 +434,22 @@ public class Game implements GameInterface {
 
     }
 
-    public List<Integer> getGoalDeck() {
-        List<Integer> goals = new ArrayList<>();
-        for(GoalCard g : goalDeck){
-            goals.add(g.getId());
-        }
-        return goals;
+    public List<PlayableCard> getPickableResourceCards(){
+        return pickableResourceCards;
     }
 
-    public List<Integer> getResourceDeck() {
-        List<Integer> resource = new ArrayList<>();
-        for(PlayableCard c : resourceDeck){
-            resource.add(c.getId());
-        }
-        return resource;
+    public List<PlayableCard> getPickableGoldCards(){
+        return pickableResourceCards;
     }
 
-    public List<Integer> getGoldDeck() {
-        List<Integer> gold = new ArrayList<>();
-        for(PlayableCard c : goldDeck){
-            gold.add(c.getId());
-        }
-        return gold;
+    public PlayableCard getFirstResourceCard() {
+        return resourceDeck.getTop();
     }
 
-    public List<Integer> getStartingDeck() {
-        List<Integer> s = new ArrayList<>();
-        for(PlayableCard c : startingDeck){
-            s.add(c.getId());
-        }
-        return s;
+    public PlayableCard getFirstGoldCard() {
+        return goldDeck.getTop();
     }
 
-    public List<Integer> getPickableResourceCards() {
-        List<Integer> pr = new ArrayList<>();
-        for(PlayableCard c : pickableResourceCards){
-            pr.add(c.getId());
-        }
-        return pr;
-    }
-
-    public List<Integer> getPickableGoldCards() {
-        List<Integer> pg = new ArrayList<>();
-        for(PlayableCard c : pickableGoldCards){
-            pg.add(c.getId());
-        }
-        return pg;
-    }
 
     public List<Color> getAvailableColors() {
         return availableColors;

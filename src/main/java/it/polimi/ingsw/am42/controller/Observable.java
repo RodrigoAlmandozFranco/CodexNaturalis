@@ -1,7 +1,7 @@
 package it.polimi.ingsw.am42.controller;
 
 import it.polimi.ingsw.am42.network.MessageListener;
-import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Message;
+import it.polimi.ingsw.am42.network.tcp.messages.Message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +18,7 @@ public abstract class Observable {
         for(MessageListener l : listeners)
             l.update(message);
     }
+
     protected void update(Message message, String id){
         for(MessageListener l : listeners)
             if (l.getId().equals(id))

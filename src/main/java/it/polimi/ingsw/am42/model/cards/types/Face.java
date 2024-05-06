@@ -6,6 +6,7 @@ import it.polimi.ingsw.am42.model.enumeration.Resource;
 import it.polimi.ingsw.am42.model.evaluator.Evaluator;
 import it.polimi.ingsw.am42.model.structure.Position;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ import java.util.Map;
  * This class represents the face of a card.
  * @author Tommaso Crippa
  */
-public abstract class Face {
+public abstract class Face implements Serializable {
     private final String srcImage;
     protected final List<Corner> corners;
     private Position position;

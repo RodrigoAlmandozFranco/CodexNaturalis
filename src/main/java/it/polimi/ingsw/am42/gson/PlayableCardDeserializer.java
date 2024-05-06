@@ -1,4 +1,4 @@
-package it.polimi.ingsw.am42.gson.playableCardGson;
+package it.polimi.ingsw.am42.gson;
 
 
 import com.google.gson.*;

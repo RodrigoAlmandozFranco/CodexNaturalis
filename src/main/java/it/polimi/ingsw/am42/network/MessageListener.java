@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am42.network;
 
-import it.polimi.ingsw.am42.network.tcp.server.messagesServer.Message;
+
+import it.polimi.ingsw.am42.network.tcp.messages.Message;
 
 public interface MessageListener {
 

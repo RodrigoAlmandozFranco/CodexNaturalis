@@ -11,6 +11,7 @@ import it.polimi.ingsw.am42.model.exceptions.RequirementsNotMetException;
 import it.polimi.ingsw.am42.model.structure.Board;
 import it.polimi.ingsw.am42.model.structure.Position;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.List;
@@ -23,7 +24,7 @@ import java.util.Map;
  * This class represents the player, containing all the attributes and methods to play his game
  * @author Tommaso Crippa
  */
-public class Player {
+public class Player implements Serializable {
     private int points;
     private final String nickname;
     private List<PlayableCard> hand;
@@ -35,7 +36,6 @@ public class Player {
     /**
      * Constructor of the class Player for the reconstruction
      * of the game after network disconnections.
-     * @see it.polimi.ingsw.am42.gson.gameGson.GameDeserializer
      * @param nickname
      * @param points
      * @param hand

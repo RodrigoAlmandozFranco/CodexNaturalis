@@ -1,5 +1,7 @@
 package it.polimi.ingsw.am42.model.cards;
 
+import java.io.Serializable;
+
 /**
  * This class represents a generic card
  * It has an id
@@ -7,7 +9,7 @@ package it.polimi.ingsw.am42.model.cards;
  * @author Mattia Brandi
  */
 
-public abstract class Card {
+public abstract class Card implements Serializable {
     private final int id;
 
     public Card(int id) {

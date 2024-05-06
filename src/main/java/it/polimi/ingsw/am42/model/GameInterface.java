@@ -37,12 +37,10 @@ public interface GameInterface {
     public List<GoalCard> choosePersonalGoal();
     public void setTurnFinal(boolean v);
     public boolean getTurnFinal();
-    public List<Integer> getGoalDeck();
-    public List<Integer> getResourceDeck();
-    public List<Integer> getGoldDeck();
-    public List<Integer> getStartingDeck();
-    public List<Integer> getPickableResourceCards();
-    public List<Integer> getPickableGoldCards();
+    public List<PlayableCard> getPickableResourceCards();
+    public List<PlayableCard> getPickableGoldCards();
+    public PlayableCard getFirstResourceCard();
+    public PlayableCard getFirstGoldCard();
     public List<Color> getAvailableColors();
     public void removeColor(Color c);
     public Face getFace(String srcImage);

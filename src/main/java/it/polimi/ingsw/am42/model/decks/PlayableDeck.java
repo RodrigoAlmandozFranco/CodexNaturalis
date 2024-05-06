@@ -3,6 +3,7 @@ package it.polimi.ingsw.am42.model.decks;
 import it.polimi.ingsw.am42.model.cards.Card;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -19,7 +20,7 @@ import java.util.List;
  * @author Mattia Brandi
  */
 
-public class PlayableDeck implements Iterable<PlayableCard>{
+public class PlayableDeck implements Serializable, Iterable<PlayableCard>{
     private List<PlayableCard> deck;
 
     public PlayableDeck() {

@@ -3,6 +3,7 @@ import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -19,7 +20,7 @@ import java.util.List;
  * @author Mattia Brandi
  */
 
-public class GoalDeck implements Iterable<GoalCard>{
+public class GoalDeck implements Serializable, Iterable<GoalCard>{
     private List<GoalCard> deck;
 
     public GoalDeck() {

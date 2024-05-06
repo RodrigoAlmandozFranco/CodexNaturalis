@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.model.structure;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Objects;
  * @author Rodrigo Almandoz Franco
  */
 
-public class Position {
+public class Position implements Serializable {
     private final int x, y;
 
     public Position(int x, int y) {

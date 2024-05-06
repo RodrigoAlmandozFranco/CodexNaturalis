@@ -6,13 +6,14 @@ import it.polimi.ingsw.am42.model.enumeration.CornerState;
 import it.polimi.ingsw.am42.model.enumeration.Direction;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * This class represents the gaming board of a player, in which he can place cards.
  * @author Tommaso Crippa
  */
-public class Board {
+public class Board implements Serializable {
     private final List<Face> faces;
     private final Map<Resource, Integer> totalResources;
     private Face lastPlacedFace;

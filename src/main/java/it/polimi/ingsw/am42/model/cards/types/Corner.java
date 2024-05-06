@@ -4,13 +4,15 @@ import it.polimi.ingsw.am42.model.enumeration.CornerState;
 import it.polimi.ingsw.am42.model.enumeration.Direction;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
 
+import java.io.Serializable;
+
 
 /**
  * This class represents a corner of a face.
  * @author Tommaso Crippa
  */
 
-public class Corner {
+public class Corner implements Serializable {
     private final Resource resource;
     private CornerState state;
     private final Direction direction;
