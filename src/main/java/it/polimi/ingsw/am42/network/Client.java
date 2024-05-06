@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.network;
 
+import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
@@ -41,5 +42,5 @@ public abstract class Client {
 
     public abstract List<Player> getWinner();
 
-    public abstract void update(Message message);
+    public abstract void update(Change diff);
 }

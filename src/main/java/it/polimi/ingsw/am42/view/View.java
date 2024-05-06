@@ -1,9 +1,20 @@
 package it.polimi.ingsw.am42.view;
 
-import it.polimi.ingsw.am42.network.tcp.messages.Message;
+import it.polimi.ingsw.am42.controller.gameDB.Change;
+import it.polimi.ingsw.am42.controller.state.State;
+import it.polimi.ingsw.am42.view.gameview.GameView;
 
 public abstract class View {
+    protected String nickname;
+    protected String currentPlayer;
+    protected State currentState;
 
-    public abstract void update(Message message);
+    protected GameView gameview;
+
+    public void update(Change diff){
+        gameview.update(currentPlayer, diff);
+        currentPlayer = diff.getFuturePlayer();
+        currentState = diff.getCurrentState();
+    }
 
 }

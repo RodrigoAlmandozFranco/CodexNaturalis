@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.controller;
 
+import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.network.MessageListener;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 
@@ -14,14 +15,10 @@ public abstract class Observable {
     public void removeListener(MessageListener l) {
         listeners.remove(l);
     }
-    protected void updateAll(Message message){
+    protected void updateAll(Change message){
         for(MessageListener l : listeners)
             l.update(message);
     }
 
-    protected void update(Message message, String id){
-        for(MessageListener l : listeners)
-            if (l.getId().equals(id))
-                l.update(message);
-    }
+
 }

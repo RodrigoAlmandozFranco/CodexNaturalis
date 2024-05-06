@@ -23,6 +23,8 @@ public class Change extends Message implements Serializable {
     private int pointsPlayer;
     private int numberGoalsAchieved;
     private String futurePlayer;
+    //TODO aggiungere quando il flag è false List<PlayerView> players; List<GoalCard> globalGoals;
+    // int numberPlayers; e un flag
     private List<PlayableCard> hand;
     private Face lastPlacedFace;
     private PlayableCard firstResourceCard;

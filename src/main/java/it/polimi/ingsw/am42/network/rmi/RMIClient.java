@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am42.network.rmi;
 
 
+import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.network.MessageListener;
 import it.polimi.ingsw.am42.model.Player;
@@ -87,7 +88,7 @@ public class RMIClient extends Client implements MessageListener {
     }
 
     @Override
-    public void update(Message message) {
-        view.update(message);
+    public void update(Change diff) {
+        view.update(diff);
     }
 }

@@ -82,9 +82,7 @@ public class ClientHandler implements Runnable, MessageListener {
         //todo controller creerà un messaggio di disconnessione e chiamerò la updateAll()
     }
 
-    public void update(String s){}
-
-    public void update (Message change) {
+    public void update (Change change) {
         sendMessage(change);
     }
     public String getId(){

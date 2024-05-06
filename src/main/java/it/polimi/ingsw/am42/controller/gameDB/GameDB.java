@@ -35,7 +35,7 @@ public class GameDB {
      * @param s the state of the game.
      * @return the string which contains all the game or only the changes.
      */
-    public Message saveGame(boolean gs, State s) {
+    public Change saveGame(boolean gs, State s) {
 
         try {
             state = s;
