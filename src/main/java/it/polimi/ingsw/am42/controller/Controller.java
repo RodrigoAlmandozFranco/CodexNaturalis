@@ -12,7 +12,9 @@ import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.MessageListener;
+import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.network.rmi.RMISpeaker;
+import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.PlayerDisconnectedMessage;
 
 
 import java.util.List;
@@ -134,6 +136,19 @@ public class Controller extends Observable implements RMISpeaker {
 
     public List<Player> getWinner(){
         return game.getWinner();
+    }
+
+
+    public void playerDisconnected() {
+        sendMessageAll(new PlayerDisconnectedMessage());
+    }
+
+    public void sendChatMessage(ChatMessage chatMessage) {
+        if (chatMessage.getReceiver().equals("all"))
+            sendMessageAll(chatMessage);
+        else
+            sendMessage(chatMessage, chatMessage.getReceiver());
+
     }
 }
 

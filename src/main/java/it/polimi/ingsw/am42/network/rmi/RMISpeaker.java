@@ -8,6 +8,7 @@ import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.model.structure.Position;
+import it.polimi.ingsw.am42.network.chat.ChatMessage;
 
 import java.rmi.Remote;
 import java.util.List;
@@ -49,4 +50,8 @@ public interface RMISpeaker extends Remote {
     public List<Player> getWinner();
 
     public List<Color> getAvailableColors(String p);
+
+    public void playerDisconnected();
+
+    public void sendChatMessage(ChatMessage chatMessage);
 }

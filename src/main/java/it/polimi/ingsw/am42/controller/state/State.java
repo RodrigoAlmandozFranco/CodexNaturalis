@@ -16,7 +16,6 @@ public enum State {
     PLACE,
 
     PICK,
-
     LAST;
 
     public State changeState(Game game){

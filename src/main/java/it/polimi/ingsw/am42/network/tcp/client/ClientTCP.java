@@ -70,8 +70,6 @@ public class ClientTCP extends Client {
             }
         } catch (final NoSuchElementException e) {
             System.out.println("Connection closed");
-        } finally{
-            socket.close();
         }
     }
 

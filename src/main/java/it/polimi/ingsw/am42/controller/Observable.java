@@ -20,5 +20,18 @@ public abstract class Observable {
             l.update(message);
     }
 
+    protected void sendMessageAll(Message message) {
+        for(MessageListener l : listeners)
+            // TODO make custom update message different from Change
+            l.receiveMessage(smessage);
+    }
+
+    protected void sendMessage(Message message, String id) {
+        for(MessageListener l : listeners)
+            if (l.getId().equals(id))
+                // TODO make custom update message different from Change
+                l.receiveMessage(smessage);
+    }
+
 
 }

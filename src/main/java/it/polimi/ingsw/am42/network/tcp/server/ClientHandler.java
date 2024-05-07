@@ -48,13 +48,11 @@ public class ClientHandler implements Runnable, MessageListener {
                     Message message = (Message) input.readObject();
                     Message answer;
 
+
                     if(message instanceof ChatMessage) {
-                        controller.getChatMessage(chatMessage);
-                        answer = null;
+                        controller.sendChatMessage((ChatMessage) message);
                     } else {
                         answer = message.execute();
-                    }
-                    if(answer != null) {
                         sendMessage(answer);
                     }
                 }
@@ -77,7 +75,6 @@ public class ClientHandler implements Runnable, MessageListener {
 
     public void playerDisconnected() {
         controller.playerDisconnected();
-        //todo controller creerà un messaggio di disconnessione e chiamerò la updateAll()
     }
 
     public void update (Change change) {
