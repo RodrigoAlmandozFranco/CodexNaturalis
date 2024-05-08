@@ -4,6 +4,7 @@ import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.State;
 import it.polimi.ingsw.am42.model.exceptions.GameFullException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
@@ -18,8 +19,10 @@ import java.util.List;
 
 public interface GameInterface {
     public void initializeGame();
-    public void initializeGameForPlayers();
+    public void initializeHandCurrentPlayer();
     public boolean checkEndGamePoints();
+    public void changeState();
+    public void setCurrentState(State currentState);
     public boolean checkEndGameDecks();
     public List<Player> getWinner();
     public void addToGame(String nickname) throws   GameFullException,

@@ -1,6 +1,6 @@
-package it.polimi.ingsw.am42.controller.state;
+package it.polimi.ingsw.am42.model.enumeration;
 
-import it.polimi.ingsw.am42.model.Game;
+import it.polimi.ingsw.am42.model.GameInterface;
 import it.polimi.ingsw.am42.model.Player;
 
 public enum State {
@@ -16,25 +16,29 @@ public enum State {
     PLACE,
 
     PICK,
-    LAST;
+    LAST,
+    DISCONNECTED;
 
-    public State changeState(Game game){
+    public State changeState(GameInterface game){
          switch (this){
              case INITIAL:
-                 if(game.getCurrentPlayer().equals(game.getPlayers().getLast()))
+                 if(game.getPlayers().size() == game.getNumberPlayers()) {
+                     game.initializeGame();
                      return SETHAND;
+                 }
                  else return INITIAL;
 
              case SETHAND:
                  return SETCOLOR;
 
              case SETCOLOR:
+                 game.initializeHandCurrentPlayer();
                  return SETGOAL;
 
              case SETGOAL:
                  if(game.getCurrentPlayer().equals(game.getPlayers().getLast()))
-                     return SETHAND;
-                 else return PLACE;
+                     return PLACE;
+                 else return SETHAND;
 
              case PLACE:
                  if(game.getTurnFinal() && game.getCurrentPlayer().equals(game.getPlayers().getLast()))
@@ -54,6 +58,9 @@ public enum State {
 
              case LAST:
                  return LAST;
+
+             case DISCONNECTED:
+                 return DISCONNECTED;
 
          }
         return null;

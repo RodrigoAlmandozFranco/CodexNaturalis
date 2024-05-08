@@ -41,15 +41,13 @@ public interface RMISpeaker extends Remote {
 
     public void pick(String p, PlayableCard card);
 
-    public void chooseColor(String p, Color color);
-
-    public List<GoalCard> getGoals(String p);
+    public List<GoalCard> chooseColor(String p, Color color);
 
     public void chooseGoal(String p, GoalCard goal);
 
     public List<Player> getWinner();
 
-    public List<Color> getAvailableColors(String p);
+    public List<Color> placeStarting(String p, Face face);
 
     public void playerDisconnected();
 

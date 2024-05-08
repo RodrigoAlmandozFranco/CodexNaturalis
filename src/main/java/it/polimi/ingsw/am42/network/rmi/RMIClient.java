@@ -58,16 +58,12 @@ public class RMIClient extends Client implements MessageListener {
         return stub.place( p, face, pos);
     }
 
-    public List<Color> getAvailableColors(String p){
-        return stub.getAvailableColors( p);
+    public List<Color> placeStarting(String p, Face face){
+        return stub.placeStarting(p, face);
     }
 
-    public void chooseColor(String p, Color color){
-        stub.chooseColor(p, color);
-    }
-
-    public List<GoalCard> getGoals(String p){
-        return stub.getGoals( p);
+    public List<GoalCard> chooseColor(String p, Color color) {
+        return stub.chooseColor(p, color);
     }
 
     public void chooseGoal(String p, GoalCard goal){stub.chooseGoal( p, goal);

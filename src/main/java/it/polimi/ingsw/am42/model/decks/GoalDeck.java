@@ -32,6 +32,12 @@ public class GoalDeck implements Serializable, Iterable<GoalCard>{
     public GoalCard getTop() {
         return deck.getFirst();
     }
+    public GoalCard pop() {
+        GoalCard c = deck.getFirst();
+        remove();
+        return c;
+    }
+
     public boolean finished() {
         return deck.isEmpty();
     }

@@ -1,6 +1,6 @@
 package it.polimi.ingsw.am42.controller.gameDB;
 
-import it.polimi.ingsw.am42.controller.state.State;
+import it.polimi.ingsw.am42.model.enumeration.State;
 import it.polimi.ingsw.am42.model.Game;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
@@ -9,7 +9,6 @@ import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

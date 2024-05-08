@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Observable {
-    List<MessageListener> listeners = new ArrayList<>();
+    protected List<MessageListener> listeners = new ArrayList<>();
     public void addListener(MessageListener l) {
         listeners.add(l);
     }
