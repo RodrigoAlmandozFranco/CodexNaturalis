@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.controller.gameDB;
 
+import it.polimi.ingsw.am42.model.GameInterface;
 import it.polimi.ingsw.am42.model.enumeration.State;
 import it.polimi.ingsw.am42.model.Game;
 import it.polimi.ingsw.am42.model.Player;
@@ -37,7 +38,7 @@ public class Change extends Message implements Serializable {
     private boolean gameStarted;
 
 
-    public Change(Game game, State state, boolean gameStarted){
+    public Change(GameInterface game, boolean gameStarted){
 
         pointsPlayer = game.getCurrentPlayer().getPoints();
         numberGoalsAchieved = game.getCurrentPlayer().getGoalsAchieved();
@@ -48,7 +49,7 @@ public class Change extends Message implements Serializable {
         firstGoldCard = game.getFirstGoldCard();
         pickableResourceCards = game.getPickableResourceCards();
         pickableGoldCards = game.getPickableGoldCards();
-        currentState = state;
+        currentState = game.getCurrentState();
         players = null;
         globalGoals = null;
         numberPlayers = 0;
@@ -59,6 +60,9 @@ public class Change extends Message implements Serializable {
             globalGoals = game.getGoals();
             numberPlayers = game.getNumberPlayers();
         }
+    }
+
+    public Change() {
     }
 
 

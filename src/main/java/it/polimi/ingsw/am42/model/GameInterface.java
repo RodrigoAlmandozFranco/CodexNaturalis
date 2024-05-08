@@ -18,35 +18,36 @@ import java.util.List;
  */
 
 public interface GameInterface {
-    public void initializeGame();
-    public void initializeHandCurrentPlayer();
-    public boolean checkEndGamePoints();
-    public void changeState();
-    public void setCurrentState(State currentState);
-    public boolean checkEndGameDecks();
-    public List<Player> getWinner();
-    public void addToGame(String nickname) throws   GameFullException,
+    void initializeGame();
+    void initializeHandCurrentPlayer();
+    boolean checkEndGamePoints();
+    void changeState();
+    void setCurrentState(State currentState);
+    boolean checkEndGameDecks();
+    List<Player> getWinner();
+    void addToGame(String nickname) throws   GameFullException,
                                                     NicknameAlreadyInUseException,
                                                     NicknameInvalidException;
-    public List<Player> getPlayers();
-    public Player getCurrentPlayer();
-    public Player getNextPlayer();
-    public void setCurrentPlayer(Player p);
-    public int getNumberPlayers();
-    public List<PlayableCard> getPickableCards();
-    public List<GoalCard> getGoals();
-    public List<Player> getStandings();
-    public void chosenCardToAddInHand(PlayableCard c);
-    public List<GoalCard> choosePersonalGoal();
-    public void setTurnFinal(boolean v);
-    public boolean getTurnFinal();
-    public List<PlayableCard> getPickableResourceCards();
-    public List<PlayableCard> getPickableGoldCards();
-    public PlayableCard getFirstResourceCard();
-    public PlayableCard getFirstGoldCard();
-    public List<Color> getAvailableColors();
-    public void removeColor(Color c);
-    public Face getFace(String srcImage);
-    public PlayableCard getPlayableCard(int id);
-    public GoalCard getGoalCard(int id);
+    List<Player> getPlayers();
+    Player getCurrentPlayer();
+    Player getNextPlayer();
+    void setCurrentPlayer(Player p);
+    int getNumberPlayers();
+    List<PlayableCard> getPickableCards();
+    List<GoalCard> getGoals();
+    List<Player> getStandings();
+    void chosenCardToAddInHand(PlayableCard c);
+    List<GoalCard> choosePersonalGoal();
+    void setTurnFinal(boolean v);
+    boolean getTurnFinal();
+    List<PlayableCard> getPickableResourceCards();
+    List<PlayableCard> getPickableGoldCards();
+    PlayableCard getFirstResourceCard();
+    PlayableCard getFirstGoldCard();
+    List<Color> getAvailableColors();
+    void removeColor(Color c);
+    Face getFace(String srcImage);
+    PlayableCard getPlayableCard(int id);
+    GoalCard getGoalCard(int id);
+    State getCurrentState();
 }

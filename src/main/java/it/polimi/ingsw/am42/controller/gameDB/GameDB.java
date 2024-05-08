@@ -17,7 +17,6 @@ import java.io.*;
 public class GameDB {
     protected GameInterface game;
     private static final String path = "src/main/resources/it/polimi/ingsw/am42/gamePersistence/game.dat";
-    protected State state;
 
     public GameDB() {}
 
@@ -38,8 +37,6 @@ public class GameDB {
     public Change saveGame(boolean gs) {
 
         try {
-            state = s;
-
             if (fileExists()) fileDelete();
 
             ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(path));
@@ -48,12 +45,15 @@ public class GameDB {
 
             outputStream.close();
 
-            return new Change(game, state, gs);
-
+            return new Change(game, gs);
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public ChangeAfterLoad afterLoad() {
+        return new ChangeAfterLoad(game);
     }
 
 
@@ -89,6 +89,7 @@ public class GameDB {
             ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(path));
 
             Game game = (Game) inputStream.readObject();
+            this.setGame(game);
 
             inputStream.close();
             return game;
