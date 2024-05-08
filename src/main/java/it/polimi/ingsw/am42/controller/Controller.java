@@ -21,11 +21,24 @@ import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.PlayerDisconnect
 import java.util.List;
 import java.util.Set;
 
+
+/**
+ * This class acts as the controller of the model
+ * It transforms the requests made by the client into actions on the game
+ * Extends from the Observable class for the observer design pattern
+ * @see Observable
+ * Directly connected with the RMI client that uses the RMISpeaker interface
+ * @see RMISpeaker
+ *
+ * @author Tommaso Crippa
+ * @author Alessandro Di Maria
+ */
 public class Controller extends Observable implements RMISpeaker {
     private GameInterface game;
     private final GameDB gameDB;
 
     public Controller() {
+        super();
         this.gameDB = new GameDB();
     }
 
@@ -34,7 +47,6 @@ public class Controller extends Observable implements RMISpeaker {
         return null;
     }
 
-    //TODO
     @Override
     public int createGame(MessageListener l, String nickname, int numPlayers) throws NumberPlayerWrongException, GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
 
@@ -144,6 +156,10 @@ public class Controller extends Observable implements RMISpeaker {
         return game.getWinner();
     }
 
+    @Override
+    protected void handleDisconnection() {
+        playerDisconnected();
+    }
 
     public void playerDisconnected() {
         game.setCurrentState(State.DISCONNECTED);
@@ -155,7 +171,6 @@ public class Controller extends Observable implements RMISpeaker {
             sendMessageAll(chatMessage);
         else
             sendMessage(chatMessage, chatMessage.getReceiver());
-
     }
 }
 

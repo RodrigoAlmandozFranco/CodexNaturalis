@@ -14,6 +14,15 @@ import java.rmi.Remote;
 import java.util.List;
 import java.util.Set;
 
+
+
+
+/**
+ * Interface used by RMI clients to interact with the model
+ *
+ * @author Tommaso Crippa
+ * @author Alessandro Di Maria
+ */
 public interface RMISpeaker extends Remote {
 
 

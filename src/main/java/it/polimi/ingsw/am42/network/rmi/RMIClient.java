@@ -19,6 +19,12 @@ import java.rmi.registry.Registry;
 import java.util.List;
 import java.util.Set;
 
+
+/**
+ * This class acts as the client when using a RMI connection
+ *
+ * @author Alessandro Di Maria
+ */
 public class RMIClient extends Client implements MessageListener {
     Registry registry;
     RMISpeaker stub;
@@ -86,5 +92,9 @@ public class RMIClient extends Client implements MessageListener {
     @Override
     public void update(Change diff) {
         view.update(diff);
+    }
+
+    public boolean heartbeat() {
+        return true;
     }
 }

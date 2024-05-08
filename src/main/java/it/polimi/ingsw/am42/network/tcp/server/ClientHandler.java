@@ -80,6 +80,14 @@ public class ClientHandler implements Runnable, MessageListener {
     public void update (Change change) {
         sendMessage(change);
     }
+
+    @Override
+    public boolean heartbeat() {
+        // For TCP connection it is not necessary to send heartbeat to client
+        // Disconnection already revealed with exception
+        return true;
+    }
+
     public String getId(){
         return null;
     }
