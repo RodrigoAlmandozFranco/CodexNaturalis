@@ -1,9 +1,10 @@
-package it.polimi.ingsw.am42.network.tcp.server;
+package it.polimi.ingsw.am42.network;
 
 import it.polimi.ingsw.am42.controller.Controller;
 import it.polimi.ingsw.am42.exceptions.GenericException;
 import it.polimi.ingsw.am42.model.Game;
 import it.polimi.ingsw.am42.network.rmi.RMISpeaker;
+import it.polimi.ingsw.am42.network.tcp.server.ClientHandler;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -28,23 +29,21 @@ import java.net.UnknownHostException;
  */
 
 public class Server {
+
+    static private int PORT = 4203;
     public static void main( String[] args ) throws GenericException {
         System.out.println( "Hello from Server!" );
-        int port = 4203;
-
-        Controller controller = new Controller();
-
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-p") && i + 1 < args.length) {
-                port = Integer.parseInt(args[i + 1]);
+                PORT = Integer.parseInt(args[i + 1]);
                 i++;
             }
         }
         printIpAddress();
 
-        startServerRMI(controller, port);
+        startServerRMI();
 
-        startServerTCP(controller, port);
+        startServerTCP();
     }
 
     public static void printIpAddress() {
@@ -56,18 +55,21 @@ public class Server {
         }
     }
 
-    public static void startServerRMI(Controller controller, int port) throws GenericException {
+    public static void startServerRMI() throws GenericException {
+
+        Controller controller = new Controller();
+
         RMISpeaker stub = null;
         try {
             stub = (RMISpeaker) UnicastRemoteObject.exportObject(
-                    controller, port);
+                    controller, PORT);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
         // Bind the remote object's stub in the registry
         Registry registry = null;
         try {
-            registry = LocateRegistry.createRegistry(port);
+            registry = LocateRegistry.createRegistry(PORT);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -81,11 +83,14 @@ public class Server {
         System.err.println("Server RMI ready");
     }
 
-    public static void startServerTCP(Controller controller, int port) throws GenericException {
+    public static void startServerTCP() throws GenericException {
+
+
+        Controller controller = new Controller();
         ExecutorService executor = Executors.newCachedThreadPool();
         ServerSocket serverSocket;
         try {
-            serverSocket = new ServerSocket(port);
+            serverSocket = new ServerSocket(PORT);
         } catch (IOException e) {
             throw new GenericException("Error while creating the server socket");
         }

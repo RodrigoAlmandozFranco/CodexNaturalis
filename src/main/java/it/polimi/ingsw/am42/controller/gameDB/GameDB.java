@@ -1,8 +1,8 @@
 package it.polimi.ingsw.am42.controller.gameDB;
 
-import it.polimi.ingsw.am42.controller.state.State;
+import it.polimi.ingsw.am42.model.enumeration.State;
 import it.polimi.ingsw.am42.model.Game;
-import it.polimi.ingsw.am42.network.tcp.messages.Message;
+import it.polimi.ingsw.am42.model.GameInterface;
 
 import java.io.*;
 
@@ -15,13 +15,13 @@ import java.io.*;
  * @author Rodrigo Almandoz Franco
  */
 public class GameDB {
-    protected Game game;
+    protected GameInterface game;
     private static final String path = "src/main/resources/it/polimi/ingsw/am42/gamePersistence/game.dat";
     protected State state;
 
     public GameDB() {}
 
-    public void setGame(Game game) {
+    public void setGame(GameInterface game) {
         this.game = game;
     }
 
@@ -31,11 +31,11 @@ public class GameDB {
      * If the gameStarted boolean is false, it returns null.
      * If the gameStarted boolean is true, it returns a Change class which contains the
      * changes made by the current player.
+     *
      * @param gs boolean that points out if the game has started or not.
-     * @param s the state of the game.
      * @return the string which contains all the game or only the changes.
      */
-    public Change saveGame(boolean gs, State s) {
+    public Change saveGame(boolean gs) {
 
         try {
             state = s;

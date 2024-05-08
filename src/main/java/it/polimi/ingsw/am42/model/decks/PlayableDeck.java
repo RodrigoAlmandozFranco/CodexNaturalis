@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am42.model.decks;
 
 import it.polimi.ingsw.am42.model.cards.Card;
+import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 
 import java.io.Serializable;
@@ -42,6 +43,12 @@ public class PlayableDeck implements Serializable, Iterable<PlayableCard>{
 
     public void addCard(PlayableCard card) {
         deck.add(card);
+    }
+
+    public PlayableCard pop() {
+        PlayableCard c = deck.getFirst();
+        remove();
+        return c;
     }
 
     @Override

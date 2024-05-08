@@ -2,8 +2,9 @@ package it.polimi.ingsw.am42.controller;
 
 import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.controller.gameDB.GameDB;
-import it.polimi.ingsw.am42.controller.state.State;
+import it.polimi.ingsw.am42.model.enumeration.State;
 import it.polimi.ingsw.am42.model.Game;
+import it.polimi.ingsw.am42.model.GameInterface;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
@@ -21,13 +22,11 @@ import java.util.List;
 import java.util.Set;
 
 public class Controller extends Observable implements RMISpeaker {
-    private Game game;
-    private State currentState;
+    private GameInterface game;
     private final GameDB gameDB;
 
     public Controller() {
         this.gameDB = new GameDB();
-        this.currentState = State.INITIAL;
     }
 
     @Override
@@ -46,8 +45,6 @@ public class Controller extends Observable implements RMISpeaker {
 
         this.game.addToGame(nickname);
 
-        this.currentState = this.currentState.changeState(this.game);
-
         //TODO return gameid;
         return 1;
     }
@@ -58,28 +55,33 @@ public class Controller extends Observable implements RMISpeaker {
 
         this.game.addToGame(nickname);
 
-        this.currentState = this.currentState.changeState(this.game);
+        if(listeners.size() == game.getNumberPlayers()) {
+            game.changeState();
+            Change change = gameDB.saveGame(false);
+            updateAll(change);
+        }
 
         return true;
     }
 
     @Override
     public boolean reconnect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
-        this.game = this.gameDB.loadGame();
+        if(listeners.isEmpty())
+            this.game = this.gameDB.loadGame();
         this.addListener(l);
 
-        this.game.addToGame(nickname);
-
-        this.currentState = this.currentState.changeState(this.game);
+        if(listeners.size() == game.getNumberPlayers()) {
+            Change change = gameDB.afterLoad();
+            updateAll(change);
+        }
 
         return true;
     }
 
     @Override
     public Set<Position> getAvailablePositions(String p) {
-        if (p.equals(game.getCurrentPlayer().getNickname()))
-            return game.getCurrentPlayer().getBoard().getPossiblePositions();
-        return null;
+        //if (p.equals(game.getCurrentPlayer().getNickname()))
+        return game.getCurrentPlayer().getBoard().getPossiblePositions();
     }
 
     @Override
@@ -88,10 +90,10 @@ public class Controller extends Observable implements RMISpeaker {
 
         Change change;
         game.getCurrentPlayer().placeCard(position, face);
-        this.currentState = this.currentState.changeState(this.game);
+        game.changeState();
         if(game.getTurnFinal())
             game.setCurrentPlayer(game.getNextPlayer());
-        change = gameDB.saveGame(true, this.currentState);
+        change = gameDB.saveGame(true);
         updateAll(change);
 
         return true;
@@ -100,39 +102,43 @@ public class Controller extends Observable implements RMISpeaker {
     @Override
     public void pick(String p, PlayableCard card) {
         game.chosenCardToAddInHand(card);
-        this.currentState = this.currentState.changeState(this.game);
+        game.changeState();
         game.setCurrentPlayer(game.getNextPlayer());
-        Change change = gameDB.saveGame(true, this.currentState);
+        Change change = gameDB.saveGame(true);
         updateAll(change);
     }
 
+    public List<Color> placeStarting(String p, Face face){
+        Change change;
+        game.getCurrentPlayer().placeCard(new Position(0,0), face);
+        game.changeState();
+        change = gameDB.saveGame(true);
+        updateAll(change);
+
+        return game.getAvailableColors();
+    }
+
     @Override
-    public void chooseColor(String p, Color color) {
+    public List<GoalCard> chooseColor(String p, Color color) {
         game.getCurrentPlayer().setColor(color);
         game.removeColor(color);
-        this.currentState = this.currentState.changeState(this.game);
-        Change change = gameDB.saveGame(false, this.currentState);
+        game.changeState();
+        game.initializeHandCurrentPlayer();
+        Change change = gameDB.saveGame(false);
         updateAll(change);
-    }
-
-    @Override
-    public List<GoalCard> getGoals(String p) {
         return game.choosePersonalGoal();
     }
+
 
     @Override
     public void chooseGoal(String p, GoalCard goal) {
         game.getCurrentPlayer().setPersonalGoal(goal);
-        this.currentState = this.currentState.changeState(game);
+        game.changeState();
         game.setCurrentPlayer(game.getNextPlayer());
-        Change change = gameDB.saveGame(false, this.currentState);
+        Change change = gameDB.saveGame(false);
         updateAll(change);
     }
 
-    @Override
-    public List<Color> getAvailableColors(String p) {
-        return game.getAvailableColors();
-    }
 
     public List<Player> getWinner(){
         return game.getWinner();
@@ -140,6 +146,7 @@ public class Controller extends Observable implements RMISpeaker {
 
 
     public void playerDisconnected() {
+        game.setCurrentState(State.DISCONNECTED);
         sendMessageAll(new PlayerDisconnectedMessage());
     }
 

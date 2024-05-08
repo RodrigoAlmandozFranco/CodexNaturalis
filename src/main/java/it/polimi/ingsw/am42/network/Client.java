@@ -30,9 +30,9 @@ public abstract class Client {
 
     public abstract boolean place(String p, Face face, Position pos) throws RequirementsNotMetException;
 
-    public abstract List<Color> getAvailableColors(String p);
+    public abstract List<Color> placeStarting(String p, Face face);
 
-    public abstract void chooseColor(String p, Color color);
+    public abstract List<GoalCard> chooseColor(String p, Color color);
 
     public abstract List<GoalCard> getGoals(String p);
 

@@ -16,6 +16,7 @@ import it.polimi.ingsw.am42.model.cards.types.playables.ResourceCard;
 import it.polimi.ingsw.am42.model.decks.GoalDeck;
 import it.polimi.ingsw.am42.model.decks.PlayableDeck;
 import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.State;
 import it.polimi.ingsw.am42.model.evaluator.Evaluator;
 import it.polimi.ingsw.am42.model.exceptions.GameFullException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
@@ -56,6 +57,8 @@ public class Game implements GameInterface, Serializable {
     private final int numberPlayers;
     private boolean turnFinal;
     private List<Color> availableColors;
+    private State currentState;
+
 
 
     /**
@@ -81,9 +84,21 @@ public class Game implements GameInterface, Serializable {
             turnFinal = false;
             availableColors = new ArrayList<Color>();
             availableColors.addAll(Arrays.asList(Color.values()));
+            this.currentState = State.INITIAL;
         }
     }
 
+    public void setCurrentState(State currentState) {
+        this.currentState = currentState;
+    }
+
+    public State getCurrentState() {
+        return currentState;
+    }
+
+    public void changeState(){
+        this.currentState = this.currentState.changeState(this);
+    }
 
     /**
      * Constructor of the class Player for the reconstruction
@@ -127,17 +142,23 @@ public class Game implements GameInterface, Serializable {
         initializeDecks();
 
         for(int i = 0; i < 2; i++) {
-            PlayableCard r = resourceDeck.getTop();
-            PlayableCard g = goldDeck.getTop();
+            PlayableCard r = resourceDeck.pop();
+            PlayableCard g = goldDeck.pop();
 
             r.setVisibility(true);
             g.setVisibility(true);
 
             pickableGoldCards.add(g);
-            goldDeck.remove();
             pickableResourceCards.add(r);
-            resourceDeck.remove();
         }
+
+        Collections.shuffle(players);
+        currentPlayer = players.getFirst();
+
+        for (int i = 0; i < 2; i++) {
+            globalGoals.add(goalDeck.pop());
+        }
+        initializeGameForPlayers();
     }
 
     /**
@@ -416,22 +437,20 @@ public class Game implements GameInterface, Serializable {
 
         for (Player p : players) {
             List<PlayableCard> list = new ArrayList<>();
-            for (int i = 0; i < 2; i++) {
-                list.add(resourceDeck.getTop());
-                resourceDeck.remove();
-            }
-            list.add(goldDeck.getTop());
-            goldDeck.remove();
+            list.add(startingDeck.pop());
 
             p.setHand(list);
         }
+    }
 
+    public void initializeHandCurrentPlayer() {
+        List<PlayableCard> list = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
-            globalGoals.add(goalDeck.getTop());
-            goalDeck.remove();
+            list.add(resourceDeck.pop());
         }
+        list.add(goldDeck.pop());
 
-
+        currentPlayer.setHand(list);
     }
 
     public List<PlayableCard> getPickableResourceCards(){
