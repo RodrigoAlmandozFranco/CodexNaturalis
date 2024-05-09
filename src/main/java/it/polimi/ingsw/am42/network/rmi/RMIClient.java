@@ -29,16 +29,18 @@ import java.util.Set;
 public class RMIClient extends Client implements MessageListener {
     Registry registry;
     RMISpeaker stub;
-    private RMIClient(String host) {
+    public RMIClient(String host, int port) {
         //TODO da riga di comando ricevo se voglio un view GUI o TUI
         //this.view = new View(this);
         try {
-            this.registry = LocateRegistry.getRegistry(host);
-            this.stub = (RMISpeaker) registry.lookup("Controller");
+            this.registry = LocateRegistry.getRegistry(host, port);// si potrebbe mettere anche la porta
+            this.stub = (RMISpeaker) registry.lookup("RMIHandler");
+            System.out.println("Connected to Server!!!");
         } catch (Exception e) {
             System.err.println("Client exception: " + e.toString());
             e.printStackTrace();
         }
+
     }
     //TODO metodo che il server chiama sul RMIClient
     //public void update(diff) {view.update(diff);}

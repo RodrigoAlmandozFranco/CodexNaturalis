@@ -42,25 +42,6 @@ public class ClientTCP extends Client {
         output = new ObjectOutputStream(socket.getOutputStream());
     }
 
-    //TODO this should be a main abstract main, that will call the constructor
-    public static void main(String[] args) throws IOException {
-        for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-p") && i + 1 < args.length) {
-                port = Integer.parseInt(args[i + 1]);
-                i++;
-            } else if (args[i].equals("-ip") && i + 1 < args.length) {
-                ip = args[i + 1];
-                i++;
-            }
-        }
-        ClientTCP client = new ClientTCP(ip, port);
-        try {
-            client.startClient();
-        } catch (final IOException e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
     public void startClient() throws IOException {
         serverHandler = new ServerHandler(input, this);
 
@@ -71,6 +52,8 @@ public class ClientTCP extends Client {
             input.close();
             output.close();
         }
+
+        System.out.println("Connesso al Server!");
     }
 
     private void sendMessage(Message message) {
