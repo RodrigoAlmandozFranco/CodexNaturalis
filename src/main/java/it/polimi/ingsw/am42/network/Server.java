@@ -42,7 +42,7 @@ public class Server {
         }
         Controller controller = new Controller();
         printIpAddress();
-
+        System.out.println("Port: " + PORT);
         startServerRMI(controller);
 
         startServerTCP(controller);

@@ -79,6 +79,7 @@ public class Controller extends Observable{
         if(listeners.isEmpty())
             this.game = this.gameDB.loadGame();
         this.addListener(l);
+        this.game.addToGame(nickname);
 
         if(listeners.size() == game.getNumberPlayers()) {
             Change change = gameDB.afterLoad();

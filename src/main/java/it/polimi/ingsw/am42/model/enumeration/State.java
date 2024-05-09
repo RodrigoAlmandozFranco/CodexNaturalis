@@ -43,12 +43,10 @@ public enum State {
              case PLACE:
                  if(game.getTurnFinal() && game.getCurrentPlayer().equals(game.getPlayers().getLast()))
                      return LAST;
-                 if(game.getCurrentPlayer().equals(game.getPlayers().getLast())) {
-                     for (Player p : game.getPlayers())
-                         if(p.getPoints() >= 20){
-                             game.setTurnFinal(true);
-                         }
-                 }
+                 if(game.getCurrentPlayer().equals(game.getPlayers().getLast()))
+                     if (game.checkEndGameDecks() || game.checkEndGamePoints())
+                         game.setTurnFinal(true);
+
                  if(game.getTurnFinal())
                      return PLACE;
                  else  return PICK;

@@ -29,7 +29,9 @@ import java.util.Set;
 public class RMIClient extends Client implements MessageListener {
     Registry registry;
     RMISpeaker stub;
-    public RMIClient(String host, int port) {
+
+    String nickname;
+    private RMIClient(String host, int port) {
         //TODO da riga di comando ricevo se voglio un view GUI o TUI
         //this.view = new View(this);
         try {
@@ -40,7 +42,7 @@ public class RMIClient extends Client implements MessageListener {
             System.err.println("Client exception: " + e.toString());
             e.printStackTrace();
         }
-
+        this.nickname = "Still missing";
     }
     //TODO metodo che il server chiama sul RMIClient
     //public void update(diff) {view.update(diff);}
@@ -57,7 +59,9 @@ public class RMIClient extends Client implements MessageListener {
 
     public int createGame(MessageListener l, String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException {
         try {
-            return stub.createGame(l, nickname, numPlayers);
+            stub.createGame(l, nickname, numPlayers);
+            this.nickname = nickname;
+            return -1;
         } catch (RemoteException e) {
             Throwable originalException = e.getCause();
             if (originalException instanceof GameFullException)
@@ -166,9 +170,7 @@ public class RMIClient extends Client implements MessageListener {
 
     @Override
     public String getId() {
-        // TODO give nickname to RMIClient
-        //return nickname;
-        return null;
+        return this.nickname;
     }
 
     public List<Player> getWinner() {
