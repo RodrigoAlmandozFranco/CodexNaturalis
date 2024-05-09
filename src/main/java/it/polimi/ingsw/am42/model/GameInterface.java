@@ -46,8 +46,5 @@ public interface GameInterface {
     PlayableCard getFirstGoldCard();
     List<Color> getAvailableColors();
     void removeColor(Color c);
-    Face getFace(String srcImage);
-    PlayableCard getPlayableCard(int id);
-    GoalCard getGoalCard(int id);
     State getCurrentState();
 }

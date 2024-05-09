@@ -7,17 +7,16 @@ import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.cards.types.playables.GoldCard;
 import it.polimi.ingsw.am42.model.cards.types.playables.ResourceCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.State;
+import it.polimi.ingsw.am42.model.evaluator.Evaluator;
 import it.polimi.ingsw.am42.model.evaluator.EvaluatorPoints;
 import it.polimi.ingsw.am42.model.exceptions.GameFullException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
 import it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException;
-import it.polimi.ingsw.am42.model.structure.Position;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,12 +27,28 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-        } catch (it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException e) {
+        } catch (NumberPlayerWrongException e) {
             throw new RuntimeException(e);
         }
-        game.initializeGame();
+        game.initializeDecks();
+        try{
+            try {
+                game.addToGame("Rodri");
+                game.addToGame("Matti");
+            } catch (GameFullException |
+                     NicknameAlreadyInUseException |
+                     NicknameInvalidException e) {
+                throw new RuntimeException(e);
+            }
+            game.initializeGame();
+        } catch (RuntimeException e) {
+            throw new RuntimeException(e);
+        }
         assertEquals(2, game.getPlayers().size());
 
+        List<PlayableCard> pr = game.getPickableResourceCards();
+        List<PlayableCard> pg = game.getPickableGoldCards();
+        List<GoalCard> gg = game.getGoals();
         List<PlayableCard> cards = game.getPickableCards();
         assertEquals(6, cards.size());
         assertFalse(cards.contains(null));
@@ -41,7 +56,10 @@ class GameTest {
         int gold = 0;
         for(PlayableCard c : cards) {
             assertNotNull(c);
-            assertTrue(c.getVisibility());
+            if(pr.contains(c) || pg.contains(c))
+                assertTrue(c.getVisibility());
+            else assertFalse(c.getVisibility());
+
             if(c instanceof ResourceCard)
                 resource++;
             else gold++;
@@ -53,30 +71,85 @@ class GameTest {
     }
 
     @org.junit.jupiter.api.Test
+    void setCurrentState() {
+        Game game = null;
+        try {
+            game = new Game(2);
+            game.initializeDecks();
+            game.addToGame("Rodri");
+            game.addToGame("Matti");
+            game.initializeGame();
+        } catch (NumberPlayerWrongException | GameFullException | NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
+            throw new RuntimeException(e);
+        }
+
+        game.setCurrentState(State.SETHAND);
+        assertEquals(State.SETHAND, game.getCurrentState());
+    }
+
+    @org.junit.jupiter.api.Test
+    void getCurrentState() {
+        Game game = null;
+        try {
+            game = new Game(2);
+            game.initializeDecks();
+            game.addToGame("Rodri");
+            game.addToGame("Matti");
+            game.initializeGame();
+        } catch (NumberPlayerWrongException | GameFullException | NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
+            throw new RuntimeException(e);
+        }
+        State state = game.getCurrentState();
+        assertNotNull(state);
+        assertEquals(State.INITIAL, state);
+    }
+
+    @org.junit.jupiter.api.Test
+    void changeState() {
+        Game game = null;
+        try {
+            game = new Game(2);
+            game.initializeDecks();
+            game.addToGame("Tommy");
+            game.addToGame("Matti");
+            game.initializeGame();
+        } catch (NumberPlayerWrongException | GameFullException | NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
+            throw new RuntimeException(e);
+        }
+        State state = game.getCurrentState();
+        assertNotNull(state);
+        assertEquals(State.INITIAL, state);
+        game.changeState();
+        assertEquals(State.SETHAND, game.getCurrentState());
+        assertNotEquals(State.INITIAL, game.getCurrentState());
+    }
+
+    @org.junit.jupiter.api.Test
     void checkEndGamePoints() {
         Game game = null;
         try {
             game = new Game(2);
-        } catch (it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException e) {
+            game.initializeDecks();
+        } catch (NumberPlayerWrongException e) {
             throw new RuntimeException(e);
         }
-        game.initializeGame();
-        assertFalse(game.checkEndGamePoints());
-
 
         try{
             game.addToGame("Rodri");
             game.addToGame("Matti");
-
+            game.initializeGame();
+            assertFalse(game.checkEndGamePoints());
             game.getPlayers().getFirst().addPoints(10);
             assertFalse(game.checkEndGamePoints());
             game.getPlayers().getFirst().addPoints(11);
             assertTrue(game.checkEndGamePoints());
 
-
-        } catch (it.polimi.ingsw.am42.model.exceptions.GameFullException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException e) {
+        } catch (GameFullException |
+                 NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
             throw new RuntimeException(e);
         }
     }
@@ -86,12 +159,22 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-        } catch (it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException e) {
+            game.initializeDecks();
+        } catch (NumberPlayerWrongException e) {
+            throw new RuntimeException(e);
+        }
+        try{
+            game.addToGame("Rodri");
+            game.addToGame("Matti");
+        } catch (GameFullException |
+                 NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
             throw new RuntimeException(e);
         }
         game.initializeGame();
 
         assertFalse(game.checkEndGameDecks());
+
 
         Front front = new Front("front", null, Color.RED, null, null);
         Back back = new Back("back", null, Color.RED, null);
@@ -114,22 +197,25 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-        } catch (it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException e) {
+        } catch (NumberPlayerWrongException e) {
             throw new RuntimeException(e);
         }
-        game.initializeGame();
+        game.initializeDecks();
         try{
             try {
                 game.addToGame("Rodri");
                 game.addToGame("Matti");
-            } catch (it.polimi.ingsw.am42.model.exceptions.GameFullException |
-                     it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException |
-                     it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException e) {
+            } catch (GameFullException |
+                     NicknameAlreadyInUseException |
+                     NicknameInvalidException e) {
                 throw new RuntimeException(e);
             }
+            game.initializeGame();
 
             game.getPlayers().getFirst().addPoints(10);
+            game.getPlayers().getFirst().setGoal(new GoalCard(1, ",", new EvaluatorPoints(0)));
             game.getPlayers().getLast().addPoints(1);
+            game.getPlayers().getLast().setGoal(new GoalCard(1, ",", new EvaluatorPoints(0)));
 
             assertEquals(1, game.getWinner().size());
             List<Player> winner = new ArrayList<>();
@@ -159,39 +245,40 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(6);
-        } catch (it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException e) {
+        } catch (NumberPlayerWrongException e) {
             assertInstanceOf(NumberPlayerWrongException.class, e);
         }
         assertNull(game);
 
         try {
             game = new Game(-6);
-        } catch (it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException e) {
+        } catch (NumberPlayerWrongException e) {
             assertInstanceOf(NumberPlayerWrongException.class, e);
         }
         assertNull(game);
 
         try {
             game = new Game(2);
-        } catch (it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException e) {
+            game.initializeDecks();
+        } catch (NumberPlayerWrongException e) {
             throw new RuntimeException(e);
         }
 
         assertNotNull(game);
 
-        game.initializeGame();
+
         try{
             game.addToGame("");
-        } catch (it.polimi.ingsw.am42.model.exceptions.GameFullException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException e) {
+        } catch (GameFullException |
+                 NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
             assertInstanceOf(NicknameInvalidException.class, e);
         }
         try{
             game.addToGame("    ");
-        } catch (it.polimi.ingsw.am42.model.exceptions.GameFullException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException e) {
+        } catch (GameFullException |
+                 NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
             assertInstanceOf(NicknameInvalidException.class, e);
         }
 
@@ -200,36 +287,37 @@ class GameTest {
         try{
             game.addToGame("Rodri");
             assertEquals(1, game.getPlayers().size());
-        } catch (it.polimi.ingsw.am42.model.exceptions.GameFullException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException e) {
+        } catch (GameFullException |
+                 NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
             throw new RuntimeException(e);
         }
 
         try{
             game.addToGame("Rodri");
-        } catch (it.polimi.ingsw.am42.model.exceptions.GameFullException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException e) {
+        } catch (GameFullException |
+                 NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
             assertInstanceOf(NicknameAlreadyInUseException.class, e);
         }assertEquals(1, game.getPlayers().size());
 
         try{
             game.addToGame("Matti");
             assertEquals(2, game.getPlayers().size());
-        } catch (it.polimi.ingsw.am42.model.exceptions.GameFullException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException e) {
+        } catch (GameFullException |
+                 NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
             throw new RuntimeException(e);
         }
 
         try{
             game.addToGame("Tommi");
-        } catch (it.polimi.ingsw.am42.model.exceptions.GameFullException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException e) {
+        } catch (GameFullException |
+                 NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
             assertInstanceOf(GameFullException.class, e);
         }
+        game.initializeGame();
         assertEquals(2, game.getPlayers().size());
     }
 
@@ -238,16 +326,18 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-        } catch (it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException e) {
+            game.initializeDecks();
+        } catch (NumberPlayerWrongException e) {
             throw new RuntimeException(e);
         }
-        game.initializeGame();
+
         try{
             game.addToGame("Rodri");
             game.addToGame("Matti");
-        } catch (it.polimi.ingsw.am42.model.exceptions.GameFullException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException e) {
+            game.initializeGame();
+        } catch (GameFullException |
+                 NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
             throw new RuntimeException(e);
         }
         Player p1 = game.getPlayers().getFirst();
@@ -265,16 +355,18 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-        } catch (it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException e) {
+            game.initializeDecks();
+        } catch (NumberPlayerWrongException e) {
             throw new RuntimeException(e);
         }
-        game.initializeGame();
+
         try{
             game.addToGame("Rodri");
             game.addToGame("Matti");
-        } catch (it.polimi.ingsw.am42.model.exceptions.GameFullException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException e) {
+            game.initializeGame();
+        } catch (GameFullException |
+                 NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
             throw new RuntimeException(e);
         }
 
@@ -282,118 +374,107 @@ class GameTest {
     }
 
     @org.junit.jupiter.api.Test
+    void setCurrentPlayer() {
+        Game game = null;
+        try {
+            game = new Game(2);
+            game.initializeDecks();
+        } catch (NumberPlayerWrongException e) {
+            throw new RuntimeException(e);
+        }
+
+        try{
+            game.addToGame("Rodri");
+            game.addToGame("Matti");
+            game.initializeGame();
+        } catch (GameFullException |
+                 NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
+            throw new RuntimeException(e);
+        }
+
+        assertEquals(game.getCurrentPlayer(), game.getPlayers().getFirst());
+        game.setCurrentPlayer(game.getPlayers().getLast());
+        assertEquals(game.getCurrentPlayer(), game.getPlayers().getLast());
+    }
+
+    @org.junit.jupiter.api.Test
     void getNextPlayer() {
         Game game = null;
         try {
             game = new Game(2);
-        } catch (it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException e) {
+            game.initializeDecks();
+        } catch (NumberPlayerWrongException e) {
             throw new RuntimeException(e);
         }
-        game.initializeGame();
+
         try{
             game.addToGame("Rodri");
             game.addToGame("Matti");
-        } catch (it.polimi.ingsw.am42.model.exceptions.GameFullException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException e) {
+            game.initializeGame();
+        } catch (GameFullException |
+                 NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
             throw new RuntimeException(e);
         }
 
-
-        assertEquals(2, game.getPlayers().size());
-        assertEquals("Rodri", game.getCurrentPlayer().getNickname());
-        assertEquals("Matti", game.getNextPlayer().getNickname());
+        assertEquals(game.getCurrentPlayer(), game.getPlayers().getFirst());
+        game.setCurrentPlayer(game.getNextPlayer());
+        assertEquals(game.getCurrentPlayer(), game.getPlayers().getLast());
     }
 
     @org.junit.jupiter.api.Test
-    void getPickableCards(){
+    void getNumberPlayers() {
         Game game = null;
         try {
             game = new Game(2);
-        } catch (it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException e) {
+            game.initializeDecks();
+            game.addToGame("Rodri");
+            game.addToGame("Matti");
+            game.initializeGame();
+        } catch (NumberPlayerWrongException | GameFullException | NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
             throw new RuntimeException(e);
         }
-        game.initializeGame();
+        assertNotNull(game.getPlayers());
+        assertEquals(2, game.getNumberPlayers());
+        assertEquals(2, game.getPlayers().size());
+    }
+
+    @org.junit.jupiter.api.Test
+    void getPickableCards() throws GameFullException, NicknameAlreadyInUseException, NicknameInvalidException {
+        Game game = null;
+        try {
+            game = new Game(2);
+            game.initializeDecks();
+            game.addToGame("Rodri");
+            game.addToGame("Matti");
+            game.initializeGame();
+        } catch (NumberPlayerWrongException e) {
+            throw new RuntimeException(e);
+        }
+        List<PlayableCard> pr = game.getPickableResourceCards();
+        List<PlayableCard> pg = game.getPickableGoldCards();
+        List<GoalCard> gg = game.getGoals();
         List<PlayableCard> cards = game.getPickableCards();
         assertEquals(6, cards.size());
         assertFalse(cards.contains(null));
         int resource = 0;
         int gold = 0;
-        int rNotVisible = 0;
-        int gNotVisible = 0;
         for(PlayableCard c : cards) {
             assertNotNull(c);
-            if(c instanceof ResourceCard && c.getVisibility())
+            if(pr.contains(c) || pg.contains(c))
+                assertTrue(c.getVisibility());
+            else assertFalse(c.getVisibility());
+
+            if(c instanceof ResourceCard)
                 resource++;
-            else if (c instanceof GoldCard && c.getVisibility())
-                gold++;
-            else if (c instanceof ResourceCard && !c.getVisibility())
-                rNotVisible++;
-            else if (c instanceof GoldCard && !c.getVisibility())
-                gNotVisible++;
+            else gold++;
 
             assertTrue(c instanceof ResourceCard || c instanceof GoldCard);
         }
-        assertEquals(2, resource);
-        assertEquals(2, gold);
-        assertEquals(1, rNotVisible);
-        assertEquals(1, gNotVisible);
-
-        Front front = new Front("front", null, Color.RED, null, null);
-        Back back = new Back("back", null, Color.RED, null);
-        PlayableCard card = new GoldCard(1, front, back);
-
-        PlayableCard c = new ResourceCard(2, front, back);
-
-        for(int i = 0; i < 38; i++){
-            game.chosenCardToAddInHand(c);
-        }
-        cards = game.getPickableCards();
-        assertEquals(6, cards.size());
-        resource = 0;
-        gold = 0;
-        rNotVisible = 0;
-        gNotVisible = 0;
-
-        for( PlayableCard cd : cards) {
-            assertNotNull(cd);
-            if(cd instanceof ResourceCard && cd.getVisibility())
-                resource++;
-            else if (cd instanceof GoldCard && cd.getVisibility())
-                gold++;
-            else if (cd instanceof ResourceCard && !cd.getVisibility())
-                rNotVisible++;
-            else if (cd instanceof GoldCard && !cd.getVisibility())
-                gNotVisible++;
-            assertTrue(cd instanceof ResourceCard || cd instanceof GoldCard);
-        }
-        assertEquals(2, resource);
-        assertEquals(2, gold);
-        assertEquals(0, rNotVisible);
-        assertEquals(2, gNotVisible);
-
-        for(int i = 0; i < 38; i++){
-            game.chosenCardToAddInHand(card);
-        }
-        cards = game.getPickableCards();
-        assertEquals(4, cards.size());
-        for( PlayableCard s : cards) {
-            assertNotNull(s);
-            if(s instanceof ResourceCard && s.getVisibility())
-                resource++;
-            else if (s instanceof GoldCard && s.getVisibility())
-                gold++;
-            else if (s instanceof ResourceCard && !s.getVisibility())
-                rNotVisible++;
-            else if (s instanceof GoldCard && !s.getVisibility())
-                gNotVisible++;
-            assertTrue(s instanceof ResourceCard || s instanceof GoldCard);
-        }
-
-        assertEquals(2, resource);
-        assertEquals(2, gold);
-        assertEquals(0, rNotVisible);
-        assertEquals(0, gNotVisible);
+        assertEquals(3, resource);
+        assertEquals(3, gold);
     }
 
     @org.junit.jupiter.api.Test
@@ -406,12 +487,15 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-        } catch (it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException e) {
+            game.initializeDecks();
+            game.addToGame("Rodri");
+            game.addToGame("Matti");
+            game.initializeGame();
+        } catch (NumberPlayerWrongException | NicknameInvalidException | NicknameAlreadyInUseException |
+                 GameFullException e) {
             throw new RuntimeException(e);
         }
-        game.initializeGame();
 
-        game.initializeGameForPlayers();
         List<GoalCard> goals = game.getGoals();
         assertEquals(2, goals.size());
         assertFalse(goals.contains(null));
@@ -426,17 +510,12 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-        } catch (it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException e) {
-            throw new RuntimeException(e);
-        }
-        game.initializeGame();
-
-        try {
+            game.initializeDecks();
             game.addToGame("Rodri");
             game.addToGame("Matti");
-        } catch (it.polimi.ingsw.am42.model.exceptions.GameFullException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException e) {
+            game.initializeGame();
+        } catch (NumberPlayerWrongException | NicknameInvalidException | NicknameAlreadyInUseException |
+                 GameFullException e) {
             throw new RuntimeException(e);
         }
 
@@ -458,12 +537,15 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-        } catch (it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException e) {
+            game.initializeDecks();
+            game.addToGame("Rodri");
+            game.addToGame("Matti");
+            game.initializeGame();
+        } catch (NumberPlayerWrongException | NicknameInvalidException | NicknameAlreadyInUseException |
+                 GameFullException e) {
             throw new RuntimeException(e);
         }
-        game.initializeGame();
 
-        game.initializeGameForPlayers();
         List<GoalCard> goals = game.choosePersonalGoal();
         assertEquals(2, goals.size());
         assertFalse(goals.contains(null));
@@ -474,47 +556,198 @@ class GameTest {
     }
 
     @org.junit.jupiter.api.Test
-    void initializeGameForPlayers() {
+    void setTurnFinal() {
         Game game = null;
         try {
             game = new Game(2);
-        } catch (it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException e) {
-            throw new RuntimeException(e);
-        }
-        game.initializeGame();
-
-        try {
+            game.initializeDecks();
             game.addToGame("Rodri");
             game.addToGame("Matti");
-        } catch (it.polimi.ingsw.am42.model.exceptions.GameFullException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException |
-                 it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException e) {
+            game.initializeGame();
+        } catch (NumberPlayerWrongException | GameFullException | NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
             throw new RuntimeException(e);
         }
+        boolean b = game.getTurnFinal();
+        assertFalse(b);
+        game.setTurnFinal(true);
+        assertTrue(game.getTurnFinal());
+    }
 
-        int gold = 0;
-        int resource = 0;
-
-        game.initializeGameForPlayers();
-        List<Player> players = game.getPlayers();
-        for (Player p : players) {
-            assertEquals(0, p.getPoints());
-            assertEquals(0, p.getGoalsAchieved());
-            for (PlayableCard card : p.getHand()) {
-                assertNotNull(card);
-                if (card instanceof ResourceCard) {
-                    resource++;
-                } else gold++;
-                assertEquals(2, resource);
-                assertEquals(1, gold);
-            }
+    @org.junit.jupiter.api.Test
+    void getTurnFinal() {
+        Game game = null;
+        try {
+            game = new Game(2);
+            game.initializeDecks();
+            game.addToGame("Rodri");
+            game.addToGame("Matti");
+            game.initializeGame();
+        } catch (NumberPlayerWrongException | GameFullException | NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
+            throw new RuntimeException(e);
         }
-        assertEquals(2, game.getGoals().size());
-        for(GoalCard g : game.getGoals()) {
-            assertNotNull(g);
-            assertInstanceOf(GoalCard.class, g);
+        boolean b = game.getTurnFinal();
+        assertFalse(b);
+        game.setTurnFinal(true);
+        assertTrue(game.getTurnFinal());
+    }
+
+
+    @org.junit.jupiter.api.Test
+    void initializeHandCurrentPlayer(){
+        Game game = null;
+        try {
+            game = new Game(2);
+            game.initializeDecks();
+            game.addToGame("Rodri");
+            game.addToGame("Matti");
+            game.initializeGame();
+        } catch (NumberPlayerWrongException | GameFullException | NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
+            throw new RuntimeException(e);
+        }
+        game.initializeHandCurrentPlayer();
+        assertEquals(3, game.getCurrentPlayer().getHand().size());
+        assertNotNull(game.getCurrentPlayer().getHand());
+        int resource = 0, gold = 0;
+        for(PlayableCard c : game.getCurrentPlayer().getHand()){
+            assertNotNull(c);
+            if(c instanceof ResourceCard)
+                resource++;
+            else gold++;
+        }
+
+        assertEquals(2, resource);
+        assertEquals(1, gold);
+    }
+
+    @org.junit.jupiter.api.Test
+    void getPickableResourceCards() {
+        Game game = null;
+        try {
+            game = new Game(2);
+            game.initializeDecks();
+            game.addToGame("Rodri");
+            game.addToGame("Matti");
+            game.initializeGame();
+        } catch (NumberPlayerWrongException | GameFullException | NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
+            throw new RuntimeException(e);
+        }
+        List<PlayableCard> cards = game.getPickableResourceCards();
+        assertNotNull(cards);
+        for(PlayableCard card : cards){
+            assertNotNull(card);
+            assertInstanceOf(ResourceCard.class, card);
+        }
+        assertEquals(2, cards.size());
+    }
+
+    @org.junit.jupiter.api.Test
+    void getPickableGoldCards() {
+        Game game = null;
+        try {
+            game = new Game(2);
+            game.initializeDecks();
+            game.addToGame("Rodri");
+            game.addToGame("Matti");
+            game.initializeGame();
+        } catch (NumberPlayerWrongException | GameFullException | NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
+            throw new RuntimeException(e);
+        }
+        List<PlayableCard> cards = game.getPickableGoldCards();
+        assertNotNull(cards);
+        for(PlayableCard card : cards){
+            assertNotNull(card);
+            assertInstanceOf(GoldCard.class, card);
+        }
+        assertEquals(2, cards.size());
+    }
+
+    @org.junit.jupiter.api.Test
+    void getFirstResourceCard() {
+        Game game = null;
+        try {
+            game = new Game(2);
+            game.initializeDecks();
+            game.addToGame("Rodri");
+            game.addToGame("Matti");
+            game.initializeGame();
+        } catch (NumberPlayerWrongException | GameFullException | NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
+            throw new RuntimeException(e);
+        }
+        PlayableCard card = game.getFirstResourceCard();
+        assertNotNull(card);
+        assertInstanceOf(ResourceCard.class, card);
+    }
+
+    @org.junit.jupiter.api.Test
+    void getFirstGoldCard() {
+        Game game = null;
+        try {
+            game = new Game(2);
+            game.initializeDecks();
+            game.addToGame("Rodri");
+            game.addToGame("Matti");
+            game.initializeGame();
+        } catch (NumberPlayerWrongException | GameFullException | NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
+            throw new RuntimeException(e);
+        }
+        PlayableCard card = game.getFirstGoldCard();
+        assertNotNull(card);
+        assertInstanceOf(GoldCard.class, card);
+    }
+
+    @org.junit.jupiter.api.Test
+    void getAvailableColors() {
+        Game game = null;
+        try {
+            game = new Game(2);
+            game.initializeDecks();
+            game.addToGame("Rodri");
+            game.addToGame("Matti");
+            game.initializeGame();
+        } catch (NumberPlayerWrongException | GameFullException | NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
+            throw new RuntimeException(e);
+        }
+        List<Color> colors = game.getAvailableColors();
+        assertNotNull(colors);
+        assertEquals(5, colors.size());
+        for(Color c : colors){
+            assertNotNull(c);
         }
     }
+
+    @org.junit.jupiter.api.Test
+    void removeColor() {
+        Game game = null;
+        try {
+            game = new Game(2);
+            game.initializeDecks();
+            game.addToGame("Rodri");
+            game.addToGame("Matti");
+            game.initializeGame();
+        } catch (NumberPlayerWrongException | GameFullException | NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
+            throw new RuntimeException(e);
+        }
+        List<Color> colors = game.getAvailableColors();
+        assertNotNull(colors);
+        assertEquals(5, colors.size());
+        Color c = colors.getFirst();
+        game.removeColor(c);
+        for(Color cc : colors){
+            assertNotNull(cc);
+        }
+        assertEquals(4, colors.size());
+        assertFalse(colors.contains(c));
+    }
+
 
 }
 

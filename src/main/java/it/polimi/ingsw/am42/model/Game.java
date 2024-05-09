@@ -139,7 +139,6 @@ public class Game implements GameInterface, Serializable {
      */
     @Override
     public void initializeGame() {
-        initializeDecks();
 
         for(int i = 0; i < 2; i++) {
             PlayableCard r = resourceDeck.pop();
@@ -431,7 +430,7 @@ public class Game implements GameInterface, Serializable {
      * Controller calls this method when the number of players is equal to the size of the list of players.
      */
 
-    public void initializeGameForPlayers() {
+    private void initializeGameForPlayers() {
         Collections.shuffle(players);
         currentPlayer = players.getFirst();
 
@@ -458,7 +457,7 @@ public class Game implements GameInterface, Serializable {
     }
 
     public List<PlayableCard> getPickableGoldCards(){
-        return pickableResourceCards;
+        return pickableGoldCards;
     }
 
     public PlayableCard getFirstResourceCard() {
@@ -479,56 +478,6 @@ public class Game implements GameInterface, Serializable {
         availableColors.remove(c);
     }
 
-
-    public Face getFace(String srcImage){
-
-        for (PlayableCard card : currentPlayer.getHand()) {
-            if (card.getFront().getSrcImage().equals(srcImage)) {
-                return card.getFront();
-            }
-            if (card.getBack().getSrcImage().equals(srcImage)) {
-                return card.getBack();
-            }
-        }
-        return null;
-    }
-
-    public PlayableCard getPlayableCard(int id){
-        PlayableDeck deck;
-        List<PlayableCard> pickable;
-
-        if(id <= 40){
-            deck = resourceDeck;
-            pickable = pickableResourceCards;
-        }
-        else {
-            deck = goldDeck;
-            pickable = pickableGoldCards;
-        }
-
-        if(deck.getTop().getId() == id) {
-            return deck.getTop();
-        }
-
-        for(PlayableCard card : pickable) {
-            if(card.getId() == id)
-                return card;
-        }
-
-        return null;
-    }
-
-    public GoalCard getGoalCard(int id){
-        for(GoalCard card : goalDeck) {
-            if(card.getId() == id) {
-                return card;
-            }
-        }
-        return null;
-    }
-
-
-
     /**
      * This method initializes the decks of the game.
      * It reads the json files and creates the cards.
@@ -537,7 +486,7 @@ public class Game implements GameInterface, Serializable {
      * It uses the classes in the gson package.
      */
 
-    private void initializeDecks() {
+    public void initializeDecks() {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Evaluator.class, new EvaluatorDeserializer())
                 .registerTypeAdapter(Front.class, new FrontDeserializer())
