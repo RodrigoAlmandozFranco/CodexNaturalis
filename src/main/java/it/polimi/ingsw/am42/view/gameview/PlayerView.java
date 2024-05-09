@@ -8,12 +8,14 @@ import it.polimi.ingsw.am42.model.structure.Board;
 
 import java.util.List;
 
+
 public class PlayerView {
+
     private int points;
-    private final String nickname;
+    private  String nickname;
     private List<PlayableCard> hand;
     private Color color;
-    private final BoardView board;
+    private BoardView board;
     private GoalCard personalGoal;
 
     public int getPoints() {
@@ -52,4 +54,6 @@ public class PlayerView {
         hand = diff.getHand();
         board.update(diff);
     }
+
+
 }

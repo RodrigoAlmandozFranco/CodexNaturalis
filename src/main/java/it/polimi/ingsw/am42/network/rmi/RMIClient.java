@@ -14,6 +14,7 @@ import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 import it.polimi.ingsw.am42.view.View;
 
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.List;
@@ -42,56 +43,150 @@ public class RMIClient extends Client implements MessageListener {
     //TODO metodo che il server chiama sul RMIClient
     //public void update(diff) {view.update(diff);}
 
-    public String getGameInfo(){return stub.getGameInfo();}
+    public String getGameInfo(){
+        try {
+            return stub.getGameInfo();
+        } catch (RemoteException e) {
+            //TODO notify the view that the server is dead
+            return null;
+        }
+
+    }
 
     public int createGame(MessageListener l, String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException {
-        return stub.createGame(l,  nickname,  numPlayers);
+        try {
+            return stub.createGame(l, nickname, numPlayers);
+        } catch (RemoteException e) {
+            Throwable originalException = e.getCause();
+            if (originalException instanceof GameFullException)
+                throw (GameFullException) originalException;
+            if (originalException instanceof NicknameInvalidException)
+                throw (NicknameInvalidException) originalException;
+            if (originalException instanceof NicknameAlreadyInUseException)
+                throw (NicknameAlreadyInUseException) originalException;
+            if (originalException instanceof NumberPlayerWrongException)
+                throw (NumberPlayerWrongException) originalException;
+
+            //TODO notify the view that the server is dead
+            else return -1;
+        }
     }
 
     public boolean connect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
-        return stub.connect(l, nickname, gameId);
+        try {
+            return stub.connect(l, nickname, gameId);
+        } catch (RemoteException e) {
+            Throwable originalException = e.getCause();
+            if (originalException instanceof GameFullException)
+                throw (GameFullException) originalException;
+            if (originalException instanceof NicknameInvalidException)
+                throw (NicknameInvalidException) originalException;
+            if (originalException instanceof NicknameAlreadyInUseException)
+                throw (NicknameAlreadyInUseException) originalException;
+
+            //TODO notify the view that the server is dead
+            else return false;
+        }
     }
 
     public boolean reconnect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
-        return stub.reconnect( l, nickname, gameId);
+        try {
+            return stub.reconnect(l, nickname, gameId);
+        } catch (RemoteException e) {
+            Throwable originalException = e.getCause();
+            if (originalException instanceof GameFullException)
+                throw (GameFullException) originalException;
+            if (originalException instanceof NicknameInvalidException)
+                throw (NicknameInvalidException) originalException;
+            if (originalException instanceof NicknameAlreadyInUseException)
+                throw (NicknameAlreadyInUseException) originalException;
+
+            //TODO notify the view that the server is dead
+            else return false;
+        }
     }
 
     public Set<Position> getAvailablePositions(String p){
-        return stub.getAvailablePositions(p);
+        try {
+            return stub.getAvailablePositions(p);
+        } catch (RemoteException e) {
+            //TODO notify the view that the server is dead
+            return null;
+        }
     }
 
     public boolean place(String p, Face face, Position pos) throws RequirementsNotMetException {
-        return stub.place( p, face, pos);
+        try {
+            return stub.place( p, face, pos);
+        } catch (RemoteException e) {
+            Throwable originalException = e.getCause();
+            if (originalException instanceof RequirementsNotMetException)
+                throw (RequirementsNotMetException) originalException;
+
+            //TODO notify the view that the server is dead
+            else return false;
+        }
     }
 
     public List<Color> placeStarting(String p, Face face){
-        return stub.placeStarting(p, face);
+        try {
+            return stub.placeStarting(p, face);
+        } catch (RemoteException e) {
+            //TODO notify the view that the server is dead
+            return null;
+        }
     }
 
     public List<GoalCard> chooseColor(String p, Color color) {
-        return stub.chooseColor(p, color);
+        try {
+            return stub.chooseColor(p, color);
+        } catch (RemoteException e) {
+            //TODO notify the view that the server is dead
+            return null;
+        }
     }
 
-    public void chooseGoal(String p, GoalCard goal){stub.chooseGoal( p, goal);
+    public void chooseGoal(String p, GoalCard goal){
+        try {
+            stub.chooseGoal( p, goal);
+        } catch (RemoteException e) {
+            //TODO notify the view that the server is dead
+        }
     }
 
     public void pick(String p, PlayableCard card){
-         stub.pick(p, card);
+        try {
+            stub.pick(p, card);
+        } catch (RemoteException e) {
+            //TODO notify the view that the server is dead
+        }
     }
-
 
     @Override
     public String getId() {
+        // TODO give nickname to RMIClient
+        //return nickname;
         return null;
     }
 
     public List<Player> getWinner() {
-        return stub.getWinner();
+        try {
+            return stub.getWinner();
+        } catch (RemoteException e) {
+            //TODO notify the view that the server is dead
+            return null;
+        }
     }
 
     @Override
     public void update(Change diff) {
         view.update(diff);
+    }
+
+    @Override
+    public void receiveMessage(Message message) {
+        // TODO: implement receive Message
+        // view.receiveMessage(message)
     }
 
     public boolean heartbeat() {

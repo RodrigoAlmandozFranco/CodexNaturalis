@@ -29,8 +29,15 @@ class BoardTest {
             cornerList.add(new Corner(Resource.ANIMALKINGDOM, CornerState.OPEN, d));
         }
 
-        Face f = new Back("default", cornerList, Color.PURPLE, Resource.FUNGIKINGDOM);
-        Face f1 = new Back("default1", cornerList, Color.CYAN, Resource.FUNGIKINGDOM);
+        List<Resource> lst = new ArrayList<>();
+
+        lst.add(Resource.FUNGIKINGDOM);
+
+
+        Face f = new Back("default", cornerList, Color.PURPLE, lst);
+        Face f1 = new Back("default", cornerList, Color.PURPLE, lst);
+
+
         f.setPosition(new Position(0,0) ) ;
         f1.setPosition(new Position(1,0) ) ;
 
@@ -91,7 +98,13 @@ class BoardTest {
         Board b = new Board();
         List<Corner> cornerList = new ArrayList<Corner>();
 
-        Face f = new Back("default", cornerList, Color.PURPLE, Resource.FUNGIKINGDOM);
+
+        List<Resource> lst = new ArrayList<>();
+
+        lst.add(Resource.FUNGIKINGDOM);
+
+        Face f = new Back("default", cornerList, Color.PURPLE, lst);
+
         f.setPosition(new Position(0,0) ) ;
 
         b.addFace(f);
@@ -117,7 +130,10 @@ class BoardTest {
                 else cornerList.add(new Corner(Resource.ANIMALKINGDOM, CornerState.OPEN, d));
             }
 
-            faceList.add(new Back("default", cornerList, Color.PURPLE, Resource.ANIMALKINGDOM));
+            List<Resource> lst = new ArrayList<>();
+
+            lst.add(Resource.ANIMALKINGDOM);
+            faceList.add(new Back("default", cornerList, Color.PURPLE, lst));
             faceList.get(i).setPosition(new Position(i > 0 ? 1:0 ,i/2) ) ;
 
             b.addFace(faceList.get(i));
@@ -147,7 +163,11 @@ class BoardTest {
                 cornerList.add(new Corner(Resource.ANIMALKINGDOM, CornerState.OPEN, d));
             }
 
-            faceList.add(new Back("default", cornerList, Color.PURPLE, Resource.ANIMALKINGDOM));
+            List<Resource> lst = new ArrayList<>();
+
+            lst.add(Resource.ANIMALKINGDOM);
+
+            faceList.add(new Back("default", cornerList, Color.PURPLE, lst));
             faceList.get(i).setPosition(new Position(i%2,i/2) ) ;
 
             b.addFace(faceList.get(i));
@@ -165,7 +185,10 @@ class BoardTest {
         Board b = new Board();
         List<Corner> cornerList = new ArrayList<Corner>();
 
-        Face f = new Back("default", cornerList, Color.PURPLE, Resource.FUNGIKINGDOM);
+        List<Resource> lst = new ArrayList<>();
+
+        lst.add(Resource.FUNGIKINGDOM);
+        Face f = new Back("default", cornerList, Color.PURPLE, lst);
         f.setPosition(new Position(0,0) ) ;
 
         b.addFace(f);

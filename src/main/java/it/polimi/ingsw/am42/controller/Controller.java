@@ -27,13 +27,11 @@ import java.util.Set;
  * It transforms the requests made by the client into actions on the game
  * Extends from the Observable class for the observer design pattern
  * @see Observable
- * Directly connected with the RMI client that uses the RMISpeaker interface
- * @see RMISpeaker
  *
  * @author Tommaso Crippa
  * @author Alessandro Di Maria
  */
-public class Controller extends Observable implements RMISpeaker {
+public class Controller extends Observable{
     private GameInterface game;
     private final GameDB gameDB;
 
@@ -42,12 +40,12 @@ public class Controller extends Observable implements RMISpeaker {
         this.gameDB = new GameDB();
     }
 
-    @Override
+
     public String getGameInfo() {
         return null;
     }
 
-    @Override
+
     public int createGame(MessageListener l, String nickname, int numPlayers) throws NumberPlayerWrongException, GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
 
         this.game = new Game(numPlayers);
@@ -61,7 +59,7 @@ public class Controller extends Observable implements RMISpeaker {
         return 1;
     }
 
-    @Override
+
     public boolean connect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         this.addListener(l);
 
@@ -76,7 +74,7 @@ public class Controller extends Observable implements RMISpeaker {
         return true;
     }
 
-    @Override
+
     public boolean reconnect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         if(listeners.isEmpty())
             this.game = this.gameDB.loadGame();
@@ -90,13 +88,13 @@ public class Controller extends Observable implements RMISpeaker {
         return true;
     }
 
-    @Override
+
     public Set<Position> getAvailablePositions(String p) {
         //if (p.equals(game.getCurrentPlayer().getNickname()))
         return game.getCurrentPlayer().getBoard().getPossiblePositions();
     }
 
-    @Override
+
     public boolean place(String p, Face face, Position position) throws RequirementsNotMetException {
         game.getCurrentPlayer().checkRequirements(face);
 
@@ -111,7 +109,7 @@ public class Controller extends Observable implements RMISpeaker {
         return true;
     }
 
-    @Override
+
     public void pick(String p, PlayableCard card) {
         game.chosenCardToAddInHand(card);
         game.changeState();
@@ -130,7 +128,7 @@ public class Controller extends Observable implements RMISpeaker {
         return game.getAvailableColors();
     }
 
-    @Override
+
     public List<GoalCard> chooseColor(String p, Color color) {
         game.getCurrentPlayer().setColor(color);
         game.removeColor(color);
@@ -142,7 +140,7 @@ public class Controller extends Observable implements RMISpeaker {
     }
 
 
-    @Override
+
     public void chooseGoal(String p, GoalCard goal) {
         game.getCurrentPlayer().setPersonalGoal(goal);
         game.changeState();

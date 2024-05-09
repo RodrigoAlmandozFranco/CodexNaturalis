@@ -62,17 +62,21 @@ class EvaluatorTest {
 
         int numPoints = 2;
 
+        List<Resource> lst = new ArrayList<>();
+
+        lst.add(Resource.ANIMALKINGDOM);
+
         Board b = new Board();
-        Face f = new Back("", null, null, Resource.ANIMALKINGDOM);
+        Face f = new Back("", null, null, lst);
         f.setPosition(new Position(0, 0));
         b.addFace(f);
-        Face f2 = new Back("", null, null, Resource.ANIMALKINGDOM);
+        Face f2 = new Back("", null, null, lst);
         f2.setPosition(new Position(1, 0));
         b.addFace(f2);
-        Face f3 = new Back("", null, null, Resource.ANIMALKINGDOM);
+        Face f3 = new Back("", null, null, lst);
         f3.setPosition(new Position(0, 1));
         b.addFace(f3);
-        Face f4 = new Back("", null, null, Resource.ANIMALKINGDOM);
+        Face f4 = new Back("", null, null, lst);
         f4.setPosition(new Position(1, 1));
         b.addFace(f4);
 
@@ -98,14 +102,20 @@ class EvaluatorTest {
         e = new EvaluatorPointsPerResource(numPoints, map);
         assertEquals(0, e.getPoints(b));
 
-        Face f5 = new Back("", null, null, Resource.FUNGIKINGDOM);
+        List<Resource> lst1 = new ArrayList<>();
+
+        lst.add(Resource.FUNGIKINGDOM);
+
+
+
+        Face f5 = new Back("", null, null, lst1);
         f5.setPosition(new Position(1, 1));
         b.addFace(f5);
         map.put(Resource.FUNGIKINGDOM, 1);
         map.put(Resource.ANIMALKINGDOM, 1);
         e = new EvaluatorPointsPerResource(numPoints, map);
         assertEquals(numPoints, e.getPoints(b));
-        Face f6 = new Back("", null, null, Resource.FUNGIKINGDOM);
+        Face f6 = new Back("", null, null, lst1);
         f6.setPosition(new Position(1, 1));
         b.addFace(f6);
         assertEquals(2 * numPoints, e.getPoints(b));
@@ -123,6 +133,9 @@ class EvaluatorTest {
 
         Evaluator e = new EvaluatorPointsPerStair(numPoints, color, direction);
 
+        List<Resource> lst = new ArrayList<>();
+
+        lst.add(Resource.ANIMALKINGDOM);
 
         List<Corner> cornerList = new ArrayList<Corner>();
         for (Direction d : Direction.values()) {
@@ -134,7 +147,7 @@ class EvaluatorTest {
 
         for (int i = 0; i < 4; i++) {
 
-            Face f = new Back("default", cornerList, color, Resource.ANIMALKINGDOM);
+            Face f = new Back("default", cornerList, color, lst);
             f.setPosition(new Position(i, 0));
 
             b.addFace(f);
@@ -142,11 +155,11 @@ class EvaluatorTest {
 
         assertEquals(numPoints, e.getPoints(b));
 
-        Face f = new Back("default", cornerList, color, Resource.ANIMALKINGDOM);
+        Face f = new Back("default", cornerList, color, lst);
         f.setPosition(new Position(4, 0));
         b.addFace(f);
 
-        f = new Back("default", cornerList, color, Resource.ANIMALKINGDOM);
+        f = new Back("default", cornerList, color, lst);
         f.setPosition(new Position(-1, 0));
 
         b.addFace(f);
@@ -167,51 +180,56 @@ class EvaluatorTest {
 
         List<Corner> cornerList = new ArrayList<Corner>();
 
+        List<Resource> lst = new ArrayList<>();
+
+        lst.add(Resource.ANIMALKINGDOM);
+
+
         for (Direction d : Direction.values()) {
             cornerList.add(new Corner(Resource.ANIMALKINGDOM, CornerState.OPEN, d));
         }
 
         assertEquals(0, e.getPoints(b));
 
-        Face f = new Back("default", cornerList, color1, Resource.ANIMALKINGDOM);
+        Face f = new Back("default", cornerList, color1, lst);
         f.setPosition(new Position(1, 1));
         b.addFace(f);
 
 
-        f = new Back("default", cornerList, color1, Resource.ANIMALKINGDOM);
+        f = new Back("default", cornerList, color1, lst);
         f.setPosition(new Position(0, 0));
         b.addFace(f);
 
 
-        f = new Back("default", cornerList, color2, Resource.ANIMALKINGDOM);
+        f = new Back("default", cornerList, color2, lst);
         f.setPosition(new Position(1, 0));
         b.addFace(f);
 
 
-        f = new Back("default", cornerList, color2, Resource.ANIMALKINGDOM);
+        f = new Back("default", cornerList, color2, lst);
         f.setPosition(new Position(2, 1));
         b.addFace(f);
 
         assertEquals(numPoints, e.getPoints(b));
 
-        f = new Back("default", cornerList, color2, Resource.ANIMALKINGDOM);
+        f = new Back("default", cornerList, color2, lst);
         f.setPosition(new Position(3, 2));
         b.addFace(f);
 
 
-        f = new Back("default", cornerList, color1, Resource.ANIMALKINGDOM);
+        f = new Back("default", cornerList, color1, lst);
         f.setPosition(new Position(3, 3));
         b.addFace(f);
 
 
-        f = new Back("default", cornerList, color1, Resource.ANIMALKINGDOM);
+        f = new Back("default", cornerList, color1, lst);
         f.setPosition(new Position(2, 2));
         b.addFace(f);
 
         assertEquals(numPoints, e.getPoints(b));
 
 
-        f = new Back("default", cornerList, color2, Resource.ANIMALKINGDOM);
+        f = new Back("default", cornerList, color2, lst);
         f.setPosition(new Position(4, 3));
         b.addFace(f);
 

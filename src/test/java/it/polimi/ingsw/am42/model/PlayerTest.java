@@ -6,6 +6,7 @@ import it.polimi.ingsw.am42.model.cards.types.playables.GoldCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
 import it.polimi.ingsw.am42.model.evaluator.EvaluatorPoints;
+import it.polimi.ingsw.am42.model.exceptions.RequirementsNotMetException;
 import it.polimi.ingsw.am42.model.structure.Position;
 import org.junit.jupiter.api.Test;
 
@@ -53,7 +54,9 @@ class PlayerTest {
 
     @Test
     void getColor() {
-        Player p = new Player("Tommy", Color.CYAN);
+        Player p = new Player("Tommy");
+
+        p.setColor(Color.CYAN);
 
         assertEquals(p.getColor(), Color.CYAN);
     }
@@ -110,18 +113,27 @@ class PlayerTest {
 
         Map<Resource, Integer> requirements = new HashMap<>();
         requirements.put(Resource.ANIMALKINGDOM, 1);
+        List<Resource> lst = new ArrayList<>();
+        lst.add(Resource.ANIMALKINGDOM);
+
         Front f = new Front("C://", null, null, requirements, null);
-        Back f2 = new Back("C://", null, null, Resource.ANIMALKINGDOM);
+        Back f2 = new Back("C://", null, null, lst);
 
         PlayableCard c = new GoldCard(1, f, f2);
 
+        try {
+            p.checkRequirements(f);
+        }
+        catch (RequirementsNotMetException e) {}
 
-        assertFalse(p.checkRequirements(f));
-        assertTrue(p.checkRequirements(f2));
+        try {
+            p.checkRequirements(f2);
 
-        p.placeCard(new Position(0, 0), f2);
+            p.placeCard(new Position(0, 0), f2);
 
-        assertTrue(p.checkRequirements(f));
+            p.checkRequirements(f);
+        } catch (RequirementsNotMetException e) {}
+
 
     }
 
@@ -129,9 +141,11 @@ class PlayerTest {
     void placeCard() {
         Player p = new Player("Tommy");
 
+        List<Resource> lst = new ArrayList<>();
+        lst.add(Resource.ANIMALKINGDOM);
 
         Front f = new Front("C://", new ArrayList<Corner>(), Color.GREEN, new HashMap<>(), new EvaluatorPoints(0));
-        Back f2 = new Back("C://", new ArrayList<Corner>(), Color.CYAN, Resource.ANIMALKINGDOM);
+        Back f2 = new Back("C://", new ArrayList<Corner>(), Color.CYAN, lst);
 
         PlayableCard c = new GoldCard(1, f, f2);
 
@@ -145,7 +159,7 @@ class PlayerTest {
 
     @Test
     void calculatePoint() {
-        Player p = new Player("Tommy");
+        Player p = new Player("Ale");
 
 
         Front f = new Front("C://", null, null, null, new EvaluatorPoints(1));

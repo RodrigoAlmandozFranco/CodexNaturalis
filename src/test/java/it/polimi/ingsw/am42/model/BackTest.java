@@ -31,7 +31,12 @@ class BackTest {
         corners.add(new Corner(Resource.QUILLOBJECT, CornerState.OPEN, Direction.DOWNLEFT));
         corners.add(new Corner(Resource.QUILLOBJECT, CornerState.OPEN, Direction.DOWNRIGHT));
 
-        Face face = new Back(src, corners, Color.CYAN, Resource.ANIMALKINGDOM);
+        List<Resource> lst = new ArrayList<>();
+
+        lst.add(Resource.ANIMALKINGDOM);
+
+
+        Face face = new Back(src, corners, Color.CYAN, lst);
 
         Evaluator other = new EvaluatorPoints(0);
         assertEquals(other.getPoints(null), face.getEvaluator().getPoints(null));
@@ -69,7 +74,11 @@ class BackTest {
         Map<Resource, Integer> resources = new HashMap<Resource, Integer>();
         resources.put(Resource.ANIMALKINGDOM, 1);
 
-        Face face = new Back(src, corners, Color.CYAN, Resource.ANIMALKINGDOM);
+        List<Resource> lst = new ArrayList<>();
+
+        lst.add(Resource.ANIMALKINGDOM);
+
+        Face face = new Back(src, corners, Color.CYAN, lst);
 
         assertEquals(resources, face.getResources());
     }

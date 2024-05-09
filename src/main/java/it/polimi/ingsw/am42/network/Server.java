@@ -3,6 +3,7 @@ package it.polimi.ingsw.am42.network;
 import it.polimi.ingsw.am42.controller.Controller;
 import it.polimi.ingsw.am42.exceptions.GenericException;
 import it.polimi.ingsw.am42.model.Game;
+import it.polimi.ingsw.am42.network.rmi.RMIHandler;
 import it.polimi.ingsw.am42.network.rmi.RMISpeaker;
 import it.polimi.ingsw.am42.network.tcp.server.ClientHandler;
 
@@ -39,11 +40,12 @@ public class Server {
                 i++;
             }
         }
+        Controller controller = new Controller();
         printIpAddress();
 
-        startServerRMI();
+        startServerRMI(controller);
 
-        startServerTCP();
+        startServerTCP(controller);
     }
 
     public static void printIpAddress() {
@@ -55,14 +57,14 @@ public class Server {
         }
     }
 
-    public static void startServerRMI() throws GenericException {
+    public static void startServerRMI(Controller controller) throws GenericException {
 
-        Controller controller = new Controller();
+        RMIHandler obj = new RMIHandler(controller);
 
         RMISpeaker stub = null;
         try {
             stub = (RMISpeaker) UnicastRemoteObject.exportObject(
-                    controller, PORT);
+                    obj, PORT);
         } catch (RemoteException e) {
             e.printStackTrace();
         }
@@ -80,21 +82,19 @@ public class Server {
         } catch (AlreadyBoundException e) {
             e.printStackTrace();
         }
-        System.err.println("Server RMI ready");
+        System.out.println("Server RMI ready");
     }
 
-    public static void startServerTCP() throws GenericException {
+    public static void startServerTCP(Controller controller) throws GenericException {
 
-
-        Controller controller = new Controller();
         ExecutorService executor = Executors.newCachedThreadPool();
         ServerSocket serverSocket;
         try {
-            serverSocket = new ServerSocket(PORT);
+            serverSocket = new ServerSocket(PORT+1);
         } catch (IOException e) {
-            throw new GenericException("Error while creating the server socket");
+            throw new GenericException(e.getMessage());
         }
-        System.err.println("Server TCP ready");
+        System.out.println("Server TCP ready");
         while (true) {
             try {
                 Socket socket = serverSocket.accept();

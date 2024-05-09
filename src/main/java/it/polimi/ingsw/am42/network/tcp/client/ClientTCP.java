@@ -24,6 +24,8 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
 
+
+
 public class ClientTCP extends Client {
 
     private static String ip = "";
@@ -202,8 +204,7 @@ public class ClientTCP extends Client {
         view.updateDisconnection();
     }
 
-
-
 }
+
 
 
