@@ -3,6 +3,7 @@ package it.polimi.ingsw.am42.network.tcp.messages.clientToServer;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 import it.polimi.ingsw.am42.network.tcp.messages.ClientToServerMessage;
+import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GoodMessage;
 
 /**
  * Message sent by the client to the server to pick a card
@@ -27,6 +28,6 @@ public class PickMessage extends ClientToServerMessage {
     @Override
     public Message execute() {
         controller.pick(nickname, card);
-        return null;
+        return new GoodMessage();
     }
 }

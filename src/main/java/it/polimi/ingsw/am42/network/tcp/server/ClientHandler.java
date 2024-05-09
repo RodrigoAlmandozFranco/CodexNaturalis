@@ -11,6 +11,7 @@ import it.polimi.ingsw.am42.network.MessageListener;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.ClientToServerMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
+import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.ChangeMessage;
 
 /**
  * This class is responsible for handling the connection with the client.
@@ -27,7 +28,6 @@ public class ClientHandler implements Runnable, MessageListener {
     private Socket socket;
     private Controller controller;
     private ClientToServerMessage message;
-    private PrintWriter out;
     private ObjectInputStream input;
     private ObjectOutputStream output;
 
@@ -36,7 +36,6 @@ public class ClientHandler implements Runnable, MessageListener {
         this.socket = socket;
         this.controller = controller;
         message = new ClientToServerMessage(controller, this);
-        out = new PrintWriter(socket.getOutputStream());
         input = new ObjectInputStream(socket.getInputStream());
         output = new ObjectOutputStream(socket.getOutputStream());
     }
@@ -47,7 +46,6 @@ public class ClientHandler implements Runnable, MessageListener {
                 if(socket.getInputStream().available() > 0) {
                     Message message = (Message) input.readObject();
                     Message answer;
-
 
                     if(message instanceof ChatMessage) {
                         controller.sendChatMessage((ChatMessage) message);
@@ -73,15 +71,19 @@ public class ClientHandler implements Runnable, MessageListener {
         }
     }
 
+    public void receiveMessage(Message message) {
+        sendMessage(message);
+    }
+
+
     public void playerDisconnected() {
         controller.playerDisconnected();
     }
 
     public void update (Change change) {
-        sendMessage(change);
+        sendMessage(new ChangeMessage(change));
     }
 
-    @Override
     public boolean heartbeat() {
         // For TCP connection it is not necessary to send heartbeat to client
         // Disconnection already revealed with exception

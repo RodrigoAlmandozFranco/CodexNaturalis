@@ -21,7 +21,7 @@ import java.util.List;
  * @author Rodrigo Almandoz Franco
  */
 
-public class Change extends Message implements Serializable {
+public class Change implements Serializable {
     private int pointsPlayer;
     private int numberGoalsAchieved;
     private String futurePlayer;

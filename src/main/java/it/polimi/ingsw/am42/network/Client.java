@@ -30,17 +30,15 @@ public abstract class Client {
 
     public abstract boolean place(String p, Face face, Position pos) throws RequirementsNotMetException;
 
-    public abstract List<Color> placeStarting(String p, Face face);
-
     public abstract List<GoalCard> chooseColor(String p, Color color);
-
-    public abstract List<GoalCard> getGoals(String p);
 
     public abstract void chooseGoal(String p, GoalCard goal);
 
     public abstract void pick(String p, PlayableCard card);
 
     public abstract List<Player> getWinner();
+
+    public abstract List<Color> placeStarting(String p, Face face);
 
     public abstract void update(Change diff);
 }

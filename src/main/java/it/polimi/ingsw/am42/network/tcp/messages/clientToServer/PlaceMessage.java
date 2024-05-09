@@ -5,6 +5,7 @@ import it.polimi.ingsw.am42.model.exceptions.RequirementsNotMetException;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.tcp.messages.ClientToServerMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
+import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GoodMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.NoRequirementsErrorMessage;
 
 /**
@@ -25,6 +26,7 @@ public class PlaceMessage extends ClientToServerMessage {
     public PlaceMessage(String n, Face f, Position p){
         nickname = n;
         face = f;
+        position = p;
     }
 
     public Message execute() {
@@ -34,6 +36,6 @@ public class PlaceMessage extends ClientToServerMessage {
         } catch (RequirementsNotMetException e) {
             return new NoRequirementsErrorMessage();
         }
-        return null;
+        return new GoodMessage();
     }
 }

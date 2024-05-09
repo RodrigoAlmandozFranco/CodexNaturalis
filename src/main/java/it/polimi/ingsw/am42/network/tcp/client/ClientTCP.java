@@ -10,6 +10,7 @@ import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.MessageListener;
+import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 import it.polimi.ingsw.am42.network.tcp.messages.clientToServer.*;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.*;
@@ -39,6 +40,7 @@ public class ClientTCP extends Client {
         output = new ObjectOutputStream(socket.getOutputStream());
     }
 
+    //TODO this should be a main abstract main, that will call the constructor
     public static void main(String[] args) throws IOException {
         for (int i = 0; i < args.length; i++) {
             if (args[i].equals("-p") && i + 1 < args.length) {
@@ -58,18 +60,14 @@ public class ClientTCP extends Client {
     }
 
     public void startClient() throws IOException {
-
-        final Scanner stdin = new Scanner(System.in);
-        Message messageReceived;
         serverHandler = new ServerHandler(input, this);
-        new Thread(serverHandler).start();
 
         try {
-            while (true) {
-
-            }
+            new Thread(serverHandler).start();
+            while (true) {}
         } catch (final NoSuchElementException e) {
-            System.out.println("Connection closed");
+            input.close();
+            output.close();
         }
     }
 
@@ -92,15 +90,15 @@ public class ClientTCP extends Client {
         Message message = new FirstConnectionMessage(nickname, numPlayers);
         sendMessage(message);
         Message answer = serverHandler.getMessage();
-        if (answer instanceof NumberPlayersWrongErrorMessage) {
-            throw new NumberPlayerWrongException("Number Player Wrong");
-        } else if (answer instanceof NicknameInvalidErrorMessage) {
-            throw new NicknameInvalidException("Nickname is invalid");
-        } else if (answer instanceof NicknameAlreadyInUseErrorMessage) {
-            throw new NicknameAlreadyInUseException("Nickname is already in use");
-        } else {
-                return 1;
-        }
+        return switch (answer) {
+            case NumberPlayersWrongErrorMessage numberPlayersWrongErrorMessage ->
+                    throw new NumberPlayerWrongException("Number Player Wrong");
+            case NicknameInvalidErrorMessage nicknameInvalidErrorMessage ->
+                    throw new NicknameInvalidException("Nickname is invalid");
+            case NicknameAlreadyInUseErrorMessage nicknameAlreadyInUseErrorMessage ->
+                    throw new NicknameAlreadyInUseException("Nickname is already in use");
+            default -> 1;
+        };
     }
 
     @Override
@@ -114,7 +112,7 @@ public class ClientTCP extends Client {
                     throw new NicknameInvalidException("Nickname is invalid");
             case NicknameAlreadyInUseErrorMessage nicknameAlreadyInUseErrorMessage ->
                     throw new NicknameAlreadyInUseException("Nickname is already in use");
-            case null, default -> true;
+            default -> true;
         };
     }
 
@@ -129,7 +127,7 @@ public class ClientTCP extends Client {
                     throw new NicknameInvalidException("Nickname is invalid");
             case NicknameAlreadyInUseErrorMessage nicknameAlreadyInUseErrorMessage ->
                     throw new NicknameAlreadyInUseException("Nickname is already in use");
-            case null, default -> true;
+            default -> true;
         };
     }
 
@@ -141,51 +139,46 @@ public class ClientTCP extends Client {
         return answer.getPositions();
     }
 
-    @Override
-    public boolean place(String p, Face face, Position pos) throws RequirementsNotMetException {
-        Message message = new PlaceMessage(p, face, pos);
-        sendMessage(message);
-        Message answer = serverHandler.getMessage();
-        if (answer instanceof NoRequirementsErrorMessage) {
-            throw new RequirementsNotMetException("Requirements are not met");
-        } else {
-            return true;
-        }
-    }
-
-    @Override
-    public List<Color> getAvailableColors(String p) {
-        Message message = new GetColorsMessage(p);
+    public List<Color> placeStarting(String p, Face face) {
+        Message message = new PlaceStartingMessage(p, face);
         sendMessage(message);
         SendAvailableColorsMessage answer = (SendAvailableColorsMessage) serverHandler.getMessage();
         return answer.getColors();
     }
 
     @Override
-    public void chooseColor(String p, Color color) {
-        Message message = new ChosenColorMessage(p, color);
+    public boolean place(String p, Face face, Position pos) throws RequirementsNotMetException {
+        Message message = new PlaceMessage(p, face, pos);
         sendMessage(message);
+        Message answer = serverHandler.getMessage();
+        if(answer instanceof NoRequirementsErrorMessage)
+            throw new RequirementsNotMetException("Requirements are not met");
+        return true;
     }
 
     @Override
-    public List<GoalCard> getGoals(String p) {
-        Message message = new GetGoalsMessage(p);
+    public List<GoalCard> chooseColor(String p, Color color) {
+        Message message = new ChosenColorMessage(p, color);
         sendMessage(message);
         SendPossibleGoalsMessage answer = (SendPossibleGoalsMessage) serverHandler.getMessage();
         return answer.getGoals();
-
     }
+
 
     @Override
     public void chooseGoal(String p, GoalCard goal) {
         Message message = new ChosenGoalMessage(p, goal);
         sendMessage(message);
+        Message answer = serverHandler.getMessage();
+        assert(answer instanceof GoodMessage);
     }
 
     @Override
     public void pick(String p, PlayableCard card) {
         Message message = new PickMessage(p, card);
         sendMessage(message);
+        Message answer = serverHandler.getMessage();
+        assert(answer instanceof GoodMessage);
     }
 
     @Override
@@ -200,6 +193,17 @@ public class ClientTCP extends Client {
     public void update(Change change) {
         view.update(change);
     }
+
+    public void updateMessage (ChatMessage chatMessage){
+        view.updateMessage(chatMessage);
+    }
+
+    public void updateDisconnection(){
+        view.updateDisconnection();
+    }
+
+
+
 }
 
 

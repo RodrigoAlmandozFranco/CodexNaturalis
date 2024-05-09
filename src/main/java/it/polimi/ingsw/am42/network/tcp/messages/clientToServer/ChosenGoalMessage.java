@@ -3,6 +3,7 @@ package it.polimi.ingsw.am42.network.tcp.messages.clientToServer;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.network.tcp.messages.ClientToServerMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
+import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GoodMessage;
 
 /**
  * Message sent by the client to the server to choose the personal goal
@@ -26,7 +27,7 @@ public class ChosenGoalMessage extends ClientToServerMessage {
 
     public Message execute() {
         controller.chooseGoal(nickname, goal);
-        return null;
+        return new GoodMessage();
     }
 }
 

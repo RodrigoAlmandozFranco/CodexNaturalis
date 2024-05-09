@@ -6,10 +6,7 @@ import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
 import it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException;
 import it.polimi.ingsw.am42.network.tcp.messages.ClientToServerMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
-import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GameFullErrorMessage;
-import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.NicknameAlreadyInUseErrorMessage;
-import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.NicknameInvalidErrorMessage;
-import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.NumberPlayersWrongErrorMessage;
+import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.*;
 
 /**
  * Message sent by the client to the server to create a game and connect to it
@@ -44,6 +41,6 @@ public class FirstConnectionMessage extends ClientToServerMessage {
         } catch (NicknameAlreadyInUseException e) {
             return new NicknameAlreadyInUseErrorMessage();
         }
-        return null;
+        return new GoodMessage();
     }
 }

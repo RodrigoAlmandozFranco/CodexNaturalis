@@ -4,6 +4,7 @@ import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
 import it.polimi.ingsw.am42.network.tcp.messages.ClientToServerMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
+import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GoodMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.NicknameAlreadyInUseErrorMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.NicknameInvalidErrorMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GameFullErrorMessage;
@@ -40,6 +41,6 @@ public class ConnectMessage extends ClientToServerMessage {
         } catch (NicknameAlreadyInUseException e) {
             return new NicknameAlreadyInUseErrorMessage();
         }
-        return null;
+        return new GoodMessage();
     }
 }
