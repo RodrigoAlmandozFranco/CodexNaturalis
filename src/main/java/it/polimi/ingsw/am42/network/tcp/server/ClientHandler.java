@@ -2,7 +2,6 @@ package it.polimi.ingsw.am42.network.tcp.server;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 
 import it.polimi.ingsw.am42.controller.Controller;
@@ -12,6 +11,7 @@ import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.ClientToServerMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.ChangeMessage;
+import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.SendWinnerMessage;
 
 /**
  * This class is responsible for handling the connection with the client.
@@ -28,14 +28,17 @@ public class ClientHandler implements Runnable, MessageListener {
     private Socket socket;
     private Controller controller;
     private ClientToServerMessage message;
-    private ObjectInputStream input;
-    private ObjectOutputStream output;
+    private final ObjectInputStream input;
+    private final ObjectOutputStream output;
 
 
     public ClientHandler(Socket socket, Controller controller) throws IOException {
         this.socket = socket;
         this.controller = controller;
         message = new ClientToServerMessage(controller, this);
+
+        input = new ObjectInputStream(socket.getInputStream());
+        output = new ObjectOutputStream(socket.getOutputStream());
     }
 
     public void run() {
@@ -43,7 +46,7 @@ public class ClientHandler implements Runnable, MessageListener {
             //System.out.println("ClientHandler ready!");
             while(true) {
                 if(socket.getInputStream().available() > 0) {
-                    input = new ObjectInputStream(socket.getInputStream());
+                    //input = new ObjectInputStream(socket.getInputStream());
                     Message message = (Message) input.readObject();
                     Message answer;
 
@@ -52,6 +55,8 @@ public class ClientHandler implements Runnable, MessageListener {
                     } else {
                         answer = message.execute();
                         sendMessage(answer);
+                        if(answer instanceof SendWinnerMessage)
+                            break;
                     }
                 }
             }
@@ -60,11 +65,20 @@ public class ClientHandler implements Runnable, MessageListener {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+
+        try{
+            input.close();
+            output.close();
+            socket.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     private void sendMessage(Message answer) {
         try {
-            output = new ObjectOutputStream(socket.getOutputStream());
+            //output = new ObjectOutputStream(socket.getOutputStream());
             output.writeObject(answer);
             output.flush();
         } catch (IOException e) {

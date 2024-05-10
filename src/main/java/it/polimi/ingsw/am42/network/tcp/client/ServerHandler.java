@@ -19,6 +19,8 @@ public class ServerHandler implements Runnable {
     private boolean isRunning = true;
     private ClientTCP client;
 
+    private ObjectInputStream input;
+
     public ServerHandler(Socket socket, ClientTCP client) {
         this.socket = socket;
         this.client = client;
@@ -29,9 +31,10 @@ public class ServerHandler implements Runnable {
     public void run() {
         try {
             //System.out.println("ServerHandler ready!");
-            while(isRunning) {
+            input = new ObjectInputStream(socket.getInputStream());
+            while(true) {
                 if (socket.getInputStream().available() > 0 && !newMessage) {
-                    ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+                    //ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
                     Message m = (Message) input.readObject();
                     if(m instanceof ChangeMessage){
                         client.update(((ChangeMessage) m).getChange());
@@ -47,13 +50,18 @@ public class ServerHandler implements Runnable {
             }
 
         } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            //If everything ok, when the server stops the connection
+            //I will receive this Exception
+            try{
+                socket.close();
+                input.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            client.connectionClosed();
         }
     }
 
-    public void stopThread() {
-        isRunning = false;
-    }
 
     public Message getMessage () {
 
