@@ -50,7 +50,7 @@ public class ClientTCP extends Client {
             new Thread(serverHandler).start();
             while (true) {}
         } catch (final NoSuchElementException e) {
-            input.close();
+            //input.close();
             output.close();
         }
     }
@@ -180,11 +180,21 @@ public class ClientTCP extends Client {
     }
 
     public void updateMessage (ChatMessage chatMessage){
-        //view.updateMessage(chatMessage);
+        view.updateMessage(chatMessage);
     }
 
     public void updateDisconnection(){
         //view.updateDisconnection();
+    }
+
+    public void connectionClosed(){
+
+        try{
+            output.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        view.connectionClosed();
     }
 
 }
