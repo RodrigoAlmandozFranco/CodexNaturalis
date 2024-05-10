@@ -36,14 +36,14 @@ public class ClientHandler implements Runnable, MessageListener {
         this.socket = socket;
         this.controller = controller;
         message = new ClientToServerMessage(controller, this);
-        input = new ObjectInputStream(socket.getInputStream());
-        output = new ObjectOutputStream(socket.getOutputStream());
     }
 
     public void run() {
         try {
+            //System.out.println("ClientHandler ready!");
             while(true) {
                 if(socket.getInputStream().available() > 0) {
+                    input = new ObjectInputStream(socket.getInputStream());
                     Message message = (Message) input.readObject();
                     Message answer;
 
@@ -64,6 +64,7 @@ public class ClientHandler implements Runnable, MessageListener {
 
     private void sendMessage(Message answer) {
         try {
+            output = new ObjectOutputStream(socket.getOutputStream());
             output.writeObject(answer);
             output.flush();
         } catch (IOException e) {

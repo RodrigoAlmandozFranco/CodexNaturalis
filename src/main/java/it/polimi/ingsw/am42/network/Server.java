@@ -32,17 +32,18 @@ import java.net.UnknownHostException;
 public class Server {
 
     static private int PORT = 4203;
-    public static void main( String[] args ) throws GenericException {
+    public static void main(String[] args) throws GenericException {
         System.out.println( "Hello from Server!" );
         for (int i = 0; i < args.length; i++) {
-            if (args[i].equals("-p") && i + 1 < args.length) {
+            if ((args[i].equals("-p") || (args[i].equals("--port"))) && i + 1 < args.length) {
                 PORT = Integer.parseInt(args[i + 1]);
                 i++;
             }
         }
         Controller controller = new Controller();
         printIpAddress();
-        System.out.println("Port: " + PORT);
+        System.out.println("PortRMI: " + PORT);
+        System.out.println("PortTCP: " + (PORT + 1));
         startServerRMI(controller);
 
         startServerTCP(controller);
@@ -90,7 +91,7 @@ public class Server {
         ExecutorService executor = Executors.newCachedThreadPool();
         ServerSocket serverSocket;
         try {
-            serverSocket = new ServerSocket(PORT+1);
+            serverSocket = new ServerSocket(PORT + 1);
         } catch (IOException e) {
             throw new GenericException(e.getMessage());
         }
@@ -106,3 +107,5 @@ public class Server {
         executor.shutdown();
     }
 }
+
+

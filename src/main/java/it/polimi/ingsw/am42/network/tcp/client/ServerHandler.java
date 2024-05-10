@@ -8,18 +8,19 @@ import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.PlayerDisconnect
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.Socket;
 
 
 //TODO disconnected, close socket, while loop
 public class ServerHandler implements Runnable {
     private Message message;
-    private ObjectInputStream input;
+    private Socket socket;
     private boolean newMessage = false;
     private boolean isRunning = true;
     private ClientTCP client;
 
-    public ServerHandler(ObjectInputStream input, ClientTCP client) {
-        this.input = input;
+    public ServerHandler(Socket socket, ClientTCP client) {
+        this.socket = socket;
         this.client = client;
         message = null;
     }
@@ -27,8 +28,10 @@ public class ServerHandler implements Runnable {
     @Override
     public void run() {
         try {
+            //System.out.println("ServerHandler ready!");
             while(isRunning) {
-                if (input.available() > 0 && !newMessage) {
+                if (socket.getInputStream().available() > 0 && !newMessage) {
+                    ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
                     Message m = (Message) input.readObject();
                     if(m instanceof ChangeMessage){
                         client.update(((ChangeMessage) m).getChange());

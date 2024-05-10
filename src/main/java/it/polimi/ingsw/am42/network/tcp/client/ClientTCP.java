@@ -30,34 +30,34 @@ public class ClientTCP extends Client {
 
     private static String ip = "";
     private static int port;
+    private ServerHandler serverHandler;
+    private final Socket socket;
     private ObjectInputStream input;
     private ObjectOutputStream output;
-    private ServerHandler serverHandler;
 
     public ClientTCP(String ip, int port) throws IOException {
         ClientTCP.ip = ip;
         ClientTCP.port = port;
-        final Socket socket = new Socket(ip, port);
-        input = new ObjectInputStream(socket.getInputStream());
-        output = new ObjectOutputStream(socket.getOutputStream());
+        socket = new Socket(ip, port);
+        this.startClient();
     }
 
     public void startClient() throws IOException {
-        serverHandler = new ServerHandler(input, this);
+        serverHandler = new ServerHandler(socket, this);
 
         try {
+            //System.out.println("ClientTCP ready!");
             new Thread(serverHandler).start();
             while (true) {}
         } catch (final NoSuchElementException e) {
             input.close();
             output.close();
         }
-
-        System.out.println("Connesso al Server!");
     }
 
     private void sendMessage(Message message) {
         try {
+            output = new ObjectOutputStream(socket.getOutputStream());
             output.writeObject(message);
             output.flush();
         } catch (final IOException e) {
@@ -180,11 +180,11 @@ public class ClientTCP extends Client {
     }
 
     public void updateMessage (ChatMessage chatMessage){
-        view.updateMessage(chatMessage);
+        //view.updateMessage(chatMessage);
     }
 
     public void updateDisconnection(){
-        view.updateDisconnection();
+        //view.updateDisconnection();
     }
 
 }
