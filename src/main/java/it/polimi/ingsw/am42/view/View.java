@@ -2,6 +2,7 @@ package it.polimi.ingsw.am42.view;
 
 import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.model.enumeration.State;
+import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.view.gameview.GameView;
 
 public abstract class View {
@@ -18,4 +19,10 @@ public abstract class View {
     public void handleState() {
     }
 
+    public void updateMessage(ChatMessage chatMessage) {
+
+    }
+
+    public void connectionClosed() {
+    }
 }
