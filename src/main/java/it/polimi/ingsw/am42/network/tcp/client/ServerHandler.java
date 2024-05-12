@@ -3,8 +3,8 @@ package it.polimi.ingsw.am42.network.tcp.client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.ChangeMessage;
-import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GoodMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.PlayerDisconnectedMessage;
+import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GoodMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

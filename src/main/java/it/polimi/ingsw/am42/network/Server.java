@@ -29,9 +29,13 @@ import java.net.UnknownHostException;
  * @author Mattia Brandi
  */
 
-public class Server {
+public class Server extends UnicastRemoteObject {
 
     static private int PORT = 4203;
+
+    protected Server() throws RemoteException {
+    }
+
     public static void main( String[] args ) throws GenericException {
         System.out.println( "Hello from Server!" );
         for (int i = 0; i < args.length; i++) {
@@ -41,23 +45,28 @@ public class Server {
             }
         }
         Controller controller = new Controller();
-        printIpAddress();
-        System.out.println("Port: " + PORT);
+
+        System.out.println("IP Address: " + getIpAddress());
+        System.out.println("RMI Port: " + PORT);
+        System.out.println("TCP Port: " + PORT + 1);
         startServerRMI(controller);
 
         startServerTCP(controller);
     }
 
-    public static void printIpAddress() {
+    private static String getIpAddress() {
         try {
             InetAddress inetAddress = InetAddress.getLocalHost();
-            System.out.println("IP Address: " + inetAddress.getHostAddress());
+            return inetAddress.getHostAddress();
         } catch (UnknownHostException e) {
-            System.out.println("Could not find IP address: " + e.getMessage());
+            return "localhost";
         }
     }
 
+
     public static void startServerRMI(Controller controller) throws GenericException {
+
+        // System.setProperty("java.rmi.server.hostname",getIpAddress());
 
         RMIHandler obj = new RMIHandler(controller);
 
@@ -76,7 +85,7 @@ public class Server {
             e.printStackTrace();
         }
         try {
-            registry.bind("RMISpeaker", stub);
+            registry.bind("RMIHandler", stub);
         } catch (RemoteException e) {
             e.printStackTrace();
         } catch (AlreadyBoundException e) {

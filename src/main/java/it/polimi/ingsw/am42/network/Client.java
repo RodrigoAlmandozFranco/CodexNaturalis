@@ -41,4 +41,8 @@ public abstract class Client {
     public abstract List<Color> placeStarting(String p, Face face);
 
     public abstract void update(Change diff);
+
+    public View getView() {
+        return view;
+    }
 }

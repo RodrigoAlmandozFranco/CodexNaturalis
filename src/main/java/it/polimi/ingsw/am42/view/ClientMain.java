@@ -7,11 +7,17 @@ import it.polimi.ingsw.am42.network.tcp.client.ClientTCP;
 import javafx.application.Application;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
-public class ClientMain {
+public class ClientMain extends UnicastRemoteObject {
 
     static private int PORT = 4203;
+
+    protected ClientMain() throws RemoteException {
+    }
+
     public static void main(String[] args) {
         boolean tuiParam = false;
         boolean rmiParam = false;
@@ -56,8 +62,6 @@ public class ClientMain {
 
         // Read the input provided by the user
         String address = scanner.nextLine();
-//        JFRInputEvent Reader;
-//        String address = Reader.getInput();
         if (address.equals("")) address = "localhost";
 
         if (rmiParam) {
@@ -71,5 +75,7 @@ public class ClientMain {
                 System.exit(1);
             }
         }
+
+
     }
 }

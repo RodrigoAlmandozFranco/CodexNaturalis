@@ -180,11 +180,11 @@ public class ClientTCP extends Client {
     }
 
     public void updateMessage (ChatMessage chatMessage){
-        view.updateMessage(chatMessage);
+        // view.updateMessage(chatMessage);
     }
 
     public void updateDisconnection(){
-        view.updateDisconnection();
+        // view.updateDisconnection();
     }
 
 }

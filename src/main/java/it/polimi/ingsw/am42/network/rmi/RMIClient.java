@@ -26,12 +26,12 @@ import java.util.Set;
  *
  * @author Alessandro Di Maria
  */
-public class RMIClient extends Client implements MessageListener {
+public class RMIClient extends Client implements RMIMessageListener {
     Registry registry;
     RMISpeaker stub;
 
     String nickname;
-    private RMIClient(String host, int port) {
+    public RMIClient(String host, int port) {
         //TODO da riga di comando ricevo se voglio un view GUI o TUI
         //this.view = new View(this);
         try {

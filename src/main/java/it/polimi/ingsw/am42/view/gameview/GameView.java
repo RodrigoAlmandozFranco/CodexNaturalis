@@ -3,12 +3,15 @@ package it.polimi.ingsw.am42.view.gameview;
 import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
+import it.polimi.ingsw.am42.model.enumeration.State;
 
 import java.util.List;
 
 public class GameView {
     private List<PlayerView> players;
     private List<GoalCard> globalGoals;
+
+    private State currentState;
 
     private List<PlayableCard> pickableResourceCards;
     private List<PlayableCard> pickableGoldCards;
@@ -73,5 +76,13 @@ public class GameView {
 
     public int getNumberPlayers() {
         return numberPlayers;
+    }
+
+    public State getCurrentState() {
+        return currentState;
+    }
+
+    public void setCurrentState(State state) {
+        this.currentState = state;
     }
 }
