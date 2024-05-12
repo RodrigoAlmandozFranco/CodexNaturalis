@@ -8,18 +8,21 @@ import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GoodMessage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.net.Socket;
 
 
 //TODO disconnected, close socket, while loop
 public class ServerHandler implements Runnable {
     private Message message;
-    private ObjectInputStream input;
+    private Socket socket;
     private boolean newMessage = false;
     private boolean isRunning = true;
     private ClientTCP client;
 
-    public ServerHandler(ObjectInputStream input, ClientTCP client) {
-        this.input = input;
+    private ObjectInputStream input;
+
+    public ServerHandler(Socket socket, ClientTCP client) {
+        this.socket = socket;
         this.client = client;
         message = null;
     }
@@ -27,8 +30,11 @@ public class ServerHandler implements Runnable {
     @Override
     public void run() {
         try {
-            while(isRunning) {
-                if (input.available() > 0 && !newMessage) {
+            //System.out.println("ServerHandler ready!");
+            input = new ObjectInputStream(socket.getInputStream());
+            while(true) {
+                if (socket.getInputStream().available() > 0 && !newMessage) {
+                    //ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
                     Message m = (Message) input.readObject();
                     if(m instanceof ChangeMessage){
                         client.update(((ChangeMessage) m).getChange());
@@ -44,13 +50,18 @@ public class ServerHandler implements Runnable {
             }
 
         } catch (IOException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+            //If everything ok, when the server stops the connection
+            //I will receive this Exception
+            try{
+                socket.close();
+                input.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+            client.connectionClosed();
         }
     }
 
-    public void stopThread() {
-        isRunning = false;
-    }
 
     public Message getMessage () {
 
