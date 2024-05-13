@@ -1,14 +1,13 @@
-package it.polimi.ingsw.am42.view;
+package it.polimi.ingsw.am42.view.App;
 
 import it.polimi.ingsw.am42.network.Client;
+import it.polimi.ingsw.am42.view.App.App;
 
-public class TUIApplication {
-
-    private Client client;
+public class TUIApplication extends App {
 
 
     public TUIApplication(Client client) {
-        this.client = client;
+        super(client);
 
         printLogo();
     }
@@ -37,5 +36,14 @@ public class TUIApplication {
 
                 + "\u001B[0m"
         );
+    }
+
+
+    @Override
+    public void start() {
+        while (true) {
+            //TODO : start TUI
+        }
+
     }
 }

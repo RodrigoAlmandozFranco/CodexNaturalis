@@ -3,14 +3,13 @@ package it.polimi.ingsw.am42.view;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.rmi.RMIClient;
 import it.polimi.ingsw.am42.network.tcp.client.ClientTCP;
+import it.polimi.ingsw.am42.view.App.App;
+import it.polimi.ingsw.am42.view.App.GUIApplication;
+import it.polimi.ingsw.am42.view.App.TUIApplication;
 import it.polimi.ingsw.am42.view.gameview.GameView;
-import javafx.application.Application;
 
-import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Scanner;
-
 
 
 /**
@@ -63,18 +62,7 @@ public class ClientMain extends UnicastRemoteObject {
             }
         }
 
-        if (tuiParam) {
-            TUIstart(rmiParam);
-
-        } else {
-            // Application.launch(Gui.class);
-        }
-    }
-
-    private static void TUIstart(boolean rmiParam) {
         Client client;
-
-        System.out.println("Insert server IP address:");
 
 
         if (rmiParam) {
@@ -94,10 +82,14 @@ public class ClientMain extends UnicastRemoteObject {
 
         client.setView(view);
 
-        TUIApplication tui = new TUIApplication(client);
+        App app;
 
+        if (tuiParam)
+                app = new TUIApplication(client);
+        else
+            app = new GUIApplication(client);
 
-
-
+        app.start();
     }
+
 }
