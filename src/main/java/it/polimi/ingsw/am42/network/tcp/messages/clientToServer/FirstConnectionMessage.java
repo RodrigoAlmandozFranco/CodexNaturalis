@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.network.tcp.messages.clientToServer;
 
+import it.polimi.ingsw.am42.controller.Controller;
 import it.polimi.ingsw.am42.model.exceptions.GameFullException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
@@ -28,7 +29,7 @@ public class FirstConnectionMessage extends ClientToServerMessage {
         numPlayers = num;
     }
 
-    public Message execute() {
+    public Message execute(Controller controller) {
 
         try {
             controller.createGame(clientHandler, nickname, numPlayers);

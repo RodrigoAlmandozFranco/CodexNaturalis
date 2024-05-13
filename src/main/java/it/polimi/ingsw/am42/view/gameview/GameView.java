@@ -19,6 +19,7 @@ public class GameView {
     private List<PlayableCard> pickableGoldCards;
     private int numberPlayers;
     protected String currentPlayer;
+    protected String modifiedPlayer;
 
     private List<Runnable> usableMethods;
 
@@ -57,11 +58,16 @@ public class GameView {
                 if(p.getNickname().equals(currentPlayer))
                     p.update(diff);
             }
+            modifiedPlayer = currentPlayer;
             currentPlayer = diff.getFuturePlayer();
 
             handleState();
 
         System.out.println(diff);
+    }
+
+    public String getModifiedPlayer(){
+        return modifiedPlayer;
     }
 
     @Override

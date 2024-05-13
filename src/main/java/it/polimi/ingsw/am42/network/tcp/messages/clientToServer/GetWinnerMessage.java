@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.network.tcp.messages.clientToServer;
 
+import it.polimi.ingsw.am42.controller.Controller;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.network.tcp.messages.ClientToServerMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
@@ -23,7 +24,7 @@ public class GetWinnerMessage extends ClientToServerMessage {
     public GetWinnerMessage() {}
 
     @Override
-    public Message execute() {
+    public Message execute(Controller controller) {
         List<Player> winners = controller.getWinner();
         return new SendWinnerMessage(winners);
     }
