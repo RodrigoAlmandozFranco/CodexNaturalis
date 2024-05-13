@@ -12,7 +12,6 @@ import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
-import it.polimi.ingsw.am42.view.View;
 
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;

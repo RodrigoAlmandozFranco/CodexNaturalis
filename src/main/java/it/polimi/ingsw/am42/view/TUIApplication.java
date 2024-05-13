@@ -1,6 +1,17 @@
 package it.polimi.ingsw.am42.view;
 
-public class TUIView extends View {
+import it.polimi.ingsw.am42.network.Client;
+
+public class TUIApplication {
+
+    private Client client;
+
+
+    public TUIApplication(Client client) {
+        this.client = client;
+
+        printLogo();
+    }
 
     private void printLogo() {
         System.out.println( "\u001B[33m" +
@@ -26,9 +37,5 @@ public class TUIView extends View {
 
                 + "\u001B[0m"
         );
-    }
-
-    public TUIView() {
-        printLogo();
     }
 }

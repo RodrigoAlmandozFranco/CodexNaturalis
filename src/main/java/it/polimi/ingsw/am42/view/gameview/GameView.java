@@ -4,6 +4,7 @@ import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.State;
+import it.polimi.ingsw.am42.network.chat.ChatMessage;
 
 import java.util.List;
 
@@ -18,13 +19,30 @@ public class GameView {
 
     private int numberPlayers;
 
-    public void update(String currentPlayer,Change diff){
+    protected String nickname;
+    protected String currentPlayer;
+
+    protected GameView gameview;
+
+
+    public void handleState() {
+    }
+
+    public void updateMessage(ChatMessage chatMessage) {
+
+    }
+
+    public void connectionClosed() {
+    }
+
+    public void update(Change diff){
             pickableGoldCards = diff.getPickableGoldCards();
             pickableResourceCards = diff.getPickableResourceCards();
             for (PlayerView p: players){
                 if(p.getNickname().equals(currentPlayer))
                     p.update(diff);
             }
+            currentPlayer = diff.getFuturePlayer();
     }
 
     @Override
