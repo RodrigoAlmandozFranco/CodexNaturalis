@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.network.rmi;
 
+import it.polimi.ingsw.am42.controller.ConnectionState;
 import it.polimi.ingsw.am42.controller.Controller;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
@@ -33,8 +34,8 @@ public class RMIHandler implements RMISpeaker{
     }
 
     @Override
-    public String getGameInfo() {
-        return null;
+    public ConnectionState getGameInfo() {
+        return controller.getGameInfo();
     }
 
     @Override

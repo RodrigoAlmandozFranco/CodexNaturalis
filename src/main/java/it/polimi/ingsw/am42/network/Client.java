@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.network;
 
+import it.polimi.ingsw.am42.controller.ConnectionState;
 import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
@@ -19,7 +20,7 @@ public abstract class Client {
 
     protected GameView view;
 
-    public abstract String getGameInfo();
+    public abstract ConnectionState getGameInfo();
 
     public abstract int createGame(MessageListener l, String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException;
 

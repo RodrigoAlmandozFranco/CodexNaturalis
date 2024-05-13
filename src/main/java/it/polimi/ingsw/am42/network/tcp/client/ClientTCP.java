@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.network.tcp.client;
 
+import it.polimi.ingsw.am42.controller.ConnectionState;
 import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
@@ -81,8 +82,8 @@ public class ClientTCP extends Client {
     }
 
     @Override
-    public String getGameInfo() {
-        return "";
+    public ConnectionState getGameInfo() {
+        return null;
     }
 
     @Override

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am42.network.rmi;
 
 
+import it.polimi.ingsw.am42.controller.ConnectionState;
 import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.network.MessageListener;
@@ -49,7 +50,7 @@ public class RMIClient extends Client implements RMIMessageListener, Serializabl
     //TODO metodo che il server chiama sul RMIClient
     //public void update(diff) {view.update(diff);}
 
-    public String getGameInfo(){
+    public ConnectionState getGameInfo(){
         try {
             return stub.getGameInfo();
         } catch (RemoteException e) {

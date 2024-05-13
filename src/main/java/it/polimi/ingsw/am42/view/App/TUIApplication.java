@@ -118,9 +118,16 @@ public class TUIApplication extends App {
 
     }
 
+    private void handleConnection() {
+        client.getGameInfo();
+
+    }
+
 
     @Override
     public void start() {
+
+        handleConnection();
 
 
         while (true) {
@@ -129,7 +136,7 @@ public class TUIApplication extends App {
                                 "1 - createGame\n" +
                                 "2 - connect\n" +
                                 "3 - reconnect\n" +
-                                "4 - check board");
+                                "4 - see board");
 
             int choice = in.nextInt();
 

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.network.rmi;
 
+import it.polimi.ingsw.am42.controller.ConnectionState;
 import it.polimi.ingsw.am42.network.MessageListener;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
@@ -27,7 +28,7 @@ import java.util.Set;
 public interface RMISpeaker extends Remote {
 
 
-    public String getGameInfo() throws RemoteException;
+    public ConnectionState getGameInfo() throws RemoteException;
 
     public int createGame(MessageListener l, String nickname, int numPlayers) throws RemoteException;
 

@@ -61,7 +61,7 @@ public class GameDB {
      * This method checks if the file exists.
      * @return true if the file exists, false otherwise.
      */
-    private boolean fileExists() {
+    public boolean fileExists() {
         File file = new File(path);
         return file.exists();
     }

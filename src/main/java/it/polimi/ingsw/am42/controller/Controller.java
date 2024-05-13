@@ -38,11 +38,17 @@ public class Controller extends Observable{
     public Controller() {
         super();
         this.gameDB = new GameDB();
+        this.game = null;
     }
 
 
-    public String getGameInfo() {
-        return null;
+    public ConnectionState getGameInfo() {
+        if (this.game == null) {
+            if (this.gameDB.fileExists())
+                return ConnectionState.LOAD;
+            return ConnectionState.CONNECT;
+        }
+        return ConnectionState.CREATE;
     }
 
 
