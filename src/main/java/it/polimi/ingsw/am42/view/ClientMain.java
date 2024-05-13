@@ -3,6 +3,7 @@ package it.polimi.ingsw.am42.view;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.rmi.RMIClient;
 import it.polimi.ingsw.am42.network.tcp.client.ClientTCP;
+import it.polimi.ingsw.am42.view.gameview.GameView;
 import javafx.application.Application;
 
 import java.io.IOException;
@@ -10,9 +11,21 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 
+
+
+/**
+ Executable for Client
+ Parameters to add when launching file:
+ --tui | -t: use TUI instead of GUI
+ --rmi | -r : use RMI connection instead of TCP connection
+ --port | -p : set port of server to next int
+ --ip | -a : set address of server to next string
+ **/
 public class ClientMain extends UnicastRemoteObject {
 
     static private int PORT = 4203;
+
+    static private String ADDRESS = "localhost";
 
     protected ClientMain() throws RemoteException {
     }
@@ -43,6 +56,13 @@ public class ClientMain extends UnicastRemoteObject {
             }
         }
 
+        for (int i = 0; i < args.length; i++) {
+            if (args[i].equals("--ip") || args[i].equals("-a")) {
+                ADDRESS = args[i + 1];
+                break;
+            }
+        }
+
         if (tuiParam) {
             TUIstart(rmiParam);
 
@@ -56,19 +76,13 @@ public class ClientMain extends UnicastRemoteObject {
 
         System.out.println("Insert server IP address:");
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("IP: ");
-
-        // Read the input provided by the user
-        String address = scanner.nextLine();
-        if (address.equals("")) address = "localhost";
 
         if (rmiParam) {
-            client = new RMIClient(address, PORT);
+            client = new RMIClient(ADDRESS, PORT);
         }
         else {
             try {
-                client = new ClientTCP(address, PORT);
+                client = new ClientTCP(ADDRESS, PORT);
             } catch (Exception e) {
                 System.out.println("could not connect to server");
                 System.exit(1);
@@ -76,7 +90,12 @@ public class ClientMain extends UnicastRemoteObject {
             }
         }
 
-        client.setView(new TUIView());
+        GameView view = new GameView();
+
+        client.setView(view);
+
+        TUIApplication tui = new TUIApplication(client);
+
 
 
 
