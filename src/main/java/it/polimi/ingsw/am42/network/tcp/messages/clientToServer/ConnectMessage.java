@@ -21,19 +21,17 @@ import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GameFullErrorMes
  */
 
 public class ConnectMessage extends ClientToServerMessage {
-    private int idGame;
     private String nickname;
 
 
-    public ConnectMessage(int id, String n){
-        idGame = id;
+    public ConnectMessage(String n){
         nickname = n;
     }
 
     public Message execute() {
 
         try {
-            controller.connect(clientHandler, nickname, idGame);
+            controller.connect(clientHandler, nickname);
         } catch (GameFullException e) {
             return new GameFullErrorMessage();
         } catch (NicknameInvalidException e){

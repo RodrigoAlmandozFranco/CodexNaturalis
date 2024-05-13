@@ -22,18 +22,16 @@ import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.NicknameInvalidE
  */
 
 public class ReconnectMessage extends ClientToServerMessage {
-    private int idGame;
     private String nickname;
 
-    public ReconnectMessage(int id, String n){
-        idGame = id;
+    public ReconnectMessage(String n){
         nickname = n;
     }
 
     public Message execute() {
 
         try {
-            controller.reconnect(clientHandler, nickname, idGame);
+            controller.reconnect(clientHandler, nickname);
         } catch (GameFullException e) {
             return new GameFullErrorMessage();
         } catch (NicknameInvalidException e){

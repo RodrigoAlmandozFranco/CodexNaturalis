@@ -32,10 +32,10 @@ public interface RMISpeaker extends Remote {
 
     public int createGame(MessageListener l, String nickname, int numPlayers) throws RemoteException;
 
-    public boolean connect(MessageListener l, String nickname, int gameId)
+    public boolean connect(MessageListener l, String nickname)
                                   throws RemoteException;
 
-    public boolean reconnect(MessageListener l, String nickname, int gameId)
+    public boolean reconnect(MessageListener l, String nickname)
                                  throws RemoteException;
 
 

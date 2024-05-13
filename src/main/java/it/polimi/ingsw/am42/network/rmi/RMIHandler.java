@@ -51,9 +51,9 @@ public class RMIHandler implements RMISpeaker{
     }
 
     @Override
-    public boolean connect(MessageListener l, String nickname, int gameId) throws RemoteException {
+    public boolean connect(MessageListener l, String nickname) throws RemoteException {
         try {
-            return controller.connect(l, nickname, gameId);
+            return controller.connect(l, nickname);
         }
         catch (GameFullException | NicknameInvalidException | NicknameAlreadyInUseException e) {
             throw new RemoteException(e.getMessage(), e);
@@ -62,9 +62,9 @@ public class RMIHandler implements RMISpeaker{
     }
 
     @Override
-    public boolean reconnect(MessageListener l, String nickname, int gameId) throws RemoteException {
+    public boolean reconnect(MessageListener l, String nickname) throws RemoteException {
         try {
-            return controller.reconnect(l, nickname, gameId);
+            return controller.reconnect(l, nickname);
         }
         catch (GameFullException | NicknameInvalidException | NicknameAlreadyInUseException e) {
 

@@ -87,7 +87,7 @@ public class ClientTCP extends Client {
     }
 
     @Override
-    public int createGame(MessageListener l, String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException {
+    public int createGame(String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException {
         Message message = new FirstConnectionMessage(nickname, numPlayers);
         sendMessage(message);
         Message answer = serverHandler.getMessage();
@@ -103,8 +103,8 @@ public class ClientTCP extends Client {
     }
 
     @Override
-    public boolean connect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
-        Message message = new ConnectMessage(gameId, nickname);
+    public boolean connect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+        Message message = new ConnectMessage(nickname);
         sendMessage(message);
         Message answer = serverHandler.getMessage();
         return switch (answer) {
@@ -118,8 +118,8 @@ public class ClientTCP extends Client {
     }
 
     @Override
-    public boolean reconnect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
-        Message message = new ReconnectMessage(gameId, nickname);
+    public boolean reconnect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+        Message message = new ReconnectMessage(nickname);
         sendMessage(message);
         Message answer = serverHandler.getMessage();
         return switch (answer) {

@@ -60,7 +60,7 @@ public class RMIClient extends Client implements RMIMessageListener, Serializabl
 
     }
 
-    public int createGame(MessageListener l, String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException {
+    public int createGame(String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException {
         try {
             int gameID = stub.createGame(this, nickname, numPlayers);
             this.nickname = nickname;
@@ -81,9 +81,9 @@ public class RMIClient extends Client implements RMIMessageListener, Serializabl
         }
     }
 
-    public boolean connect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+    public boolean connect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         try {
-            return stub.connect(this, nickname, gameId);
+            return stub.connect(this, nickname);
         } catch (RemoteException e) {
             Throwable originalException = e.getCause();
             if (originalException instanceof GameFullException)
@@ -98,9 +98,9 @@ public class RMIClient extends Client implements RMIMessageListener, Serializabl
         }
     }
 
-    public boolean reconnect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+    public boolean reconnect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         try {
-            return stub.reconnect(this, nickname, gameId);
+            return stub.reconnect(this, nickname);
         } catch (RemoteException e) {
             Throwable originalException = e.getCause();
             if (originalException instanceof GameFullException)

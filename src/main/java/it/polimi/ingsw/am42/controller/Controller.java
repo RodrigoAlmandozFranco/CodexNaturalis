@@ -66,7 +66,7 @@ public class Controller extends Observable{
     }
 
 
-    public boolean connect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+    public boolean connect(MessageListener l, String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         this.addListener(l);
 
         this.game.addToGame(nickname);
@@ -81,7 +81,7 @@ public class Controller extends Observable{
     }
 
 
-    public boolean reconnect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+    public boolean reconnect(MessageListener l, String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         if(listeners.isEmpty())
             this.game = this.gameDB.loadGame();
         this.addListener(l);

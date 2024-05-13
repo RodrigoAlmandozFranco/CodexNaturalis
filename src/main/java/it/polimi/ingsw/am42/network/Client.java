@@ -22,11 +22,11 @@ public abstract class Client {
 
     public abstract ConnectionState getGameInfo();
 
-    public abstract int createGame(MessageListener l, String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException;
+    public abstract int createGame(String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException;
 
-    public abstract boolean connect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException;
+    public abstract boolean connect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException;
 
-    public abstract boolean reconnect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException;
+    public abstract boolean reconnect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException;
 
     public abstract Set<Position> getAvailablePositions(String p);
 
