@@ -6,6 +6,7 @@ import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.structure.Board;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerView {
@@ -15,6 +16,15 @@ public class PlayerView {
     private Color color;
     private BoardView board;
     private GoalCard personalGoal;
+
+    public PlayerView() {
+        this.points = 0;
+        this.nickname = "";
+        this.hand = new ArrayList<>();
+        this.color = null;
+        this.board = new BoardView();
+        this.personalGoal = null;
+    }
 
     public int getPoints() {
         return points;

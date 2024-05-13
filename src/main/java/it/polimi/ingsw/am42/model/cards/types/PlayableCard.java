@@ -53,5 +53,18 @@ public class PlayableCard extends Card {
     public boolean getVisibility() {
         return visible;
     }
+
+    @Override
+    public String toString() {
+        String to_print = "";
+        if (visible) {
+            to_print += "Front:\n";
+            to_print += front;
+        }
+        to_print += "\nBack:\n";
+        to_print += back;
+
+        return to_print;
+    }
 }
 

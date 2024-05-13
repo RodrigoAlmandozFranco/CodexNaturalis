@@ -6,6 +6,7 @@ import it.polimi.ingsw.am42.network.tcp.messages.Message;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 public interface RMIMessageListener extends MessageListener, Remote {
 

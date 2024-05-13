@@ -11,11 +11,14 @@ import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.Client;
+import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Set;
 
@@ -25,7 +28,7 @@ import java.util.Set;
  *
  * @author Alessandro Di Maria
  */
-public class RMIClient extends Client implements RMIMessageListener {
+public class RMIClient extends Client implements RMIMessageListener, Serializable {
     Registry registry;
     RMISpeaker stub;
 
@@ -58,9 +61,9 @@ public class RMIClient extends Client implements RMIMessageListener {
 
     public int createGame(MessageListener l, String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException {
         try {
-            stub.createGame(l, nickname, numPlayers);
+            int gameID = stub.createGame(this, nickname, numPlayers);
             this.nickname = nickname;
-            return -1;
+            return gameID;
         } catch (RemoteException e) {
             Throwable originalException = e.getCause();
             if (originalException instanceof GameFullException)
@@ -79,7 +82,7 @@ public class RMIClient extends Client implements RMIMessageListener {
 
     public boolean connect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         try {
-            return stub.connect(l, nickname, gameId);
+            return stub.connect(this, nickname, gameId);
         } catch (RemoteException e) {
             Throwable originalException = e.getCause();
             if (originalException instanceof GameFullException)
@@ -96,7 +99,7 @@ public class RMIClient extends Client implements RMIMessageListener {
 
     public boolean reconnect(MessageListener l, String nickname, int gameId) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         try {
-            return stub.reconnect(l, nickname, gameId);
+            return stub.reconnect(this, nickname, gameId);
         } catch (RemoteException e) {
             Throwable originalException = e.getCause();
             if (originalException instanceof GameFullException)
@@ -184,6 +187,15 @@ public class RMIClient extends Client implements RMIMessageListener {
     @Override
     public void update(Change diff) {
         view.update(diff);
+    }
+
+    @Override
+    public void sendChatMessage(ChatMessage message) {
+        try {
+            stub.sendChatMessage(message);
+        } catch (RemoteException e) {
+            //TODO notify the view that the server is dead
+        }
     }
 
     @Override

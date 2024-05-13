@@ -8,6 +8,8 @@ import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.model.structure.Position;
+import it.polimi.ingsw.am42.network.chat.ChatMessage;
+import it.polimi.ingsw.am42.network.tcp.messages.Message;
 import it.polimi.ingsw.am42.view.gameview.GameView;
 
 import java.util.List;
@@ -41,7 +43,13 @@ public abstract class Client {
 
     public abstract void update(Change diff);
 
+    public abstract  void sendChatMessage(ChatMessage message);
+
     public void setView(GameView view) {
         this.view = view;
+    }
+
+    public GameView getView() {
+        return view;
     }
 }

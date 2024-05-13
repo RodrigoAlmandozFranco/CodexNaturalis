@@ -56,7 +56,7 @@ public class Controller extends Observable{
         this.game.addToGame(nickname);
 
         //TODO return gameid;
-        return 1;
+        return 0;
     }
 
 

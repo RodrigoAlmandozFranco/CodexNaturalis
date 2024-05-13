@@ -235,11 +235,6 @@ public class Game implements GameInterface, Serializable {
                 throw new NicknameAlreadyInUseException("Nickname already in use");
             }
         }
-
-        Player p = players.getLast();
-        List<PlayableCard> hand = new ArrayList<PlayableCard>();
-        hand.add(startingDeck.getTop());
-        p.setHand(hand);
     }
 
     /**

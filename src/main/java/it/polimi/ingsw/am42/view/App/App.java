@@ -4,7 +4,7 @@ import it.polimi.ingsw.am42.network.Client;
 
 public abstract class App {
 
-    private Client client;
+    protected Client client;
 
 
     public App(Client client) {

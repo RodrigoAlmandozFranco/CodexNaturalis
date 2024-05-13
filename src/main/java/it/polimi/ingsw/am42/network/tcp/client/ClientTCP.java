@@ -39,7 +39,20 @@ public class ClientTCP extends Client {
         ClientTCP.ip = ip;
         ClientTCP.port = port;
         socket = new Socket(ip, port);
-        this.startClient();
+
+
+        Runnable myFunction = () -> {
+
+            try {
+                startClient();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        };
+
+        Thread thread = new Thread(myFunction);
+
+        thread.start();
     }
 
     public void startClient() throws IOException {
@@ -55,7 +68,7 @@ public class ClientTCP extends Client {
         }
 
         System.out.println("Connesso al Server!");
-    }
+}
 
     private void sendMessage(Message message) {
         try {
@@ -179,6 +192,11 @@ public class ClientTCP extends Client {
     @Override
     public void update(Change change) {
         view.update(change);
+    }
+
+    @Override
+    public void sendChatMessage(ChatMessage message) {
+        sendMessage(message);
     }
 
     public void updateMessage (ChatMessage chatMessage){

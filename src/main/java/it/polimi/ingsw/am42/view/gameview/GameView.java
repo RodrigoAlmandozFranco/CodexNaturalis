@@ -4,28 +4,43 @@ import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.State;
+import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GameView {
     private List<PlayerView> players;
     private List<GoalCard> globalGoals;
-
     private State currentState;
 
     private List<PlayableCard> pickableResourceCards;
     private List<PlayableCard> pickableGoldCards;
-
     private int numberPlayers;
-
-    protected String nickname;
     protected String currentPlayer;
 
-    protected GameView gameview;
+    private List<Runnable> usableMethods;
+
+    public GameView() {
+        this.players = new ArrayList<>();
+        this.globalGoals = new ArrayList<>();
+        this.currentState = null;
+
+        this.pickableResourceCards = new ArrayList<>();
+        this.pickableGoldCards = new ArrayList<>();
+        this.numberPlayers = 0;
+        this.currentPlayer = null;
+
+    }
 
 
     public void handleState() {
+        usableMethods.clear();
+
+        switch (currentState) {
+            case INITIAL -> {}
+        }
     }
 
     public void updateMessage(ChatMessage chatMessage) {
@@ -43,6 +58,10 @@ public class GameView {
                     p.update(diff);
             }
             currentPlayer = diff.getFuturePlayer();
+
+            handleState();
+
+        System.out.println(diff);
     }
 
     @Override

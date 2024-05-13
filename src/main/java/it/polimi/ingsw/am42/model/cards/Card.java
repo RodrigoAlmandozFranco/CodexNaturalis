@@ -19,4 +19,6 @@ public abstract class Card implements Serializable {
     public int getId() {
         return id;
     }
+
+
 }
