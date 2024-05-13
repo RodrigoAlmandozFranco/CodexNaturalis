@@ -42,17 +42,14 @@ public class ClientTCP extends Client {
         socket = new Socket(ip, port);
 
 
-        Runnable myFunction = () -> {
-
-            try {
-                startClient();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        Thread thread = new Thread(() -> {
+                try {
+                    startClient();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
-        };
-
-        Thread thread = new Thread(myFunction);
-
+        );
         thread.start();
     }
 
@@ -62,13 +59,11 @@ public class ClientTCP extends Client {
         try {
             //System.out.println("ClientTCP ready!");
             new Thread(serverHandler).start();
-            while (true) {}
+            //while (true) {}
         } catch (final NoSuchElementException e) {
             //input.close();
             output.close();
         }
-
-        System.out.println("Connesso al Server!");
 }
 
     private void sendMessage(Message message) {

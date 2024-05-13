@@ -35,7 +35,7 @@ public class ClientHandler implements Runnable, MessageListener {
     public ClientHandler(Socket socket, Controller controller) throws IOException {
         this.socket = socket;
         this.controller = controller;
-        message = new ClientToServerMessage(controller, this);
+        //message = new ClientToServerMessage(controller, this);
 
         input = new ObjectInputStream(socket.getInputStream());
         output = new ObjectOutputStream(socket.getOutputStream());
@@ -53,7 +53,7 @@ public class ClientHandler implements Runnable, MessageListener {
                     if(message instanceof ChatMessage) {
                         controller.sendChatMessage((ChatMessage) message);
                     } else {
-                        answer = message.execute();
+                        answer = message.execute(controller);
                         sendMessage(answer);
                         if(answer instanceof SendWinnerMessage)
                             break;

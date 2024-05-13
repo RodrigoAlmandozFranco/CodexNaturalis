@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.network.tcp.messages.clientToServer;
 
+import it.polimi.ingsw.am42.controller.Controller;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.tcp.messages.ClientToServerMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
@@ -24,8 +25,8 @@ public class GetAvailablePositionMessage extends ClientToServerMessage {
         this.nickname = nickname;
     }
 
-    @Override
-    public Message execute() {
+
+    public Message execute(Controller controller) {
         Set<Position> positions = controller.getAvailablePositions(nickname);
         return new SendAvailablePositionMessage(positions);
     }

@@ -20,7 +20,7 @@ public class Message  implements Serializable {
     public Message() {
     }
 
-    public Message execute() {
+    public Message execute(Controller controller) {
         return null;
     }
 
