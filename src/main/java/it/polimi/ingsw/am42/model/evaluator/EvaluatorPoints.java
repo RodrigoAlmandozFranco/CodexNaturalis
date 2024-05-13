@@ -23,7 +23,7 @@ public class EvaluatorPoints extends Evaluator{
 
     public String toString(boolean small) {
         if (small)
-            return "  " + numPoints + "  ";
+            return "  " + (numPoints != 0 ? numPoints : " ") + "  ";
         else
             return toString();
     }

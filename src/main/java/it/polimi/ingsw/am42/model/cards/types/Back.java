@@ -84,19 +84,19 @@ public class Back extends Face {
                 to_print += "|                       |\n";
         else {
             // 1
-            to_print += "|" + " ".repeat(5 - resource.size())
+            to_print += "|" + " ".repeat(10 - resource.size())
                     + "+-" + "--".repeat(resource.size()) + "+"
-                    + " ".repeat(5 - resource.size()) + "|\n";
+                    + " ".repeat(10 - resource.size()) + "|\n";
             // 2
-            to_print += "|" + " ".repeat(5 - resource.size())
+            to_print += "|" + " ".repeat(10 - resource.size())
                     + "| ";
             for (Resource r : resource)
                 to_print += r + " ";
-            to_print += "|"+ " ".repeat(5 - resource.size()) + "|\n";
+            to_print += "|"+ " ".repeat(10 - resource.size()) + "|\n";
             // 3
-            to_print += "|" + " ".repeat(5 - resource.size())
+            to_print += "|" + " ".repeat(10 - resource.size())
                     + "+-" + "--".repeat(resource.size()) + "+"
-                    + " ".repeat(5 - resource.size()) + "|\n";
+                    + " ".repeat(10 - resource.size()) + "|\n";
         }
 
 

@@ -167,22 +167,22 @@ public abstract class Face implements Serializable {
         String to_print = color.toString();
 
         // 1
-        if (getCorner(Direction.UPLEFT).getState().equals(CornerState.CLOSED))
+        if (getCorner(Direction.DOWNLEFT).getState().equals(CornerState.CLOSED))
             to_print += "|    ";
         else
             to_print += "+---+";
         to_print += "               ";
-        if (getCorner(Direction.UPRIGHT).getState().equals(CornerState.CLOSED))
+        if (getCorner(Direction.DOWNRIGHT).getState().equals(CornerState.CLOSED))
             to_print += "    |\n";
         else
             to_print += "+---+\n";
 
 
         // 2
-        if (getCorner(Direction.UPLEFT).getState().equals(CornerState.CLOSED))
+        if (getCorner(Direction.DOWNLEFT).getState().equals(CornerState.CLOSED))
             to_print += "|    ";
         else
-            to_print += "| " + getCorner(Direction.UPLEFT).getResource().toString() + " |";
+            to_print += "| " + getCorner(Direction.DOWNLEFT).getResource().toString() + " |";
         if (getRequirements().equals(null))
             to_print += "               ";
         else {
@@ -191,16 +191,18 @@ public abstract class Face implements Serializable {
                 totalValues += value;
             }
 
-            to_print += " ".repeat(7 - totalValues) + "|";
+            to_print += " ".repeat(7 - totalValues);
+
+            to_print += totalValues != 0 ? "|" : " ";
             for (Resource r : getRequirements().keySet())
                 for (int i=0; i< getRequirements().get(r); i++)
                     to_print += r.toString() + "|";
             to_print += " ".repeat(7 - totalValues);
         }
-        if (getCorner(Direction.UPRIGHT).getState().equals(CornerState.CLOSED))
+        if (getCorner(Direction.DOWNRIGHT).getState().equals(CornerState.CLOSED))
             to_print += "    |\n";
         else
-            to_print += "| " + getCorner(Direction.UPRIGHT).getResource().toString() + " |\n";
+            to_print += "| " + getCorner(Direction.DOWNRIGHT).getResource().toString() + " |\n";
 
 
         // 3

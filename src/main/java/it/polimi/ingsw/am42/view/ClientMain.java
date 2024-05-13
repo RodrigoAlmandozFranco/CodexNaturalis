@@ -44,14 +44,14 @@ public class ClientMain extends UnicastRemoteObject {
         }
 
         if (tuiParam) {
-            connectToIP(rmiParam);
+            TUIstart(rmiParam);
 
         } else {
             // Application.launch(Gui.class);
         }
     }
 
-    private static void connectToIP(boolean rmiParam) {
+    private static void TUIstart(boolean rmiParam) {
         Client client;
 
         System.out.println("Insert server IP address:");
@@ -72,8 +72,12 @@ public class ClientMain extends UnicastRemoteObject {
             } catch (Exception e) {
                 System.out.println("could not connect to server");
                 System.exit(1);
+                return;
             }
         }
+
+        client.setView(new TUIView());
+
 
 
     }
