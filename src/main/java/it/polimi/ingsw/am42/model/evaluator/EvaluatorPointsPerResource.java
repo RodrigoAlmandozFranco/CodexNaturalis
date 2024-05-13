@@ -1,0 +1,65 @@
+package it.polimi.ingsw.am42.model.evaluator;
+
+import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.Resource;
+import it.polimi.ingsw.am42.model.structure.Board;
+
+import java.util.Map;
+
+public class EvaluatorPointsPerResource extends Evaluator{
+
+    private final Map<Resource, Integer> resourceMap;
+    public EvaluatorPointsPerResource(int numPoints, Map<Resource, Integer> resourceMap) {
+        super(numPoints);
+
+        this.resourceMap = resourceMap;
+    }
+
+    /**
+     * Returns the number of points given the requested resources the number of resources on the board
+     * @param board the current board
+     * @return numPoints proportionate to the requested resources and the number of resources on the board
+     * @author Tommaso Crippa
+     */
+    @Override
+    public int getPoints(Board board) {
+
+        Map<Resource, Integer> boardResources = board.getTotalResources();
+        int minFactor = Integer.MAX_VALUE;
+
+        if (resourceMap == null || resourceMap.isEmpty())
+            return 0;
+
+        for (Resource r : resourceMap.keySet())
+            if (boardResources.containsKey(r) && resourceMap.get(r) != 0)
+                minFactor = Math.min(minFactor, boardResources.get(r) / resourceMap.get(r));
+            else
+                minFactor = 0;
+
+        return minFactor*numPoints;
+    }
+
+
+
+    public String toString(boolean small) {
+        if (small)
+            return numPoints + " | " + resourceMap.keySet().toArray()[0];
+        else
+            return toString();
+    }
+    @Override
+    public String toString() {
+        String to_print = "\u001B[33m";
+
+        to_print += "+-----------------------+\n";
+
+        // TODO
+
+        to_print += "+-----------------------+";
+
+
+        to_print += Color.WHITE.toString();
+        return to_print;
+    }
+}
+
