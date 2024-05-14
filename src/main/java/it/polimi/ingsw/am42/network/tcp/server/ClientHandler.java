@@ -8,7 +8,6 @@ import it.polimi.ingsw.am42.controller.Controller;
 import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.network.MessageListener;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
-import it.polimi.ingsw.am42.network.tcp.messages.ClientToServerMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.ChangeMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.SendWinnerMessage;
@@ -27,15 +26,13 @@ import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.SendWinnerMessag
 public class ClientHandler implements Runnable, MessageListener {
     private Socket socket;
     private Controller controller;
-    private ClientToServerMessage message;
-    private final ObjectInputStream input;
-    private final ObjectOutputStream output;
+    private ObjectInputStream input;
+    private ObjectOutputStream output;
 
 
     public ClientHandler(Socket socket, Controller controller) throws IOException {
         this.socket = socket;
         this.controller = controller;
-        //message = new ClientToServerMessage(controller, this);
 
         input = new ObjectInputStream(socket.getInputStream());
         output = new ObjectOutputStream(socket.getOutputStream());
@@ -43,17 +40,15 @@ public class ClientHandler implements Runnable, MessageListener {
 
     public void run() {
         try {
-            //System.out.println("ClientHandler ready!");
             while(true) {
                 if(socket.getInputStream().available() > 0) {
-                    //input = new ObjectInputStream(socket.getInputStream());
                     Message message = (Message) input.readObject();
                     Message answer;
 
                     if(message instanceof ChatMessage) {
                         controller.sendChatMessage((ChatMessage) message);
                     } else {
-                        answer = message.execute(controller);
+                        answer = message.execute(this, controller);
                         sendMessage(answer);
                         if(answer instanceof SendWinnerMessage)
                             break;
@@ -78,7 +73,6 @@ public class ClientHandler implements Runnable, MessageListener {
 
     private void sendMessage(Message answer) {
         try {
-            //output = new ObjectOutputStream(socket.getOutputStream());
             output.writeObject(answer);
             output.flush();
         } catch (IOException e) {

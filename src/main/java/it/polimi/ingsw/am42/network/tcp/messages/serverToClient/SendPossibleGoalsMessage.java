@@ -8,7 +8,6 @@ import java.util.List;
 /**
  * Message sent by the server to the client to send the possible goals to choose from
  * @see it.polimi.ingsw.am42.network.tcp.messages.Message
- * @see it.polimi.ingsw.am42.network.tcp.messages.ClientToServerMessage
  * @see it.polimi.ingsw.am42.network.tcp.server.ClientHandler
  *
  * @author Rodrigo Almandoz Franco

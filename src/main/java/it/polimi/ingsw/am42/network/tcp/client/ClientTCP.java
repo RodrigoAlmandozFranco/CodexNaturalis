@@ -41,7 +41,7 @@ public class ClientTCP extends Client {
         ClientTCP.port = port;
         socket = new Socket(ip, port);
 
-
+        output = new ObjectOutputStream(socket.getOutputStream());
         Thread thread = new Thread(() -> {
                 try {
                     startClient();
@@ -57,18 +57,16 @@ public class ClientTCP extends Client {
         serverHandler = new ServerHandler(socket, this);
 
         try {
-            //System.out.println("ClientTCP ready!");
             new Thread(serverHandler).start();
-            //while (true) {}
+            while (true) {}
         } catch (final NoSuchElementException e) {
-            //input.close();
+            input.close();
             output.close();
         }
-}
+    }
 
     private void sendMessage(Message message) {
         try {
-            output = new ObjectOutputStream(socket.getOutputStream());
             output.writeObject(message);
             output.flush();
         } catch (final IOException e) {
@@ -85,7 +83,16 @@ public class ClientTCP extends Client {
     public int createGame(String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException {
         Message message = new FirstConnectionMessage(nickname, numPlayers);
         sendMessage(message);
-        Message answer = serverHandler.getMessage();
+
+        Message answer;
+
+        try {
+            answer = serverHandler.getMessage();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+
         return switch (answer) {
             case NumberPlayersWrongErrorMessage numberPlayersWrongErrorMessage ->
                     throw new NumberPlayerWrongException("Number Player Wrong");
@@ -101,7 +108,14 @@ public class ClientTCP extends Client {
     public boolean connect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         Message message = new ConnectMessage(nickname);
         sendMessage(message);
-        Message answer = serverHandler.getMessage();
+        Message answer;
+
+        try {
+            answer = serverHandler.getMessage();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         return switch (answer) {
             case GameFullErrorMessage gameFullErrorMessage -> throw new GameFullException("Game is full");
             case NicknameInvalidErrorMessage nicknameInvalidErrorMessage ->
@@ -116,7 +130,14 @@ public class ClientTCP extends Client {
     public boolean reconnect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         Message message = new ReconnectMessage(nickname);
         sendMessage(message);
-        Message answer = serverHandler.getMessage();
+        Message answer;
+
+        try {
+            answer = serverHandler.getMessage();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         return switch (answer) {
             case GameFullErrorMessage gameFullErrorMessage -> throw new GameFullException("Game is full");
             case NicknameInvalidErrorMessage nicknameInvalidErrorMessage ->
@@ -131,14 +152,28 @@ public class ClientTCP extends Client {
     public Set<Position> getAvailablePositions(String p) {
         Message message = new GetAvailablePositionMessage(p);
         sendMessage(message);
-        SendAvailablePositionMessage answer = (SendAvailablePositionMessage) serverHandler.getMessage();
+        SendAvailablePositionMessage answer;
+
+        try {
+            answer = (SendAvailablePositionMessage) serverHandler.getMessage();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         return answer.getPositions();
     }
 
     public List<Color> placeStarting(String p, Face face) {
         Message message = new PlaceStartingMessage(p, face);
         sendMessage(message);
-        SendAvailableColorsMessage answer = (SendAvailableColorsMessage) serverHandler.getMessage();
+
+        SendAvailableColorsMessage answer;
+        try{
+            answer = (SendAvailableColorsMessage) serverHandler.getMessage();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         return answer.getColors();
     }
 
@@ -146,7 +181,13 @@ public class ClientTCP extends Client {
     public boolean place(String p, Face face, Position pos) throws RequirementsNotMetException {
         Message message = new PlaceMessage(p, face, pos);
         sendMessage(message);
-        Message answer = serverHandler.getMessage();
+        Message answer;
+        try {
+            answer = serverHandler.getMessage();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         if(answer instanceof NoRequirementsErrorMessage)
             throw new RequirementsNotMetException("Requirements are not met");
         return true;
@@ -156,7 +197,13 @@ public class ClientTCP extends Client {
     public List<GoalCard> chooseColor(String p, Color color) {
         Message message = new ChosenColorMessage(p, color);
         sendMessage(message);
-        SendPossibleGoalsMessage answer = (SendPossibleGoalsMessage) serverHandler.getMessage();
+        SendPossibleGoalsMessage answer;
+        try {
+            answer = (SendPossibleGoalsMessage) serverHandler.getMessage();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         return answer.getGoals();
     }
 
@@ -165,23 +212,38 @@ public class ClientTCP extends Client {
     public void chooseGoal(String p, GoalCard goal) {
         Message message = new ChosenGoalMessage(p, goal);
         sendMessage(message);
-        Message answer = serverHandler.getMessage();
-        assert(answer instanceof GoodMessage);
+        Message answer;
+        try {
+            answer = serverHandler.getMessage();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void pick(String p, PlayableCard card) {
         Message message = new PickMessage(p, card);
         sendMessage(message);
-        Message answer = serverHandler.getMessage();
-        assert(answer instanceof GoodMessage);
+        Message answer;
+        try {
+            answer = serverHandler.getMessage();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public List<Player> getWinner() {
         Message message = new GetWinnerMessage();
         sendMessage(message);
-        SendWinnerMessage answer = (SendWinnerMessage) serverHandler.getMessage();
+
+        SendWinnerMessage answer;
+        try {
+            answer = (SendWinnerMessage) serverHandler.getMessage();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         return answer.getWinners();
     }
 
@@ -212,7 +274,6 @@ public class ClientTCP extends Client {
         }
         view.connectionClosed();
     }
-
 }
 
 

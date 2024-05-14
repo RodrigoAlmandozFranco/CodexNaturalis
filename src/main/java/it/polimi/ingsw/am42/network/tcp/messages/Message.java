@@ -2,6 +2,7 @@ package it.polimi.ingsw.am42.network.tcp.messages;
 
 import it.polimi.ingsw.am42.controller.Controller;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
+import it.polimi.ingsw.am42.network.tcp.server.ClientHandler;
 
 import java.io.Serializable;
 
@@ -9,7 +10,6 @@ import java.io.Serializable;
  * This class represents a generic message that can be sent through the network
  * It is used to send messages between the server and the client
  *
- * @see ClientToServerMessage
  * @see ChatMessage
  *
  * @author Rodrigo Almandoz Franco
@@ -20,7 +20,7 @@ public class Message  implements Serializable {
     public Message() {
     }
 
-    public Message execute(Controller controller) {
+    public Message execute(ClientHandler clientHandler, Controller controller) {
         return null;
     }
 

@@ -13,10 +13,8 @@ import java.net.Socket;
 
 //TODO disconnected, close socket, while loop
 public class ServerHandler implements Runnable {
-    private Message message;
+    private volatile Message message;
     private Socket socket;
-    private boolean newMessage = false;
-    private boolean isRunning = true;
     private ClientTCP client;
 
     private ObjectInputStream input;
@@ -30,11 +28,9 @@ public class ServerHandler implements Runnable {
     @Override
     public void run() {
         try {
-            //System.out.println("ServerHandler ready!");
             input = new ObjectInputStream(socket.getInputStream());
             while(true) {
-                if (socket.getInputStream().available() > 0 && !newMessage) {
-                    //ObjectInputStream input = new ObjectInputStream(socket.getInputStream());
+                if (socket.getInputStream().available() > 0) {
                     Message m = (Message) input.readObject();
                     if(m instanceof ChangeMessage){
                         client.update(((ChangeMessage) m).getChange());
@@ -42,9 +38,11 @@ public class ServerHandler implements Runnable {
                         client.updateMessage((ChatMessage) m);
                     } else if(m instanceof PlayerDisconnectedMessage) {
                         client.updateDisconnection();
-                    } else /* if (!(m instanceof GoodMessage)) */ {
-                        message = m;
-                        newMessage = true;
+                    } else {
+                        synchronized (this) {
+                            message = m;
+                            notify();
+                        }
                     }
                 }
             }
@@ -63,14 +61,16 @@ public class ServerHandler implements Runnable {
     }
 
 
-    public Message getMessage () {
+    public Message getMessage() throws InterruptedException {
+        synchronized (this) {
+            while (message == null) {
+                wait();
+            }
+            Message msg = message;
+            message = null;
 
-        while(message == null || !newMessage) {}
-        Message msg = message;
-        newMessage = false;
-        message = null;
-
-        return msg;
+            return msg;
+        }
     }
 }
 
