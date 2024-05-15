@@ -76,7 +76,15 @@ public class ClientTCP extends Client {
 
     @Override
     public ConnectionState getGameInfo() {
-        return null;
+        Message message = new GetGameInfoMessage();
+        sendMessage(message);
+        ConnectionStateMessage answer;
+        try {
+            answer = (ConnectionStateMessage) serverHandler.getMessage();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        return answer.getConnectionState();
     }
 
     @Override
@@ -85,7 +93,6 @@ public class ClientTCP extends Client {
         sendMessage(message);
 
         Message answer;
-
         try {
             answer = serverHandler.getMessage();
         } catch (InterruptedException e) {
@@ -130,6 +137,7 @@ public class ClientTCP extends Client {
     public boolean reconnect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         Message message = new ReconnectMessage(nickname);
         sendMessage(message);
+
         Message answer;
 
         try {
@@ -168,7 +176,7 @@ public class ClientTCP extends Client {
         sendMessage(message);
 
         SendAvailableColorsMessage answer;
-        try{
+        try {
             answer = (SendAvailableColorsMessage) serverHandler.getMessage();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
@@ -182,6 +190,7 @@ public class ClientTCP extends Client {
         Message message = new PlaceMessage(p, face, pos);
         sendMessage(message);
         Message answer;
+
         try {
             answer = serverHandler.getMessage();
         } catch (InterruptedException e) {
@@ -213,6 +222,7 @@ public class ClientTCP extends Client {
         Message message = new ChosenGoalMessage(p, goal);
         sendMessage(message);
         Message answer;
+
         try {
             answer = serverHandler.getMessage();
         } catch (InterruptedException e) {
@@ -225,6 +235,7 @@ public class ClientTCP extends Client {
         Message message = new PickMessage(p, card);
         sendMessage(message);
         Message answer;
+
         try {
             answer = serverHandler.getMessage();
         } catch (InterruptedException e) {
@@ -238,6 +249,7 @@ public class ClientTCP extends Client {
         sendMessage(message);
 
         SendWinnerMessage answer;
+
         try {
             answer = (SendWinnerMessage) serverHandler.getMessage();
         } catch (InterruptedException e) {
