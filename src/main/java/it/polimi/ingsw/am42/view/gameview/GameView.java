@@ -22,8 +22,12 @@ public class GameView {
     private int numberPlayers;
     protected PlayerView currentPlayer;
     protected PlayerView modifiedPlayer;
+    private String nickname;
+    private List<MethodChoice> usableMethods;
 
-    private List<Runnable> usableMethods;
+
+
+
 
     public GameView() {
         this.players = new ArrayList<>();
@@ -34,6 +38,11 @@ public class GameView {
         this.pickableGoldCards = new ArrayList<>();
         this.numberPlayers = 0;
         this.currentPlayer = null;
+        this.nickname = null;
+        this.usableMethods = new ArrayList<>();
+        usableMethods.add(MethodChoice.DISCONNECT);
+        usableMethods.add(MethodChoice.SEECHAT);
+        usableMethods.add(MethodChoice.SENDMESSAGE);
 
     }
 
@@ -41,8 +50,59 @@ public class GameView {
     public void handleState() {
         usableMethods.clear();
 
+        usableMethods.add(MethodChoice.DISCONNECT);
+        usableMethods.add(MethodChoice.SEECHAT);
+        usableMethods.add(MethodChoice.SENDMESSAGE);
         switch (currentState) {
             case INITIAL -> {}
+
+            case SETHAND -> {
+                usableMethods.add(MethodChoice.SEECARDS);
+                usableMethods.add(MethodChoice.SEEBOARD);
+                if (currentPlayer.getNickname().equals(nickname))
+                    usableMethods.add(MethodChoice.PLACESTARTING);
+
+            }
+            case SETCOLOR -> {
+                usableMethods.add(MethodChoice.SEECARDS);
+                usableMethods.add(MethodChoice.SEEBOARD);
+                if (currentPlayer.getNickname().equals(nickname))
+                    usableMethods.add(MethodChoice.CHOOSECOLOR);
+            }
+            case SETGOAL -> {
+                usableMethods.add(MethodChoice.SEECARDS);
+                usableMethods.add(MethodChoice.SEEBOARD);
+                if (currentPlayer.getNickname().equals(nickname))
+                    usableMethods.add(MethodChoice.CHOOSEGOAL);
+            }
+            case PLACE -> {
+                usableMethods.add(MethodChoice.SEESTANDINGS);
+                usableMethods.add(MethodChoice.SEECARDS);
+                usableMethods.add(MethodChoice.SEEBOARD);
+                usableMethods.add(MethodChoice.SEEGOALS);
+                usableMethods.add(MethodChoice.SEEPICKABLECARDS);
+                if (currentPlayer.getNickname().equals(nickname))
+                    usableMethods.add(MethodChoice.PLACE);
+
+            }
+            case PICK -> {
+                usableMethods.add(MethodChoice.SEESTANDINGS);
+                usableMethods.add(MethodChoice.SEECARDS);
+                usableMethods.add(MethodChoice.SEEBOARD);
+                usableMethods.add(MethodChoice.SEEGOALS);
+                usableMethods.add(MethodChoice.SEEPICKABLECARDS);
+                if (currentPlayer.getNickname().equals(nickname))
+                    usableMethods.add(MethodChoice.PICK);
+            }
+            case LAST -> {
+                usableMethods.add(MethodChoice.SEEBOARD);
+                usableMethods.add(MethodChoice.SEESTANDINGS);
+            }
+            case DISCONNECTED -> {
+            }
+            default -> {}
+
+
         }
     }
 
@@ -101,7 +161,7 @@ public class GameView {
 
     private PlayerView getPlayer(String nickname) {
         for (PlayerView p : players)
-            if (p.getNickname() == nickname)
+            if (p.getNickname().equals(nickname))
                 return p;
         return null;
     }
@@ -156,5 +216,11 @@ public class GameView {
 
     public String getModifiedPlayer(){
         return modifiedPlayer.getNickname();
+    }
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+    public List<MethodChoice> getUsableMethods() {
+        return usableMethods;
     }
 }

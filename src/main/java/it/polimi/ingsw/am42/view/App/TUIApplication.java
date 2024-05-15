@@ -2,26 +2,28 @@ package it.polimi.ingsw.am42.view.App;
 
 import it.polimi.ingsw.am42.controller.ConnectionState;
 import it.polimi.ingsw.am42.model.cards.types.Face;
+import it.polimi.ingsw.am42.model.enumeration.State;
 import it.polimi.ingsw.am42.model.structure.Board;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.MessageListener;
 import it.polimi.ingsw.am42.view.App.App;
 import it.polimi.ingsw.am42.view.IOHandler;
 import it.polimi.ingsw.am42.view.gameview.GameView;
+import it.polimi.ingsw.am42.view.gameview.MethodChoice;
 
 import java.io.PrintStream;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class TUIApplication extends App {
 
-    private String nickname;
-    private final IOHandler io;
+    private static String nickname;
+    private static final IOHandler io = new IOHandler();
 
 
     public TUIApplication(Client client) {
         super(client);
-        this.io = new IOHandler();
 
         printLogo();
 
@@ -61,11 +63,12 @@ public class TUIApplication extends App {
             numPlayers = io.getInt("How many players should join this game?");
 
 
-            String nickname = io.getString("What will your nickname be?");
+            nickname = io.getString("What will your nickname be?");
 
 
 
             int gameid = client.createGame(nickname, numPlayers);
+            client.getView().setNickname(nickname);
         }
         catch (Exception e) {
             io.print(e.getMessage());
@@ -82,6 +85,7 @@ public class TUIApplication extends App {
 
 
             client.connect(nickname);
+            client.getView().setNickname(nickname);
         }
         catch (Exception e) {
             io.print(e.getMessage());
@@ -93,21 +97,81 @@ public class TUIApplication extends App {
 
         try {
 
-            String nickname = io.getString("What will your nickname be?");
+            nickname = io.getString("What will your nickname be?");
 
             client.reconnect(nickname);
         }
         catch (Exception e) {
             io.print(e.getMessage());
             reconnect();
+            client.getView().setNickname(nickname);
         }
     }
 
-    private void seeBoard() {
-        Board board = client.getView().getPlayers().getFirst().getBoard();
-        System.out.println(board);
 
+
+
+    public static void placeStarting() {
+        // TODO
     }
+
+    public static void chooseColor() {
+        // TODO
+    }
+
+    public static void chooseGoal() {
+        // TODO
+    }
+
+    public static void seeBoard() {
+        // TODO
+    }
+
+    public static void seeCards() {
+        // TODO
+    }
+
+    public static void seeStandings() {
+        // TODO
+    }
+
+    public static void seePickableCards() {
+        // TODO
+    }
+    public static void seeGoals() {
+        // TODO
+    }
+
+    public static void place() {
+        // TODO
+    }
+
+    public static void pick() {
+        // TODO
+    }
+
+    public static void seeChat() {
+        // TODO
+    }
+
+    public static void sendMessage() {
+        // TODO
+    }
+
+    public static void disconnect() {
+        if (client.getView().getCurrentState() != null
+            && !client.getView().getCurrentState().equals(State.LAST)
+            && !client.getView().getCurrentState().equals(State.DISCONNECTED)) {
+
+            boolean sure = io.getBoolean("Are you sure?");
+            if (!sure)
+                return;
+        }
+        io.print("Thanks for Playing!");
+        System.exit(0);
+    }
+
+
 
     private void handleConnection() {
         ConnectionState c;
@@ -136,46 +200,29 @@ public class TUIApplication extends App {
         }
     }
 
+    public static void selectChoice() {
+        List<MethodChoice> choices = client.getView().getUsableMethods();
+        String question = "What do you want to do?\n";
+        for (int i=0; i<choices.size(); i++)
+            question += i + " - " + choices.get(i) + "\n";
+
+        int choice = io.getInt(question);
+        if (choice < 0 || choice >= choices.size()) {
+            io.print("Invalid choice");
+            return;
+        }
+        choices.get(choice).selectChoice().run();
+    }
+
+
 
     @Override
     public void start() {
 
         handleConnection();
 
-
-        while (true) {
-
-
-
-            int choice = io.getInt(
-                    "0 - exit\n" +
-                    "1 - createGame\n" +
-                    "2 - connect\n" +
-                    "3 - reconnect\n" +
-                    "4 - see board\n" +
-                    "5 - place");
-
-
-            switch (choice) {
-                case (0) -> {
-                    System.out.println("Thanks for Playing!");
-                    return;
-                }
-                case (1) -> createGame();
-                case (2) -> connect();
-                case (3) -> reconnect();
-                case (4) -> seeBoard();
-                default -> {
-                    System.out.println("Invalid choice");
-                }
-
-            }
-
-
-
-
-
-        }
+        while (true)
+            selectChoice();
 
     }
 }
