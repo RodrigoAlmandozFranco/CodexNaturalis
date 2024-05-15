@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am42.view.gameview;
 
 import it.polimi.ingsw.am42.controller.gameDB.Change;
+import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
@@ -10,39 +11,58 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerView {
+
     private int points;
     private  String nickname;
     private List<PlayableCard> hand;
     private Color color;
-    private BoardView board;
+    private Board board;
     private GoalCard personalGoal;
+    private int numberGoalsAchieved;
 
     public PlayerView() {
         this.points = 0;
         this.nickname = "";
         this.hand = new ArrayList<>();
         this.color = null;
-        this.board = new BoardView();
+        this.board = new Board();
         this.personalGoal = null;
+        this.numberGoalsAchieved = 0;
+    }
+
+    public PlayerView(Player p) {
+        this.points = p.getPoints();
+        this.nickname = p.getNickname();
+        this.hand = p.getHand();
+        this.color = p.getColor();
+        this.board = p.getBoard();
+        this.personalGoal = p.getPersonalGoal();
+        this.numberGoalsAchieved = p.getGoalsAchieved();
     }
 
     public int getPoints() {
         return points;
     }
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
 
     public String getNickname() {
         return nickname;
     }
-
     public List<PlayableCard> getHand() {
         return hand;
+    }
+    public void setHand(List<PlayableCard> hand) {
+        this.hand = hand;
     }
 
     public Color getColor() {
         return color;
     }
 
-    public BoardView getBoard() {
+    public Board getBoard() {
         return board;
     }
 
@@ -54,12 +74,14 @@ public class PlayerView {
         return numberGoalsAchieved;
     }
 
-    private int numberGoalsAchieved;
+    public void setNumberGoalsAchieved(int numberGoalsAchieved) {
+        this.numberGoalsAchieved = numberGoalsAchieved;
+    }
+
 
     public void update(Change diff){
         points = diff.getPointsPlayer();
         numberGoalsAchieved = diff.getNumberGoalsAchieved();
         hand = diff.getHand();
-        board.update(diff);
     }
 }

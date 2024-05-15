@@ -2,11 +2,11 @@ package it.polimi.ingsw.am42.view.App;
 
 import it.polimi.ingsw.am42.controller.ConnectionState;
 import it.polimi.ingsw.am42.model.cards.types.Face;
+import it.polimi.ingsw.am42.model.structure.Board;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.MessageListener;
 import it.polimi.ingsw.am42.view.App.App;
 import it.polimi.ingsw.am42.view.IOHandler;
-import it.polimi.ingsw.am42.view.gameview.BoardView;
 import it.polimi.ingsw.am42.view.gameview.GameView;
 
 import java.io.PrintStream;
@@ -74,11 +74,11 @@ public class TUIApplication extends App {
     }
 
     private void connect() {
-
+        String nickname;
         io.print("Connecting to game:");
 
         try {
-            String nickname = io.getString("What will your nickname be?");
+            nickname = io.getString("What will your nickname be?");
 
 
             client.connect(nickname);
@@ -104,13 +104,20 @@ public class TUIApplication extends App {
     }
 
     private void seeBoard() {
-        BoardView board = client.getView().getPlayers().getFirst().getBoard();
+        Board board = client.getView().getPlayers().getFirst().getBoard();
         System.out.println(board);
 
     }
 
     private void handleConnection() {
-        ConnectionState c = client.getGameInfo();
+        ConnectionState c;
+        try {
+            c = client.getGameInfo();
+        } catch (NullPointerException e) {
+            io.print("could not connect to server");
+            System.exit(0);
+            return;
+        }
         if (c.equals(ConnectionState.CONNECT)) {
             connect();
         }
@@ -122,6 +129,10 @@ public class TUIApplication extends App {
                 io.print("Creating new game...");
                 createGame();
             }
+        }
+        else {
+            io.print("Creating new game...");
+            createGame();
         }
     }
 
@@ -141,7 +152,8 @@ public class TUIApplication extends App {
                     "1 - createGame\n" +
                     "2 - connect\n" +
                     "3 - reconnect\n" +
-                    "4 - see board");
+                    "4 - see board\n" +
+                    "5 - place");
 
 
             switch (choice) {

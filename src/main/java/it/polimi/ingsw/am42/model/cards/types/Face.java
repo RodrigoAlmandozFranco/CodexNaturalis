@@ -127,7 +127,7 @@ public abstract class Face implements Serializable {
             to_print += "|    ";
         else
             to_print += "| " + getCorner(Direction.UPLEFT).getResource().toString() + " |";
-        if (getEvaluator().equals(null))
+        if (getEvaluator() == null)
             to_print += "               ";
         else
             to_print += "     " + getEvaluator().toString(true) + "     ";
@@ -223,7 +223,7 @@ public abstract class Face implements Serializable {
         to_print += finalPart();
 
 
-        return  to_print;
+        return to_print;
     }
 }
 

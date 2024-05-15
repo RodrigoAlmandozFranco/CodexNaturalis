@@ -52,6 +52,7 @@ public abstract class Observable {
         listeners.add(l);
     }
     protected void updateAll(Change message){
+        System.out.println("Updating listeners");
         for(MessageListener l : listeners)
             l.update(message);
     }

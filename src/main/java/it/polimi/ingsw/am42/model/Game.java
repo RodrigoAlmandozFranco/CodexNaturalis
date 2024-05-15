@@ -139,6 +139,7 @@ public class Game implements GameInterface, Serializable {
      */
     @Override
     public void initializeGame() {
+        initializeDecks();
 
         for(int i = 0; i < 2; i++) {
             PlayableCard r = resourceDeck.pop();

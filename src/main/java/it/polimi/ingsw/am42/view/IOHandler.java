@@ -28,7 +28,14 @@ public class IOHandler {
     }
 
     public int getInt() {
-        return in.nextInt();
+        int i;
+        try {
+            i = Integer.parseInt(in.nextLine());
+        } catch (NumberFormatException e) {
+            print("Insert an integer");
+            i = getInt();
+        }
+        return i;
     }
 
     public String getString(String question) {
@@ -38,8 +45,9 @@ public class IOHandler {
 
     public String getString() {
         String s = in.nextLine();
-        while (s == null || s.isEmpty())
+        while (s == null || s.isEmpty()) {
             s = in.nextLine();
+        }
         return s;
     }
 
@@ -55,9 +63,11 @@ public class IOHandler {
         while (!yes.contains(c.toLowerCase()) && !no.contains(c.toLowerCase())) {
             print("(y/n)");
             c = in.nextLine();
+
         }
         if (yes.contains(c.toLowerCase()))
             return true;
         return false;
     }
+
 }

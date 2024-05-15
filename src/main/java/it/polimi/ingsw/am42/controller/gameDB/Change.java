@@ -119,10 +119,28 @@ public class Change implements Serializable {
         return pickableGoldCards;
     }
 
-
-
     public State getCurrentState() {
         return currentState;
+    }
+
+    @Override
+    public String toString() {
+        return "Change{" +
+                "pointsPlayer=" + pointsPlayer +
+                ", numberGoalsAchieved=" + numberGoalsAchieved +
+                ", futurePlayer='" + futurePlayer + '\'' +
+                ", players=" + players +
+                ", globalGoals=" + globalGoals +
+                ", numberPlayers=" + numberPlayers +
+                ", hand=" + hand +
+                ", lastPlacedFace=" + lastPlacedFace +
+                ", firstResourceCard=" + firstResourceCard +
+                ", firstGoldCard=" + firstGoldCard +
+                ", pickableResourceCards=" + pickableResourceCards +
+                ", pickableGoldCards=" + pickableGoldCards +
+                ", currentState=" + currentState +
+                ", gameStarted=" + gameStarted +
+                '}';
     }
 }
 

@@ -43,12 +43,16 @@ public class Controller extends Observable{
 
 
     public ConnectionState getGameInfo() {
+
+        System.out.println("sending game info");
+
+
         if (this.game == null) {
             if (this.gameDB.fileExists())
                 return ConnectionState.LOAD;
-            return ConnectionState.CONNECT;
+            return ConnectionState.CREATE;
         }
-        return ConnectionState.CREATE;
+        return ConnectionState.CONNECT;
     }
 
 
@@ -61,6 +65,8 @@ public class Controller extends Observable{
 
         this.game.addToGame(nickname);
 
+        System.out.println(nickname + " created new game");
+
         //TODO return gameid;
         return 0;
     }
@@ -68,14 +74,19 @@ public class Controller extends Observable{
 
     public boolean connect(MessageListener l, String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         this.addListener(l);
-
         this.game.addToGame(nickname);
+
+        System.out.println(nickname + " connected to the game");
 
         if(listeners.size() == game.getNumberPlayers()) {
             game.changeState();
+
             Change change = gameDB.saveGame(false);
             updateAll(change);
+            System.out.println("Everybody joined -> starting game");
         }
+
+
 
         return true;
     }
@@ -92,12 +103,16 @@ public class Controller extends Observable{
             updateAll(change);
         }
 
+        System.out.println(nickname + " loaded up new game");
+
         return true;
     }
 
 
     public Set<Position> getAvailablePositions(String p) {
         //if (p.equals(game.getCurrentPlayer().getNickname()))
+
+        System.out.println(p + " requested available positions");
         return game.getCurrentPlayer().getBoard().getPossiblePositions();
     }
 
@@ -113,6 +128,7 @@ public class Controller extends Observable{
         change = gameDB.saveGame(true);
         updateAll(change);
 
+        System.out.println(p + " placed a card in position " + position);
         return true;
     }
 
@@ -123,6 +139,7 @@ public class Controller extends Observable{
         game.setCurrentPlayer(game.getNextPlayer());
         Change change = gameDB.saveGame(true);
         updateAll(change);
+        System.out.println(p + "picked a card");
     }
 
     public List<Color> placeStarting(String p, Face face){
@@ -132,6 +149,7 @@ public class Controller extends Observable{
         change = gameDB.saveGame(true);
         updateAll(change);
 
+        System.out.println(p + " placed starting card");
         return game.getAvailableColors();
     }
 
@@ -143,6 +161,8 @@ public class Controller extends Observable{
         game.initializeHandCurrentPlayer();
         Change change = gameDB.saveGame(false);
         updateAll(change);
+        System.out.println(p + " chose color" + color);
+
         return game.choosePersonalGoal();
     }
 
@@ -154,10 +174,13 @@ public class Controller extends Observable{
         game.setCurrentPlayer(game.getNextPlayer());
         Change change = gameDB.saveGame(false);
         updateAll(change);
+
+        System.out.println(p + " chose his personal goal");
     }
 
 
     public List<Player> getWinner(){
+        System.out.println("sending final results");
         return game.getWinner();
     }
 
@@ -167,11 +190,13 @@ public class Controller extends Observable{
     }
 
     public void playerDisconnected() {
+        System.out.println("someone connected to the game");
         game.setCurrentState(State.DISCONNECTED);
         sendMessageAll(new PlayerDisconnectedMessage());
     }
 
     public void sendChatMessage(ChatMessage chatMessage) {
+        System.out.println("delivering chat message");
         if (chatMessage.getReceiver().equals("all"))
             sendMessageAll(chatMessage);
         else
