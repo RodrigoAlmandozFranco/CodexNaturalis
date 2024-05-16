@@ -4,5 +4,5 @@ public enum ConnectionState {
     CREATE,
     CONNECT,
     LOAD,
-
+    LOADING
 }

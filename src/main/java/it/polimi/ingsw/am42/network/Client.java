@@ -28,6 +28,8 @@ public abstract class Client {
 
     public abstract boolean reconnect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException;
 
+    public abstract boolean connectAfterLoad(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException;
+
     public abstract Set<Position> getAvailablePositions(String p);
 
     public abstract boolean place(String p, Face face, Position pos) throws RequirementsNotMetException;

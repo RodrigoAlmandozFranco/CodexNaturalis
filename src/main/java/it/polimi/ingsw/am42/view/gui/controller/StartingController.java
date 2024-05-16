@@ -2,6 +2,7 @@ package it.polimi.ingsw.am42.view.gui.controller;
 
 import it.polimi.ingsw.am42.controller.ConnectionState;
 import it.polimi.ingsw.am42.network.Client;
+import it.polimi.ingsw.am42.view.gui.utils.ClientHolder;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -24,21 +25,32 @@ public class StartingController{
 
     public void login(ActionEvent e) throws IOException {
         ConnectionState c = client.getGameInfo();
-        if(c.equals(ConnectionState.CONNECT)){
-            setter = "/it/polimi/ingsw/am42/menu.fxml";
+
+        if(c.equals(ConnectionState.CREATE)){
+            setter = "/it/polimi/ingsw/am42/javafx/NicknameFirstPlayerCreateGame.fxml";
         }
-        else if(c.equals(ConnectionState.CREATE)){
-            setter = "/it/polimi/ingsw/am42/menu.fxml";
+        else if(c.equals(ConnectionState.CONNECT)){
+            setter = "/it/polimi/ingsw/am42/javafx/GeneralConnection.fxml";
         }
-        else{ //(c.equals(ConnectionState.LOAD)){
-            setter = "/it/polimi/ingsw/am42/menu.fxml";
+        else if(c.equals(ConnectionState.LOAD)){
+            setter = "/it/polimi/ingsw/am42/javafx/FirstPlayerMenu.fxml";
+        } else {
+            setter = "/it/polimi/ingsw/am42/javafx/GeneralConnection.fxml";
         }
 
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource(setter));
-
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(setter));
         stage = (Stage)((Node)e.getSource()).getScene().getWindow();
         scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
+
+        if(c.equals(ConnectionState.CONNECT) || c.equals(ConnectionState.LOAD)) {
+            NormalConnectionController normal = fxmlLoader.getController();
+            normal.setClient(ClientHolder.getClient());
+        } else if(c.equals(ConnectionState.CREATE)) {
+            FirstPlayerCreateGameController first = fxmlLoader.getController();
+            first.setClient(ClientHolder.getClient());
+        }
+
         stage.show();
 
     }

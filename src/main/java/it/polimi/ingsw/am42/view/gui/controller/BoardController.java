@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am42.view.gui.controller;
 
 import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.view.gameview.GameView;
 import it.polimi.ingsw.am42.view.gameview.PlayerView;
 import javafx.fxml.FXML;
@@ -10,12 +11,16 @@ import javafx.util.Pair;
 
 import java.util.List;
 
-public class BoardController extends Controller{
+public class BoardController {
+
+    private Client client;
 
     @FXML
     protected ImageView circle;
     private GameView gameView;
     private String modifiedPlayer;
+
+    public BoardController() {}
 
     public void displayStandings(){
         gameView = client.getView();
@@ -34,6 +39,11 @@ public class BoardController extends Controller{
         vedo il DIFF, capisco chi ha fatto punti, setCircleX o setCircleY,
          */
 
+    }
+
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 
 }

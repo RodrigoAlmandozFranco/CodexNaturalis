@@ -157,6 +157,12 @@ public class ClientTCP extends Client {
     }
 
     @Override
+    public boolean connectAfterLoad(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+        //todo
+        return true;
+    }
+
+    @Override
     public Set<Position> getAvailablePositions(String p) {
         Message message = new GetAvailablePositionMessage(p);
         sendMessage(message);

@@ -108,6 +108,10 @@ public class Controller extends Observable{
         return true;
     }
 
+    public boolean connectAfterLoad(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+        //todo
+        return true;
+    }
 
     public Set<Position> getAvailablePositions(String p) {
         //if (p.equals(game.getCurrentPlayer().getNickname()))
