@@ -35,6 +35,7 @@ public class GameView {
     private List<ChatMessage> tmpMessages;
 
     private boolean canRead;
+    private boolean startGame;
     private final Lock lock = new ReentrantLock();
 
 
@@ -55,6 +56,7 @@ public class GameView {
         allMessages = new ArrayList<>();
         tmpMessages = new ArrayList<>();
         canRead = false;
+        startGame = false;
     }
 
     public void setMyNickname(String nickname){
@@ -160,12 +162,16 @@ public class GameView {
         return canRead;
     }
 
+    public boolean getReady(){
+        return startGame;
+    }
+
 
     public void connectionClosed() {
     }
 
     public void update(Change diff){
-            System.out.println(diff);
+           // System.out.println(diff);
 
             // First diff
             if (numberPlayers == 0) {
@@ -195,8 +201,7 @@ public class GameView {
             modifiedPlayer = currentPlayer;
             currentPlayer = getPlayer(diff.getFuturePlayer());
 
-
-
+            startGame = true;
 
             handleState();
     }

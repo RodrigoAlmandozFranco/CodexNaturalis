@@ -28,10 +28,14 @@ public class BoardController implements Initializable {
 
     private List<PlayerView> players;
 
+    private List<String> nicknames;
+
+
+
+    //@FXML
+    //VBox vbox;
     @FXML
-    VBox vbox;
-    @FXML
-    ListView listView;
+    ListView<Label> listView;
     @FXML
     ScrollPane scrollPane;
     @FXML
@@ -47,28 +51,29 @@ public class BoardController implements Initializable {
 
     }
 
-    public void displayStandings(){
-        gameView = client.getView();
-        modifiedPlayer = gameView.getModifiedPlayer();
-        for(PlayerView p : gameView.getPlayers()) {
-            if(p.getNickname().equals(modifiedPlayer)) {
-                int points = p.getPoints();
-                String color = p.getColor().toString();
-
-
-            }
-        }
+//    public void displayStandings(){
+//        gameView = client.getView();
+//        modifiedPlayer = gameView.getModifiedPlayer();
+//        for(PlayerView p : gameView.getPlayers()) {
+//            if(p.getNickname().equals(modifiedPlayer)) {
+//                int points = p.getPoints();
+//                String color = p.getColor().toString();
+//
+//
+//            }
+//        }
 
 
         /*
         vedo il DIFF, capisco chi ha fatto punti, setCircleX o setCircleY,
          */
 
-    }
+//    }
 
 
     public void setClient(Client client) {
         this.client = client;
+        this.start();
     }
 
     public void seeMessages(){
@@ -122,29 +127,47 @@ public class BoardController implements Initializable {
 
         choiceBox.setValue("All");
 
-        ChatMessage chatMessage = new ChatMessage(message, sender, receiver);
+        ChatMessage chatMessage;
+
+        if(receiver.equals("All"))
+            chatMessage = new ChatMessage(message, sender);
+        else
+            chatMessage = new ChatMessage(message, sender, receiver);
         client.sendChatMessage(chatMessage);
         System.out.println("Messaggio inviato");
     }
 
 
+    public void start(){
+
+        players = client.getView().getPlayers();
+        nicknames = new ArrayList<>();
+        nicknames.add("All");
+
+        for(PlayerView p : players){
+            if (!p.getNickname().equals(client.getView().getMyNickname()))
+                nicknames.add(p.getNickname());
+        }
+
+        Platform.runLater(() -> {
+            choiceBox.getItems().clear();
+            choiceBox.getItems().addAll(nicknames);
+            choiceBox.setValue("All");
+        });
+        //vbox.getChildren().add(listView);
+    }
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Thread thread = new Thread(this::seeMessages);
         thread.start();
-        players = client.getView().getPlayers();
-        List<String> nicknames = new ArrayList<>();
-        nicknames.add("All");
 
-        for(PlayerView p : players){
-            nicknames.add(p.getNickname());
-        }
+//        ObservableList<Label> messages = FXCollections.observableArrayList();
+//        listView.setItems(messages);
 
-        ObservableList<String> recipients = FXCollections.observableArrayList(nicknames);
-        choiceBox.setItems(recipients);
         choiceBox.setValue("All");
 
-        scrollPane.setContent(vbox);
+        //scrollPane.setContent(vbox);
+
     }
 }
 

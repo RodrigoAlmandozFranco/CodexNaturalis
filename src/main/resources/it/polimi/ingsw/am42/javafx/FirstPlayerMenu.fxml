@@ -28,7 +28,7 @@
          <children>
             <ImageView fitHeight="450.0" fitWidth="427.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../../../../../../../../../../../../../Downloads/Codex-Naturalis_001_PetitCaribou.png" />
+                  <Image url="@../graphical/gameStructure/codex.png" />
                </image>
             </ImageView>
             <ImageView fitHeight="135.0" fitWidth="94.0" layoutX="167.0" layoutY="507.0" pickOnBounds="true" preserveRatio="true">

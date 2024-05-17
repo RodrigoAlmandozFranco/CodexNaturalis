@@ -2,54 +2,117 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0" prefWidth="1152.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.am42.view.gui.controller.BoardController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.am42.view.gui.controller.BoardController">
    <children>
-      <ImageView fitHeight="650.0" fitWidth="1152.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../graphical/gameStructure/parquet.png" />
-         </image></ImageView>
-      <ImageView fitHeight="363.0" fitWidth="242.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../graphical/gameStructure/scoreboard.png" />
-         </image>
-      </ImageView>
-      <Pane layoutX="280.0" layoutY="1.0" prefHeight="649.0" prefWidth="644.0">
+      <AnchorPane layoutX="-1.0" layoutY="-1.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="660.0" prefWidth="1163.0">
          <children>
-            <ImageView fitHeight="646.0" fitWidth="642.0" pickOnBounds="true">
+            <ImageView fitHeight="681.0" fitWidth="1187.0" layoutX="-7.0" layoutY="-11.0" pickOnBounds="true">
+               <image>
+                  <Image url="@../graphical/gameStructure/parquet.png" />
+               </image>
+            </ImageView>
+            <ScrollPane fx:id="scrollPane" layoutX="1.0" layoutY="444.0" prefHeight="167.0" prefWidth="318.0">
+               <content>
+                  <ListView prefHeight="167.0" prefWidth="315.0" />
+               </content>
+            </ScrollPane>
+            <HBox fx:id="hbox" layoutY="614.0" prefHeight="36.0" prefWidth="320.0">
+               <children>
+                  <TextField fx:id="textField" prefHeight="36.0" prefWidth="262.0" />
+                  <Button fx:id="button" mnemonicParsing="false" onAction="#sendMessage" prefHeight="59.0" prefWidth="42.0" text="&gt;" />
+               </children>
+            </HBox>
+            <ImageView disable="true" fitHeight="650.0" fitWidth="336.0" layoutX="423.0" pickOnBounds="true" preserveRatio="true" visible="false">
+               <image>
+                  <Image url="@../graphical/gameStructure/scoreboard.png" />
+               </image>
+            </ImageView>
+            <VBox layoutX="1013.0" layoutY="260.0" prefHeight="395.0" prefWidth="139.0">
+               <children>
+                  <Button mnemonicParsing="false" prefHeight="97.0" prefWidth="139.0" text="SEE STANDIGS" />
+                  <Button mnemonicParsing="false" prefHeight="97.0" prefWidth="139.0" text="SEE STANDIGS" />
+                  <Button mnemonicParsing="false" prefHeight="97.0" prefWidth="139.0" text="SEE STANDIGS" />
+                  <Button mnemonicParsing="false" prefHeight="97.0" prefWidth="139.0" text="SEE STANDIGS" />
+               </children>
+            </VBox>
+            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="23.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../graphical/cardImages/1_back.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="190.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../graphical/cardImages/1_back.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="23.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../graphical/cardImages/1_back.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="190.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../graphical/cardImages/1_back.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="23.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../graphical/cardImages/1_back.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="190.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../graphical/cardImages/1_back.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="21.0" layoutY="328.0" prefHeight="100.0" prefWidth="300.0" text="Label" />
+            <ImageView fitHeight="564.0" fitWidth="669.0" layoutX="331.0" layoutY="-4.0" pickOnBounds="true">
                <image>
                   <Image url="@../graphical/gameStructure/structure.png" />
                </image>
             </ImageView>
-            <ScrollPane layoutX="36.0" layoutY="54.0" opacity="0.0" prefHeight="540.0" prefWidth="571.0">
-               <content>
-                  <ImageView fitHeight="648.0" fitWidth="1152.0" pickOnBounds="true">
-                     <image>
-                        <Image url="@../graphical/gameStructure/parquet.png" />
-                     </image>
-                  </ImageView>
-               </content></ScrollPane>
+            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="343.0" layoutY="567.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../graphical/cardImages/1_back.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="503.0" layoutY="567.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../graphical/cardImages/1_back.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="663.0" layoutY="567.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../graphical/cardImages/1_back.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="1015.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../graphical/cardImages/1_back.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="1015.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../graphical/cardImages/1_back.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="862.0" layoutY="565.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../graphical/cardImages/1_back.png" />
+               </image>
+            </ImageView>
+            <ChoiceBox fx:id="choiceBox" layoutX="467.0" layoutY="343.0" prefHeight="131.0" prefWidth="88.0" />
          </children>
-      </Pane>
-      <ScrollPane fx:id="scrollPane" layoutX="1.0" layoutY="364.0" prefHeight="247.0" prefWidth="200.0">
-         <content>
-            <VBox fx:id="vbox" prefHeight="239.0" prefWidth="203.0" />
-         </content>
-      </ScrollPane>
-      <HBox fx:id="hbox" layoutY="614.0" prefHeight="36.0" prefWidth="200.0">
-         <children>
-            <ChoiceBox fx:id="choiceBox" prefHeight="55.0" prefWidth="32.0" />
-            <TextField fx:id="textField" prefHeight="54.0" prefWidth="127.0" />
-            <Button fx:id="button" mnemonicParsing="false" onAction="#sendMessage" prefHeight="59.0" prefWidth="42.0" text="&gt;" />
-         </children>
-      </HBox>
+      </AnchorPane>
    </children>
 </AnchorPane>

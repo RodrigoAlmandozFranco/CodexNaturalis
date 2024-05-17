@@ -115,6 +115,11 @@ public class RMIClient extends Client implements RMIMessageListener, Serializabl
         }
     }
 
+    @Override
+    public boolean connectAfterLoad(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+        return false;
+    }
+
     public Set<Position> getAvailablePositions(String p){
         try {
             return stub.getAvailablePositions(p);

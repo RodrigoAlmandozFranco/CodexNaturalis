@@ -68,12 +68,12 @@ public class NormalConnectionController {
     }
 
     private void load(ActionEvent event) throws IOException {
-        String resource = "/it/polimi/ingsw/am42/javafx/Board.fxml";
+        String resource = "/it/polimi/ingsw/am42/javafx/Lobby.fxml";
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
         Parent root = fxmlLoader.load();
-        BoardController boardController = fxmlLoader.getController();
-        boardController.setClient(ClientHolder.getClient());
+        LobbyController lobbycontroller = fxmlLoader.getController();
+        lobbycontroller.setClient(ClientHolder.getClient());
 
         Scene scene = new Scene(root);
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am42.view.gui.controller;
 
 import it.polimi.ingsw.am42.network.Client;
+import it.polimi.ingsw.am42.view.gui.utils.ClientHolder;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -65,18 +66,18 @@ public class FirstPlayerCreateGameController implements Initializable {
     private void connect(ActionEvent event) throws IOException {
         try {
             client.createGame(nickname, numberOfPlayers);
-
+            client.getView().setMyNickname(nickname);
         } catch (Exception exception) {
             showAlert("Error creating game");
             System.exit(1);
         }
 
-        String resource = "/it/polimi/ingsw/am42/javafx/Board.fxml";
+        String resource = "/it/polimi/ingsw/am42/javafx/Lobby.fxml";
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
         Parent root = fxmlLoader.load();
-        //BoardController boardController = fxmlLoader.getController();
-        //boardController.setClient(ClientHolder.getClient());
+        LobbyController lobbycontroller = fxmlLoader.getController();
+        lobbycontroller.setClient(ClientHolder.getClient());
 
         Scene scene = new Scene(root);
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();

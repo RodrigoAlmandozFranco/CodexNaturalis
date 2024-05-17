@@ -57,7 +57,7 @@ public class Change implements Serializable {
 
         if(!gameStarted){
             players = game.getPlayers();
-            globalGoals = game.getGoals();
+            //globalGoals = game.getGoals();
             numberPlayers = game.getNumberPlayers();
         }
     }
