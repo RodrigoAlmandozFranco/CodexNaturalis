@@ -53,19 +53,35 @@ public abstract class Observable {
     }
     protected void updateAll(Change message){
         System.out.println("Updating listeners");
-        for(MessageListener l : listeners)
-            l.update(message);
+        for(MessageListener l : listeners) {
+            try {
+                l.update(message);
+            } catch (RemoteException e) {
+                //TODO qui un client si potrebbe essere disconesso quindi si potrebbe pensare di passare allo stato DISCONNECTED
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     protected void sendMessageAll(Message message) {
-        for(MessageListener l : listeners)
-            l.receiveMessage(message);
+        for(MessageListener l : listeners) {
+            try {
+                l.receiveMessage(message);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 
     protected void sendMessage(Message message, String id) {
-        for(MessageListener l : listeners)
-            if (l.getId().equals(id))
-                l.receiveMessage(message);
+        for(MessageListener l : listeners) {
+            try {
+                if (l.getId().equals(id))
+                    l.receiveMessage(message);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
     protected void handleDisconnection() {
         sendMessageAll(new PlayerDisconnectedMessage());

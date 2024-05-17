@@ -13,46 +13,38 @@ import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 import it.polimi.ingsw.am42.view.gameview.GameView;
 
+import java.rmi.Remote;
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Set;
 
-public abstract class Client {
+public interface Client {
 
-    protected GameView view;
+    ConnectionState getGameInfo();
 
-    public abstract ConnectionState getGameInfo();
+    public  int createGame(String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException;
 
-    public abstract int createGame(String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException;
+    boolean connect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException;
+    boolean reconnect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException;
 
-    public abstract boolean connect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException;
+    Set<Position> getAvailablePositions(String p);
 
-    public abstract boolean reconnect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException;
+    boolean place(String p, Face face, Position pos) throws RequirementsNotMetException;
 
-    public abstract boolean connectAfterLoad(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException;
+    List<GoalCard> chooseColor(String p, Color color);
 
-    public abstract Set<Position> getAvailablePositions(String p);
+    void chooseGoal(String p, GoalCard goal);
 
-    public abstract boolean place(String p, Face face, Position pos) throws RequirementsNotMetException;
+    void pick(String p, PlayableCard card);
 
-    public abstract List<GoalCard> chooseColor(String p, Color color);
+    List<Player> getWinner();
 
-    public abstract void chooseGoal(String p, GoalCard goal);
+    List<Color> placeStarting(String p, Face face);
 
-    public abstract void pick(String p, PlayableCard card);
+    void sendChatMessage(ChatMessage message);
 
-    public abstract List<Player> getWinner();
+    void setView(GameView view);
 
-    public abstract List<Color> placeStarting(String p, Face face);
-
-    public abstract void update(Change diff);
-
-    public abstract  void sendChatMessage(ChatMessage message);
-
-    public void setView(GameView view) {
-        this.view = view;
-    }
-
-    public GameView getView() {
-        return view;
-    }
+    GameView getView();
 }

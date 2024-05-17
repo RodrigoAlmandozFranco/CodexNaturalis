@@ -50,7 +50,7 @@ public class NormalConnectionController {
             if(client.getGameInfo().equals(ConnectionState.CONNECT))
                 client.connect(nickname);
             else
-                client.connectAfterLoad(nickname);
+                client.reconnect(nickname);
 
             client.getView().setMyNickname(nickname);
             load(event);
