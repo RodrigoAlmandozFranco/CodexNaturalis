@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.view.gui.controller;
 
+import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.view.gui.utils.ClientHolder;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,10 +21,17 @@ public class MenuController {
     @FXML
     private Button loadGameButton;
 
+    private Client client;
+
     public MenuController(){
     }
 
-    public void CreateGameAction(ActionEvent event) throws IOException {
+
+    public void setClient(Client client){
+        this.client = client;
+    }
+
+    public void createGameAction(ActionEvent event) throws IOException {
         String resource = "/it/polimi/ingsw/am42/javafx/NicknameFirstPlayerCreateGame.fxml";
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
         Parent root = fxmlLoader.load();
@@ -41,6 +49,7 @@ public class MenuController {
         FXMLLoader root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(resource)));
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root.load());
+        //TODO there isn't the constructor
         stage.setScene(scene);
         stage.show();
     }

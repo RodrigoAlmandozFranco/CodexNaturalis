@@ -10,9 +10,15 @@ import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class GameView {
+
+    private String myNickname;
     private List<PlayerView> players;
     private List<GoalCard> globalGoals;
     private State currentState;
@@ -25,8 +31,11 @@ public class GameView {
     private String nickname;
     private List<MethodChoice> usableMethods;
 
+    private List<ChatMessage> allMessages;
+    private List<ChatMessage> tmpMessages;
 
-
+    private boolean canRead;
+    private final Lock lock = new ReentrantLock();
 
 
     public GameView() {
@@ -43,7 +52,13 @@ public class GameView {
         usableMethods.add(MethodChoice.DISCONNECT);
         usableMethods.add(MethodChoice.SEECHAT);
         usableMethods.add(MethodChoice.SENDMESSAGE);
+        allMessages = new ArrayList<>();
+        tmpMessages = new ArrayList<>();
+        canRead = false;
+    }
 
+    public void setMyNickname(String nickname){
+        myNickname = nickname;
     }
 
 
@@ -106,9 +121,45 @@ public class GameView {
         }
     }
 
-    public void updateMessage(ChatMessage chatMessage) {
-
+    public String getMyNickname(){
+        return myNickname;
     }
+
+    public void updateMessage(ChatMessage chatMessage) {
+        lock.lock();
+        try {
+            allMessages.add(chatMessage);
+            tmpMessages.add(chatMessage);
+            canRead = true;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public List<ChatMessage> getAllMessages() {
+        lock.lock();
+        try {
+            return new ArrayList<>(allMessages);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public List<ChatMessage> getTmpMessages() {
+        lock.lock();
+        try {
+            List<ChatMessage> tmp = new ArrayList<>(tmpMessages);
+            tmpMessages.clear();
+            return tmp;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public boolean getCanRead() {
+        return canRead;
+    }
+
 
     public void connectionClosed() {
     }
@@ -143,6 +194,9 @@ public class GameView {
 
             modifiedPlayer = currentPlayer;
             currentPlayer = getPlayer(diff.getFuturePlayer());
+
+
+
 
             handleState();
     }

@@ -7,32 +7,36 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="648.0" prefWidth="1152.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.am42.view.gui.controller.MenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="648.0" prefWidth="1152.0" style="-fx-background-color: linear-gradient(to bottom, #000000, #3533cd);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.am42.view.gui.controller.MenuController">
    <children>
-      <ImageView fitHeight="649.0" fitWidth="1152.0" pickOnBounds="true">
-         <image>
-            <Image url="@../graphical/codex2.png" />
-         </image>
-      </ImageView>
-      <ImageView fitHeight="131.0" fitWidth="90.0" layoutX="36.0" layoutY="506.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../graphical/cranio.png" />
-         </image>
-      </ImageView>
-      <Label layoutX="426.0" layoutY="28.0" prefHeight="46.0" prefWidth="715.0" style="-fx-background-color: aliceblue;" text="Welcome to the wonderful world of Codex Naturalis!">
+      <Label layoutX="427.0" layoutY="42.0" prefHeight="46.0" prefWidth="715.0" text="Welcome to the wonderful world of Codex Naturalis!" textFill="WHITE">
          <font>
-            <Font size="30.0" />
+            <Font name="SansSerif Bold" size="30.0" />
          </font>
       </Label>
-      <Button fx:id="createGameButton" layoutX="550.0" layoutY="97.0" mnemonicParsing="false" onAction="#CreateGameAction" prefHeight="73.0" prefWidth="542.0" style="-fx-background-color: midnightblue;" text="Create Game" textFill="WHITE">
+      <Button fx:id="createGameButton" layoutX="513.0" layoutY="161.0" mnemonicParsing="false" onAction="#createGameAction" prefHeight="73.0" prefWidth="542.0" style="-fx-background-color: midnightblue; -fx-border-color: White; -fx-border-width: 4;" text="Create Game" textFill="WHITE">
          <font>
-            <Font size="34.0" />
+            <Font name="Futura Bold Italic BT" size="40.0" />
          </font>
       </Button>
-      <Button fx:id="LoginButton1" layoutX="550.0" layoutY="168.0" mnemonicParsing="false" onAction="#loadGameAction" prefHeight="73.0" prefWidth="542.0" style="-fx-background-color: teal;" text="Load Game" textFill="WHITE">
+      <Button fx:id="LoginButton1" layoutX="513.0" layoutY="287.0" mnemonicParsing="false" onAction="#loadGameAction" prefHeight="73.0" prefWidth="542.0" style="-fx-background-color: teal; -fx-border-color: White; -fx-border-width: 4;" text="Load Game" textFill="WHITE">
          <font>
-            <Font size="34.0" />
+            <Font name="Futura Bold Italic BT" size="40.0" />
          </font>
       </Button>
+      <AnchorPane prefHeight="648.0" prefWidth="420.0" style="-fx-background-color: linear-gradient(to bottom, #000000, #3533cd);">
+         <children>
+            <ImageView fitHeight="450.0" fitWidth="427.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../../../../../../../Downloads/Codex-Naturalis_001_PetitCaribou.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="135.0" fitWidth="94.0" layoutX="167.0" layoutY="507.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../graphical/cranio.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

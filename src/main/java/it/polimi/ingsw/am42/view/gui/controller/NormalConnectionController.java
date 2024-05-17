@@ -5,6 +5,7 @@ import it.polimi.ingsw.am42.model.exceptions.GameFullException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
 import it.polimi.ingsw.am42.network.Client;
+import it.polimi.ingsw.am42.view.gui.utils.ClientHolder;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -50,6 +51,8 @@ public class NormalConnectionController {
                 client.connect(nickname);
             else
                 client.connectAfterLoad(nickname);
+
+            client.getView().setMyNickname(nickname);
             load(event);
         } catch (GameFullException e) {
             showAlert("The game is full");
@@ -69,8 +72,8 @@ public class NormalConnectionController {
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
         Parent root = fxmlLoader.load();
-        //BoardController boardController = fxmlLoader.getController();
-        //boardController.setClient(ClientHolder.getClient());
+        BoardController boardController = fxmlLoader.getController();
+        boardController.setClient(ClientHolder.getClient());
 
         Scene scene = new Scene(root);
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();

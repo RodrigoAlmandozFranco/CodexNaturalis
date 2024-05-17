@@ -43,10 +43,15 @@ public class StartingController{
         scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
 
-        if(c.equals(ConnectionState.CONNECT) || c.equals(ConnectionState.LOAD)) {
+        if(c.equals(ConnectionState.CONNECT)) {
             NormalConnectionController normal = fxmlLoader.getController();
             normal.setClient(ClientHolder.getClient());
-        } else if(c.equals(ConnectionState.CREATE)) {
+        }
+        else if(c.equals(ConnectionState.LOAD)) {
+            MenuController load = fxmlLoader.getController();
+            load.setClient(ClientHolder.getClient());
+        }
+        else if(c.equals(ConnectionState.CREATE)) {
             FirstPlayerCreateGameController first = fxmlLoader.getController();
             first.setClient(ClientHolder.getClient());
         }
