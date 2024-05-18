@@ -206,7 +206,7 @@ public class GameView {
             handleState();
     }
 
-
+/*
     @Override
     public String toString() {
         return "GameView{" +
@@ -217,6 +217,8 @@ public class GameView {
                 ", numberPlayers=" + numberPlayers +
                 '}';
     }
+
+ */
 
     private PlayerView getPlayer(String nickname) {
         for (PlayerView p : players)

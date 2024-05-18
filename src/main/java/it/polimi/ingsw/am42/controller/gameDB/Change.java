@@ -57,7 +57,7 @@ public class Change implements Serializable {
 
         if(!gameStarted){
             players = game.getPlayers();
-            //globalGoals = game.getGoals();
+            globalGoals = game.getGoals();
             numberPlayers = game.getNumberPlayers();
         }
     }
@@ -123,6 +123,7 @@ public class Change implements Serializable {
         return currentState;
     }
 
+    /*
     @Override
     public String toString() {
         return "Change{" +
@@ -142,5 +143,7 @@ public class Change implements Serializable {
                 ", gameStarted=" + gameStarted +
                 '}';
     }
+
+     */
 }
 

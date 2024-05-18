@@ -21,22 +21,18 @@
                   <Image url="@../graphical/gameStructure/parquet.png" />
                </image>
             </ImageView>
-            <ScrollPane fx:id="scrollPane" layoutX="1.0" layoutY="444.0" prefHeight="167.0" prefWidth="318.0">
+            <ScrollPane fx:id="scrollPane" layoutX="5.0" layoutY="444.0" prefHeight="167.0" prefWidth="318.0">
                <content>
-                  <ListView prefHeight="167.0" prefWidth="315.0" />
+                  <ListView fx:id="listView" prefHeight="167.0" prefWidth="315.0" />
                </content>
             </ScrollPane>
-            <HBox fx:id="hbox" layoutY="614.0" prefHeight="36.0" prefWidth="320.0">
+            <HBox fx:id="hbox" layoutX="5.0" layoutY="614.0" prefHeight="36.0" prefWidth="320.0">
                <children>
-                  <TextField fx:id="textField" prefHeight="36.0" prefWidth="262.0" />
+                  <ChoiceBox fx:id="choiceBox" prefHeight="36.0" prefWidth="42.0" />
+                  <TextField fx:id="textField" prefHeight="36.0" prefWidth="234.0" HBox.hgrow="ALWAYS" />
                   <Button fx:id="button" mnemonicParsing="false" onAction="#sendMessage" prefHeight="59.0" prefWidth="42.0" text="&gt;" />
                </children>
             </HBox>
-            <ImageView disable="true" fitHeight="650.0" fitWidth="336.0" layoutX="423.0" pickOnBounds="true" preserveRatio="true" visible="false">
-               <image>
-                  <Image url="@../graphical/gameStructure/scoreboard.png" />
-               </image>
-            </ImageView>
             <VBox layoutX="1013.0" layoutY="260.0" prefHeight="395.0" prefWidth="139.0">
                <children>
                   <Button mnemonicParsing="false" prefHeight="97.0" prefWidth="139.0" text="SEE STANDIGS" />
@@ -45,73 +41,33 @@
                   <Button mnemonicParsing="false" prefHeight="97.0" prefWidth="139.0" text="SEE STANDIGS" />
                </children>
             </VBox>
-            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="23.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../graphical/cardImages/1_back.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="190.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../graphical/cardImages/1_back.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="23.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../graphical/cardImages/1_back.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="190.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../graphical/cardImages/1_back.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="23.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../graphical/cardImages/1_back.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="190.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../graphical/cardImages/1_back.png" />
-               </image>
-            </ImageView>
-            <Label layoutX="21.0" layoutY="328.0" prefHeight="100.0" prefWidth="300.0" text="Label" />
+            <ImageView fx:id="firstCardResource" fitHeight="85.0" fitWidth="137.0" layoutX="23.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="firstCardGold" fitHeight="85.0" fitWidth="137.0" layoutX="190.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="pickableResource1" fitHeight="85.0" fitWidth="137.0" layoutX="23.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="pickableGold1" fitHeight="85.0" fitWidth="137.0" layoutX="190.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="pickableResource2" fitHeight="85.0" fitWidth="137.0" layoutX="23.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="pickableGold2" fitHeight="85.0" fitWidth="137.0" layoutX="190.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="updateText" layoutX="21.0" layoutY="328.0" prefHeight="100.0" prefWidth="300.0" text="UpdateText" />
             <ImageView fitHeight="564.0" fitWidth="669.0" layoutX="331.0" layoutY="-4.0" pickOnBounds="true">
                <image>
                   <Image url="@../graphical/gameStructure/structure.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="343.0" layoutY="567.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../graphical/cardImages/1_back.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="503.0" layoutY="567.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../graphical/cardImages/1_back.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="663.0" layoutY="567.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../graphical/cardImages/1_back.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="1015.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../graphical/cardImages/1_back.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="1015.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../graphical/cardImages/1_back.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="85.0" fitWidth="137.0" layoutX="862.0" layoutY="565.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../graphical/cardImages/1_back.png" />
-               </image>
-            </ImageView>
-            <ChoiceBox fx:id="choiceBox" layoutX="467.0" layoutY="343.0" prefHeight="131.0" prefWidth="88.0" />
+            <ImageView fx:id="handCard1" fitHeight="85.0" fitWidth="137.0" layoutX="343.0" layoutY="567.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="handCard2" fitHeight="85.0" fitWidth="137.0" layoutX="503.0" layoutY="567.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="handCard3" fitHeight="85.0" fitWidth="137.0" layoutX="663.0" layoutY="567.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="globalGoal1" fitHeight="85.0" fitWidth="137.0" layoutX="1015.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="globalGoal2" fitHeight="85.0" fitWidth="137.0" layoutX="1015.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="personalGoal" fitHeight="85.0" fitWidth="137.0" layoutX="862.0" layoutY="565.0" pickOnBounds="true" preserveRatio="true" />
+            <Button fx:id="firstCardResourceButton" layoutX="23.0" layoutY="22.0" mnemonicParsing="false" onAction="#firstCardResourceButtonEvent" opacity="0.0" prefHeight="85.0" prefWidth="137.0" />
+            <Button fx:id="firstCardGoldButton" layoutX="190.0" layoutY="22.0" mnemonicParsing="false" onAction="#firstCardGoldButtonEvent" opacity="0.0" prefHeight="85.0" prefWidth="137.0" />
+            <Button fx:id="pickableResource1Button" layoutX="23.0" layoutY="120.0" mnemonicParsing="false" onAction="#pickableResource1ButtonEvent" opacity="0.0" prefHeight="85.0" prefWidth="137.0" />
+            <Button fx:id="pickableGold1Button" layoutX="190.0" layoutY="120.0" mnemonicParsing="false" onAction="#pickableGold1ButtonEvent" opacity="0.0" prefHeight="85.0" prefWidth="137.0" />
+            <Button fx:id="pickableResource2Button" layoutX="23.0" layoutY="218.0" mnemonicParsing="false" onAction="#pickableResource2ButtonEvent" opacity="0.0" prefHeight="85.0" prefWidth="137.0" />
+            <Button fx:id="pickableGold2Button" layoutX="190.0" layoutY="218.0" mnemonicParsing="false" onAction="#pickableGold2ButtonEvent" opacity="0.0" prefHeight="85.0" prefWidth="137.0" />
+            <Button fx:id="handCard1Button" layoutX="343.0" layoutY="567.0" mnemonicParsing="false" onAction="#handCard1ButtonAction" opacity="0.0" prefHeight="85.0" prefWidth="137.0" />
+            <Button fx:id="handCard2Button" layoutX="503.0" layoutY="567.0" mnemonicParsing="false" onAction="#handCard2ButtonAction" opacity="0.0" prefHeight="85.0" prefWidth="137.0" />
+            <Button fx:id="handCard3Button" layoutX="663.0" layoutY="567.0" mnemonicParsing="false" onAction="#handCard3ButtonAction" opacity="0.0" prefHeight="85.0" prefWidth="137.0" />
          </children>
       </AnchorPane>
    </children>

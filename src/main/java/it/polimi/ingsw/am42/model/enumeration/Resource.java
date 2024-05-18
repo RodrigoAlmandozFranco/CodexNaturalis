@@ -13,7 +13,7 @@ public enum Resource {
     QUILLOBJECT,
     INKWELLOBJECT,
     MANUSCRIPTOBJECT;
-
+/*
 
     public String toString() {
         return switch (this) {
@@ -27,5 +27,7 @@ public enum Resource {
             default -> "?";
         };
     }
+
+ */
 }
 

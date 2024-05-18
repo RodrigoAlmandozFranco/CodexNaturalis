@@ -76,6 +76,7 @@ public class Back extends Face {
         return resources;
     }
 
+    /*
     @Override
     protected String middlePart() {
         String to_print = color.toString();
@@ -106,6 +107,8 @@ public class Back extends Face {
 
 
     }
+
+     */
 
 }
 

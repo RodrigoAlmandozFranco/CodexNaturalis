@@ -114,6 +114,7 @@ public abstract class Face implements Serializable {
         return srcImage;
     }
 
+    /*
 
     private String upperPart() {
 
@@ -225,5 +226,7 @@ public abstract class Face implements Serializable {
 
         return to_print;
     }
+
+ */
 }
 

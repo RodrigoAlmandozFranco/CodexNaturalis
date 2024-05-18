@@ -1,5 +1,7 @@
 package it.polimi.ingsw.am42.view.gui.controller;
 
+import it.polimi.ingsw.am42.model.cards.types.GoalCard;
+import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.view.gameview.GameView;
@@ -11,31 +13,36 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class BoardController implements Initializable {
 
     private Client client;
     private GameView gameView;
-    private String modifiedPlayer;
-
     private List<PlayerView> players;
-
     private List<String> nicknames;
+    List<Button> pickableCardsButton;
+    List<ImageView> pickableResourceCards;
+    List<ImageView> pickableGoldCards;
+    List<ImageView> globalGoals;
+    List<ImageView> hand;
+    List<Button> handButtons;
 
-
-
-    //@FXML
-    //VBox vbox;
+    //Chat labels
     @FXML
-    ListView<Label> listView;
+    ListView<TextFlow> listView;
     @FXML
     ScrollPane scrollPane;
     @FXML
@@ -46,10 +53,34 @@ public class BoardController implements Initializable {
     Button button;
     @FXML
     TextField textField;
+    //Chat labels end
 
-    public BoardController() {
+    //Pickable Cards Labels
+    @FXML
+    ImageView firstCardResource, firstCardGold, pickableResource1, pickableResource2, pickableGold1, pickableGold2;
+    @FXML
+    Button firstCardResourceButton, pickableResource1Button, pickableResource2Button;
+    @FXML
+    Button firstCardGoldButton, pickableGold1Button, pickableGold2Button;
+    //Pickable cards labels end
 
-    }
+    //hand cards
+    @FXML
+    ImageView handCard1, handCard2, handCard3;
+    @FXML
+    Button handCard1Button, handCard2Button, handCard3Button;
+    //hand cards end
+
+    //goal cards
+    @FXML
+    ImageView personalGoal, globalGoal1, globalGoal2;
+    //end goal cards
+
+
+    @FXML
+    Label updateText;
+
+    public BoardController() {}
 
 //    public void displayStandings(){
 //        gameView = client.getView();
@@ -73,6 +104,7 @@ public class BoardController implements Initializable {
 
     public void setClient(Client client) {
         this.client = client;
+        gameView = client.getView();
         this.start();
     }
 
@@ -85,8 +117,8 @@ public class BoardController implements Initializable {
             }
         }
         while(true){
-            if(client.getView().getCanRead()){
-                List<ChatMessage> newMessage = client.getView().getTmpMessages();
+            if(gameView.getCanRead()){
+                List<ChatMessage> newMessage = gameView.getTmpMessages();
                 if (newMessage != null && !newMessage.isEmpty()) {
                     Platform.runLater(() -> {
                         updateListView(newMessage);
@@ -104,21 +136,28 @@ public class BoardController implements Initializable {
     private void updateListView(List<ChatMessage> newMessage) {
         for (ChatMessage message : newMessage) {
             String sender;
-            if(client.getView().getMyNickname().equals(message.getSender()))
+            if(gameView.getMyNickname().equals(message.getSender()))
                 sender = "You";
             else
-                sender = message.getMessage();
+                sender = message.getSender();
 
-            Label messageLabel = new Label(sender + " to " + message.getReceiver() + ": " + message.getMessage());
+            TextFlow textFlow = new TextFlow();
+            textFlow.setPrefWidth(listView.getWidth() - 20);
+            textFlow.setLineSpacing(5.0);
 
-            messageLabel.setStyle("-fx-font-weight: bold;");
-            listView.getItems().add(messageLabel);
+            Text messageText = new Text(sender + " to " + message.getReceiver() + ": " + message.getMessage());
+            messageText.setStyle("-fx-font-weight: bold;");
+
+            textFlow.getChildren().add(messageText);
+
+            listView.getItems().add(textFlow);
         }
+        Platform.runLater(() -> listView.scrollTo(listView.getItems().size() - 1));
     }
 
     public void sendMessage(ActionEvent e) {
         String message = textField.getText();
-        String sender = client.getView().getMyNickname();
+        String sender = gameView.getMyNickname();
         String receiver = choiceBox.getValue();
 
         if(message.isEmpty()) return;
@@ -134,18 +173,17 @@ public class BoardController implements Initializable {
         else
             chatMessage = new ChatMessage(message, sender, receiver);
         client.sendChatMessage(chatMessage);
-        System.out.println("Messaggio inviato");
     }
 
 
     public void start(){
 
-        players = client.getView().getPlayers();
+        players = gameView.getPlayers();
         nicknames = new ArrayList<>();
         nicknames.add("All");
 
         for(PlayerView p : players){
-            if (!p.getNickname().equals(client.getView().getMyNickname()))
+            if (!p.getNickname().equals(gameView.getMyNickname()))
                 nicknames.add(p.getNickname());
         }
 
@@ -154,20 +192,91 @@ public class BoardController implements Initializable {
             choiceBox.getItems().addAll(nicknames);
             choiceBox.setValue("All");
         });
-        //vbox.getChildren().add(listView);
+
+        List<GoalCard> goals = gameView.getGlobalGoals();
+        for(int i = 0; i < goals.size(); i++) {
+            String src = goals.get(i).getSrcImage();
+            Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
+            globalGoals.get(i).setImage(image);
+        }
     }
+
+
+    public void handCard1ButtonAction(ActionEvent event) {
+        //todo
+    }
+
+    public void handCard2ButtonAction(ActionEvent event) {
+        //todo
+    }
+
+    public void handCard3ButtonAction(ActionEvent event) {
+        //todo
+    }
+
+    public void firstCardResourceButtonEvent(ActionEvent event) {
+        //todo
+
+    }
+
+    public void firstCardGoldButtonEvent(ActionEvent event) {
+        //todo
+    }
+
+    public void pickableResource1ButtonEvent(ActionEvent event) {
+        //todo
+    }
+
+    public void pickableGold1ButtonEvent(ActionEvent event) {
+        //todo
+    }
+
+    public void pickableResource2ButtonEvent(ActionEvent event) {
+        //todo
+    }
+
+    public void pickableGold2ButtonEvent(ActionEvent event) {
+        //todo
+    }
+
+
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         Thread thread = new Thread(this::seeMessages);
         thread.start();
 
-//        ObservableList<Label> messages = FXCollections.observableArrayList();
-//        listView.setItems(messages);
-
         choiceBox.setValue("All");
 
-        //scrollPane.setContent(vbox);
+        pickableCardsButton = new ArrayList<>();
+        pickableCardsButton.add(firstCardResourceButton);
+        pickableCardsButton.add(pickableResource1Button);
+        pickableCardsButton.add(pickableResource2Button);
+        pickableCardsButton.add(firstCardGoldButton);
+        pickableCardsButton.add(pickableGold1Button);
+        pickableCardsButton.add(pickableGold2Button);
 
+        pickableGoldCards = new ArrayList<>();
+        pickableGoldCards.add(pickableGold1);
+        pickableGoldCards.add(pickableGold2);
+
+        pickableResourceCards = new ArrayList<>();
+        pickableResourceCards.add(pickableResource1);
+        pickableResourceCards.add(pickableResource2);
+
+        globalGoals = new ArrayList<>();
+        globalGoals.add(globalGoal1);
+        globalGoals.add(globalGoal2);
+
+        hand = new ArrayList<>();
+        hand.add(handCard1);
+        hand.add(handCard2);
+        hand.add(handCard3);
+
+        handButtons = new ArrayList<>();
+        handButtons.add(handCard1Button);
+        handButtons.add(handCard2Button);
+        handButtons.add(handCard3Button);
     }
 }
 

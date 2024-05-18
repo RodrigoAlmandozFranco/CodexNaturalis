@@ -70,7 +70,7 @@ public class EvaluatorPointsPerChair extends Evaluator{
 
     }
 
-
+/*
     public String toString(boolean small) {
         if (small)
             return numPoints + " | L" ;
@@ -92,4 +92,6 @@ public class EvaluatorPointsPerChair extends Evaluator{
         return to_print;
     }
 
+
+ */
 }

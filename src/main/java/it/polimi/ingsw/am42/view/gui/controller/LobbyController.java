@@ -88,10 +88,11 @@ public class LobbyController {
             Stage newStage = new Stage();
 
             newStage.setScene(scene);
-            newStage.show();
-
             Stage currentStage = (Stage) progressBar.getScene().getWindow();
             currentStage.close();
+
+            newStage.show();
+
         });
     }
 }
