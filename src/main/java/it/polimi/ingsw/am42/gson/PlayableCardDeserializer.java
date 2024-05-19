@@ -28,6 +28,8 @@ public class PlayableCardDeserializer implements JsonDeserializer<PlayableCard> 
 
         Front front = context.deserialize(jsonObject.get("front"), Front.class);
         Back back = context.deserialize(jsonObject.get("back"), Back.class);
+        front.setId(id);
+        back.setId(id);
 
         return switch (jsonObject.get("type").getAsString()) {
             case "ResourceCard" -> new ResourceCard(id, front, back);

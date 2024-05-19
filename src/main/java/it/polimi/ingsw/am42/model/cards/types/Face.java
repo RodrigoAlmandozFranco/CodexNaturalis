@@ -18,6 +18,7 @@ import java.util.Map;
 public abstract class Face implements Serializable {
     private final String srcImage;
     protected final List<Corner> corners;
+    protected int id;
     private Position position;
     protected final Color color;
 
@@ -114,6 +115,13 @@ public abstract class Face implements Serializable {
         return srcImage;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     private String upperPart() {
 

@@ -149,11 +149,21 @@ class PlayerTest {
 
         PlayableCard c = new GoldCard(1, f, f2);
 
+        List<PlayableCard> hand = new ArrayList<PlayableCard>();
+
+        hand.add(c);
+
+        p.setHand(hand);
+
+        assertTrue(p.getHand().contains(c));
+
         p.placeCard(new Position(0, 0), f2);
 
         assertTrue(p.getBoard().getFaces().contains(f2));
 
         assertFalse(p.getHand().contains(c));
+
+        assertTrue(p.getHand().isEmpty());
 
     }
 
