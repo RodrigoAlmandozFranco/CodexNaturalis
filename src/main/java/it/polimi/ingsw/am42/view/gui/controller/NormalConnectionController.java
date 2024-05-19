@@ -52,7 +52,7 @@ public class NormalConnectionController {
             else
                 client.reconnect(nickname);
 
-            client.getView().setMyNickname(nickname);
+            client.getView().setNickname(nickname);
             load(event);
         } catch (GameFullException e) {
             showAlert("The game is full");
