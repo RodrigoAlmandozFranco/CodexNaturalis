@@ -1,8 +1,12 @@
 package it.polimi.ingsw.am42.view.gui.controller;
 
+import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
+import it.polimi.ingsw.am42.model.cards.types.playables.ResourceCard;
 import it.polimi.ingsw.am42.model.cards.types.playables.StartingCard;
+import it.polimi.ingsw.am42.model.exceptions.RequirementsNotMetException;
+import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.view.gameview.GameView;
@@ -84,6 +88,8 @@ public class BoardController implements Initializable {
     Button handCard1Button, handCard2Button, handCard3Button;
     //hand cards end
 
+    Face chosenFace;
+    Position chosenPosition;
 
     //goal cards
     List<ImageView> globalGoals;
@@ -100,79 +106,106 @@ public class BoardController implements Initializable {
 
     public BoardController() {}
 
-    public void placeFrontButtonAction(ActionEvent event) {}
+    public void placeFrontButtonAction(ActionEvent event) {
+        if (checkBeforePlace()) return;
 
-    public void seeFrontButtonAction(ActionEvent event) {
-        if(chosenCard != null) {
+        if(chosenCard instanceof StartingCard) {
+            placeStartingCard(chosenCard.getBack());
+            return;
+        }
 
-            if(chosenCard instanceof StartingCard) {
-                seeBackStartingCard();
-            } else {
-                String src = chosenCard.getFront().getSrcImage();
-                new Thread(() -> {
-                    try {
-                        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
-                        Platform.runLater(() -> {
-                            hand.get(myPlayer.getHand().indexOf(chosenCard)).setImage(image);
-                        });
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }).start();
-            }
+        chosenFace = chosenCard.getFront();
+        try {
+            client.place(myPlayer.getNickname(), chosenFace, chosenPosition);
+        } catch (RequirementsNotMetException e) {
+            showAlert("The requirements are not met");
         }
     }
 
-    public void placeBackButtonAction(ActionEvent event) {}
+    private void placeStartingCard(Face face) {
+        client.placeStarting(myPlayer.getNickname(), face);
+    }
+
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    public void seeFrontButtonAction(ActionEvent event) {
+        if(chosenCard == null) {
+            showAlert("You have to choose a card");
+            return;
+        }
+
+       if(chosenCard instanceof StartingCard) {
+            seeBackStartingCard();
+       } else {
+            modifyHandCardImage(chosenCard.getFront().getSrcImage());
+       }
+    }
+
+    private void modifyHandCardImage(String src) {
+        new Thread(() -> {
+            try {
+                Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
+                Platform.runLater(() -> {
+                    hand.get(myPlayer.getHand().indexOf(chosenCard)).setImage(image);
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    public void placeBackButtonAction(ActionEvent event) {
+        if (checkBeforePlace()) return;
+
+        if(chosenCard instanceof StartingCard) {
+            placeStartingCard(chosenCard.getFront());
+            return;
+        }
+
+        chosenFace = chosenCard.getBack();
+        try {
+            client.place(myPlayer.getNickname(), chosenFace, chosenPosition);
+        } catch (RequirementsNotMetException e) {
+            showAlert("The requirements are not met");
+        }
+    }
+
+    private boolean checkBeforePlace() {
+        if (chosenCard == null) {
+            showAlert("You have to choose a card");
+            return true;
+        }
+        if(chosenPosition == null && !(chosenCard instanceof StartingCard)) {
+            showAlert("You have to choose a position");
+            return true;
+        }
+        return false;
+    }
 
     public void seeBackButtonAction(ActionEvent event) {
-        if(chosenCard != null) {
-
-            if(chosenCard instanceof StartingCard) {
-                seeFrontStartingCard();
-            } else {
-                String src = chosenCard.getBack().getSrcImage();
-                new Thread(() -> {
-                    try {
-                        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
-                        Platform.runLater(() -> {
-                            hand.get(myPlayer.getHand().indexOf(chosenCard)).setImage(image);
-                        });
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }).start();
-            }
-
+        if(chosenCard == null) {
+            showAlert("You have to choose a card");
+            return;
+        }
+        if(chosenCard instanceof StartingCard) {
+            seeFrontStartingCard();
+        } else {
+            modifyHandCardImage(chosenCard.getBack().getSrcImage());
         }
     }
 
     private void seeBackStartingCard() {
-        String src = chosenCard.getBack().getSrcImage();
-        new Thread(() -> {
-            try {
-                Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
-                Platform.runLater(() -> {
-                    hand.get(myPlayer.getHand().indexOf(chosenCard)).setImage(image);
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
+        modifyHandCardImage(chosenCard.getBack().getSrcImage());
     }
 
     private void seeFrontStartingCard() {
-        String src = chosenCard.getFront().getSrcImage();
-        new Thread(() -> {
-            try {
-                Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
-                Platform.runLater(() -> {
-                    hand.get(myPlayer.getHand().indexOf(chosenCard)).setImage(image);
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
+        modifyHandCardImage(chosenCard.getFront().getSrcImage());
     }
 
     private void highlightCard(ImageView cardImageView) {
@@ -276,31 +309,35 @@ public class BoardController implements Initializable {
                 }
 
                 List<PlayableCard> pickableResources = gameView.getPickableResourceCards();
-
-                for(int i = 0; i < pickableResources.size(); i++) {
-                    if(!pickableResources.get(i).getVisibility()) {
-                        String src = pickableResources.get(i).getBack().getSrcImage();
-                        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
-                        firstCardResource.setImage(image);
-                    } else {
-                        String src = pickableResources.get(i).getFront().getSrcImage();
-                        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
-                        pickableResourceCards.get(i).setImage(image);
-                    }
-                }
-
                 List<PlayableCard> pickableGold = gameView.getPickableGoldCards();
-                for(int i = 0; i < pickableGold.size(); i++) {
-                    if(!pickableGold.get(i).getVisibility()) {
-                        String src = pickableGold.get(i).getBack().getSrcImage();
-                        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
-                        firstCardGold.setImage(image);
+
+                List<List<PlayableCard>> pickables = new ArrayList<>();
+                pickables.add(pickableResources);
+                pickables.add(pickableGold);
+
+                for(List<PlayableCard> pickable : pickables) {
+                    ImageView firstCard;
+                    List<ImageView> pickableCards;
+                    if(pickable.getFirst() instanceof ResourceCard) {
+                        firstCard = firstCardResource;
+                        pickableCards = pickableResourceCards;
                     } else {
-                        String src = pickableGold.get(i).getFront().getSrcImage();
-                        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
-                        pickableGoldCards.get(i).setImage(image);
+                        firstCard = firstCardGold;
+                        pickableCards = pickableGoldCards;
+                    }
+                    for(PlayableCard p : pickable) {
+                        if(!p.getVisibility()) {
+                            String src = p.getBack().getSrcImage();
+                            Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
+                            firstCard.setImage(image);
+                        } else {
+                            String src = p.getFront().getSrcImage();
+                            Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
+                            pickableCards.get(pickable.indexOf(p)).setImage(image);
+                        }
                     }
                 }
+
 
                 //todo points + boards
 
