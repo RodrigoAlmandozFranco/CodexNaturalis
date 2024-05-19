@@ -6,10 +6,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -24,6 +26,8 @@ public class FirstPlayerCreateGameController implements Initializable {
     private int numberOfPlayers = 0;
     @FXML
     private ChoiceBox<String> choiceBox;
+    @FXML
+    private Button LoginButton1;
 
     private String[] numbers = {"2","3","4"};
 
@@ -34,6 +38,8 @@ public class FirstPlayerCreateGameController implements Initializable {
 
     public void setClient(Client client) {
         this.client = client;
+        LoginButton1.setOnMouseEntered(event -> LoginButton1.setCursor(Cursor.HAND));
+        LoginButton1.setOnMouseExited(event -> LoginButton1.setCursor(Cursor.DEFAULT));
     }
 
     public void submit() {
@@ -52,13 +58,15 @@ public class FirstPlayerCreateGameController implements Initializable {
 
     public void createGameAction(ActionEvent event) throws IOException {
 
-        if(numberOfPlayers == 0 && nickname.trim().isEmpty()) {
+        if(numberOfPlayers == 0 && nickname.trim().isEmpty() && textField.getText().trim().isEmpty()) {
             showAlert("Please select the number of players and your nickname");
         } else if(numberOfPlayers == 0) {
             showAlert("Please select the number of players");
-        } else if(nickname.trim().isEmpty()) {
+        } else if(nickname.trim().isEmpty() && textField.getText().trim().isEmpty()) {
             showAlert("Please insert a nickname");
         } else {
+            if(nickname.trim().isEmpty())
+                nickname = textField.getText().trim();
             connect(event);
         }
     }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.am42.view.gui.controller;
 
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
+import it.polimi.ingsw.am42.model.cards.types.playables.StartingCard;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.view.gameview.GameView;
@@ -12,12 +13,16 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
 
 import java.io.IOException;
@@ -31,14 +36,12 @@ public class BoardController implements Initializable {
 
     private Client client;
     private GameView gameView;
+    private PlayerView myPlayer;
     private List<PlayerView> players;
     private List<String> nicknames;
-    List<Button> pickableCardsButton;
-    List<ImageView> pickableResourceCards;
-    List<ImageView> pickableGoldCards;
-    List<ImageView> globalGoals;
-    List<ImageView> hand;
-    List<Button> handButtons;
+
+
+    private final DropShadow highlightEffect = new DropShadow(20, Color.YELLOW);
 
     //Chat labels
     @FXML
@@ -56,6 +59,12 @@ public class BoardController implements Initializable {
     //Chat labels end
 
     //Pickable Cards Labels
+
+    List<Button> pickableCardsButton;
+    List<ImageView> pickableResourceCards;
+    List<ImageView> pickableGoldCards;
+
+
     @FXML
     ImageView firstCardResource, firstCardGold, pickableResource1, pickableResource2, pickableGold1, pickableGold2;
     @FXML
@@ -65,72 +74,315 @@ public class BoardController implements Initializable {
     //Pickable cards labels end
 
     //hand cards
+    List<ImageView> hand;
+    List<Button> handAndControlButtons;
+    PlayableCard chosenCard;
+
     @FXML
     ImageView handCard1, handCard2, handCard3;
     @FXML
     Button handCard1Button, handCard2Button, handCard3Button;
     //hand cards end
 
+
     //goal cards
+    List<ImageView> globalGoals;
+
     @FXML
     ImageView personalGoal, globalGoal1, globalGoal2;
     //end goal cards
 
+    @FXML
+    Button placeFrontButton, seeFrontButton, placeBackButton, seeBackButton;
 
     @FXML
     Label updateText;
 
     public BoardController() {}
 
-//    public void displayStandings(){
-//        gameView = client.getView();
-//        modifiedPlayer = gameView.getModifiedPlayer();
-//        for(PlayerView p : gameView.getPlayers()) {
-//            if(p.getNickname().equals(modifiedPlayer)) {
-//                int points = p.getPoints();
-//                String color = p.getColor().toString();
-//
-//
-//            }
-//        }
+    public void placeFrontButtonAction(ActionEvent event) {}
+
+    public void seeFrontButtonAction(ActionEvent event) {
+        if(chosenCard != null) {
+
+            if(chosenCard instanceof StartingCard) {
+                seeBackStartingCard();
+            } else {
+                String src = chosenCard.getFront().getSrcImage();
+                new Thread(() -> {
+                    try {
+                        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
+                        Platform.runLater(() -> {
+                            hand.get(myPlayer.getHand().indexOf(chosenCard)).setImage(image);
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }
+        }
+    }
+
+    public void placeBackButtonAction(ActionEvent event) {}
+
+    public void seeBackButtonAction(ActionEvent event) {
+        if(chosenCard != null) {
+
+            if(chosenCard instanceof StartingCard) {
+                seeFrontStartingCard();
+            } else {
+                String src = chosenCard.getBack().getSrcImage();
+                new Thread(() -> {
+                    try {
+                        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
+                        Platform.runLater(() -> {
+                            hand.get(myPlayer.getHand().indexOf(chosenCard)).setImage(image);
+                        });
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }
+
+        }
+    }
+
+    private void seeBackStartingCard() {
+        String src = chosenCard.getBack().getSrcImage();
+        new Thread(() -> {
+            try {
+                Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
+                Platform.runLater(() -> {
+                    hand.get(myPlayer.getHand().indexOf(chosenCard)).setImage(image);
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void seeFrontStartingCard() {
+        String src = chosenCard.getFront().getSrcImage();
+        new Thread(() -> {
+            try {
+                Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
+                Platform.runLater(() -> {
+                    hand.get(myPlayer.getHand().indexOf(chosenCard)).setImage(image);
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void highlightCard(ImageView cardImageView) {
+        for (ImageView handCard : hand) {
+            handCard.setEffect(null);
+        }
+        cardImageView.setEffect(highlightEffect);
+    }
 
 
-        /*
-        vedo il DIFF, capisco chi ha fatto punti, setCircleX o setCircleY,
-         */
+    private void enablePickableButtons() {
+        for(Button b : pickableCardsButton) {
+            b.setDisable(false);
+            b.setOnMouseEntered(event -> b.setCursor(Cursor.HAND));
+            b.setOnMouseExited(event -> b.setCursor(Cursor.DEFAULT));
+        }
+    }
 
-//    }
+    private void disablePickableButtons() {
+        for(Button b : pickableCardsButton) {
+            b.setDisable(true);
+            b.setOnMouseEntered(event -> b.setCursor(Cursor.DEFAULT));
+            b.setOnMouseExited(event -> b.setCursor(Cursor.DEFAULT));
+        }
+    }
+
+    private void enableHandAndControlButtons() {
+        for(Button b : handAndControlButtons) {
+            b.setDisable(false);
+            if(b.equals(placeFrontButton) || b.equals(placeBackButton) || b.equals(seeFrontButton) || b.equals(seeBackButton))
+                b.setOpacity(1);
+            b.setOnMouseEntered(event -> b.setCursor(Cursor.HAND));
+            b.setOnMouseExited(event -> b.setCursor(Cursor.DEFAULT));
+        }
+    }
+
+    private void disableHandAndControlButtons() {
+        for(Button b : handAndControlButtons) {
+            b.setDisable(true);
+            if(b.equals(placeFrontButton) || b.equals(placeBackButton) || b.equals(seeFrontButton) || b.equals(seeBackButton))
+                b.setOpacity(0);
+            b.setOnMouseEntered(event -> b.setCursor(Cursor.DEFAULT));
+            b.setOnMouseExited(event -> b.setCursor(Cursor.DEFAULT));
+        }
+    }
+
 
 
     public void setClient(Client client) {
         this.client = client;
         gameView = client.getView();
+        Thread thread = new Thread(this::seeMessages);
+        thread.start();
+        Thread threadGame = new Thread(this::updateGameView);
+        threadGame.start();
         this.start();
     }
 
-    public void seeMessages(){
-        while(client == null) {
+    public void updateGameView() {
+        while(true){
+            if(gameView.getNewUpdate()){
+
+                if(gameView.getCurrentPlayer().getNickname().equals(gameView.getMyNickname())) {
+                    if(gameView.getCurrentState().toString().equals("SETHAND")) {
+                        enableHandAndControlButtons();
+                        disablePickableButtons();
+                    } else if(gameView.getCurrentState().toString().equals("SETCOLOR")) {
+                        //todo
+                    } else if(gameView.getCurrentState().toString().equals("SETGOAL")) {
+                        //todo
+                    } else if(gameView.getCurrentState().toString().equals("PLACE")) {
+                        if(gameView.getCurrentPlayer().equals(myPlayer)) {
+                            enableHandAndControlButtons();
+                        } else {
+                            disableHandAndControlButtons();
+                            disablePickableButtons();
+                        }
+                    } else if(gameView.getCurrentState().toString().equals("PICK")) {
+                        if(gameView.getCurrentPlayer().equals(myPlayer)) {
+                            enablePickableButtons();
+                        } else {
+                            disableHandAndControlButtons();
+                            disablePickableButtons();
+                        }
+                    } else if(gameView.getCurrentState().toString().equals("LAST")) {
+                        //todo
+                    } else {
+                        // case disconnected
+                        //todo
+                    }
+                } else {
+                    disableHandAndControlButtons();
+                    disablePickableButtons();
+                }
+
+                List<PlayableCard> hand = myPlayer.getHand();
+                for(int i = 0; i < hand.size(); i++) {
+                    String src = hand.get(i).getBack().getSrcImage();
+                    Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
+                    this.hand.get(i).setImage(image);
+                }
+
+                List<PlayableCard> pickableResources = gameView.getPickableResourceCards();
+
+                for(int i = 0; i < pickableResources.size(); i++) {
+                    if(!pickableResources.get(i).getVisibility()) {
+                        String src = pickableResources.get(i).getBack().getSrcImage();
+                        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
+                        firstCardResource.setImage(image);
+                    } else {
+                        String src = pickableResources.get(i).getFront().getSrcImage();
+                        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
+                        pickableResourceCards.get(i).setImage(image);
+                    }
+                }
+
+                List<PlayableCard> pickableGold = gameView.getPickableGoldCards();
+                for(int i = 0; i < pickableGold.size(); i++) {
+                    if(!pickableGold.get(i).getVisibility()) {
+                        String src = pickableGold.get(i).getBack().getSrcImage();
+                        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
+                        firstCardGold.setImage(image);
+                    } else {
+                        String src = pickableGold.get(i).getFront().getSrcImage();
+                        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
+                        pickableGoldCards.get(i).setImage(image);
+                    }
+                }
+
+                //todo points + boards
+
+
+
+
+                String currentPlayer;
+                String text = "";
+
+                if(gameView.getCurrentPlayer().equals(myPlayer)) {
+                    text += "It's your turn";
+                    currentPlayer = "You have ";
+                } else {
+                    currentPlayer = gameView.getCurrentPlayer().getNickname();
+                    text += currentPlayer + " is playing";
+                    currentPlayer += " has ";
+                }
+
+
+
+                if(gameView.getCurrentState().toString().equals("SETHAND")) {
+                    //todo
+                } else if(gameView.getCurrentState().toString().equals("SETCOLOR")) {
+                    text += currentPlayer + "to choose a color.";
+                } else if(gameView.getCurrentState().toString().equals("SETGOAL")) {
+                    text += currentPlayer + "to choose your personal goal.";
+                } else if(gameView.getCurrentState().toString().equals("PLACE")) {
+                    text += currentPlayer + "to place a card.";
+                    if(currentPlayer.equals("You have ")) {
+                        text += "Pick a position, choose a card and select the face you want to place.";
+                    }
+                } else if(gameView.getCurrentState().toString().equals("PICK")) {
+                    text += currentPlayer + "to pick a card.";
+                    if(currentPlayer.equals("You have ")) {
+                        text += "Pick a card from the top left of the screen. You can pick the visible cards or one card from the decks";
+                    }
+                } else if(gameView.getCurrentState().toString().equals("LAST")) {
+                    //todo
+                } else {
+                    // case disconnected
+                    //todo
+                }
+
+                String finalText = text;
+                Platform.runLater(() -> {
+                    updateText.setStyle("-fx-background-color: #FFEBCD; -fx-text-fill: #DC143C; -fx-padding: 10;");
+                    updateText.setWrapText(true);
+                    updateText.setTextAlignment(TextAlignment.CENTER);
+                    updateText.setText(finalText);
+                });
+
+            }
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+
+
+
+
+    public void seeMessages(){
+
         while(true){
-            if(gameView.getCanRead()){
-                List<ChatMessage> newMessage = gameView.getTmpMessages();
-                if (newMessage != null && !newMessage.isEmpty()) {
-                    Platform.runLater(() -> {
-                        updateListView(newMessage);
-                    });
+            List<ChatMessage> newMessage = gameView.getTmpMessages();
+            if(newMessage != null && !newMessage.isEmpty()) {
+                Platform.runLater(() -> {
+                    updateListView(newMessage);
+                });
+            } else {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
             }
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
         }
+
+
     }
 
     private void updateListView(List<ChatMessage> newMessage) {
@@ -185,6 +437,8 @@ public class BoardController implements Initializable {
         for(PlayerView p : players){
             if (!p.getNickname().equals(gameView.getMyNickname()))
                 nicknames.add(p.getNickname());
+            else
+                myPlayer = p;
         }
 
         Platform.runLater(() -> {
@@ -199,54 +453,74 @@ public class BoardController implements Initializable {
             Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
             globalGoals.get(i).setImage(image);
         }
+
     }
 
 
     public void handCard1ButtonAction(ActionEvent event) {
-        //todo
+        chosenCard = myPlayer.getHand().getFirst();
+        highlightCard(handCard1);
     }
 
     public void handCard2ButtonAction(ActionEvent event) {
-        //todo
+        chosenCard = myPlayer.getHand().get(1);
+        highlightCard(handCard2);
     }
 
     public void handCard3ButtonAction(ActionEvent event) {
-        //todo
+        chosenCard = myPlayer.getHand().get(2);
+        highlightCard(handCard3);
     }
 
     public void firstCardResourceButtonEvent(ActionEvent event) {
-        //todo
-
+        PlayableCard card = null;
+        for(PlayableCard p : gameView.getPickableResourceCards()) {
+            if(!p.getVisibility()) {
+                card = p;
+                break;
+            }
+        }
+        client.pick(myPlayer.getNickname(), card);
     }
 
     public void firstCardGoldButtonEvent(ActionEvent event) {
-        //todo
+        PlayableCard card = null;
+        for(PlayableCard p : gameView.getPickableGoldCards()) {
+            if(!p.getVisibility()) {
+                card = p;
+                break;
+            }
+        }
+        client.pick(myPlayer.getNickname(), card);
     }
 
     public void pickableResource1ButtonEvent(ActionEvent event) {
-        //todo
+        client.pick(myPlayer.getNickname(), gameView.getPickableResourceCards().getFirst());
     }
 
     public void pickableGold1ButtonEvent(ActionEvent event) {
-        //todo
+        client.pick(myPlayer.getNickname(), gameView.getPickableGoldCards().getFirst());
     }
 
     public void pickableResource2ButtonEvent(ActionEvent event) {
-        //todo
+        client.pick(myPlayer.getNickname(), gameView.getPickableResourceCards().get(1));
     }
 
     public void pickableGold2ButtonEvent(ActionEvent event) {
-        //todo
+        client.pick(myPlayer.getNickname(), gameView.getPickableGoldCards().get(1));
     }
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        Thread thread = new Thread(this::seeMessages);
-        thread.start();
+
+
 
         choiceBox.setValue("All");
+
+
+
 
         pickableCardsButton = new ArrayList<>();
         pickableCardsButton.add(firstCardResourceButton);
@@ -273,10 +547,32 @@ public class BoardController implements Initializable {
         hand.add(handCard2);
         hand.add(handCard3);
 
-        handButtons = new ArrayList<>();
-        handButtons.add(handCard1Button);
-        handButtons.add(handCard2Button);
-        handButtons.add(handCard3Button);
+        handAndControlButtons = new ArrayList<>();
+        handAndControlButtons.add(handCard1Button);
+        handAndControlButtons.add(handCard2Button);
+        handAndControlButtons.add(handCard3Button);
+        handAndControlButtons.add(placeFrontButton);
+        handAndControlButtons.add(placeBackButton);
+        handAndControlButtons.add(seeFrontButton);
+        handAndControlButtons.add(seeBackButton);
+
+
+
+
+        firstCardResourceButton.setOnAction(this::firstCardResourceButtonEvent);
+        firstCardGoldButton.setOnAction(this::firstCardGoldButtonEvent);
+        pickableResource1Button.setOnAction(this::pickableResource1ButtonEvent);
+        pickableResource2Button.setOnAction(this::pickableResource2ButtonEvent);
+        pickableGold1Button.setOnAction(this::pickableGold1ButtonEvent);
+        pickableGold2Button.setOnAction(this::pickableGold2ButtonEvent);
+        handCard1Button.setOnAction(this::handCard1ButtonAction);
+        handCard2Button.setOnAction(this::handCard2ButtonAction);
+        handCard3Button.setOnAction(this::handCard3ButtonAction);
+        placeFrontButton.setOnAction(this::placeFrontButtonAction);
+        placeBackButton.setOnAction(this::placeBackButtonAction);
+        seeFrontButton.setOnAction(this::seeFrontButtonAction);
+        seeBackButton.setOnAction(this::seeBackButtonAction);
+
     }
 }
 

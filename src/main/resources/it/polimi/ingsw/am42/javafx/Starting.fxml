@@ -13,7 +13,7 @@
             <Image url="@../graphical/CodexNaturalis.png" />
          </image>
       </ImageView>
-      <Button fx:id="LoginButton" layoutX="437.0" layoutY="503.0" mnemonicParsing="false" onAction="#login" prefHeight="111.0" prefWidth="279.0" text="START">
+      <Button fx:id="loginButton" layoutX="437.0" layoutY="503.0" mnemonicParsing="false" onAction="#login" prefHeight="111.0" prefWidth="279.0" text="START">
          <font>
             <Font name="Open Sans Bold Italic" size="56.0" />
          </font>

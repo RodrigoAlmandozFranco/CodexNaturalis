@@ -22,6 +22,7 @@ public class GameView {
     private List<PlayerView> players;
     private List<GoalCard> globalGoals;
     private State currentState;
+    private boolean newUpdate = false;
 
     private List<PlayableCard> pickableResourceCards;
     private List<PlayableCard> pickableGoldCards;
@@ -34,9 +35,7 @@ public class GameView {
     private List<ChatMessage> allMessages;
     private List<ChatMessage> tmpMessages;
 
-    private boolean canRead;
     private boolean startGame;
-    private final Lock lock = new ReentrantLock();
 
 
     public GameView() {
@@ -55,7 +54,6 @@ public class GameView {
         usableMethods.add(MethodChoice.SENDMESSAGE);
         allMessages = new ArrayList<>();
         tmpMessages = new ArrayList<>();
-        canRead = false;
         startGame = false;
     }
 
@@ -128,39 +126,21 @@ public class GameView {
     }
 
     public void updateMessage(ChatMessage chatMessage) {
-        lock.lock();
-        try {
-            allMessages.add(chatMessage);
-            tmpMessages.add(chatMessage);
-            canRead = true;
-        } finally {
-            lock.unlock();
-        }
+        allMessages.add(chatMessage);
+        tmpMessages.add(chatMessage);
     }
 
     public List<ChatMessage> getAllMessages() {
-        lock.lock();
-        try {
-            return new ArrayList<>(allMessages);
-        } finally {
-            lock.unlock();
-        }
+        return new ArrayList<>(allMessages);
     }
 
     public List<ChatMessage> getTmpMessages() {
-        lock.lock();
-        try {
-            List<ChatMessage> tmp = new ArrayList<>(tmpMessages);
-            tmpMessages.clear();
-            return tmp;
-        } finally {
-            lock.unlock();
-        }
+        List<ChatMessage> tmp = new ArrayList<>(tmpMessages);
+        tmpMessages.clear();
+        return tmp;
     }
 
-    public boolean getCanRead() {
-        return canRead;
-    }
+
 
     public boolean getReady(){
         return startGame;
@@ -175,8 +155,12 @@ public class GameView {
 
             // First diff
             if (numberPlayers == 0) {
-                for (Player p : diff.getPlayers())
-                     players.add(new PlayerView(p));
+                for (Player p : diff.getPlayers()) {
+                    PlayerView playerView = new PlayerView(p);
+                    players.add(playerView);
+                    playerView.setHand(diff.getHand());
+                }
+
                 currentPlayer = players.getFirst();
                 globalGoals = diff.getGlobalGoals();
                 numberPlayers = diff.getNumberPlayers();
@@ -202,11 +186,12 @@ public class GameView {
             currentPlayer = getPlayer(diff.getFuturePlayer());
 
             startGame = true;
+            newUpdate = true;
 
             handleState();
     }
 
-/*
+    /*
     @Override
     public String toString() {
         return "GameView{" +
@@ -220,12 +205,23 @@ public class GameView {
 
  */
 
+    public boolean getNewUpdate() {
+        boolean tmp = newUpdate;
+        newUpdate = false;
+        return tmp;
+    }
+
     private PlayerView getPlayer(String nickname) {
         for (PlayerView p : players)
             if (p.getNickname().equals(nickname))
                 return p;
         return null;
     }
+
+    public PlayerView getCurrentPlayer() {
+        return currentPlayer;
+    }
+
 
     public List<PlayableCard> getPickableResourceCards() {
         return pickableResourceCards;

@@ -9,10 +9,12 @@ import it.polimi.ingsw.am42.view.gui.utils.ClientHolder;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -22,6 +24,8 @@ public class NormalConnectionController {
 
     private Client client;
     private String nickname = "";
+    @FXML
+    private Button LoginButton1;
 
     @FXML
     TextField textField;
@@ -30,6 +34,8 @@ public class NormalConnectionController {
 
     public void setClient(Client client) {
         this.client = client;
+        LoginButton1.setOnMouseEntered(event -> LoginButton1.setCursor(Cursor.HAND));
+        LoginButton1.setOnMouseExited(event -> LoginButton1.setCursor(Cursor.DEFAULT));
     }
 
     public void submit() {
@@ -38,9 +44,11 @@ public class NormalConnectionController {
 
 
     public void connectGameAction(ActionEvent event) throws IOException {
-        if(nickname.trim().isEmpty()) {
+        if(nickname.trim().isEmpty() && textField.getText().trim().isEmpty()){
             showAlert("Please insert a nickname");
         } else {
+            if(nickname.trim().isEmpty())
+                nickname = textField.getText().trim();
             connect(event);
         }
     }
