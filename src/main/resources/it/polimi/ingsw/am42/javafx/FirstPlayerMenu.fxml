@@ -19,7 +19,7 @@
             <Font name="Futura Bold Italic BT" size="40.0" />
          </font>
       </Button>
-      <Button fx:id="LoginButton1" layoutX="513.0" layoutY="287.0" mnemonicParsing="false" onAction="#loadGameAction" prefHeight="73.0" prefWidth="542.0" style="-fx-background-color: teal; -fx-border-color: White; -fx-border-width: 4;" text="Load Game" textFill="WHITE">
+      <Button fx:id="loadGameButton" layoutX="513.0" layoutY="287.0" mnemonicParsing="false" onAction="#loadGameAction" prefHeight="73.0" prefWidth="542.0" style="-fx-background-color: teal; -fx-border-color: White; -fx-border-width: 4;" text="Load Game" textFill="WHITE">
          <font>
             <Font name="Futura Bold Italic BT" size="40.0" />
          </font>

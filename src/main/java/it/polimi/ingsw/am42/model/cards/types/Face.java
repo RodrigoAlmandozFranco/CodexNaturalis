@@ -18,6 +18,7 @@ import java.util.Map;
 public abstract class Face implements Serializable {
     private final String srcImage;
     protected final List<Corner> corners;
+    protected int id;
     private Position position;
     protected final Color color;
 
@@ -114,7 +115,13 @@ public abstract class Face implements Serializable {
         return srcImage;
     }
 
-    /*
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     private String upperPart() {
 
@@ -127,7 +134,8 @@ public abstract class Face implements Serializable {
         if (getCorner(Direction.UPLEFT).getState().equals(CornerState.CLOSED))
             to_print += "|    ";
         else
-            to_print += "| " + getCorner(Direction.UPLEFT).getResource().toString() + " |";
+            to_print += "| " + (getCorner(Direction.UPLEFT).getResource() == null ? " " : getCorner(Direction.UPLEFT).getResource().toString()) + " |";
+
         if (getEvaluator() == null)
             to_print += "               ";
         else
@@ -135,7 +143,7 @@ public abstract class Face implements Serializable {
         if (getCorner(Direction.UPRIGHT).getState().equals(CornerState.CLOSED))
             to_print += "    |\n";
         else
-            to_print += "| " + getCorner(Direction.UPRIGHT).getResource().toString() + " |\n";
+            to_print += "| " + (getCorner(Direction.UPRIGHT).getResource() == null ? " " : getCorner(Direction.UPRIGHT).getResource().toString()) + " |\n";
 
         // 3
         if (getCorner(Direction.UPLEFT).getState().equals(CornerState.CLOSED))
@@ -183,7 +191,7 @@ public abstract class Face implements Serializable {
         if (getCorner(Direction.DOWNLEFT).getState().equals(CornerState.CLOSED))
             to_print += "|    ";
         else
-            to_print += "| " + getCorner(Direction.DOWNLEFT).getResource().toString() + " |";
+            to_print += "| " + (getCorner(Direction.DOWNLEFT).getResource() == null ? " " : getCorner(Direction.DOWNLEFT).getResource().toString()) + " |";
         if (getRequirements().equals(null))
             to_print += "               ";
         else {
@@ -203,7 +211,7 @@ public abstract class Face implements Serializable {
         if (getCorner(Direction.DOWNRIGHT).getState().equals(CornerState.CLOSED))
             to_print += "    |\n";
         else
-            to_print += "| " + getCorner(Direction.DOWNRIGHT).getResource().toString() + " |\n";
+            to_print += "| " + (getCorner(Direction.DOWNRIGHT).getResource() == null ? " " : getCorner(Direction.DOWNRIGHT).getResource().toString()) + " |\n";
 
 
         // 3
@@ -226,7 +234,5 @@ public abstract class Face implements Serializable {
 
         return to_print;
     }
-
- */
 }
 

@@ -18,6 +18,8 @@ import it.polimi.ingsw.am42.network.rmi.RMISpeaker;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.PlayerDisconnectedMessage;
 
 
+import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -87,16 +89,34 @@ public class Controller extends Observable{
         }
 
 
-
         return true;
     }
 
 
     public boolean reconnect(MessageListener l, String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+        boolean wasInPrevGame = false;
+
         if(listeners.isEmpty())
             this.game = this.gameDB.loadGame();
+        for (MessageListener lis : listeners) {
+            try {
+                if (lis.getId().equals(nickname))
+                    throw new NicknameAlreadyInUseException(nickname + "si è già connesso");
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        for (Player p : game.getPlayers())
+            if (p.getNickname().equals(nickname)) {
+                wasInPrevGame = true;
+                break;
+            }
+
+        if(!wasInPrevGame)
+            throw new NicknameInvalidException(nickname + "non stava giocando nella partita precedente");
+
         this.addListener(l);
-        this.game.addToGame(nickname);
 
         if(listeners.size() == game.getNumberPlayers()) {
             Change change = gameDB.afterLoad();
@@ -105,11 +125,6 @@ public class Controller extends Observable{
 
         System.out.println(nickname + " loaded up new game");
 
-        return true;
-    }
-
-    public boolean connectAfterLoad(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
-        //todo
         return true;
     }
 

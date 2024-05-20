@@ -15,6 +15,7 @@ import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 import it.polimi.ingsw.am42.network.tcp.messages.clientToServer.*;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.*;
+import it.polimi.ingsw.am42.view.gameview.GameView;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -27,7 +28,7 @@ import java.util.Set;
 
 
 
-public class ClientTCP extends Client {
+public class ClientTCP implements Client {
 
     private static String ip = "";
     private static int port;
@@ -35,6 +36,7 @@ public class ClientTCP extends Client {
     private final Socket socket;
     private ObjectInputStream input;
     private ObjectOutputStream output;
+    private GameView view;
 
     public ClientTCP(String ip, int port) throws IOException {
         ClientTCP.ip = ip;
@@ -156,7 +158,7 @@ public class ClientTCP extends Client {
         };
     }
 
-    @Override
+    //@Override
     public boolean connectAfterLoad(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         //todo
         return true;
@@ -265,7 +267,6 @@ public class ClientTCP extends Client {
         return answer.getWinners();
     }
 
-    @Override
     public void update(Change change) {
         view.update(change);
     }
@@ -292,7 +293,12 @@ public class ClientTCP extends Client {
         }
         view.connectionClosed();
     }
+
+    public void setView(GameView view) {
+        this.view = view;
+    }
+
+    public GameView getView() {
+        return view;
+    }
 }
-
-
-

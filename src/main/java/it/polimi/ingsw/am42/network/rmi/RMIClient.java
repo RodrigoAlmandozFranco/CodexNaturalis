@@ -14,6 +14,7 @@ import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
+import it.polimi.ingsw.am42.view.gameview.GameView;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -25,16 +26,16 @@ import java.util.Set;
 
 
 /**
- * This class acts as the client when using a RMI connection
+ * This class acts as the client when using RMI connection
  *
  * @author Alessandro Di Maria
  */
-public class RMIClient extends Client implements RMIMessageListener, Serializable {
-    Registry registry;
-    RMISpeaker stub;
-
-    String nickname;
-    public RMIClient(String host, int port) {
+public class RMIClient extends UnicastRemoteObject implements Client, RMIMessageListener, Serializable {
+    private Registry registry;
+    private RMISpeaker stub;
+    private GameView view;
+    private String nickname;
+    public RMIClient(String host, int port) throws RemoteException {
         //TODO da riga di comando ricevo se voglio un view GUI o TUI
         //this.view = new View(this);
         try {
@@ -47,8 +48,6 @@ public class RMIClient extends Client implements RMIMessageListener, Serializabl
         }
         this.nickname = "Still missing";
     }
-    //TODO metodo che il server chiama sul RMIClient
-    //public void update(diff) {view.update(diff);}
 
     public ConnectionState getGameInfo(){
         try {
@@ -191,7 +190,7 @@ public class RMIClient extends Client implements RMIMessageListener, Serializabl
     }
 
     @Override
-    public void update(Change diff) {
+    public void update(Change diff) throws RemoteException{
         view.update(diff);
     }
 
@@ -210,7 +209,16 @@ public class RMIClient extends Client implements RMIMessageListener, Serializabl
         // view.receiveMessage(message)
     }
 
-    public boolean heartbeat() {
+    public boolean heartbeat() throws RemoteException {
         return true;
+    }
+
+
+    public void setView(GameView view) {
+        this.view = view;
+    }
+
+    public GameView getView() {
+        return view;
     }
 }

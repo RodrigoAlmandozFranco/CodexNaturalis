@@ -5,6 +5,7 @@ import it.polimi.ingsw.am42.view.gui.utils.ClientHolder;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -29,6 +30,10 @@ public class MenuController {
 
     public void setClient(Client client){
         this.client = client;
+        createGameButton.setOnMouseEntered(event -> createGameButton.setCursor(Cursor.HAND));
+        createGameButton.setOnMouseExited(event -> createGameButton.setCursor(Cursor.DEFAULT));
+        loadGameButton.setOnMouseEntered(event -> loadGameButton.setCursor(Cursor.HAND));
+        loadGameButton.setOnMouseExited(event -> loadGameButton.setCursor(Cursor.DEFAULT));
     }
 
     public void createGameAction(ActionEvent event) throws IOException {

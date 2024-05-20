@@ -242,7 +242,7 @@ public class Player implements Serializable {
      */
     private void removeCardFromHand(Face face) {
         for (PlayableCard c : hand) {
-            if (face.equals((c.getFront())) || face.equals(c.getBack())) {
+            if (face.getId() == c.getId()) {
                 hand.remove(c);
                 break;
             }

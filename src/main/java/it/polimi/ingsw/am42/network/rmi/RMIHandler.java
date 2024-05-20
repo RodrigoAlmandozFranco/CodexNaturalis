@@ -40,36 +40,17 @@ public class RMIHandler implements RMISpeaker{
 
     @Override
     public int createGame(MessageListener l, String nickname, int numPlayers) throws RemoteException{
-
-        try {
-            return controller.createGame(l, nickname, numPlayers);
-        }
-        catch (NumberPlayerWrongException | GameFullException | NicknameInvalidException | NicknameAlreadyInUseException e) {
-
-            throw new RemoteException(e.getMessage(), e);
-        }
+        return controller.createGame(l, nickname, numPlayers);
     }
 
     @Override
     public boolean connect(MessageListener l, String nickname) throws RemoteException {
-        try {
-            return controller.connect(l, nickname);
-        }
-        catch (GameFullException | NicknameInvalidException | NicknameAlreadyInUseException e) {
-            throw new RemoteException(e.getMessage(), e);
-        }
-
+        return controller.connect(l, nickname);
     }
 
     @Override
     public boolean reconnect(MessageListener l, String nickname) throws RemoteException {
-        try {
-            return controller.reconnect(l, nickname);
-        }
-        catch (GameFullException | NicknameInvalidException | NicknameAlreadyInUseException e) {
-
-            throw new RemoteException(e.getMessage(), e);
-        }
+        return controller.reconnect(l, nickname);
     }
 
     @Override
@@ -79,13 +60,7 @@ public class RMIHandler implements RMISpeaker{
 
     @Override
     public boolean place(String p, Face face, Position position) throws RemoteException {
-        try {
-            return controller.place(p, face, position);
-        }
-        catch (RequirementsNotMetException e) {
-            throw new RemoteException(e.getMessage(), e);
-        }
-
+        return controller.place(p, face, position);
     }
 
     @Override
