@@ -33,7 +33,7 @@ public class PlayerView {
     public PlayerView(Player p) {
         this.points = p.getPoints();
         this.nickname = p.getNickname();
-        this.hand = p.getHand();
+        this.hand = new ArrayList<>(p.getHand());
         this.color = p.getColor();
         this.board = p.getBoard();
         this.personalGoal = p.getPersonalGoal();
@@ -47,6 +47,9 @@ public class PlayerView {
         this.points = points;
     }
 
+    public void setColor(Color color) {
+        this.color = color;
+    }
 
     public String getNickname() {
         return nickname;
@@ -55,7 +58,8 @@ public class PlayerView {
         return hand;
     }
     public void setHand(List<PlayableCard> hand) {
-        this.hand = hand;
+        this.hand.clear();
+        this.hand.addAll(hand);
     }
 
     public Color getColor() {

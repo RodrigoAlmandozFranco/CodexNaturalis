@@ -18,7 +18,6 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class GameView {
 
-    private String myNickname;
     private List<PlayerView> players;
     private List<GoalCard> globalGoals;
     private State currentState;
@@ -28,7 +27,6 @@ public class GameView {
     private List<PlayableCard> pickableGoldCards;
     private int numberPlayers;
     protected PlayerView currentPlayer;
-    protected PlayerView modifiedPlayer;
     private String nickname;
     private List<MethodChoice> usableMethods;
 
@@ -55,10 +53,6 @@ public class GameView {
         allMessages = new ArrayList<>();
         tmpMessages = new ArrayList<>();
         startGame = false;
-    }
-
-    public void setMyNickname(String nickname){
-        myNickname = nickname;
     }
 
 
@@ -122,7 +116,7 @@ public class GameView {
     }
 
     public String getMyNickname(){
-        return myNickname;
+        return nickname;
     }
 
     public void updateMessage(ChatMessage chatMessage) {
@@ -158,13 +152,13 @@ public class GameView {
                 for (Player p : diff.getPlayers()) {
                     PlayerView playerView = new PlayerView(p);
                     players.add(playerView);
-                    playerView.setHand(diff.getHand());
+                    playerView.setHand(new ArrayList<>(diff.getHand()));
                 }
 
                 currentPlayer = players.getFirst();
                 globalGoals = diff.getGlobalGoals();
                 numberPlayers = diff.getNumberPlayers();
-                }
+            }
 
             currentPlayer.setPoints(diff.getPointsPlayer());
             currentPlayer.setNumberGoalsAchieved(diff.getNumberGoalsAchieved());
@@ -182,7 +176,6 @@ public class GameView {
 
             currentState = diff.getCurrentState();
 
-            modifiedPlayer = currentPlayer;
             currentPlayer = getPlayer(diff.getFuturePlayer());
 
             startGame = true;
@@ -271,9 +264,6 @@ public class GameView {
         this.currentState = state;
     }
 
-    public String getModifiedPlayer(){
-        return modifiedPlayer.getNickname();
-    }
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }
