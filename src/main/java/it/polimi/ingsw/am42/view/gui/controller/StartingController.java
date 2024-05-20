@@ -4,9 +4,12 @@ import it.polimi.ingsw.am42.controller.ConnectionState;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.view.gui.utils.ClientHolder;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -18,9 +21,19 @@ public class StartingController{
     private Scene scene;
     private String setter;
 
+    @FXML
+    Button loginButton;
+
+    public StartingController() {
+
+
+    }
+
 
     public void setClient(Client client){
         this.client = client;
+        loginButton.setOnMouseEntered(event -> loginButton.setCursor(Cursor.HAND));
+        loginButton.setOnMouseExited(event -> loginButton.setCursor(Cursor.DEFAULT));
     }
 
     public void login(ActionEvent e) throws IOException {

@@ -1,7 +1,7 @@
 [
   {
     "id" : 87,
-    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/87.png",
+    "srcImage" : "/it/polimi/ingsw/am42/images/87.png",
     "evaluator" : {
       "type" : "EvaluatorPointsPerStair",
       "numPoints" : 2,
@@ -11,7 +11,7 @@
   },
   {
     "id" : 88,
-    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/88.png",
+    "srcImage" : "/it/polimi/ingsw/am42/images/88.png",
     "evaluator" : {
       "type" : "EvaluatorPointsPerStair",
       "numPoints" : 2,
@@ -21,7 +21,7 @@
   },
   {
     "id" : 89,
-    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/89.png",
+    "srcImage" : "/it/polimi/ingsw/am42/images/89.png",
     "evaluator" : {
       "type" : "EvaluatorPointsPerStair",
       "numPoints" : 2,
@@ -31,7 +31,7 @@
   },
   {
     "id" : 90,
-    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/90.png",
+    "srcImage" : "/it/polimi/ingsw/am42/images/90.png",
     "evaluator" : {
       "type" : "EvaluatorPointsPerStair",
       "numPoints" : 2,
@@ -41,7 +41,7 @@
   },
   {
     "id" : 91,
-    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/91.png",
+    "srcImage" : "/it/polimi/ingsw/am42/images/91.png",
     "evaluator" : {
       "type" : "EvaluatorPointsPerChair",
       "numPoints" : 3,
@@ -52,7 +52,7 @@
   },
   {
     "id" : 92,
-    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/92.png",
+    "srcImage" : "/it/polimi/ingsw/am42/images/92.png",
     "evaluator" : {
       "type" : "EvaluatorPointsPerChair",
       "numPoints" : 3,
@@ -63,7 +63,7 @@
   },
   {
     "id" : 93,
-    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/93.png",
+    "srcImage" : "/it/polimi/ingsw/am42/images/93.png",
     "evaluator" : {
       "type" : "EvaluatorPointsPerChair",
       "numPoints" : 3,
@@ -74,7 +74,7 @@
   },
   {
     "id" : 94,
-    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/94.png",
+    "srcImage" : "/it/polimi/ingsw/am42/images/94.png",
     "evaluator" : {
       "type" : "EvaluatorPointsPerChair",
       "numPoints" : 3,
@@ -85,7 +85,7 @@
   },
   {
     "id" : 95,
-    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/95.png",
+    "srcImage" : "/it/polimi/ingsw/am42/images/95.png",
     "evaluator" : {
       "type" : "EvaluatorPointsPerResource",
       "numPoints" : 2,
@@ -96,7 +96,7 @@
   },
   {
     "id" : 96,
-    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/96.png",
+    "srcImage" : "/it/polimi/ingsw/am42/images/96.png",
     "evaluator" : {
       "type" : "EvaluatorPointsPerResource",
       "numPoints" : 2,
@@ -107,7 +107,7 @@
   },
   {
     "id" : 97,
-    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/97.png",
+    "srcImage" : "/it/polimi/ingsw/am42/images/97.png",
     "evaluator" : {
       "type" : "EvaluatorPointsPerResource",
       "numPoints" : 2,
@@ -118,7 +118,7 @@
   },
   {
     "id" : 98,
-    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/98.png",
+    "srcImage" : "/it/polimi/ingsw/am42/images/98.png",
     "evaluator" : {
       "type" : "EvaluatorPointsPerResource",
       "numPoints" : 2,
@@ -129,7 +129,7 @@
   },
   {
     "id" : 99,
-    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/99.png",
+    "srcImage" : "/it/polimi/ingsw/am42/images/99.png",
     "evaluator" : {
       "type" : "EvaluatorPointsPerResource",
       "numPoints" : 3,
@@ -142,7 +142,7 @@
   },
   {
     "id" : 100,
-    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/100.png",
+    "srcImage" : "/it/polimi/ingsw/am42/images/100.png",
     "evaluator" : {
       "type" : "EvaluatorPointsPerResource",
       "numPoints" : 2,
@@ -153,7 +153,7 @@
   },
   {
     "id" : 101,
-    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/101.png",
+    "srcImage" : "/it/polimi/ingsw/am42/images/101.png",
     "evaluator" : {
       "type" : "EvaluatorPointsPerResource",
       "numPoints" : 2,
@@ -164,7 +164,7 @@
   },
   {
     "id" : 102,
-    "srcImage" : "src/main/resources/it/polimi/ingsw/am42/images/102.png",
+    "srcImage" : "/it/polimi/ingsw/am42/images/102.png",
     "evaluator" : {
       "type" : "EvaluatorPointsPerResource",
       "numPoints" : 2,

@@ -8,7 +8,7 @@ module it.polimi.ingsw.am42 {
     requires java.desktop;
 
     opens it.polimi.ingsw.am42.view.gui.controller to javafx.fxml;
-    //exports it.polimi.ingsw.am42;
+    exports it.polimi.ingsw.am42;
     opens it.polimi.ingsw.am42.view to javafx.fxml;
     exports it.polimi.ingsw.am42.network.rmi;
     exports it.polimi.ingsw.am42.view.gui.controller;
@@ -19,4 +19,8 @@ module it.polimi.ingsw.am42 {
     opens it.polimi.ingsw.am42.view.gui.utils.points to javafx.fxml;
     exports it.polimi.ingsw.am42.view.gui.utils;
     opens it.polimi.ingsw.am42.view.gui.utils to javafx.fxml;
+    opens it.polimi.ingsw.am42 to javafx.fxml;
+
+    requires java.base;
+    exports it.polimi.ingsw.am42.model.structure;
 }

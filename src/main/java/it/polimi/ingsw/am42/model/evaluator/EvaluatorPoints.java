@@ -20,7 +20,7 @@ public class EvaluatorPoints extends Evaluator{
         return numPoints;
     }
 
-
+/*
     public String toString(boolean small) {
         if (small)
             return "  " + (numPoints != 0 ? numPoints : " ") + "  ";
@@ -41,4 +41,6 @@ public class EvaluatorPoints extends Evaluator{
         to_print += Color.WHITE.toString();
         return to_print;
     }
+
+ */
 }

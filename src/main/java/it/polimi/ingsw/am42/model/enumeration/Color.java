@@ -9,7 +9,7 @@ public enum Color {
     PURPLE,
     WHITE;
 
-
+/*
     public String toString() {
         return  switch (this) {
             case RED -> "\u001B[31m";
@@ -20,4 +20,6 @@ public enum Color {
             default -> "\u001B[0m";
         };
     }
+
+ */
 }

@@ -3,7 +3,7 @@
     "type" : "StartingCard",
     "id": 81,
     "front": {
-      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/81.png",
+      "srcImage": "/it/polimi/ingsw/am42/images/81.png",
       "color": "WHITE",
       "requirements": null,
       "evaluator": {
@@ -34,7 +34,7 @@
       ]
     },
     "back": {
-      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/81_back.png",
+      "srcImage": "/it/polimi/ingsw/am42/images/81_back.png",
       "corners": [
         {
           "resource": null,
@@ -65,7 +65,7 @@
     "type" : "StartingCard",
     "id": 82,
     "front": {
-      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/82.png",
+      "srcImage": "/it/polimi/ingsw/am42/images/82.png",
       "color": "WHITE",
       "requirements": null,
       "evaluator": {
@@ -96,7 +96,7 @@
       ]
     },
     "back": {
-      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/82_back.png",
+      "srcImage": "/it/polimi/ingsw/am42/images/82_back.png",
       "corners": [
         {
           "resource": "ANIMALKINGDOM",
@@ -127,7 +127,7 @@
     "type" : "StartingCard",
     "id": 83,
     "front": {
-      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/83.png",
+      "srcImage": "/it/polimi/ingsw/am42/images/83.png",
       "color": "WHITE",
       "requirements": null,
       "evaluator": {
@@ -158,7 +158,7 @@
       ]
     },
     "back": {
-      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/83_back.png",
+      "srcImage": "/it/polimi/ingsw/am42/images/83_back.png",
       "corners": [
         {
           "resource": null,
@@ -189,7 +189,7 @@
     "type" : "StartingCard",
     "id": 84,
     "front": {
-      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/84.png",
+      "srcImage": "/it/polimi/ingsw/am42/images/84.png",
       "color": "WHITE",
       "requirements": null,
       "evaluator": {
@@ -220,7 +220,7 @@
       ]
     },
     "back": {
-      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/84_back.png",
+      "srcImage": "/it/polimi/ingsw/am42/images/84_back.png",
       "corners": [
         {
           "resource": null,
@@ -251,7 +251,7 @@
     "type" : "StartingCard",
     "id": 85,
     "front": {
-      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/85.png",
+      "srcImage": "/it/polimi/ingsw/am42/images/85.png",
       "color": "WHITE",
       "requirements": null,
       "evaluator": {
@@ -282,7 +282,7 @@
       ]
     },
     "back": {
-      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/85_back.png",
+      "srcImage": "/it/polimi/ingsw/am42/images/85_back.png",
       "corners": [
         {
           "resource": null,
@@ -313,7 +313,7 @@
     "type" : "StartingCard",
     "id": 86,
     "front": {
-      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/86.png",
+      "srcImage": "/it/polimi/ingsw/am42/images/86.png",
       "color": "WHITE",
       "requirements": null,
       "evaluator": {
@@ -344,7 +344,7 @@
       ]
     },
     "back": {
-      "srcImage": "src/main/resources/it/polimi/ingsw/am42/images/86_back.png",
+      "srcImage": "/it/polimi/ingsw/am42/images/86_back.png",
       "corners": [
         {
           "resource": null,

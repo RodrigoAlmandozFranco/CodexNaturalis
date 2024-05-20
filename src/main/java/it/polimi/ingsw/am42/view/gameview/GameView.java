@@ -22,6 +22,8 @@ public class GameView {
     private List<PlayerView> players;
     private List<GoalCard> globalGoals;
     private State currentState;
+    private boolean newUpdate = false;
+
     private List<PlayableCard> pickableResourceCards;
     private List<PlayableCard> pickableGoldCards;
     private int numberPlayers;
@@ -29,8 +31,8 @@ public class GameView {
     private List<MethodChoice> usableMethods;
     private List<ChatMessage> allMessages;
     private List<ChatMessage> tmpMessages;
-    private boolean canRead;
-    private final Lock lock = new ReentrantLock();
+
+    private boolean startGame;
 
 
     public GameView() {
@@ -49,7 +51,7 @@ public class GameView {
         usableMethods.add(MethodChoice.SENDMESSAGE);
         allMessages = new ArrayList<>();
         tmpMessages = new ArrayList<>();
-        canRead = false;
+        startGame = false;
     }
 
     public void handleState() {
@@ -115,38 +117,23 @@ public class GameView {
     }
 
     public void updateMessage(ChatMessage chatMessage) {
-        lock.lock();
-        try {
-            allMessages.add(chatMessage);
-            tmpMessages.add(chatMessage);
-            canRead = true;
-        } finally {
-            lock.unlock();
-        }
+        allMessages.add(chatMessage);
+        tmpMessages.add(chatMessage);
     }
 
     public List<ChatMessage> getAllMessages() {
-        lock.lock();
-        try {
-            return new ArrayList<>(allMessages);
-        } finally {
-            lock.unlock();
-        }
+        return new ArrayList<>(allMessages);
     }
 
     public List<ChatMessage> getTmpMessages() {
-        lock.lock();
-        try {
-            List<ChatMessage> tmp = new ArrayList<>(tmpMessages);
-            tmpMessages.clear();
-            return tmp;
-        } finally {
-            lock.unlock();
-        }
+        List<ChatMessage> tmp = new ArrayList<>(tmpMessages);
+        tmpMessages.clear();
+        return tmp;
     }
+    
 
-    public boolean getCanRead() {
-        return canRead;
+    public boolean getReady(){
+        return startGame;
     }
 
 
@@ -180,7 +167,10 @@ public class GameView {
 
             currentPlayer = getPlayer(diff.getFuturePlayer());
 
-            handleState();
+        startGame = true;
+        newUpdate = true;
+        
+        handleState();
     }
 
 
@@ -195,12 +185,23 @@ public class GameView {
                 '}';
     }
 
+    public boolean getNewUpdate() {
+        boolean tmp = newUpdate;
+        newUpdate = false;
+        return tmp;
+    }
+
     public PlayerView getPlayer(String nickname) {
         for (PlayerView p : players)
             if (p.getNickname().equals(nickname))
                 return p;
         return null;
     }
+
+    public PlayerView getCurrentPlayer() {
+        return currentPlayer;
+    }
+
 
     public List<PlayableCard> getPickableResourceCards() {
         return pickableResourceCards;

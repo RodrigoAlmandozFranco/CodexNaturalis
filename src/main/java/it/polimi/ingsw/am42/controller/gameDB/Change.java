@@ -132,6 +132,7 @@ public class Change implements Serializable {
         return currentState;
     }
 
+    /*
     @Override
     public String toString() {
         return "Change{" +
@@ -152,5 +153,7 @@ public class Change implements Serializable {
                 ", gameStarted=" + gameStarted +
                 '}';
     }
+
+     */
 }
 
