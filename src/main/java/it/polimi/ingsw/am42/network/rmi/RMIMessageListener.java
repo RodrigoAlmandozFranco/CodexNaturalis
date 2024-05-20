@@ -10,11 +10,11 @@ import java.rmi.server.UnicastRemoteObject;
 
 public interface RMIMessageListener extends MessageListener, Remote {
 
-    public String getId();
+    public String getId() throws RemoteException;
 
-    public void update(Change diff);
+    public void update(Change diff) throws RemoteException;
 
-    public void receiveMessage(Message message);
+    public void receiveMessage(Message message) throws RemoteException;
 
-    public boolean heartbeat();
+    public boolean heartbeat() throws RemoteException;
 }

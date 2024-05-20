@@ -66,7 +66,11 @@ public class ClientMain extends UnicastRemoteObject {
 
 
         if (rmiParam) {
-            client = new RMIClient(ADDRESS, PORT);
+            try {
+                client = new RMIClient(ADDRESS, PORT);
+            } catch (RemoteException e) {
+                throw new RuntimeException(e);
+            }
         }
         else {
             try {

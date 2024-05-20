@@ -5,6 +5,7 @@ import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 
 /**
@@ -15,11 +16,11 @@ import java.rmi.Remote;
  */
 public interface MessageListener {
 
-        public String getId();
+        public String getId() throws RemoteException;
 
-        public void update(Change diff);
+        public void update(Change diff) throws RemoteException;
 
-        public void receiveMessage(Message message);
+        public void receiveMessage(Message message) throws RemoteException;
 
-        public boolean heartbeat();
+        public boolean heartbeat() throws RemoteException;
 }

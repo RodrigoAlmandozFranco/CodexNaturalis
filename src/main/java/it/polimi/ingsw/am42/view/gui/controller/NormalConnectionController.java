@@ -58,9 +58,9 @@ public class NormalConnectionController {
             if(client.getGameInfo().equals(ConnectionState.CONNECT))
                 client.connect(nickname);
             else
-                client.connectAfterLoad(nickname);
+                client.reconnect(nickname);
 
-            client.getView().setMyNickname(nickname);
+            client.getView().setNickname(nickname);
             load(event);
         } catch (GameFullException e) {
             showAlert("The game is full");
