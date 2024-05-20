@@ -50,10 +50,6 @@ public class PlayerView {
         this.points = points;
     }
 
-    public void setColor(Color color){
-        this.color = color;
-    }
-
     public String getNickname() {
         return nickname;
     }
@@ -119,6 +115,7 @@ public class PlayerView {
         hand.clear();
         hand.addAll(diff.getHand());
         if (diff.getLastPlacedFace() != null)
-            board.addFace(diff.getLastPlacedFace());
+            if(board.getLastPlacedFace() == null||board.getLastPlacedFace().getId()!=diff.getLastPlacedFace().getId())
+                board.addFace(diff.getLastPlacedFace());
     }
 }

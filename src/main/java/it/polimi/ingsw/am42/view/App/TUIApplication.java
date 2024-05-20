@@ -155,7 +155,7 @@ public class TUIApplication extends App {
         List<GoalCard> goals = p.getAvGoals();
         String question = "Choose one of the following goals\n";
         for (int i=0; i<goals.size(); i++)
-            question += i + " - " + goals.get(i) + "\n";
+            question += i + " - \n" + goals.get(i) + "\n";
 
         int choice = io.getInt(question);
         while (choice < 0 || choice >= goals.size()) {
@@ -248,11 +248,11 @@ public class TUIApplication extends App {
             for(Face f: sameHighness) {
 
                 for(int j=f.getPosition().leftness(); j<lastLeft; j++)
-                    to_print += "  ";
+                    to_print += "   ";
                 if(f.getColor() == null)
-                    to_print += " "+ faces.indexOf(f);
+                    to_print += " "+ faces.indexOf(f)+" ";
                 else
-                    to_print += f.getColor() + "██";
+                    to_print += f.getColor() + "███";
                 lastLeft = f.getPosition().leftness()-1;
             }
             io.print(to_print);
@@ -282,15 +282,18 @@ public class TUIApplication extends App {
         int i = 0;
         for (PlayableCard c : p.getHand()) {
             c.setVisibility(true);
-            io.print(i + " : " + c.getFront());
+            io.print(i + " : \n" + c.getFront());
             i++;
-            io.print(i + " : " + c.getBack());
+            io.print(i + " : \n" + c.getBack());
             i++;
         }
     }
 
     public static void seeStandings() {
-        // TODO
+        String message = "Scoreboard\n";
+        for (PlayerView p: client.getView().getPlayers())
+            message +=  p.getNickname()  + (p.getNickname().equals(nickname)?"(You)":"")+" = "+ p.getPoints() + "\n";
+        io.print(message);
     }
 
     public static void seeGoals() {
