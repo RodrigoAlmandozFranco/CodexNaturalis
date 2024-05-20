@@ -74,7 +74,7 @@ public class FirstPlayerCreateGameController implements Initializable {
     private void connect(ActionEvent event) throws IOException {
         try {
             client.createGame(nickname, numberOfPlayers);
-            client.getView().setMyNickname(nickname);
+            client.getView().setNickname(nickname);
         } catch (Exception exception) {
             showAlert("Error creating game");
             System.exit(1);
