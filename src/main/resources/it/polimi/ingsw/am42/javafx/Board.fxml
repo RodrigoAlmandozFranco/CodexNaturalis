@@ -12,8 +12,10 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.am42.view.gui.controller.BoardController">
    <children>
@@ -50,7 +52,7 @@
             <ImageView fx:id="pickableGold1" fitHeight="85.0" fitWidth="137.0" layoutX="190.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="pickableResource2" fitHeight="85.0" fitWidth="137.0" layoutX="23.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="pickableGold2" fitHeight="85.0" fitWidth="137.0" layoutX="190.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true" />
-            <Label fx:id="updateText" layoutX="21.0" layoutY="328.0" prefHeight="100.0" prefWidth="300.0" text="UpdateText" />
+            <Label fx:id="updateText" layoutX="10.0" layoutY="328.0" prefHeight="66.0" prefWidth="300.0" text="UpdateText" />
             <ImageView fitHeight="564.0" fitWidth="669.0" layoutX="331.0" layoutY="-4.0" pickOnBounds="true">
                <image>
                   <Image url="@../graphical/gameStructure/structure.png" />
@@ -76,16 +78,50 @@
             <Button fx:id="seeBackButton" layoutX="828.0" layoutY="533.0" mnemonicParsing="false" onAction="#seeBackButtonAction" prefHeight="26.0" prefWidth="115.0" text="See Back" />
             <Button fx:id="seeFrontButton" layoutX="524.0" layoutY="533.0" mnemonicParsing="false" onAction="#placeFrontButtonAction" prefHeight="26.0" prefWidth="115.0" text="See Front" />
             <GridPane fx:id="boardGrid" layoutX="364.0" layoutY="40.0" prefHeight="478.0" prefWidth="605.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
+               <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+               </rowConstraints>
             </GridPane>
+            <Pane fx:id="colorPane" disable="true" layoutX="325.0" layoutY="-3.0" opacity="0.0" prefHeight="566.0" prefWidth="682.0" style="-fx-background-color: lightgreen;">
+               <children>
+                  <ChoiceBox fx:id="colorChoiceBox" layoutX="113.0" layoutY="221.0" prefHeight="45.0" prefWidth="145.0" />
+                  <Button fx:id="chooseColorButton" layoutX="409.0" layoutY="202.0" mnemonicParsing="false" onAction="#chooseColorButtonAction" prefHeight="84.0" prefWidth="195.0" text="Choose Color">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="6.0" layoutY="81.0" prefHeight="35.0" prefWidth="674.0" style="-fx-background-color: red;" text="Choose a color for your player">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <Pane fx:id="goalPane" disable="true" layoutX="335.0" layoutY="7.0" opacity="0.0" prefHeight="566.0" prefWidth="682.0" style="-fx-background-color: lightgreen;">
+               <children>
+                  <Button fx:id="chooseGoalButton" layoutX="229.0" layoutY="390.0" mnemonicParsing="false" onAction="#chooseGoalButtonAction" prefHeight="84.0" prefWidth="195.0" text="Choose Goal">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Button>
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="6.0" layoutY="81.0" prefHeight="35.0" prefWidth="674.0" style="-fx-background-color: red;" text="Choose your personal goal ">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="possibleGoal1" fitHeight="150.0" fitWidth="200.0" layoutX="75.0" layoutY="145.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="possibleGoal2" fitHeight="150.0" fitWidth="200.0" layoutX="391.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" />
+                  <Button fx:id="personalGoal1Button" layoutX="75.0" layoutY="145.0" mnemonicParsing="false" onAction="#personalGoal1ButtonAction" opacity="0.0" prefHeight="150.0" prefWidth="200.0" />
+                  <Button fx:id="personalGoal2Button" layoutX="391.0" layoutY="161.0" mnemonicParsing="false" onAction="#personalGoal2ButtonAction" opacity="0.0" prefHeight="150.0" prefWidth="200.0" />
+               </children>
+            </Pane>
+            <Label fx:id="personalNickname" layoutX="10.0" layoutY="396.0" prefHeight="46.0" prefWidth="318.0" text="Label" />
          </children>
       </AnchorPane>
    </children>

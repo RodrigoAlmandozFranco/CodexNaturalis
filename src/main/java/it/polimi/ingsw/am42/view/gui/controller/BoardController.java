@@ -208,11 +208,11 @@ public class BoardController implements Initializable {
             return;
         }
 
-       if(chosenCard instanceof StartingCard) {
+        if(chosenCard instanceof StartingCard) {
             seeBackStartingCard();
-       } else {
+        } else {
             modifyHandCardImage(chosenCard.getFront().getSrcImage());
-       }
+        }
     }
 
     private void modifyHandCardImage(String src) {

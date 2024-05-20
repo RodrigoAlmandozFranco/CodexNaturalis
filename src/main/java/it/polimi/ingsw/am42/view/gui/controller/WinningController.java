@@ -33,7 +33,7 @@ public class WinningController {
         List<PlayerView> standings = gameView.getPlayers();
 
         standings = standings.stream().sorted(Comparator.comparingInt(PlayerView::getPoints).reversed())
-                                        .collect(Collectors.toList());
+                .collect(Collectors.toList());
 
         List<Player> winners = client.getWinner();
 
