@@ -41,19 +41,8 @@ public class LobbyController {
         });
 
         thread.start();
-        this.start();
     }
 
-    public void start() {
-
-        Timeline timeline = new Timeline(
-                new KeyFrame(Duration.ZERO, e -> progressBar.setProgress(0)),
-                new KeyFrame(Duration.seconds(2), e -> progressBar.setProgress(1)),
-                new KeyFrame(Duration.seconds(4), e -> progressBar.setProgress(0))
-        );
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
-    }
 
     private void askReady() throws IOException {
         while (!client.getView().getReady()) {
@@ -63,9 +52,7 @@ public class LobbyController {
                 e.printStackTrace();
             }
         }
-        Platform.runLater(() -> {
-            progressBar.setProgress(1);
-        });
+
         this.switchScene();
 
     }
@@ -85,13 +72,12 @@ public class LobbyController {
             boardController.setClient(ClientHolder.getClient());
 
             Scene scene = new Scene(root);
-            Stage newStage = new Stage();
 
-            newStage.setScene(scene);
-            Stage currentStage = (Stage) progressBar.getScene().getWindow();
-            currentStage.close();
+            Stage stage = (Stage)progressBar.getScene().getWindow();
 
-            newStage.show();
+            stage.setScene(scene);
+
+            stage.show();
 
         });
     }
