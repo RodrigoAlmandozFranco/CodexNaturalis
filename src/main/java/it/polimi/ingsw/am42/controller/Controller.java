@@ -63,9 +63,8 @@ public class Controller extends Observable{
         this.game = new Game(numPlayers);
         gameDB.setGame(this.game);
 
-        this.addListener(l);
-
         this.game.addToGame(nickname);
+        this.addListener(l);
 
         System.out.println(nickname + " created new game");
 
@@ -75,8 +74,8 @@ public class Controller extends Observable{
 
 
     public boolean connect(MessageListener l, String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
-        this.addListener(l);
         this.game.addToGame(nickname);
+        this.addListener(l);
 
         System.out.println(nickname + " connected to the game");
 
@@ -142,9 +141,10 @@ public class Controller extends Observable{
         Change change;
         game.getCurrentPlayer().placeCard(position, face);
         game.changeState();
+        change = gameDB.saveGame(true);
         if(game.getTurnFinal())
             game.setCurrentPlayer(game.getNextPlayer());
-        change = gameDB.saveGame(true);
+        change.setFuturePlayer(game.getCurrentPlayer().getNickname());
         updateAll(change);
 
         System.out.println(p + " placed a card in position " + position);
@@ -155,8 +155,9 @@ public class Controller extends Observable{
     public void pick(String p, PlayableCard card) {
         game.chosenCardToAddInHand(card);
         game.changeState();
-        game.setCurrentPlayer(game.getNextPlayer());
         Change change = gameDB.saveGame(true);
+        game.setCurrentPlayer(game.getNextPlayer());
+        change.setFuturePlayer(game.getCurrentPlayer().getNickname());
         updateAll(change);
         System.out.println(p + "picked a card");
     }
@@ -190,8 +191,9 @@ public class Controller extends Observable{
     public void chooseGoal(String p, GoalCard goal) {
         game.getCurrentPlayer().setPersonalGoal(goal);
         game.changeState();
-        game.setCurrentPlayer(game.getNextPlayer());
         Change change = gameDB.saveGame(false);
+        game.setCurrentPlayer(game.getNextPlayer());
+        change.setFuturePlayer(game.getCurrentPlayer().getNickname());
         updateAll(change);
 
         System.out.println(p + " chose his personal goal");

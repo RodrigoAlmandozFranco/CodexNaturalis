@@ -4,6 +4,8 @@ import it.polimi.ingsw.am42.model.cards.Card;
 import it.polimi.ingsw.am42.model.cards.types.*;
 import it.polimi.ingsw.am42.model.cards.types.playables.GoldCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.CornerState;
+import it.polimi.ingsw.am42.model.enumeration.Direction;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
 import it.polimi.ingsw.am42.model.evaluator.EvaluatorPoints;
 import it.polimi.ingsw.am42.model.exceptions.RequirementsNotMetException;
@@ -116,8 +118,13 @@ class PlayerTest {
         List<Resource> lst = new ArrayList<>();
         lst.add(Resource.ANIMALKINGDOM);
 
-        Front f = new Front("C://", null, null, requirements, null);
-        Back f2 = new Back("C://", null, null, lst);
+        List<Corner> cornerList = new ArrayList<Corner>();
+        for (Direction d : Direction.values()) {
+            cornerList.add(new Corner(Resource.FUNGIKINGDOM, CornerState.OPEN, d));
+        }
+
+        Front f = new Front("C://", cornerList, null, requirements, null);
+        Back f2 = new Back("C://", cornerList, null, lst);
 
         PlayableCard c = new GoldCard(1, f, f2);
 

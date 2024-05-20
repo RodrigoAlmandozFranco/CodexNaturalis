@@ -33,7 +33,8 @@ public class PlayerView {
     public PlayerView(Player p) {
         this.points = p.getPoints();
         this.nickname = p.getNickname();
-        this.hand = p.getHand();
+        this.hand = new ArrayList<>();
+        this.hand.addAll(p.getHand());
         this.color = p.getColor();
         this.board = p.getBoard();
         this.personalGoal = p.getPersonalGoal();
@@ -78,10 +79,17 @@ public class PlayerView {
         this.numberGoalsAchieved = numberGoalsAchieved;
     }
 
+    @Override
+    public String toString() {
+        return nickname;
+    }
 
     public void update(Change diff){
         points = diff.getPointsPlayer();
         numberGoalsAchieved = diff.getNumberGoalsAchieved();
-        hand = diff.getHand();
+        hand.clear();
+        hand.addAll(diff.getHand());
+        if (diff.getLastPlacedFace() != null)
+            board.addFace(diff.getLastPlacedFace());
     }
 }

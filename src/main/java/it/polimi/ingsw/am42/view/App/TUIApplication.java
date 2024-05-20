@@ -2,6 +2,8 @@ package it.polimi.ingsw.am42.view.App;
 
 import it.polimi.ingsw.am42.controller.ConnectionState;
 import it.polimi.ingsw.am42.model.cards.types.Face;
+import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
+import it.polimi.ingsw.am42.model.cards.types.playables.StartingCard;
 import it.polimi.ingsw.am42.model.enumeration.State;
 import it.polimi.ingsw.am42.model.structure.Board;
 import it.polimi.ingsw.am42.network.Client;
@@ -10,6 +12,7 @@ import it.polimi.ingsw.am42.view.App.App;
 import it.polimi.ingsw.am42.view.IOHandler;
 import it.polimi.ingsw.am42.view.gameview.GameView;
 import it.polimi.ingsw.am42.view.gameview.MethodChoice;
+import it.polimi.ingsw.am42.view.gameview.PlayerView;
 
 import java.io.PrintStream;
 import java.util.InputMismatchException;
@@ -66,9 +69,8 @@ public class TUIApplication extends App {
             nickname = io.getString("What will your nickname be?");
 
 
-
-            int gameid = client.createGame(nickname, numPlayers);
             client.getView().setNickname(nickname);
+            int gameid = client.createGame(nickname, numPlayers);
         }
         catch (Exception e) {
             io.print(e.getMessage());
@@ -84,8 +86,9 @@ public class TUIApplication extends App {
             nickname = io.getString("What will your nickname be?");
 
 
+            TUIApplication.nickname = nickname;
+            client.getView().setNickname(TUIApplication.nickname);
             client.connect(nickname);
-            client.getView().setNickname(nickname);
         }
         catch (Exception e) {
             io.print(e.getMessage());
@@ -112,7 +115,19 @@ public class TUIApplication extends App {
 
 
     public static void placeStarting() {
-        // TODO
+        seeCards();
+        PlayableCard startingCard = null;
+        PlayerView p = client.getView().getPlayer(nickname);
+        for(PlayableCard c: p.getHand()){
+            startingCard = c;
+        }
+        boolean faceSide = io.getBoolean("Would you like to place the starting card face up??");
+        if(startingCard != null) {
+            if (faceSide)
+                client.placeStarting(nickname, startingCard.getFront());
+            else client.placeStarting(nickname, startingCard.getBack());
+        }
+        else io.print("Starting card not found!!!");
     }
 
     public static void chooseColor() {
@@ -128,7 +143,11 @@ public class TUIApplication extends App {
     }
 
     public static void seeCards() {
-        // TODO
+        PlayerView p = client.getView().getPlayer(nickname);
+            for (PlayableCard c : p.getHand()) {
+                c.setVisibility(true);
+                io.print(c.toString());
+            }
     }
 
     public static void seeStandings() {

@@ -24,6 +24,7 @@ import java.util.List;
 public class Change implements Serializable {
     private int pointsPlayer;
     private int numberGoalsAchieved;
+    private String currentPlayer;
     private String futurePlayer;
     private List<Player> players;
     private List<GoalCard> globalGoals;
@@ -42,7 +43,8 @@ public class Change implements Serializable {
 
         pointsPlayer = game.getCurrentPlayer().getPoints();
         numberGoalsAchieved = game.getCurrentPlayer().getGoalsAchieved();
-        futurePlayer = game.getNextPlayer().getNickname();
+        currentPlayer = game.getCurrentPlayer().getNickname();
+        futurePlayer = game.getCurrentPlayer().getNickname();
         hand = game.getCurrentPlayer().getHand();
         lastPlacedFace = game.getCurrentPlayer().getBoard().getLastPlacedFace();
         firstResourceCard = game.getFirstResourceCard();
@@ -65,6 +67,13 @@ public class Change implements Serializable {
     public Change() {
     }
 
+    public void setFuturePlayer(String futurePlayer) {
+        this.futurePlayer = futurePlayer;
+    }
+
+    public String getCurrentPlayer() {
+        return currentPlayer;
+    }
 
     public List<Player> getPlayers() {
         return players;
@@ -128,6 +137,7 @@ public class Change implements Serializable {
         return "Change{" +
                 "pointsPlayer=" + pointsPlayer +
                 ", numberGoalsAchieved=" + numberGoalsAchieved +
+                ", currentPlayer=" + currentPlayer +
                 ", futurePlayer='" + futurePlayer + '\'' +
                 ", players=" + players +
                 ", globalGoals=" + globalGoals +

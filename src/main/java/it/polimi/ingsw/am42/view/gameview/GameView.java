@@ -18,22 +18,17 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class GameView {
 
-    private String myNickname;
+    private String nickname;
     private List<PlayerView> players;
     private List<GoalCard> globalGoals;
     private State currentState;
-
     private List<PlayableCard> pickableResourceCards;
     private List<PlayableCard> pickableGoldCards;
     private int numberPlayers;
     protected PlayerView currentPlayer;
-    protected PlayerView modifiedPlayer;
-    private String nickname;
     private List<MethodChoice> usableMethods;
-
     private List<ChatMessage> allMessages;
     private List<ChatMessage> tmpMessages;
-
     private boolean canRead;
     private final Lock lock = new ReentrantLock();
 
@@ -56,11 +51,6 @@ public class GameView {
         tmpMessages = new ArrayList<>();
         canRead = false;
     }
-
-    public void setMyNickname(String nickname){
-        myNickname = nickname;
-    }
-
 
     public void handleState() {
         usableMethods.clear();
@@ -120,9 +110,8 @@ public class GameView {
 
         }
     }
-
-    public String getMyNickname(){
-        return myNickname;
+    public String getNickname() {
+        return nickname;
     }
 
     public void updateMessage(ChatMessage chatMessage) {
@@ -165,22 +154,19 @@ public class GameView {
     }
 
     public void update(Change diff){
-            System.out.println(diff);
 
             // First diff
             if (numberPlayers == 0) {
                 for (Player p : diff.getPlayers())
                      players.add(new PlayerView(p));
-                currentPlayer = players.getFirst();
+                currentPlayer = getPlayer(diff.getCurrentPlayer());
                 globalGoals = diff.getGlobalGoals();
                 numberPlayers = diff.getNumberPlayers();
                 }
 
-            currentPlayer.setPoints(diff.getPointsPlayer());
-            currentPlayer.setNumberGoalsAchieved(diff.getNumberGoalsAchieved());
-            currentPlayer.setHand(diff.getHand());
-            if (diff.getLastPlacedFace() != null)
-                currentPlayer.getBoard().addFace(diff.getLastPlacedFace());
+            currentPlayer = getPlayer(diff.getCurrentPlayer());
+
+            currentPlayer.update(diff);
 
             pickableGoldCards.clear();
             pickableGoldCards.addAll(diff.getPickableGoldCards());
@@ -192,11 +178,7 @@ public class GameView {
 
             currentState = diff.getCurrentState();
 
-            modifiedPlayer = currentPlayer;
             currentPlayer = getPlayer(diff.getFuturePlayer());
-
-
-
 
             handleState();
     }
@@ -213,7 +195,7 @@ public class GameView {
                 '}';
     }
 
-    private PlayerView getPlayer(String nickname) {
+    public PlayerView getPlayer(String nickname) {
         for (PlayerView p : players)
             if (p.getNickname().equals(nickname))
                 return p;
@@ -263,13 +245,8 @@ public class GameView {
     public State getCurrentState() {
         return currentState;
     }
-
     public void setCurrentState(State state) {
         this.currentState = state;
-    }
-
-    public String getModifiedPlayer(){
-        return modifiedPlayer.getNickname();
     }
     public void setNickname(String nickname) {
         this.nickname = nickname;

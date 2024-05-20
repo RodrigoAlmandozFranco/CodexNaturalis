@@ -49,13 +49,10 @@ public class BoardController implements Initializable {
 
     public void displayStandings(){
         gameView = client.getView();
-        modifiedPlayer = gameView.getModifiedPlayer();
         for(PlayerView p : gameView.getPlayers()) {
             if(p.getNickname().equals(modifiedPlayer)) {
                 int points = p.getPoints();
                 String color = p.getColor().toString();
-
-
             }
         }
 
@@ -99,7 +96,7 @@ public class BoardController implements Initializable {
     private void updateListView(List<ChatMessage> newMessage) {
         for (ChatMessage message : newMessage) {
             String sender;
-            if(client.getView().getMyNickname().equals(message.getSender()))
+            if(client.getView().getNickname().equals(message.getSender()))
                 sender = "You";
             else
                 sender = message.getMessage();
@@ -113,7 +110,7 @@ public class BoardController implements Initializable {
 
     public void sendMessage(ActionEvent e) {
         String message = textField.getText();
-        String sender = client.getView().getMyNickname();
+        String sender = client.getView().getNickname();
         String receiver = choiceBox.getValue();
 
         if(message.isEmpty()) return;
