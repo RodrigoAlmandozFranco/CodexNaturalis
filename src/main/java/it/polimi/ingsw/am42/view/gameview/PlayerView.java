@@ -48,6 +48,9 @@ public class PlayerView {
         this.points = points;
     }
 
+    public void setColor(Color color){
+        this.color = color;
+    }
 
     public String getNickname() {
         return nickname;
