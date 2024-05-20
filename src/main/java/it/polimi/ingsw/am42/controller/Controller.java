@@ -95,12 +95,14 @@ public class Controller extends Observable{
     public boolean reconnect(MessageListener l, String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         boolean wasInPrevGame = false;
 
-        if(listeners.isEmpty())
+        if(listeners.isEmpty()) {
             this.game = this.gameDB.loadGame();
+            System.out.println(nickname + " loaded up new game");
+        }
         for (MessageListener lis : listeners) {
             try {
                 if (lis.getId().equals(nickname))
-                    throw new NicknameAlreadyInUseException(nickname + "si è già connesso");
+                    throw new NicknameAlreadyInUseException(nickname + "is already connected");
             } catch (RemoteException e) {
                 throw new RuntimeException(e);
             }
@@ -113,7 +115,7 @@ public class Controller extends Observable{
             }
 
         if(!wasInPrevGame)
-            throw new NicknameInvalidException(nickname + "non stava giocando nella partita precedente");
+            throw new NicknameInvalidException(nickname + " was not in the previous game");
 
         this.addListener(l);
 
@@ -122,7 +124,7 @@ public class Controller extends Observable{
             updateAll(change);
         }
 
-        System.out.println(nickname + " loaded up new game");
+        System.out.println(nickname + " reconncted");
 
         return true;
     }
@@ -220,8 +222,10 @@ public class Controller extends Observable{
         System.out.println("delivering chat message");
         if (chatMessage.getReceiver().equals("all"))
             sendMessageAll(chatMessage);
-        else
+        else {
             sendMessage(chatMessage, chatMessage.getReceiver());
+            sendMessage(chatMessage, chatMessage.getSender());
+        }
     }
 }
 

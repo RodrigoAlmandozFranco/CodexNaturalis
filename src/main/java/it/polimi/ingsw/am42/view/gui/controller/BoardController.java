@@ -268,7 +268,7 @@ public class BoardController implements Initializable {
         while(true){
             if(gameView.getNewUpdate()){
 
-                if(gameView.getCurrentPlayer().getNickname().equals(gameView.getMyNickname())) {
+                if(gameView.getCurrentPlayer().getNickname().equals(gameView.getNickname())) {
                     if(gameView.getCurrentState().toString().equals("SETHAND")) {
                         enableHandAndControlButtons();
                         disablePickableButtons();
@@ -425,7 +425,7 @@ public class BoardController implements Initializable {
     private void updateListView(List<ChatMessage> newMessage) {
         for (ChatMessage message : newMessage) {
             String sender;
-            if(gameView.getMyNickname().equals(message.getSender()))
+            if(gameView.getNickname().equals(message.getSender()))
                 sender = "You";
             else
                 sender = message.getSender();
@@ -446,7 +446,7 @@ public class BoardController implements Initializable {
 
     public void sendMessage(ActionEvent e) {
         String message = textField.getText();
-        String sender = gameView.getMyNickname();
+        String sender = gameView.getNickname();
         String receiver = choiceBox.getValue();
 
         if(message.isEmpty()) return;
@@ -472,7 +472,7 @@ public class BoardController implements Initializable {
         nicknames.add("All");
 
         for(PlayerView p : players){
-            if (!p.getNickname().equals(gameView.getMyNickname()))
+            if (!p.getNickname().equals(gameView.getNickname()))
                 nicknames.add(p.getNickname());
             else
                 myPlayer = p;

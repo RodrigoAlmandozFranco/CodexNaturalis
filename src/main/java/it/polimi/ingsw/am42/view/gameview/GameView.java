@@ -87,7 +87,6 @@ public class GameView {
                 usableMethods.add(MethodChoice.SEECARDS);
                 usableMethods.add(MethodChoice.SEEBOARD);
                 usableMethods.add(MethodChoice.SEEGOALS);
-                usableMethods.add(MethodChoice.SEEPICKABLECARDS);
                 if (currentPlayer.getNickname().equals(nickname))
                     usableMethods.add(MethodChoice.PLACE);
 
@@ -97,7 +96,6 @@ public class GameView {
                 usableMethods.add(MethodChoice.SEECARDS);
                 usableMethods.add(MethodChoice.SEEBOARD);
                 usableMethods.add(MethodChoice.SEEGOALS);
-                usableMethods.add(MethodChoice.SEEPICKABLECARDS);
                 if (currentPlayer.getNickname().equals(nickname))
                     usableMethods.add(MethodChoice.PICK);
             }
@@ -141,31 +139,32 @@ public class GameView {
     }
 
     public void update(Change diff){
+        System.out.println(diff);
 
-            // First diff
-            if (numberPlayers == 0) {
-                for (Player p : diff.getPlayers())
-                     players.add(new PlayerView(p));
-                currentPlayer = getPlayer(diff.getCurrentPlayer());
-                globalGoals = diff.getGlobalGoals();
-                numberPlayers = diff.getNumberPlayers();
-                }
-
+        // First diff
+        if (numberPlayers == 0) {
+            for (Player p : diff.getPlayers())
+                 players.add(new PlayerView(p));
             currentPlayer = getPlayer(diff.getCurrentPlayer());
+            globalGoals = diff.getGlobalGoals();
+            numberPlayers = diff.getNumberPlayers();
+            }
 
-            currentPlayer.update(diff);
+        currentPlayer = getPlayer(diff.getCurrentPlayer());
 
-            pickableGoldCards.clear();
-            pickableGoldCards.addAll(diff.getPickableGoldCards());
-            pickableGoldCards.add(diff.getFirstGoldCard());
+        currentPlayer.update(diff);
 
-            pickableResourceCards.clear();
-            pickableResourceCards.addAll(diff.getPickableResourceCards());
-            pickableResourceCards.add(diff.getFirstResourceCard());
+        pickableGoldCards.clear();
+        pickableGoldCards.addAll(diff.getPickableGoldCards());
+        pickableGoldCards.add(diff.getFirstGoldCard());
 
-            currentState = diff.getCurrentState();
+        pickableResourceCards.clear();
+        pickableResourceCards.addAll(diff.getPickableResourceCards());
+        pickableResourceCards.add(diff.getFirstResourceCard());
 
-            currentPlayer = getPlayer(diff.getFuturePlayer());
+        currentState = diff.getCurrentState();
+
+        currentPlayer = getPlayer(diff.getFuturePlayer());
 
         startGame = true;
         newUpdate = true;

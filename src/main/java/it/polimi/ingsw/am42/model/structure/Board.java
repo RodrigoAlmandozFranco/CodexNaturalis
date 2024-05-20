@@ -122,7 +122,6 @@ public class Board implements Serializable {
      * @author Alessandro Di Maria
      * @param face the face chosen to be placed
      */
-    // TODO: Consider Starting Card case
     public void addFace(Face face){
         faces.add(face);
         lastPlacedFace = face;

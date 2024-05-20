@@ -20,7 +20,7 @@ public class EvaluatorPoints extends Evaluator{
         return numPoints;
     }
 
-/*
+
     public String toString(boolean small) {
         if (small)
             return "  " + (numPoints != 0 ? numPoints : " ") + "  ";
@@ -33,7 +33,11 @@ public class EvaluatorPoints extends Evaluator{
 
         to_print += "+-----------------------+\n";
 
-        // TODO
+        for (int i=0; i<4; i++)
+            to_print += "|                       |\n";
+        to_print += "|            " + numPoints + "          |\n";
+        for (int i=0; i<4; i++)
+            to_print += "|                       |\n";
 
         to_print += "+-----------------------+";
 
@@ -42,5 +46,5 @@ public class EvaluatorPoints extends Evaluator{
         return to_print;
     }
 
- */
+
 }

@@ -20,8 +20,6 @@ public abstract class Evaluator implements Serializable {
         return 0;
     }
 
-    /*
-
     public String toString(boolean small) {
         if (small)
             return "  " + numPoints + "  ";
@@ -33,7 +31,7 @@ public abstract class Evaluator implements Serializable {
         String to_print = "\u001B[33m";
 
         to_print += "+-----------------------+\n";
-        for (int i=0; i<7; i++)
+        for (int i=0; i<8; i++)
             to_print += "|                       |\n";
         to_print += "+-----------------------+";
 
@@ -41,6 +39,4 @@ public abstract class Evaluator implements Serializable {
         to_print += Color.WHITE.toString();
         return to_print;
     }
-
-     */
 }

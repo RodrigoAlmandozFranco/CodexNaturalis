@@ -11,6 +11,11 @@ public abstract class App {
         this.client = client;
     }
 
+    // Only for testing!!!
+    public App() {
+
+    }
+
     public void start() {}
 
 }

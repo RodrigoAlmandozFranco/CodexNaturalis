@@ -114,11 +114,6 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         }
     }
 
-    @Override
-    public boolean connectAfterLoad(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
-        return false;
-    }
-
     public Set<Position> getAvailablePositions(String p){
         try {
             return stub.getAvailablePositions(p);

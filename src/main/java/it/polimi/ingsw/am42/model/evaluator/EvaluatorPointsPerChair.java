@@ -70,28 +70,47 @@ public class EvaluatorPointsPerChair extends Evaluator{
 
     }
 
-/*
+
     public String toString(boolean small) {
         if (small)
             return numPoints + " | L" ;
         else
             return toString();
     }
-    @Override
+
     public String toString() {
-        String to_print = "\u001B[33m";
+        String to_print = color1.toString();
 
         to_print += "+-----------------------+\n";
+        to_print += "|   ___                 |\n";
+        to_print += "|  /   \\        " + numPoints + "       |\n";
+        to_print += "|  | " + color1.colorToResource() + " |                |\n";
 
-        // TODO
-
+        if (direction.equals(Direction.UPRIGHT)) {
+            to_print += "|  |   |         " + color2.toString() + "██" + color1.toString() + "     |\n";
+            to_print += "|  |   |       ██       |\n";
+            to_print += "|  |   |       ██       |\n";
+        }
+        else if (direction.equals(Direction.UPLEFT)) {
+            to_print += "|  |   |      " + color2.toString() + "██" + color1.toString() + "        |\n";
+            to_print += "|  |   |        ██      |\n";
+            to_print += "|  |   |        ██      |\n";
+        }
+        else if (direction.equals(Direction.DOWNLEFT)) {
+            to_print += "|  |   |        ██      |\n";
+            to_print += "|  |   |        ██      |\n";
+            to_print += "|  |   |      " + color2.toString() + "██" + color1.toString() + "        |\n";
+        }
+        else {
+            to_print += "|  |   |       ██       |\n";
+            to_print += "|  |   |       ██       |\n";
+            to_print += "|  |   |         " + color2.toString() + "██" + color1.toString() + "     |\n";
+        }
+        to_print += "|  |   |                |\n";
         to_print += "+-----------------------+";
-
 
         to_print += Color.WHITE.toString();
         return to_print;
     }
 
-
- */
 }

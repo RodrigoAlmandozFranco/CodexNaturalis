@@ -31,13 +31,17 @@ public class EvaluatorPointsPerCorner extends Evaluator{
         else
             return toString();
     }
-    @Override
+
     public String toString() {
         String to_print = "\u001B[33m";
 
         to_print += "+-----------------------+\n";
 
-        // TODO
+        for (int i=0; i<4; i++)
+            to_print += "|                       |\n";
+        to_print += "|          C |" + numPoints + "          |\n";
+        for (int i=0; i<4; i++)
+            to_print += "|                       |\n";
 
         to_print += "+-----------------------+";
 
@@ -45,4 +49,5 @@ public class EvaluatorPointsPerCorner extends Evaluator{
         to_print += Color.WHITE.toString();
         return to_print;
     }
+
 }
