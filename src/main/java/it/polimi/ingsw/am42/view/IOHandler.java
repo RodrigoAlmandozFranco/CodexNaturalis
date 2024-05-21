@@ -22,6 +22,10 @@ public class IOHandler {
         out.println(s);
     }
 
+    public void print(int i) {
+        out.println(i);
+    }
+
     public int getInt(String question) {
         print(question);
         return getInt();

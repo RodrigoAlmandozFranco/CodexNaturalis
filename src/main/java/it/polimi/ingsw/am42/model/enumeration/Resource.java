@@ -13,7 +13,7 @@ public enum Resource {
     QUILLOBJECT,
     INKWELLOBJECT,
     MANUSCRIPTOBJECT;
-/*
+
 
     public String toString() {
         return switch (this) {
@@ -28,6 +28,28 @@ public enum Resource {
         };
     }
 
- */
+    public String fullName() {
+        return switch (this) {
+            case PLANTKINGDOM -> "PLANTKINGDOM";
+            case ANIMALKINGDOM -> "ANIMALKINGDOM";
+            case FUNGIKINGDOM -> "FUNGIKINGDOM";
+            case INSECTKINGDOM -> "INSECTKINGDOM";
+            case QUILLOBJECT -> "QUILLOBJECT";
+            case INKWELLOBJECT -> "INKWELLOBJECT";
+            case MANUSCRIPTOBJECT -> "MANUSCRIPTOBJECT";
+            default -> "?";
+        };
+    }
+
+    public Color resourceToColor() {
+        return switch (this) {
+            case PLANTKINGDOM -> Color.GREEN;
+            case ANIMALKINGDOM -> Color.CYAN;
+            case FUNGIKINGDOM -> Color.RED;
+            case INSECTKINGDOM -> Color.PURPLE;
+            default -> Color.WHITE;
+        };
+    }
+
 }
 

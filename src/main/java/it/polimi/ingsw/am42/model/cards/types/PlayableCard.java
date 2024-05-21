@@ -54,7 +54,6 @@ public class PlayableCard extends Card {
         return visible;
     }
 
-    /*
     @Override
     public String toString() {
         String to_print = "";
@@ -68,6 +67,5 @@ public class PlayableCard extends Card {
         return to_print;
     }
 
-     */
 }
 

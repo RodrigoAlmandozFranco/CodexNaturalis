@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am42.model.evaluator;
 
 import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.Direction;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
 import it.polimi.ingsw.am42.model.structure.Board;
 
@@ -47,19 +48,90 @@ public class EvaluatorPointsPerResource extends Evaluator{
         else
             return toString();
     }
-    @Override
-    public String toString() {
-        String to_print = "\u001B[33m";
+
+
+    public String threeOfAKind() {
+        Resource resource = resourceMap.keySet().stream().toList().getFirst();
+        String to_print = resource.resourceToColor().toString();
+
 
         to_print += "+-----------------------+\n";
+        to_print += "|   ___                 |\n";
+        to_print += "|  /   \\        " + numPoints + "       |\n";
+        to_print += "|  | X |                |\n";
 
-        // TODO
+        to_print += "|  |   |       " + resource+ "        |\n";
+        to_print += "|  |   |      " + resource+ "         |\n";
+        to_print += "|  |   |        " + resource+ "       |\n";
 
+        to_print += "|  |   |                |\n";
         to_print += "+-----------------------+";
 
-
-        to_print += Color.WHITE.toString();
         return to_print;
+    }
+
+    public String pair() {
+        String to_print = "\u001B[33m";
+
+        Resource first = resourceMap.keySet().stream().toList().get(0);
+        Resource second = resourceMap.keySet().stream().toList().get(1);
+
+
+        to_print += "+-----------------------+\n";
+        to_print += "|   ___                 |\n";
+        to_print += "|  /   \\        " + numPoints + "       |\n";
+        to_print += "|  | X |                |\n";
+
+        to_print += "|  |   |                |\n";
+        to_print += "|  |   |         " + first + " | " + second +"     |\n";
+        to_print += "|  |   |                |\n";
+
+        to_print += "|  |   |                |\n";
+        to_print += "+-----------------------+";
+
+        return to_print;
+    }
+
+    public String oneOfEach() {
+        String to_print = "\u001B[33m";
+
+        Resource first = resourceMap.keySet().stream().toList().get(0);
+        Resource second = resourceMap.keySet().stream().toList().get(1);
+        Resource third = resourceMap.keySet().stream().toList().get(2);
+
+
+        to_print += "+-----------------------+\n";
+        to_print += "|   ___                 |\n";
+        to_print += "|  /   \\        " + numPoints + "       |\n";
+        to_print += "|  | X |                |\n";
+
+        to_print += "|  |   |                |\n";
+        to_print += "|  |   |     " + first + " | " + second + " | " + third + "  |\n";
+        to_print += "|  |   |                |\n";
+
+        to_print += "|  |   |                |\n";
+        to_print += "+-----------------------+";
+
+        return to_print;
+    }
+
+
+
+    @Override
+    public String toString() {
+
+        if (resourceMap == null || resourceMap.isEmpty())
+            return super.toString();
+        if (resourceMap.keySet().size() == 1)
+            return threeOfAKind();
+        if (resourceMap.keySet().size() == 2)
+            return pair();
+        if (resourceMap.keySet().size() == 3)
+            return oneOfEach();
+        return super.toString();
+
+
+
     }
 }
 

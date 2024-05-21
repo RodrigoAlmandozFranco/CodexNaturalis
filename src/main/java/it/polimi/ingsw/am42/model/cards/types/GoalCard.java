@@ -32,4 +32,9 @@ public class GoalCard extends Card {
         return srcImage;
     }
 
+
+    @Override
+    public String toString() {
+        return evaluator.toString();
+    }
 }

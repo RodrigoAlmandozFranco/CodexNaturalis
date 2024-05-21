@@ -51,11 +51,25 @@ public class Position implements Serializable {
     public int hashCode() {
         return Objects.hash(x, y);
     }
-/*
+
+
+    /**
+     * Returns the "leftness" of the position (how much left it has been placed)
+     */
+    public int leftness() {
+        return y-x;
+    }
+
+    /**
+     * Returns the "highness" of the position (how much high it has been placed)
+     */
+    public int highness() {
+        return x+y;
+    }
+
     @Override
     public String toString() {
         return "(" + x + ", " + y + ")";
     }
 
- */
 }

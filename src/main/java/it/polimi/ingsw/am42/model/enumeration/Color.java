@@ -9,7 +9,7 @@ public enum Color {
     PURPLE,
     WHITE;
 
-/*
+
     public String toString() {
         return  switch (this) {
             case RED -> "\u001B[31m";
@@ -21,5 +21,27 @@ public enum Color {
         };
     }
 
- */
+    public String toString(boolean literal) {
+        if (literal) {
+            return switch (this) {
+                case RED -> "RED";
+                case CYAN -> "CYAN";
+                case PURPLE -> "PURPLE";
+                case GREEN -> "GREEN";
+                case WHITE -> "WHITE";
+                default -> "WHAT";
+            };
+        } else return toString();
+    }
+
+
+    public Resource colorToResource() {
+        return  switch (this) {
+            case RED -> Resource.FUNGIKINGDOM;
+            case CYAN -> Resource.ANIMALKINGDOM;
+            case PURPLE -> Resource.INSECTKINGDOM;
+            case GREEN -> Resource.PLANTKINGDOM;
+            default -> null;
+        };
+    }
 }

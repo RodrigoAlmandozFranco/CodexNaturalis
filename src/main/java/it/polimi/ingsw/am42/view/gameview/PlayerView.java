@@ -19,6 +19,8 @@ public class PlayerView {
     private Board board;
     private GoalCard personalGoal;
     private int numberGoalsAchieved;
+    private List<Color> avColors;
+    private List<GoalCard> avGoals;
 
     public PlayerView() {
         this.points = 0;
@@ -47,7 +49,6 @@ public class PlayerView {
     public void setPoints(int points) {
         this.points = points;
     }
-
 
     public String getNickname() {
         return nickname;
@@ -79,6 +80,30 @@ public class PlayerView {
         this.numberGoalsAchieved = numberGoalsAchieved;
     }
 
+    public List<Color> getAvColors() {
+        return avColors;
+    }
+
+    public void setAvColors(List<Color> avColors) {
+        this.avColors = avColors;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public void setPersonalGoal(GoalCard personalGoal) {
+        this.personalGoal = personalGoal;
+    }
+
+    public List<GoalCard> getAvGoals() {
+        return avGoals;
+    }
+
+    public void setAvGoals(List<GoalCard> avGoals) {
+        this.avGoals = avGoals;
+    }
+
     @Override
     public String toString() {
         return nickname;
@@ -90,6 +115,7 @@ public class PlayerView {
         hand.clear();
         hand.addAll(diff.getHand());
         if (diff.getLastPlacedFace() != null)
-            board.addFace(diff.getLastPlacedFace());
+            if(board.getLastPlacedFace() == null||board.getLastPlacedFace().getId()!=diff.getLastPlacedFace().getId())
+                board.addFace(diff.getLastPlacedFace());
     }
 }

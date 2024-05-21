@@ -48,16 +48,27 @@ public class EvaluatorPointsPerStair extends Evaluator {
         else
             return toString();
     }
-    @Override
+
     public String toString() {
-        String to_print = "\u001B[33m";
+        String to_print = color.toString();
 
         to_print += "+-----------------------+\n";
+        to_print += "|   ___                 |\n";
+        to_print += "|  /   \\        " + numPoints + "       |\n";
+        to_print += "|  | " + color.colorToResource() + " |                |\n";
 
-        // TODO
-
+        if (direction.equals(Direction.UPRIGHT)) {
+            to_print += "|  |   |          ██    |\n";
+            to_print += "|  |   |        ██      |\n";
+            to_print += "|  |   |      ██        |\n";
+        }
+        else {
+            to_print += "|  |   |      ██        |\n";
+            to_print += "|  |   |        ██      |\n";
+            to_print += "|  |   |          ██    |\n";
+        }
+        to_print += "|  |   |                |\n";
         to_print += "+-----------------------+";
-
 
         to_print += Color.WHITE.toString();
         return to_print;
