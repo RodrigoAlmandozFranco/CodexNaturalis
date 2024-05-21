@@ -349,7 +349,9 @@ public class Game implements GameInterface, Serializable {
         if(!visibility){
             deck1.remove();
         } else {
-            list1.remove(c);
+            for(PlayableCard x: list1)
+                if(x.getId() == c.getId())
+                    list1.remove(x);
             if(!deck1.finished()){
                 p = deck1.getTop();
                 list1.add(deck1.getTop());
