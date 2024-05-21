@@ -18,10 +18,14 @@ public enum MethodChoice {
     PICK,
     SEECHAT,
     SENDMESSAGE,
-    DISCONNECT;
+    DISCONNECT,
+    RELOAD;
 
     public String getChoice() {
         switch (this) {
+            case RELOAD -> {
+                return "Reload choices";
+            }
             case PLACESTARTING -> {
                 return "Place starting card";
             }
@@ -64,6 +68,10 @@ public enum MethodChoice {
 
     public Runnable selectChoice() {
         switch (this) {
+
+            case RELOAD -> {
+                return TUIApplication::selectChoice;
+            }
             case PLACESTARTING -> {
                 return TUIApplication::placeStarting;
             }

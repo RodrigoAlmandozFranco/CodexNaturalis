@@ -34,7 +34,7 @@ public class IOHandler {
     public int getInt() {
         int i;
         try {
-            i = Integer.parseInt(in.nextLine());
+            i = Integer.parseInt(getString());
         } catch (NumberFormatException e) {
             print("Insert an integer");
             i = getInt();
@@ -48,9 +48,17 @@ public class IOHandler {
     }
 
     public String getString() {
-        String s = in.nextLine();
+        String s = null;
         while (s == null || s.isEmpty()) {
-            s = in.nextLine();
+            if(in.hasNextLine())
+                s = in.nextLine();
+            else {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
         return s;
     }

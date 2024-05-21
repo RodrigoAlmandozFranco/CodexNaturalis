@@ -6,6 +6,7 @@ import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
 import it.polimi.ingsw.am42.model.enumeration.State;
 import it.polimi.ingsw.am42.model.exceptions.RequirementsNotMetException;
@@ -16,6 +17,7 @@ import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.view.IOHandler;
 import it.polimi.ingsw.am42.view.gameview.MethodChoice;
 import it.polimi.ingsw.am42.view.gameview.PlayerView;
+import javafx.application.Platform;
 
 import java.util.*;
 
@@ -72,7 +74,6 @@ public class TUIApplication extends App {
 
             nickname = io.getString("What will your nickname be?");
 
-
             client.getView().setNickname(nickname);
             int gameid = client.createGame(nickname, numPlayers);
         }
@@ -106,12 +107,13 @@ public class TUIApplication extends App {
 
             nickname = io.getString("What will your nickname be?");
 
+            client.getView().setNickname(nickname);
             client.reconnect(nickname);
         }
         catch (Exception e) {
             io.print(e.getMessage());
             reconnect();
-            client.getView().setNickname(nickname);
+
         }
     }
 
@@ -137,9 +139,9 @@ public class TUIApplication extends App {
     public static void chooseColor() {
         String question = "Choose one of the available colors\n";
         PlayerView p = client.getView().getPlayer(nickname);
-        List<Color> avcolors = p.getAvColors();
+        List<PlayersColor> avcolors = p.getAvColors();
         for (int i=0; i<avcolors.size(); i++)
-            question += i + " - " + avcolors.get(i).toString(true) + "\n";
+            question += i + " - " + avcolors.get(i).toString() + "\n";
 
         int choice = io.getInt(question);
         while (choice < 0 || choice >= avcolors.size()) {
@@ -443,10 +445,14 @@ public class TUIApplication extends App {
     }
 
     public static void selectChoice() {
+        List<ChatMessage> newMessage = client.getView().getTmpMessages();
+        String newMessages = "";
+        if(newMessage != null && !newMessage.isEmpty())
+            newMessages += " ("+newMessage.size()+" not read)";
         List<MethodChoice> choices = client.getView().getUsableMethods();
         String question = "What do you want to do?\n";
         for (int i=0; i<choices.size(); i++)
-            question += i + " - " + choices.get(i) + "\n";
+            question += i + " - " + choices.get(i)+ (choices.get(i).equals(MethodChoice.SEECHAT)?newMessages:"") + "\n";
 
         int choice = io.getInt(question);
         if (choice < 0 || choice >= choices.size()) {
@@ -457,11 +463,42 @@ public class TUIApplication extends App {
     }
 
 
+    private void  updatePlayer() {
+        while (true) {
+            if (client.getView().getNewUpdate() && client.getView().getCurrentPlayer()!=null){
+                String current = client.getView().getCurrentPlayer().getNickname();
+                if (current.equals(nickname)) {
+                    System.out.println("\n" +
+                            "-------------------------------------------------\n" +
+                            "                              __                 \n" +
+                            "   __  ______  __  _______   / /___  ___________ \n" +
+                            "  / / / / __ \\/ / / / ___/  / __/ / / / ___/ __ \\\n" +
+                            " / /_/ / /_/ / /_/ / /     / /_/ /_/ / /  / / / /\n" +
+                            " \\__, /\\____/\\__,_/_/      \\__/\\__,_/_/  /_/ /_/ \n" +
+                            "/____/                                           \n" +
+                            "-------------------------------------------------\n");
+                    System.out.println("Press 0 to reload your choices");
+                }
+                else System.out.println(client.getView().getCurrentState().showState(current));
+
+            }
+            else {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+    }
 
     @Override
     public void start() {
 
         handleConnection();
+
+        Thread threadGame = new Thread(this::updatePlayer);
+        threadGame.start();
 
         while (true)
             selectChoice();

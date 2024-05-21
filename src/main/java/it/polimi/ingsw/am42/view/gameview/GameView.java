@@ -46,6 +46,7 @@ public class GameView {
         this.currentPlayer = null;
         this.nickname = null;
         this.usableMethods = new ArrayList<>();
+        usableMethods.add(MethodChoice.RELOAD);
         usableMethods.add(MethodChoice.DISCONNECT);
         usableMethods.add(MethodChoice.SEECHAT);
         usableMethods.add(MethodChoice.SENDMESSAGE);
@@ -57,6 +58,7 @@ public class GameView {
     public void handleState() {
         usableMethods.clear();
 
+        usableMethods.add(MethodChoice.RELOAD);
         usableMethods.add(MethodChoice.DISCONNECT);
         usableMethods.add(MethodChoice.SEECHAT);
         usableMethods.add(MethodChoice.SENDMESSAGE);
@@ -106,8 +108,6 @@ public class GameView {
             case DISCONNECTED -> {
             }
             default -> {}
-
-
         }
     }
     public String getNickname() {

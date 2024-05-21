@@ -63,4 +63,39 @@ public enum State {
          }
         return null;
     }
+
+    /**
+     * This method is used by TUIApplication to show what is currently happening
+     * @param currentPlayer nickname of acting player
+     * @return
+     */
+    public String showState(String currentPlayer){
+        switch (this){
+            case INITIAL -> {
+                return "Setting up";
+            }
+            case SETHAND -> {
+                return currentPlayer + " is placing their starting card";
+            }
+            case SETCOLOR -> {
+                return currentPlayer + " is choosing a color";
+            }
+            case SETGOAL -> {
+                return currentPlayer + " is choosing the personal goal";
+            }
+            case PLACE -> {
+                return currentPlayer + " is placing a card";
+            }
+            case PICK -> {
+                return currentPlayer + " is drawing a card";
+            }
+            case LAST -> {
+                return "The game has finished";
+            }
+            case DISCONNECTED -> {
+                return "Someone disconnected";
+            }
+        }
+        return  null;
+    }
 }
