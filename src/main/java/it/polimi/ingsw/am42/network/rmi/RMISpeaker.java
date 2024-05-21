@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am42.network.rmi;
 
 import it.polimi.ingsw.am42.controller.ConnectionState;
+import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.network.MessageListener;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
@@ -45,13 +46,13 @@ public interface RMISpeaker extends Remote {
 
     public void pick(String p, PlayableCard card) throws RemoteException;
 
-    public List<GoalCard> chooseColor(String p, Color color) throws RemoteException;
+    public List<GoalCard> chooseColor(String p, PlayersColor color) throws RemoteException;
 
     public void chooseGoal(String p, GoalCard goal) throws RemoteException;
 
     public List<Player> getWinner() throws RemoteException;
 
-    public List<Color> placeStarting(String p, Face face) throws RemoteException;
+    public List<PlayersColor> placeStarting(String p, Face face) throws RemoteException;
 
     public void playerDisconnected() throws RemoteException;
 

@@ -2,6 +2,7 @@ package it.polimi.ingsw.am42.controller;
 
 import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.controller.gameDB.GameDB;
+import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.enumeration.State;
 import it.polimi.ingsw.am42.model.Game;
 import it.polimi.ingsw.am42.model.GameInterface;
@@ -164,7 +165,7 @@ public class Controller extends Observable{
         System.out.println(p + "picked a card");
     }
 
-    public List<Color> placeStarting(String p, Face face){
+    public List<PlayersColor> placeStarting(String p, Face face){
         Change change;
         game.getCurrentPlayer().placeCard(new Position(0,0), face);
         game.changeState();
@@ -176,7 +177,7 @@ public class Controller extends Observable{
     }
 
 
-    public List<GoalCard> chooseColor(String p, Color color) {
+    public List<GoalCard> chooseColor(String p, PlayersColor color) {
         game.getCurrentPlayer().setColor(color);
         game.removeColor(color);
         game.changeState();

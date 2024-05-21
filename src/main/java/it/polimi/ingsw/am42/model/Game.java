@@ -16,6 +16,7 @@ import it.polimi.ingsw.am42.model.cards.types.playables.ResourceCard;
 import it.polimi.ingsw.am42.model.decks.GoalDeck;
 import it.polimi.ingsw.am42.model.decks.PlayableDeck;
 import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.enumeration.State;
 import it.polimi.ingsw.am42.model.evaluator.Evaluator;
 import it.polimi.ingsw.am42.model.exceptions.GameFullException;
@@ -56,7 +57,7 @@ public class Game implements GameInterface, Serializable {
     private Player currentPlayer;
     private final int numberPlayers;
     private boolean turnFinal;
-    private List<Color> availableColors;
+    private List<PlayersColor> availableColors;
     private State currentState;
 
 
@@ -82,8 +83,8 @@ public class Game implements GameInterface, Serializable {
             globalGoals = new ArrayList<>();
             currentPlayer = null;
             turnFinal = false;
-            availableColors = new ArrayList<Color>();
-            availableColors.addAll(Arrays.asList(Color.values()));
+            availableColors = new ArrayList<PlayersColor>();
+            availableColors.addAll(Arrays.asList(PlayersColor.values()));
             this.currentState = State.INITIAL;
         }
     }
@@ -465,12 +466,12 @@ public class Game implements GameInterface, Serializable {
     }
 
 
-    public List<Color> getAvailableColors() {
+    public List<PlayersColor> getAvailableColors() {
         return availableColors;
     }
 
 
-    public void removeColor(Color c) {
+    public void removeColor(PlayersColor c) {
         availableColors.remove(c);
     }
 

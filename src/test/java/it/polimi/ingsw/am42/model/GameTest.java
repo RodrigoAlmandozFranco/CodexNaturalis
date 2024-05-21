@@ -7,6 +7,7 @@ import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.cards.types.playables.GoldCard;
 import it.polimi.ingsw.am42.model.cards.types.playables.ResourceCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.enumeration.State;
 import it.polimi.ingsw.am42.model.evaluator.Evaluator;
 import it.polimi.ingsw.am42.model.evaluator.EvaluatorPoints;
@@ -715,10 +716,10 @@ class GameTest {
                  NicknameInvalidException e) {
             throw new RuntimeException(e);
         }
-        List<Color> colors = game.getAvailableColors();
+        List<PlayersColor> colors = game.getAvailableColors();
         assertNotNull(colors);
         assertEquals(5, colors.size());
-        for(Color c : colors){
+        for(PlayersColor c : colors){
             assertNotNull(c);
         }
     }
@@ -736,12 +737,12 @@ class GameTest {
                  NicknameInvalidException e) {
             throw new RuntimeException(e);
         }
-        List<Color> colors = game.getAvailableColors();
+        List<PlayersColor> colors = game.getAvailableColors();
         assertNotNull(colors);
         assertEquals(5, colors.size());
-        Color c = colors.getFirst();
+        PlayersColor c = colors.getFirst();
         game.removeColor(c);
-        for(Color cc : colors){
+        for(PlayersColor cc : colors){
             assertNotNull(cc);
         }
         assertEquals(4, colors.size());

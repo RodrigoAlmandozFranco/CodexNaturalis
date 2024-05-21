@@ -139,7 +139,6 @@ public class GameView {
     }
 
     public void update(Change diff){
-        System.out.println(diff);
 
         // First diff
         if (numberPlayers == 0) {

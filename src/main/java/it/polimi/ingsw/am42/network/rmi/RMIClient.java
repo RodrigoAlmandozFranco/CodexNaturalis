@@ -3,6 +3,7 @@ package it.polimi.ingsw.am42.network.rmi;
 
 import it.polimi.ingsw.am42.controller.ConnectionState;
 import it.polimi.ingsw.am42.controller.gameDB.Change;
+import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.network.MessageListener;
 import it.polimi.ingsw.am42.model.Player;
@@ -136,7 +137,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         }
     }
 
-    public List<Color> placeStarting(String p, Face face){
+    public List<PlayersColor> placeStarting(String p, Face face){
         try {
             return stub.placeStarting(p, face);
         } catch (RemoteException e) {
@@ -145,7 +146,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         }
     }
 
-    public List<GoalCard> chooseColor(String p, Color color) {
+    public List<GoalCard> chooseColor(String p, PlayersColor color) {
         try {
             return stub.chooseColor(p, color);
         } catch (RemoteException e) {

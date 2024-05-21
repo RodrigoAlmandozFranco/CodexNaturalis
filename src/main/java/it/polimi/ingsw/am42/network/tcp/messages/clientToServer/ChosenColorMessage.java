@@ -3,6 +3,7 @@ package it.polimi.ingsw.am42.network.tcp.messages.clientToServer;
 import it.polimi.ingsw.am42.controller.Controller;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.SendPossibleGoalsMessage;
 import it.polimi.ingsw.am42.network.tcp.server.ClientHandler;
@@ -20,9 +21,9 @@ import java.util.List;
 
 public class ChosenColorMessage extends Message {
     private String nickname;
-    private Color color;
+    private PlayersColor color;
 
-    public ChosenColorMessage(String n, Color c){
+    public ChosenColorMessage(String n, PlayersColor c){
         nickname = n;
         color = c;
     }

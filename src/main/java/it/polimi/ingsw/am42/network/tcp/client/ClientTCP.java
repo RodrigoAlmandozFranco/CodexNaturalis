@@ -7,6 +7,7 @@ import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.Client;
@@ -179,7 +180,7 @@ public class ClientTCP implements Client {
         return answer.getPositions();
     }
 
-    public List<Color> placeStarting(String p, Face face) {
+    public List<PlayersColor> placeStarting(String p, Face face) {
         Message message = new PlaceStartingMessage(p, face);
         sendMessage(message);
 
@@ -211,7 +212,7 @@ public class ClientTCP implements Client {
     }
 
     @Override
-    public List<GoalCard> chooseColor(String p, Color color) {
+    public List<GoalCard> chooseColor(String p, PlayersColor color) {
         Message message = new ChosenColorMessage(p, color);
         sendMessage(message);
         SendPossibleGoalsMessage answer;

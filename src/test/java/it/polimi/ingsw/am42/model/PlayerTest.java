@@ -3,10 +3,7 @@ package it.polimi.ingsw.am42.model;
 import it.polimi.ingsw.am42.model.cards.Card;
 import it.polimi.ingsw.am42.model.cards.types.*;
 import it.polimi.ingsw.am42.model.cards.types.playables.GoldCard;
-import it.polimi.ingsw.am42.model.enumeration.Color;
-import it.polimi.ingsw.am42.model.enumeration.CornerState;
-import it.polimi.ingsw.am42.model.enumeration.Direction;
-import it.polimi.ingsw.am42.model.enumeration.Resource;
+import it.polimi.ingsw.am42.model.enumeration.*;
 import it.polimi.ingsw.am42.model.evaluator.EvaluatorPoints;
 import it.polimi.ingsw.am42.model.exceptions.RequirementsNotMetException;
 import it.polimi.ingsw.am42.model.structure.Position;
@@ -58,9 +55,9 @@ class PlayerTest {
     void getColor() {
         Player p = new Player("Tommy");
 
-        p.setColor(Color.CYAN);
+        p.setColor(PlayersColor.RED);
 
-        assertEquals(p.getColor(), Color.CYAN);
+        assertEquals(p.getColor(), PlayersColor.RED);
     }
 
     @Test

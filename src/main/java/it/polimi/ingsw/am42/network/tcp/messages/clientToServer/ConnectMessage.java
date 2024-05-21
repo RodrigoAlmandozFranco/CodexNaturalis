@@ -39,6 +39,7 @@ public class ConnectMessage extends Message {
         } catch (NicknameAlreadyInUseException e) {
             return new NicknameAlreadyInUseErrorMessage();
         }
+        clientHandler.setNickname(nickname);
         return new GoodMessage();
     }
 }
