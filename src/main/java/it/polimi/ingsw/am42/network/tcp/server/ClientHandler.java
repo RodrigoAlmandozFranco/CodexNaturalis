@@ -28,6 +28,7 @@ public class ClientHandler implements Runnable, MessageListener {
     private Controller controller;
     private ObjectInputStream input;
     private ObjectOutputStream output;
+    private String nickname;
 
 
     public ClientHandler(Socket socket, Controller controller) throws IOException {
@@ -71,6 +72,11 @@ public class ClientHandler implements Runnable, MessageListener {
 
     }
 
+
+    public void setNickname(String nickname){
+        this.nickname = nickname;
+    }
+
     private void sendMessage(Message answer) {
         try {
             output.writeObject(answer);
@@ -100,7 +106,7 @@ public class ClientHandler implements Runnable, MessageListener {
     }
 
     public String getId(){
-        return null;
+        return nickname;
     }
 
 }

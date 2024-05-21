@@ -5,6 +5,7 @@ import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.structure.Board;
 
 import java.util.ArrayList;
@@ -15,11 +16,11 @@ public class PlayerView {
     private int points;
     private  String nickname;
     private List<PlayableCard> hand;
-    private Color color;
+    private PlayersColor color;
     private Board board;
     private GoalCard personalGoal;
     private int numberGoalsAchieved;
-    private List<Color> avColors;
+    private List<PlayersColor> avColors;
     private List<GoalCard> avGoals;
 
     public PlayerView() {
@@ -60,7 +61,7 @@ public class PlayerView {
         this.hand = hand;
     }
 
-    public Color getColor() {
+    public PlayersColor getColor() {
         return color;
     }
 
@@ -80,15 +81,15 @@ public class PlayerView {
         this.numberGoalsAchieved = numberGoalsAchieved;
     }
 
-    public List<Color> getAvColors() {
+    public List<PlayersColor> getAvColors() {
         return avColors;
     }
 
-    public void setAvColors(List<Color> avColors) {
+    public void setAvColors(List<PlayersColor> avColors) {
         this.avColors = avColors;
     }
 
-    public void setColor(Color color) {
+    public void setColor(PlayersColor color) {
         this.color = color;
     }
 

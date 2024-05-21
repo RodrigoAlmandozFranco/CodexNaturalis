@@ -41,6 +41,7 @@ public class FirstConnectionMessage extends Message {
         } catch (NicknameAlreadyInUseException e) {
             return new NicknameAlreadyInUseErrorMessage();
         }
+        clientHandler.setNickname(nickname);
         return new GoodMessage();
     }
 }

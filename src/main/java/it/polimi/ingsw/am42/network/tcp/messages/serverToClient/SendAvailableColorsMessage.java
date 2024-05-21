@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am42.network.tcp.messages.serverToClient;
 
 import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 
 import java.util.List;
@@ -16,13 +17,13 @@ import java.util.List;
 
 public class SendAvailableColorsMessage extends Message {
 
-    private List<Color> colors;
+    private List<PlayersColor> colors;
 
-    public SendAvailableColorsMessage(List<Color> c){
+    public SendAvailableColorsMessage(List<PlayersColor> c){
         colors = c;
     }
 
-    public List<Color> getColors() {
+    public List<PlayersColor> getColors() {
         return colors;
     }
 }

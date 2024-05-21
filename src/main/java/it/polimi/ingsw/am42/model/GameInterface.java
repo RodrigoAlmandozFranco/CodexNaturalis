@@ -4,6 +4,7 @@ import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.enumeration.State;
 import it.polimi.ingsw.am42.model.exceptions.GameFullException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
@@ -44,7 +45,7 @@ public interface GameInterface {
     List<PlayableCard> getPickableGoldCards();
     PlayableCard getFirstResourceCard();
     PlayableCard getFirstGoldCard();
-    List<Color> getAvailableColors();
-    void removeColor(Color c);
+    List<PlayersColor> getAvailableColors();
+    void removeColor(PlayersColor c);
     State getCurrentState();
 }

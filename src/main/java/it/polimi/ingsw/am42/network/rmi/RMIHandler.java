@@ -7,6 +7,7 @@ import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.MessageListener;
@@ -69,7 +70,7 @@ public class RMIHandler implements RMISpeaker{
     }
 
     @Override
-    public List<GoalCard> chooseColor(String p, Color color) {
+    public List<GoalCard> chooseColor(String p, PlayersColor color) {
         return controller.chooseColor(p, color);
     }
 
@@ -84,7 +85,7 @@ public class RMIHandler implements RMISpeaker{
     }
 
     @Override
-    public List<Color> placeStarting(String p, Face face) {
+    public List<PlayersColor> placeStarting(String p, Face face) {
         return controller.placeStarting(p, face);
     }
 

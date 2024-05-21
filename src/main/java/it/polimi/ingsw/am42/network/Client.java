@@ -7,6 +7,7 @@ import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
@@ -32,7 +33,7 @@ public interface Client {
 
     boolean place(String p, Face face, Position pos) throws RequirementsNotMetException;
 
-    List<GoalCard> chooseColor(String p, Color color);
+    List<GoalCard> chooseColor(String p, PlayersColor color);
 
     void chooseGoal(String p, GoalCard goal);
 
@@ -40,7 +41,7 @@ public interface Client {
 
     List<Player> getWinner();
 
-    List<Color> placeStarting(String p, Face face);
+    List<PlayersColor> placeStarting(String p, Face face);
 
     void sendChatMessage(ChatMessage message);
 

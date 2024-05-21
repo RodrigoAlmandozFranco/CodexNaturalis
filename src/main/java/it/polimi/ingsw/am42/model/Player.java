@@ -5,6 +5,7 @@ import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
 import it.polimi.ingsw.am42.model.evaluator.Evaluator;
 import it.polimi.ingsw.am42.model.exceptions.RequirementsNotMetException;
@@ -28,7 +29,7 @@ public class Player implements Serializable {
     private int points;
     private final String nickname;
     private List<PlayableCard> hand;
-    private Color color;
+    private PlayersColor color;
     private final Board board;
     private GoalCard personalGoal;
     private int numberGoalsAchieved;
@@ -47,7 +48,7 @@ public class Player implements Serializable {
      * @author Rodrigo Almandoz Franco
      */
 
-    public Player(String nickname, int points, List<PlayableCard> hand, Color color, Board board,
+    public Player(String nickname, int points, List<PlayableCard> hand, PlayersColor color, Board board,
                   GoalCard personalGoal, int numberGoalsAchieved) {
 
         this.nickname = nickname;
@@ -118,7 +119,7 @@ public class Player implements Serializable {
      * @author Tommaso Crippa
      * @return the player's color
      */
-    public Color getColor() {
+    public PlayersColor getColor() {
         return color;
     }
 
@@ -178,7 +179,7 @@ public class Player implements Serializable {
      * @author Tommaso Crippa
      * @param color the player's color
      */
-    public void setColor(Color color) {
+    public void setColor(PlayersColor color) {
         this.color = color;
     }
 
