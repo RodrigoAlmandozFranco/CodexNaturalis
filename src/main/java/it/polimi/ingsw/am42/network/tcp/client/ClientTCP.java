@@ -95,6 +95,7 @@ public class ClientTCP implements Client {
         Message message = new FirstConnectionMessage(nickname, numPlayers);
         sendMessage(message);
 
+
         Message answer;
         try {
             answer = serverHandler.getMessage();
@@ -159,11 +160,6 @@ public class ClientTCP implements Client {
         };
     }
 
-    //@Override
-    public boolean connectAfterLoad(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
-        //todo
-        return true;
-    }
 
     @Override
     public Set<Position> getAvailablePositions(String p) {
@@ -198,6 +194,7 @@ public class ClientTCP implements Client {
     public boolean place(String p, Face face, Position pos) throws RequirementsNotMetException {
         Message message = new PlaceMessage(p, face, pos);
         sendMessage(message);
+
         Message answer;
 
         try {
@@ -208,6 +205,8 @@ public class ClientTCP implements Client {
 
         if(answer instanceof NoRequirementsErrorMessage)
             throw new RequirementsNotMetException("Requirements are not met");
+
+
         return true;
     }
 
@@ -230,6 +229,7 @@ public class ClientTCP implements Client {
     public void chooseGoal(String p, GoalCard goal) {
         Message message = new ChosenGoalMessage(p, goal);
         sendMessage(message);
+        /*
         Message answer;
 
         try {
@@ -237,12 +237,15 @@ public class ClientTCP implements Client {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+         */
     }
 
     @Override
     public void pick(String p, PlayableCard card) {
         Message message = new PickMessage(p, card);
         sendMessage(message);
+        /*
         Message answer;
 
         try {
@@ -250,6 +253,8 @@ public class ClientTCP implements Client {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+
+         */
     }
 
     @Override

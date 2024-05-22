@@ -8,9 +8,14 @@ module it.polimi.ingsw.am42 {
     requires java.desktop;
 
     opens it.polimi.ingsw.am42.view.gui.controller to javafx.fxml;
+    opens it.polimi.ingsw.am42.model.structure to javafx.fxml;
     exports it.polimi.ingsw.am42;
-    opens it.polimi.ingsw.am42.view to javafx.fxml;
+    exports it.polimi.ingsw.am42.model;
+    exports it.polimi.ingsw.am42.model.enumeration;
+    exports it.polimi.ingsw.am42.model.cards.types;
+    exports it.polimi.ingsw.am42.model.cards.types.playables;
     exports it.polimi.ingsw.am42.network.rmi;
+
     exports it.polimi.ingsw.am42.view.gui.controller;
     exports it.polimi.ingsw.am42.network;
     exports it.polimi.ingsw.am42.view.gui;

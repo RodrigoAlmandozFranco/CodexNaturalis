@@ -42,7 +42,6 @@ import javafx.util.Duration;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
-import java.util.Timer;
 
 public class BoardController implements Initializable {
 
@@ -116,12 +115,15 @@ public class BoardController implements Initializable {
     Label updateText;
 
     @FXML
+    ImageView structureImage;
+
+    @FXML
     Pane colorPane;
     @FXML
-    ChoiceBox<it.polimi.ingsw.am42.model.enumeration.PlayersColor> colorChoiceBox;
+    ChoiceBox<PlayersColor> colorChoiceBox;
     @FXML
     Button chooseColorButton;
-    List<it.polimi.ingsw.am42.model.enumeration.PlayersColor> availableColors;
+    List<PlayersColor> availableColors;
 
 
     @FXML
@@ -138,13 +140,23 @@ public class BoardController implements Initializable {
     @FXML
     List<ImageView> listTokens;
 
+    private Set<Position> availablePositions;
+
     @FXML
     Pane standingPane;
 
     @FXML
-    GridPane boardGrid;
+    ImageView startingCard;
+    @FXML
+    Pane boardPane;
 
     GoalCard chosenGoal;
+    int constOffsetX = 97;
+    int constOffsetY = 49;
+
+    List<Button> availablePositionsButtons;
+    Button chosenPositionButton;
+
 
     public void personalGoal1ButtonAction(ActionEvent event) {
         possibleGoal1.setEffect(highlightEffect);
@@ -189,6 +201,18 @@ public class BoardController implements Initializable {
         goalPane.setDisable(false);
     }
 
+    private void addFaceToBoard(Face face) {
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(face.getSrcImage())));
+        ImageView card = new ImageView(image);
+        card.setFitHeight(chosenPositionButton.getPrefHeight());
+        card.setFitWidth(chosenPositionButton.getPrefWidth());
+        card.setLayoutX(chosenPositionButton.getLayoutX());
+        card.setLayoutY(chosenPositionButton.getLayoutY());
+        chosenPositionButton = null;
+        availablePositionsButtons.clear();
+        boardPane.getChildren().add(card);
+    }
+
     List<GoalCard> possibleGoals;
 
     public BoardController() {}
@@ -198,23 +222,110 @@ public class BoardController implements Initializable {
 
         if(chosenCard instanceof StartingCard) {
             placeStartingCard(chosenCard.getBack());
-            //TODO
             return;
         }
 
         chosenFace = chosenCard.getFront();
+
+        String value = chosenPositionButton.getText();
+        String x = "", y = "";
+        for(int i = 0; i < value.length(); i++){
+            if(value.charAt(i) == ','){
+                x = value.substring(0, i).trim();
+                y = value.substring(i+1).trim();
+            }
+        }
+
+        Position chosenPosition = new Position(Integer.parseInt(x), Integer.parseInt(y));
+
+        chosenCard = null;
+
         try {
             client.place(myPlayer.getNickname(), chosenFace, chosenPosition);
+
         } catch (RequirementsNotMetException e) {
             showAlert("The requirements are not met");
+            return;
+        }
+        addFaceToBoard(chosenFace);
+
+    }
+
+    private void setupTurn(){
+        availablePositions = client.getAvailablePositions(myPlayer.getNickname());
+        for(Position position : availablePositions) {
+            double offsetX = startingCard.getLayoutX();
+            double offsetY = startingCard.getLayoutY();
+            int x = position.getX();
+            int y = position.getY();
+
+            while(x > 0) {
+                offsetX += constOffsetX;
+                offsetY -= constOffsetY;
+                x--;
+            }
+            while(y > 0) {
+                offsetY -= constOffsetY;
+                offsetX -= constOffsetX;
+                y--;
+            }
+            while(x < 0){
+                offsetX -= constOffsetX;
+                offsetY += constOffsetY;
+                x++;
+            }
+
+            while(y < 0){
+                offsetY += constOffsetY;
+                offsetX += constOffsetX;
+                y++;
+            }
+
+
+            double finalOffsetX = offsetX;
+            double finalOffsetY = offsetY;
+
+
+            double finalWidth = boardPane.getChildren().getFirst().getLayoutBounds().getWidth();
+            double finalHeight = boardPane.getChildren().getFirst().getLayoutBounds().getHeight();
+
+
+
+            Platform.runLater(() -> {
+                Button button = new Button(position.getX() + ", " + position.getY());
+                boardPane.getChildren().add(button);
+                button.setPrefWidth(finalWidth);
+                button.setPrefHeight(finalHeight);
+                button.setLayoutX(finalOffsetX);
+                button.setLayoutY(finalOffsetY);
+                button.setOpacity(0.5);
+                availablePositionsButtons.add(button);
+
+                button.setOnAction(event -> {
+                    for(Button b : availablePositionsButtons) {
+                        b.setEffect(null);
+                    }
+                    chosenPositionButton = button;
+                    button.setEffect(highlightEffect);
+                });
+            });
+
         }
     }
+
+    private void resizeBoardPane(){
+
+    }
+
 
     private void placeStartingCard(Face face) {
         availableColors = client.placeStarting(myPlayer.getNickname(), face);
         handCard1.setEffect(null);
         handCard2.setEffect(null);
         handCard3.setEffect(null);
+        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(face.getSrcImage())));
+        startingCard.setImage(image);
+        chosenCard = null;
     }
 
     private void showAlert(String message) {
@@ -264,7 +375,9 @@ public class BoardController implements Initializable {
             client.place(myPlayer.getNickname(), chosenFace, chosenPosition);
         } catch (RequirementsNotMetException e) {
             showAlert("The requirements are not met");
+            return;
         }
+        addFaceToBoard(chosenFace);
     }
 
     private boolean checkBeforePlace() {
@@ -272,7 +385,7 @@ public class BoardController implements Initializable {
             showAlert("You have to choose a card");
             return true;
         }
-        if(chosenPosition == null && !(chosenCard instanceof StartingCard)) {
+        if(chosenPositionButton == null && !(chosenCard instanceof StartingCard)) {
             showAlert("You have to choose a position");
             return true;
         }
@@ -343,28 +456,41 @@ public class BoardController implements Initializable {
         }
     }
 
-    public void seeStandingsButtonAction(ActionEvent event){
 
+    public void seeStandingsButtonAction(ActionEvent event){
+        seeStandingsButton.setDisable(true);
         List<PlayerView> players = gameView.getPlayers();
         ScreenPosition screenPosition = new ScreenPosition();
         for(PlayerView p : players) {
             if(p.getColor() != null) {
+                Image image = null;
+                switch (p.getColor()) {
+                    case RED -> image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/it/polimi/ingsw/am42/tokens/red.png")));
+                    case BLUE -> image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/it/polimi/ingsw/am42/tokens/blue.png")));
+                    case YELLOW -> image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/it/polimi/ingsw/am42/tokens/yellow.png")));
+                    case GREEN -> image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/it/polimi/ingsw/am42/tokens/green.png")));
+                }
+
                 ScreenPosition coords = screenPosition.getScreenPosition(players.indexOf(p), p.getPoints());
                 listTokens.get(players.indexOf(p)).setX(coords.getX());
                 listTokens.get(players.indexOf(p)).setY(coords.getY());
-                String src = "";
-                switch (p.getColor()) {
-                    case RED -> src = "/it/polimi/ingsw/am42/graphical/tokens/red.png";
-                    case BLUE -> src = "/it/polimi/ingsw/am42/graphical/tokens/blue.png";
-                    case YELLOW -> src = "/it/polimi/ingsw/am42/graphical/tokens/yellow.png";
-                    case GREEN -> src = "/it/polimi/ingsw/am42/graphical/tokens/green.png";
-                }
-                Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
-                Platform.runLater(() -> listTokens.get(players.indexOf(p)).setImage(image));
+
+                Image finalImage = image;
+                Platform.runLater(() -> {
+                    //Image image = new Image(String.valueOf(getClass().getResource(finalSrc)));
+                    listTokens.get(players.indexOf(p)).setImage(finalImage);
+                });
+                //Image image = new Image(String.valueOf(getClass().getResource(src)));
+                //Platform.runLater(() -> listTokens.get(players.indexOf(p)).setImage(image));
 
             }
-
         }
+
+        for(ImageView token : listTokens){
+            token.setOpacity(1);
+            token.setDisable(false);
+        }
+
 
         standingPane.setOpacity(1);
         standingPane.setDisable(false);
@@ -373,9 +499,14 @@ public class BoardController implements Initializable {
         Timeline timeline = new Timeline(new KeyFrame(
                 Duration.millis(5000),
                 ae -> {
+                    for(ImageView token : listTokens){
+                        token.setOpacity(0);
+                        token.setDisable(true);
+                    }
                     standingPane.setOpacity(0);
                     standingPane.setDisable(true);
                     standingPane.setVisible(false);
+                    seeStandingsButton.setDisable(false);
                 }
         ));
         timeline.setCycleCount(1);
@@ -403,7 +534,6 @@ public class BoardController implements Initializable {
             personalNickname.setStyle("-fx-background-color: #FFEBCD; -fx-text-fill: #DC143C; -fx-padding: 10;");
         });
 
-
         Thread thread = new Thread(this::seeMessages);
         thread.start();
         Thread threadGame = new Thread(this::updateGameView);
@@ -411,7 +541,7 @@ public class BoardController implements Initializable {
         this.start();
     }
 
-    private void setBackgroundNickname(it.polimi.ingsw.am42.model.enumeration.PlayersColor color) {
+    private void setBackgroundNickname(PlayersColor color) {
         Platform.runLater(() -> {
             switch (color) {
                 case RED -> personalNickname.setStyle("-fx-background-color: red; -fx-padding: 10;");
@@ -434,7 +564,7 @@ public class BoardController implements Initializable {
             return;
         }
 
-        it.polimi.ingsw.am42.model.enumeration.PlayersColor chosenColor = colorChoiceBox.getValue();
+        PlayersColor chosenColor = colorChoiceBox.getValue();
 
         colorPane.setOpacity(0);
         colorPane.setDisable(true);
@@ -457,14 +587,26 @@ public class BoardController implements Initializable {
                         disablePickableButtons();
                         setColor();
                     } else if(gameView.getCurrentState().toString().equals("SETGOAL")) {
+                        while(possibleGoals == null){
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         disableHandAndControlButtons();
                         disablePickableButtons();
                         setGoal();
                     } else if(gameView.getCurrentState().toString().equals("PLACE")) {
+                        boardPane.setOpacity(1);
+                        boardPane.setDisable(false);
+                        setupTurn();
                         enableHandAndControlButtons();
-                        seePossiblePosition();
+                        //seePossiblePosition();
                     } else if(gameView.getCurrentState().toString().equals("PICK")) {
+                        seeStandingsButtonAction(null);
                         enablePickableButtons();
+                        disableHandAndControlButtons();
                     } else if(gameView.getCurrentState().toString().equals("LAST")) {
                         //todo
                     } else {
@@ -481,6 +623,9 @@ public class BoardController implements Initializable {
                 }
 
                 List<PlayableCard> hand = myPlayer.getHand();
+                for(int i = 0; i < hand.size(); i++)
+                    this.hand.get(i).setImage(null);
+
                 for(int i = 0; i < hand.size(); i++) {
                     String src = hand.get(i).getFront().getSrcImage();
                     Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
@@ -577,12 +722,12 @@ public class BoardController implements Initializable {
         }
     }
 
-
+/*
     private void seePossiblePosition(){
         Set<Position> positions = client.getAvailablePositions(myPlayer.getNickname());
 
     }
-
+*/
 
     public void seeMessages(){
 
@@ -661,6 +806,7 @@ public class BoardController implements Initializable {
             Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
             globalGoals.get(i).setImage(image);
         }
+        availablePositionsButtons = new ArrayList<>();
     }
 
 
@@ -795,9 +941,6 @@ public class BoardController implements Initializable {
         seeStandingsButton.setOnMouseEntered(event -> seeStandingsButton.setCursor(Cursor.HAND));
         seeStandingsButton.setOnMouseExited(event -> seeStandingsButton.setCursor(Cursor.DEFAULT));
 
-        boardGrid.setAlignment(Pos.CENTER);
-        boardGrid.setPadding(new Insets(10));
-        boardGrid.setHgap(10);
-        boardGrid.setVgap(10);
+
     }
 }

@@ -40,6 +40,7 @@ public class ConnectMessage extends Message {
             return new NicknameAlreadyInUseErrorMessage();
         }
         clientHandler.setNickname(nickname);
+        //return null;
         return new GoodMessage();
     }
 }

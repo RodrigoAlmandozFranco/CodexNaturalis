@@ -153,9 +153,11 @@ public class GameView {
             currentPlayer = getPlayer(diff.getCurrentPlayer());
             globalGoals = diff.getGlobalGoals();
             numberPlayers = diff.getNumberPlayers();
-            }
+        }
 
         currentPlayer = getPlayer(diff.getCurrentPlayer());
+
+        currentPlayer.setColor(diff.getColor());
 
         currentPlayer.update(diff);
 

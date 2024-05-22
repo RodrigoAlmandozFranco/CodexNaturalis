@@ -3,7 +3,9 @@ package it.polimi.ingsw.am42.model.enumeration;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.view.tui.ColorChooser;
 
-public enum Color {
+import java.io.Serializable;
+
+public enum Color implements Serializable {
     GREEN,
     CYAN,
     RED,

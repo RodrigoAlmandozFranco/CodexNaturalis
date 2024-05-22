@@ -50,7 +50,8 @@ public class ClientHandler implements Runnable, MessageListener {
                         controller.sendChatMessage((ChatMessage) message);
                     } else {
                         answer = message.execute(this, controller);
-                        sendMessage(answer);
+                        if(answer != null)
+                            sendMessage(answer);
                         if(answer instanceof SendWinnerMessage)
                             break;
                     }
@@ -96,7 +97,9 @@ public class ClientHandler implements Runnable, MessageListener {
     }
 
     public void update (Change change) {
-        sendMessage(new ChangeMessage(change));
+        //sendMessage(new ChangeMessage(change));
+        Message message = new ChangeMessage(change);
+        sendMessage(message);
     }
 
     public boolean heartbeat() {

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.am42.network.tcp.client;
 
+import it.polimi.ingsw.am42.controller.gameDB.Change;
+import it.polimi.ingsw.am42.model.enumeration.State;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.ChangeMessage;

@@ -181,7 +181,7 @@ public class Controller extends Observable{
         game.getCurrentPlayer().setColor(color);
         game.removeColor(color);
         game.changeState();
-        game.initializeHandCurrentPlayer();
+        //game.initializeHandCurrentPlayer();
         Change change = gameDB.saveGame(false);
         updateAll(change);
         System.out.println(p + " chose color" + color);

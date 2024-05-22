@@ -1,11 +1,14 @@
 package it.polimi.ingsw.am42.model.enumeration;
 
 import it.polimi.ingsw.am42.model.structure.Position;
+
+import java.io.Serializable;
+
 /**
  * Enumeration of the directions of the cards in the game
  * @author Rodrigo Almandoz Franco
  */
-public enum Direction {
+public enum Direction implements Serializable {
     UPRIGHT, // (+1, 0)
     UPLEFT, // (0, +1)
     DOWNRIGHT, // (0, -1)

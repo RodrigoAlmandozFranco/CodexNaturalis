@@ -3,7 +3,9 @@ package it.polimi.ingsw.am42.model.enumeration;
 import it.polimi.ingsw.am42.model.GameInterface;
 import it.polimi.ingsw.am42.model.Player;
 
-public enum State {
+import java.io.Serializable;
+
+public enum State implements Serializable {
 
     INITIAL,
 

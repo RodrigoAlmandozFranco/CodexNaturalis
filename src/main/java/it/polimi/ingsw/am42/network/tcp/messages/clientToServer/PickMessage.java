@@ -28,6 +28,7 @@ public class PickMessage extends Message {
     @Override
     public Message execute(ClientHandler clientHandler, Controller controller) {
         controller.pick(nickname, card);
-        return new GoodMessage();
+        //return new GoodMessage();
+        return null;
     }
 }

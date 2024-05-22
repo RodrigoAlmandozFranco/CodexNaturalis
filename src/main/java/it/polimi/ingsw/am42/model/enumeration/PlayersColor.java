@@ -2,8 +2,9 @@ package it.polimi.ingsw.am42.model.enumeration;
 
 import it.polimi.ingsw.am42.view.tui.ColorChooser;
 
-public enum PlayersColor {
+import java.io.Serializable;
 
+public enum PlayersColor implements Serializable {
     RED,
     BLUE,
     GREEN,
@@ -51,4 +52,5 @@ public enum PlayersColor {
         else
             return toString();
     }
+
 }

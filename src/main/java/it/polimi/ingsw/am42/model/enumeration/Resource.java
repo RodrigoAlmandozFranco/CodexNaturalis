@@ -2,12 +2,14 @@ package it.polimi.ingsw.am42.model.enumeration;
 
 import it.polimi.ingsw.am42.view.tui.ColorChooser;
 
+import java.io.Serializable;
+
 /**
  * Enumeration of the resources in the game
  * @author Rodrigo Almandoz Franco
  */
 
-public enum Resource {
+public enum Resource implements Serializable {
     PLANTKINGDOM,
     ANIMALKINGDOM,
     FUNGIKINGDOM,

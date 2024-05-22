@@ -47,8 +47,7 @@ public class NormalConnectionController {
         if(nickname.trim().isEmpty() && textField.getText().trim().isEmpty()){
             showAlert("Please insert a nickname");
         } else {
-            if(nickname.trim().isEmpty())
-                nickname = textField.getText().trim();
+            nickname = textField.getText().trim();
             connect(event);
         }
     }

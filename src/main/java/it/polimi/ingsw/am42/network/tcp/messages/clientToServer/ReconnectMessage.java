@@ -41,5 +41,6 @@ public class ReconnectMessage extends Message {
         }
         clientHandler.setNickname(nickname);
         return new GoodMessage();
+        //return null;
     }
 }
