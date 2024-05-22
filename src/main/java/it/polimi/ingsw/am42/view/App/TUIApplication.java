@@ -141,7 +141,7 @@ public class TUIApplication extends App {
         PlayerView p = client.getView().getPlayer(nickname);
         List<PlayersColor> avcolors = p.getAvColors();
         for (int i=0; i<avcolors.size(); i++)
-            question += i + " - " + avcolors.get(i).toString() + "\n";
+            question += i + " - " + avcolors.get(i).toString(true) + "\n";
 
         int choice = io.getInt(question);
         while (choice < 0 || choice >= avcolors.size()) {

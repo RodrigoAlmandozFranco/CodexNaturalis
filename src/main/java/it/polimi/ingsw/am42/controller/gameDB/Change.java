@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am42.controller.gameDB;
 
 import it.polimi.ingsw.am42.model.GameInterface;
+import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.enumeration.State;
 import it.polimi.ingsw.am42.model.Game;
 import it.polimi.ingsw.am42.model.Player;
@@ -37,6 +38,7 @@ public class Change implements Serializable {
     private List<PlayableCard> pickableGoldCards;
     private State currentState;
     private boolean gameStarted;
+    private PlayersColor color;
 
 
     public Change(GameInterface game, boolean gameStarted){
@@ -52,6 +54,7 @@ public class Change implements Serializable {
         pickableResourceCards = game.getPickableResourceCards();
         pickableGoldCards = game.getPickableGoldCards();
         currentState = game.getCurrentState();
+        color = game.getCurrentPlayer().getColor();
         players = null;
         globalGoals = null;
         numberPlayers = 0;
@@ -104,6 +107,10 @@ public class Change implements Serializable {
         return futurePlayer;
     }
 
+    public PlayersColor getColor() {
+        return color;
+    }
+
     public List<PlayableCard> getHand() {
         return hand;
     }
@@ -145,6 +152,7 @@ public class Change implements Serializable {
                 ", numberPlayers=" + numberPlayers +
                 ", hand=" + hand +
                 ", lastPlacedFace=" + lastPlacedFace +
+                ", color=" + color +
                 ", firstResourceCard=" + firstResourceCard +
                 ", firstGoldCard=" + firstGoldCard +
                 ", pickableResourceCards=" + pickableResourceCards +

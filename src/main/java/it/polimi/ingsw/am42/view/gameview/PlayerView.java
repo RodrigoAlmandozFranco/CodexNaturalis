@@ -113,6 +113,7 @@ public class PlayerView {
     public void update(Change diff){
         points = diff.getPointsPlayer();
         numberGoalsAchieved = diff.getNumberGoalsAchieved();
+        color = diff.getColor();
         hand.clear();
         hand.addAll(diff.getHand());
         if (diff.getLastPlacedFace() != null)

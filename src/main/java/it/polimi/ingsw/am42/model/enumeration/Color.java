@@ -25,12 +25,12 @@ public enum Color {
     public String toString(boolean literal) {
         if (literal) {
             return switch (this) {
-                case RED -> "RED";
-                case CYAN -> "CYAN";
-                case PURPLE -> "PURPLE";
-                case GREEN -> "GREEN";
-                case WHITE -> "WHITE";
-                default -> "WHAT";
+                case RED -> ColorChooser.RED + "RED" + ColorChooser.RESET;
+                case CYAN -> ColorChooser.CYAN + "CYAN" + ColorChooser.RESET;
+                case PURPLE -> ColorChooser.PURPLE + "PURPLE" + ColorChooser.RESET;
+                case GREEN -> ColorChooser.GREEN + "GREEN" + ColorChooser.RESET;
+                case WHITE -> ColorChooser.WHITE + "WHITE" + ColorChooser.RESET;
+                default -> ColorChooser.WHITE +"WHAT" + ColorChooser.RESET;
             };
         } else return toString();
     }
