@@ -2,6 +2,7 @@ package it.polimi.ingsw.am42.model.evaluator;
 
 import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.structure.Board;
+import it.polimi.ingsw.am42.view.tui.ColorChooser;
 
 public class EvaluatorPoints extends Evaluator{
 
@@ -29,7 +30,7 @@ public class EvaluatorPoints extends Evaluator{
     }
     @Override
     public String toString() {
-        String to_print = "\u001B[33m";
+        String to_print = ColorChooser.YELLOW;
 
         to_print += "+-----------------------+\n";
 
@@ -42,7 +43,7 @@ public class EvaluatorPoints extends Evaluator{
         to_print += "+-----------------------+";
 
 
-        to_print += Color.WHITE.toString();
+        to_print += ColorChooser.RESET;
         return to_print;
     }
 

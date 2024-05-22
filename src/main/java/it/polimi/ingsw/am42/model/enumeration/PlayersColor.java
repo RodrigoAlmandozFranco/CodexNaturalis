@@ -1,5 +1,7 @@
 package it.polimi.ingsw.am42.model.enumeration;
 
+import it.polimi.ingsw.am42.view.tui.ColorChooser;
+
 public enum PlayersColor {
 
     RED,
@@ -11,16 +13,16 @@ public enum PlayersColor {
     public String toString() {
         switch (this) {
             case RED -> {
-                return "\033[0;31m" + "RED" + "\033[0m";
+                return ColorChooser.RED + "RED" + ColorChooser.RESET;
             }
             case BLUE -> {
-                return  "\033[0;34m" + "BLUE" + "\033[0m";
+                return  ColorChooser.BLUE + "BLUE" + ColorChooser.RESET;
             }
             case GREEN -> {
-                return  "\033[0;32m" + "GREEN" + "\033[0m";
+                return  ColorChooser.GREEN + "GREEN" + ColorChooser.RESET;
             }
             case YELLOW -> {
-                return  "\033[0;33m" + "YELLOW" + "\033[0m";
+                return  ColorChooser.YELLOW + "YELLOW" + ColorChooser.RESET;
             }
         }
         return "";

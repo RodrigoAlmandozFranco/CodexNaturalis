@@ -1,4 +1,4 @@
-package it.polimi.ingsw.am42.view;
+package it.polimi.ingsw.am42.view.tui;
 
 import it.polimi.ingsw.am42.network.Client;
 
@@ -70,8 +70,8 @@ public class IOHandler {
 
     public boolean getBoolean() {
         String c = in.nextLine();
-        List<String> yes = Arrays.asList("y", "yes", "si", "oui", "duh");
-        List<String> no = Arrays.asList("n", "no", "non", "bah");
+        List<String> yes = Arrays.asList("y", "yes", "si", "oui", "duh", "1");
+        List<String> no = Arrays.asList("n", "no", "non", "bah", "0");
         while (!yes.contains(c.toLowerCase()) && !no.contains(c.toLowerCase())) {
             print("(y/n)");
             c = in.nextLine();

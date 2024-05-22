@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am42.view.gameview;
 
 import it.polimi.ingsw.am42.view.App.TUIApplication;
+import it.polimi.ingsw.am42.view.tui.ColorChooser;
 
 /**
  * Enum of all the possible methods that can be called by TUI client
@@ -27,13 +28,13 @@ public enum MethodChoice {
                 return "Reload choices";
             }
             case PLACESTARTING -> {
-                return "Place starting card";
+                return ColorChooser.YELLOW + "Place starting card" + ColorChooser.RESET;
             }
             case CHOOSECOLOR -> {
-                return "Choose your color";
+                return ColorChooser.YELLOW + "Choose your color" + ColorChooser.RESET;
             }
             case CHOOSEGOAL -> {
-                return "Choose your personal goal";
+                return ColorChooser.YELLOW + "Choose your personal goal" + ColorChooser.RESET;
             }
             case SEEBOARD -> {
                 return "See the board";
@@ -48,10 +49,10 @@ public enum MethodChoice {
                 return "See your objectives";
             }
             case PLACE -> {
-                return "Place your card";
+                return ColorChooser.YELLOW + "Place your card" + ColorChooser.RESET;
             }
             case PICK -> {
-                return "Draw a card";
+                return ColorChooser.YELLOW + "Draw a card" + ColorChooser.RESET;
             }
             case SEECHAT -> {
                 return "Check the chat";

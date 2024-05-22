@@ -6,6 +6,7 @@ import it.polimi.ingsw.am42.model.enumeration.Direction;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
 import it.polimi.ingsw.am42.model.evaluator.Evaluator;
 import it.polimi.ingsw.am42.model.structure.Position;
+import it.polimi.ingsw.am42.view.tui.ColorChooser;
 
 import java.io.Serializable;
 import java.util.List;
@@ -124,8 +125,8 @@ public abstract class Face implements Serializable {
     }
 
     private String upperPart() {
-
-        String to_print = color.toString();
+        String colorStr = color.toString();
+        String to_print = colorStr;
 
         // 1
         to_print += "+---+---------------+---+\n";
@@ -134,7 +135,7 @@ public abstract class Face implements Serializable {
         if (getCorner(Direction.UPLEFT).getState().equals(CornerState.CLOSED))
             to_print += "|    ";
         else
-            to_print += "| " + (getCorner(Direction.UPLEFT).getResource() == null ? " " : getCorner(Direction.UPLEFT).getResource().toString()) + " |";
+            to_print += "| " + (getCorner(Direction.UPLEFT).getResource() == null ? " " : getCorner(Direction.UPLEFT).getResource().toString()+colorStr) + " |";
 
         if (getEvaluator() == null)
             to_print += "               ";
@@ -143,7 +144,7 @@ public abstract class Face implements Serializable {
         if (getCorner(Direction.UPRIGHT).getState().equals(CornerState.CLOSED))
             to_print += "    |\n";
         else
-            to_print += "| " + (getCorner(Direction.UPRIGHT).getResource() == null ? " " : getCorner(Direction.UPRIGHT).getResource().toString()) + " |\n";
+            to_print += "| " + (getCorner(Direction.UPRIGHT).getResource() == null ? " " : getCorner(Direction.UPRIGHT).getResource().toString()+colorStr) + " |\n";
 
         // 3
         if (getCorner(Direction.UPLEFT).getState().equals(CornerState.CLOSED))
@@ -156,24 +157,24 @@ public abstract class Face implements Serializable {
         else
             to_print += "+---+\n";
 
-        to_print += Color.WHITE.toString();
+        to_print += ColorChooser.RESET;
         return to_print;
     }
 
 
     protected String middlePart() {
-        String to_print = color.toString();
+        String colorStr = color.toString();
+        String to_print = colorStr;
         for (int i=0; i<3; i++)
             to_print += "|                       |\n";
 
-        to_print += Color.WHITE.toString();
+        to_print += ColorChooser.RESET;
         return to_print;
     }
 
     private String finalPart() {
-
-
-        String to_print = color.toString();
+        String colorStr = color.toString();
+        String to_print = colorStr;
 
         // 1
         if (getCorner(Direction.DOWNLEFT).getState().equals(CornerState.CLOSED))
@@ -191,7 +192,7 @@ public abstract class Face implements Serializable {
         if (getCorner(Direction.DOWNLEFT).getState().equals(CornerState.CLOSED))
             to_print += "|    ";
         else
-            to_print += "| " + (getCorner(Direction.DOWNLEFT).getResource() == null ? " " : getCorner(Direction.DOWNLEFT).getResource().toString()) + " |";
+            to_print += "| " + (getCorner(Direction.DOWNLEFT).getResource() == null ? " " : getCorner(Direction.DOWNLEFT).getResource().toString()+colorStr) + " |";
         if (getRequirements().equals(null))
             to_print += "               ";
         else {
@@ -211,13 +212,13 @@ public abstract class Face implements Serializable {
         if (getCorner(Direction.DOWNRIGHT).getState().equals(CornerState.CLOSED))
             to_print += "    |\n";
         else
-            to_print += "| " + (getCorner(Direction.DOWNRIGHT).getResource() == null ? " " : getCorner(Direction.DOWNRIGHT).getResource().toString()) + " |\n";
+            to_print += "| " + (getCorner(Direction.DOWNRIGHT).getResource() == null ? " " : getCorner(Direction.DOWNRIGHT).getResource().toString()+colorStr) + " |\n";
 
 
         // 3
         to_print += "+---+---------------+---+\n";
 
-        to_print += Color.WHITE.toString();
+        to_print += ColorChooser.RESET;;
         return to_print;
 
     }

@@ -8,6 +8,7 @@ import it.polimi.ingsw.am42.model.cards.types.playables.GoldCard;
 import it.polimi.ingsw.am42.model.enumeration.State;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
+import it.polimi.ingsw.am42.network.tcp.messages.Message;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -114,9 +115,14 @@ public class GameView {
         return nickname;
     }
 
-    public void updateMessage(ChatMessage chatMessage) {
-        allMessages.add(chatMessage);
-        tmpMessages.add(chatMessage);
+    public void updateMessage(Message message) {
+        if (message instanceof ChatMessage) {
+            allMessages.add((ChatMessage) message);
+            tmpMessages.add((ChatMessage) message);
+        }
+        else {
+            System.out.println(message);
+        }
     }
 
     public List<ChatMessage> getAllMessages() {

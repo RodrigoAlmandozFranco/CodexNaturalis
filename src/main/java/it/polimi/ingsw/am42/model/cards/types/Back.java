@@ -4,6 +4,7 @@ import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
 import it.polimi.ingsw.am42.model.evaluator.Evaluator;
 import it.polimi.ingsw.am42.model.evaluator.EvaluatorPoints;
+import it.polimi.ingsw.am42.view.tui.ColorChooser;
 
 import java.util.HashMap;
 import java.util.List;
@@ -79,7 +80,8 @@ public class Back extends Face {
 
     @Override
     protected String middlePart() {
-        String to_print = color.toString();
+        String colorStr = color.toString();
+        String to_print = colorStr;
         if (resource.isEmpty())
             for (int i=0; i<3; i++)
                 to_print += "|                       |\n";
@@ -92,7 +94,7 @@ public class Back extends Face {
             to_print += "|" + " ".repeat(10 - resource.size())
                     + "| ";
             for (Resource r : resource)
-                to_print += r + " ";
+                to_print += r +colorStr + " ";
             to_print += "|"+ " ".repeat(10 - resource.size()) + "|\n";
             // 3
             to_print += "|" + " ".repeat(10 - resource.size())
@@ -102,7 +104,7 @@ public class Back extends Face {
 
 
 
-        to_print += Color.WHITE.toString();
+        to_print += ColorChooser.RESET;
         return to_print;
 
 

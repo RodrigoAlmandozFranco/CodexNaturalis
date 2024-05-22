@@ -14,10 +14,10 @@ import it.polimi.ingsw.am42.model.structure.Board;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
-import it.polimi.ingsw.am42.view.IOHandler;
+import it.polimi.ingsw.am42.view.tui.ColorChooser;
+import it.polimi.ingsw.am42.view.tui.IOHandler;
 import it.polimi.ingsw.am42.view.gameview.MethodChoice;
 import it.polimi.ingsw.am42.view.gameview.PlayerView;
-import javafx.application.Platform;
 
 import java.util.*;
 
@@ -176,7 +176,7 @@ public class TUIApplication extends App {
      * @author Tommaso Crippa
      */
     public static void seeBoard() {
-        String question = "Choose one of the following positions\n";
+        String question = "Which player's board?\n";
 
         List<String> names = new ArrayList<>();
         names.add(nickname);
@@ -257,6 +257,7 @@ public class TUIApplication extends App {
                     to_print += f.getColor() + "███";
                 lastLeft = f.getPosition().leftness()-1;
             }
+            to_print += ColorChooser.RESET;
             io.print(to_print);
 
         }
@@ -294,12 +295,17 @@ public class TUIApplication extends App {
     public static void seeStandings() {
         String message = "Scoreboard\n";
         for (PlayerView p: client.getView().getPlayers())
-            message +=  p.getNickname()  + (p.getNickname().equals(nickname)?"(You)":"")+" = "+ p.getPoints() + "\n";
+            message +=  p.getNickname()  + (p.getNickname().equals(nickname)?" (You)":"")+" = "+ p.getPoints() + "\n";
         io.print(message);
     }
 
     public static void seeGoals() {
-        // TODO
+        io.print("Global goals:");
+        for (GoalCard g : client.getView().getGlobalGoals())
+            io.print(""+g);
+
+        io.print("Personal goal:");
+        io.print(""+client.getView().getPlayer(nickname).getPersonalGoal());
     }
 
     public static void place() {
@@ -351,9 +357,9 @@ public class TUIApplication extends App {
         int i = 0;
         for (PlayableCard c : cards) {
             if(c.getVisibility())
-                io.print(i + " : " + c.getFront());
+                io.print("\n"+ i + " : " + c.getFront());
             else
-                io.print(i + " : " + c.getBack());
+                io.print("\n" + i + " : " + c.getBack());
             i++;
         }
     }
@@ -374,13 +380,29 @@ public class TUIApplication extends App {
     }
 
     public static void seeChat() {
-        // TODO
+        List<ChatMessage> chat = client.getView().getAllMessages();
+        String to_print = "";
+        for (ChatMessage message : chat) {
+            if (message.getReceiver().equals( "all"))
+                to_print += ColorChooser.ORANGE;
+            else
+                to_print += ColorChooser.PINK;
+            to_print += "<" + message.getSender() + ">: ";
+            to_print += message.getMessage();
+            to_print += ColorChooser.RESET + "\n";
+        }
+
+        io.print(to_print);
     }
 
     public static void sendMessage() {
         String receiver = "all";
-        String question = "Choose one of the following positions\n";
+        String question = "Who do you want to write to?\n";
 
+        if (client.getView().getPlayers().isEmpty()) {
+
+            return;
+        }
         List<String> names = new ArrayList<>();
         names.add("all");
         for(PlayerView p:client.getView().getPlayers())
@@ -452,7 +474,7 @@ public class TUIApplication extends App {
         List<MethodChoice> choices = client.getView().getUsableMethods();
         String question = "What do you want to do?\n";
         for (int i=0; i<choices.size(); i++)
-            question += i + " - " + choices.get(i)+ (choices.get(i).equals(MethodChoice.SEECHAT)?newMessages:"") + "\n";
+            question += i + " - " + choices.get(i).getChoice() + (choices.get(i).equals(MethodChoice.SEECHAT)?newMessages:"") + "\n";
 
         int choice = io.getInt(question);
         if (choice < 0 || choice >= choices.size()) {
@@ -479,7 +501,12 @@ public class TUIApplication extends App {
                             "-------------------------------------------------\n");
                     System.out.println("Press 0 to reload your choices");
                 }
-                else System.out.println(client.getView().getCurrentState().showState(current));
+                else {
+                    PlayersColor c = client.getView().getPlayer(current).getColor();
+                    if (c != null)
+                        current = c + current + ColorChooser.RESET;
+                    System.out.println(client.getView().getCurrentState().showState(current));
+                }
 
             }
             else {

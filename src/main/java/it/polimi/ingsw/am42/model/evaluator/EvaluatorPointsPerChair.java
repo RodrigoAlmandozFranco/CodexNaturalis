@@ -4,6 +4,7 @@ import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.enumeration.Direction;
 import it.polimi.ingsw.am42.model.structure.Board;
+import it.polimi.ingsw.am42.view.tui.ColorChooser;
 
 
 public class EvaluatorPointsPerChair extends Evaluator{
@@ -79,12 +80,13 @@ public class EvaluatorPointsPerChair extends Evaluator{
     }
 
     public String toString() {
-        String to_print = color1.toString();
+        String colorStr = color1.toString();
+        String to_print = colorStr;
 
         to_print += "+-----------------------+\n";
         to_print += "|   ___                 |\n";
         to_print += "|  /   \\        " + numPoints + "       |\n";
-        to_print += "|  | " + color1.colorToResource() + " |                |\n";
+        to_print += "|  | " + color1.colorToResource()+colorStr + " |                |\n";
 
         if (direction.equals(Direction.UPRIGHT)) {
             to_print += "|  |   |         " + color2.toString() + "██" + color1.toString() + "     |\n";
@@ -109,7 +111,7 @@ public class EvaluatorPointsPerChair extends Evaluator{
         to_print += "|  |   |                |\n";
         to_print += "+-----------------------+";
 
-        to_print += Color.WHITE.toString();
+        to_print += ColorChooser.RESET;
         return to_print;
     }
 

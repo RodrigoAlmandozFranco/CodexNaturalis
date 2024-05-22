@@ -201,8 +201,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
 
     @Override
     public void receiveMessage(Message message) {
-        // TODO: implement receive Message
-        // view.receiveMessage(message)
+        view.updateMessage(message);
     }
 
     public boolean heartbeat() throws RemoteException {

@@ -44,7 +44,7 @@ public interface Client {
     List<PlayersColor> placeStarting(String p, Face face);
 
     void sendChatMessage(ChatMessage message);
-
+    void receiveMessage(Message message);
     void setView(GameView view);
 
     GameView getView();

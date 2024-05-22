@@ -4,6 +4,7 @@ import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.enumeration.Direction;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
 import it.polimi.ingsw.am42.model.structure.Board;
+import it.polimi.ingsw.am42.view.tui.ColorChooser;
 
 import java.util.Map;
 
@@ -52,7 +53,8 @@ public class EvaluatorPointsPerResource extends Evaluator{
 
     public String threeOfAKind() {
         Resource resource = resourceMap.keySet().stream().toList().getFirst();
-        String to_print = resource.resourceToColor().toString();
+        String color = resource.resourceToColor().toString();
+        String to_print = color;
 
 
         to_print += "+-----------------------+\n";
@@ -60,18 +62,20 @@ public class EvaluatorPointsPerResource extends Evaluator{
         to_print += "|  /   \\        " + numPoints + "       |\n";
         to_print += "|  | X |                |\n";
 
-        to_print += "|  |   |       " + resource+ "        |\n";
-        to_print += "|  |   |      " + resource+ "         |\n";
-        to_print += "|  |   |        " + resource+ "       |\n";
+        to_print += "|  |   |       " + resource+color+ "        |\n";
+        to_print += "|  |   |      " + resource+color+ "         |\n";
+        to_print += "|  |   |        " + resource+color+ "       |\n";
 
         to_print += "|  |   |                |\n";
         to_print += "+-----------------------+";
 
+        to_print += ColorChooser.RESET;
         return to_print;
     }
 
     public String pair() {
-        String to_print = "\u001B[33m";
+        String color = ColorChooser.YELLOW;
+        String to_print = color;
 
         Resource first = resourceMap.keySet().stream().toList().get(0);
         Resource second = resourceMap.keySet().stream().toList().get(1);
@@ -83,17 +87,19 @@ public class EvaluatorPointsPerResource extends Evaluator{
         to_print += "|  | X |                |\n";
 
         to_print += "|  |   |                |\n";
-        to_print += "|  |   |         " + first + " | " + second +"     |\n";
+        to_print += "|  |   |         " + first+color + " | " + second+color +"     |\n";
         to_print += "|  |   |                |\n";
 
         to_print += "|  |   |                |\n";
         to_print += "+-----------------------+";
 
+        to_print += ColorChooser.RESET;
         return to_print;
     }
 
     public String oneOfEach() {
-        String to_print = "\u001B[33m";
+        String color = ColorChooser.YELLOW;
+        String to_print = color;
 
         Resource first = resourceMap.keySet().stream().toList().get(0);
         Resource second = resourceMap.keySet().stream().toList().get(1);
@@ -106,11 +112,13 @@ public class EvaluatorPointsPerResource extends Evaluator{
         to_print += "|  | X |                |\n";
 
         to_print += "|  |   |                |\n";
-        to_print += "|  |   |     " + first + " | " + second + " | " + third + "  |\n";
+        to_print += "|  |   |     " + first+color + " | " + second+color + " | " + third+color + "  |\n";
         to_print += "|  |   |                |\n";
 
         to_print += "|  |   |                |\n";
         to_print += "+-----------------------+";
+
+        to_print += ColorChooser.RESET;
 
         return to_print;
     }

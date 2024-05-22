@@ -35,7 +35,7 @@ public class ServerHandler implements Runnable {
                     if(m instanceof ChangeMessage){
                         client.update(((ChangeMessage) m).getChange());
                     } else if (m instanceof ChatMessage) {
-                        client.updateMessage((ChatMessage) m);
+                        client.receiveMessage(m);
                     } else if(m instanceof PlayerDisconnectedMessage) {
                         client.updateDisconnection();
                     } else {

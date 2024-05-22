@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am42.model.enumeration;
 
 import it.polimi.ingsw.am42.model.structure.Position;
+import it.polimi.ingsw.am42.view.tui.ColorChooser;
 
 public enum Color {
     GREEN,
@@ -12,12 +13,12 @@ public enum Color {
 
     public String toString() {
         return  switch (this) {
-            case RED -> "\u001B[31m";
-            case CYAN -> "\u001B[36m";
-            case PURPLE -> "\u001B[35m";
-            case GREEN -> "\u001B[32m";
-            case WHITE -> "\u001B[37m";
-            default -> "\u001B[0m";
+            case RED -> ColorChooser.RED;
+            case CYAN -> ColorChooser.CYAN;
+            case PURPLE -> ColorChooser.PURPLE;
+            case GREEN -> ColorChooser.GREEN;
+            case WHITE -> ColorChooser.WHITE;
+            default -> ColorChooser.RESET;
         };
     }
 

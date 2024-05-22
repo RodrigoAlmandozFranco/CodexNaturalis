@@ -277,8 +277,8 @@ public class ClientTCP implements Client {
         sendMessage(message);
     }
 
-    public void updateMessage (ChatMessage chatMessage){
-        view.updateMessage(chatMessage);
+    public void receiveMessage(Message message){
+        view.updateMessage(message);
     }
 
     public void updateDisconnection(){
