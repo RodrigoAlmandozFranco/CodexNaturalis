@@ -105,7 +105,7 @@ public class BoardController implements Initializable {
     @FXML
     Pane colorPane;
     @FXML
-    ChoiceBox<PlayersColor> colorChoiceBox;
+    ChoiceBox<String> colorChoiceBox;
     @FXML
     Button chooseColorButton;
     List<PlayersColor> availableColors;
@@ -405,7 +405,17 @@ public class BoardController implements Initializable {
     }
 
     private void setColor() {
-        Platform.runLater(() -> colorChoiceBox.getItems().addAll(availableColors));
+
+        List<PlayersColor> colors = new ArrayList<>();
+        for(PlayersColor pc : availableColors){
+            colors.add(pc.getName());
+        }
+
+
+        Platform.runLater(() -> {
+            colorChoiceBox.getItems().clear();
+            colorChoiceBox.getItems().addAll(String.valueOf(colors));
+        });
         colorPane.setOpacity(1);
         colorPane.setDisable(false);
     }
@@ -416,7 +426,7 @@ public class BoardController implements Initializable {
             return;
         }
 
-        PlayersColor chosenColor = colorChoiceBox.getValue();
+        PlayersColor chosenColor = PlayersColor.valueOf(colorChoiceBox.getValue());
 
         colorPane.setOpacity(0);
         colorPane.setDisable(true);
@@ -654,13 +664,13 @@ public class BoardController implements Initializable {
         chosenCard = null;
 
         try {
-            client.place(myPlayer.getNickname(), chosenFace, chosenPosition);
+            client.place(myPlayer.getNickname(), face, chosenPosition);
 
         } catch (RequirementsNotMetException e) {
             showAlert("The requirements are not met");
             return;
         }
-        addFaceToBoard(chosenFace);
+        addFaceToBoard(face);
 
         for (Button b : availablePositionsButtons) {
             boardPane.getChildren().remove(b);
