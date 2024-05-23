@@ -406,15 +406,20 @@ public class BoardController implements Initializable {
 
     private void setColor() {
 
-        List<PlayersColor> colors = new ArrayList<>();
+        List<String> colors = new ArrayList<>();
         for(PlayersColor pc : availableColors){
-            colors.add(pc.getName());
+            switch(pc) {
+                case RED -> colors.add("RED");
+                case BLUE -> colors.add("BLUE");
+                case GREEN -> colors.add("GREEN");
+                case YELLOW -> colors.add("YELLOW");
+            }
         }
 
 
         Platform.runLater(() -> {
             colorChoiceBox.getItems().clear();
-            colorChoiceBox.getItems().addAll(String.valueOf(colors));
+            colorChoiceBox.getItems().addAll(colors);
         });
         colorPane.setOpacity(1);
         colorPane.setDisable(false);
