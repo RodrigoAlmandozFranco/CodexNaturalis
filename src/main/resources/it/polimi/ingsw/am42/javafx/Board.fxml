@@ -75,6 +75,11 @@
             <Button fx:id="seeBackButton" layoutX="828.0" layoutY="533.0" mnemonicParsing="false" onAction="#seeBackButtonAction" prefHeight="26.0" prefWidth="115.0" text="See Back" />
             <Button fx:id="seeFrontButton" layoutX="524.0" layoutY="533.0" mnemonicParsing="false" onAction="#placeFrontButtonAction" prefHeight="26.0" prefWidth="115.0" text="See Front" />
             <Label fx:id="personalNickname" layoutX="10.0" layoutY="396.0" prefHeight="46.0" prefWidth="318.0" text="Label" />
+            <Pane fx:id="boardPane" disable="true" layoutX="360.0" layoutY="20.0" prefHeight="510.0" prefWidth="610.0">
+               <children>
+                  <ImageView fx:id="startingCard" fitHeight="85.0" fitWidth="137.0" layoutX="236.5" layoutY="212.5" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </Pane>
             <Pane fx:id="standingPane" disable="true" layoutX="330.0" layoutY="1.0" opacity="0.0" prefHeight="566.0" prefWidth="682.0" style="-fx-background-color: white;">
                <children>
                   <ImageView fx:id="standingsImage" fitHeight="566.0" fitWidth="308.0" layoutX="190.0" pickOnBounds="true" preserveRatio="true" style="-fx-background: white;">
@@ -82,11 +87,6 @@
                         <Image url="@../graphical/gameStructure/scoreboard.png" />
                      </image>
                   </ImageView>
-               </children>
-            </Pane>
-            <Pane fx:id="boardPane" disable="true" layoutX="360.0" layoutY="20.0" prefHeight="510.0" prefWidth="610.0">
-               <children>
-                  <ImageView fx:id="startingCard" fitHeight="85.0" fitWidth="137.0" layoutX="236.5" layoutY="212.5" pickOnBounds="true" preserveRatio="true" />
                </children>
             </Pane>
             <ImageView fx:id="tokenPlayer3" disable="true" fitHeight="59.0" fitWidth="42.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" />
@@ -126,6 +126,7 @@
                   </Label>
                </children>
             </Pane>
+            <Button fx:id="pickButton" layoutX="233.0" layoutY="330.0" mnemonicParsing="false" onAction="#pickButtonAction" text="Pick!" />
          </children>
       </AnchorPane>
    </children>

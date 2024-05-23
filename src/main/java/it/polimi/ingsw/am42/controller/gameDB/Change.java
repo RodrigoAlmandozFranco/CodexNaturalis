@@ -1,16 +1,15 @@
 package it.polimi.ingsw.am42.controller.gameDB;
 
 import it.polimi.ingsw.am42.model.GameInterface;
+import it.polimi.ingsw.am42.model.cards.types.*;
 import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.enumeration.State;
 import it.polimi.ingsw.am42.model.Game;
 import it.polimi.ingsw.am42.model.Player;
-import it.polimi.ingsw.am42.model.cards.types.Face;
-import it.polimi.ingsw.am42.model.cards.types.GoalCard;
-import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -47,12 +46,36 @@ public class Change implements Serializable {
         numberGoalsAchieved = game.getCurrentPlayer().getGoalsAchieved();
         currentPlayer = game.getCurrentPlayer().getNickname();
         futurePlayer = game.getCurrentPlayer().getNickname();
-        hand = game.getCurrentPlayer().getHand();
-        lastPlacedFace = game.getCurrentPlayer().getBoard().getLastPlacedFace();
-        firstResourceCard = game.getFirstResourceCard();
-        firstGoldCard = game.getFirstGoldCard();
-        pickableResourceCards = game.getPickableResourceCards();
-        pickableGoldCards = game.getPickableGoldCards();
+        hand = new ArrayList<>(game.getCurrentPlayer().getHand());
+
+        if(game.getCurrentPlayer().getBoard().getFaces().size() == 1){
+            lastPlacedFace = game.getCurrentPlayer().getBoard().getLastPlacedFace();
+        } else {
+            if (game.getCurrentPlayer().getBoard().getLastPlacedFace() != null) {
+                if (game.getCurrentPlayer().getBoard().getLastPlacedFace() instanceof Front)
+                    lastPlacedFace = new Front(game.getCurrentPlayer().getBoard().getLastPlacedFace().getSrcImage(),
+                            game.getCurrentPlayer().getBoard().getLastPlacedFace().getCorners(),
+                            game.getCurrentPlayer().getBoard().getLastPlacedFace().getColor(),
+                            game.getCurrentPlayer().getBoard().getLastPlacedFace().getRequirements(),
+                            game.getCurrentPlayer().getBoard().getLastPlacedFace().getEvaluator());
+                else
+                    lastPlacedFace = new Back(game.getCurrentPlayer().getBoard().getLastPlacedFace().getSrcImage(),
+                            game.getCurrentPlayer().getBoard().getLastPlacedFace().getCorners(),
+                            game.getCurrentPlayer().getBoard().getLastPlacedFace().getColor(),
+                            game.getCurrentPlayer().getBoard().getLastPlacedFace().getListResource());
+
+            }
+        }
+        if(lastPlacedFace !=  null)
+            lastPlacedFace.setPosition(game.getCurrentPlayer().getBoard().getLastPlacedFace().getPosition());
+
+        firstResourceCard = new PlayableCard(game.getFirstResourceCard().getId(), game.getFirstResourceCard().getFront(), game.getFirstResourceCard().getBack());
+        firstGoldCard = new PlayableCard(game.getFirstGoldCard().getId(), game.getFirstGoldCard().getFront(), game.getFirstGoldCard().getBack());
+
+        pickableResourceCards = new ArrayList<>(game.getPickableResourceCards());
+
+        pickableGoldCards = new ArrayList<>(game.getPickableGoldCards());
+
         currentState = game.getCurrentState();
         color = game.getCurrentPlayer().getColor();
         players = null;
@@ -61,8 +84,8 @@ public class Change implements Serializable {
         this.gameStarted = gameStarted;
 
         if(!gameStarted){
-            players = game.getPlayers();
-            globalGoals = game.getGoals();
+            players = new ArrayList<>(game.getPlayers());
+            globalGoals = new ArrayList<>(game.getGoals());
             numberPlayers = game.getNumberPlayers();
         }
     }

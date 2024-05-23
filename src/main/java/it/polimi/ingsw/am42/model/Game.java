@@ -350,9 +350,7 @@ public class Game implements GameInterface, Serializable {
         if(!visibility){
             deck1.remove();
         } else {
-            for(PlayableCard x: list1)
-                if(x.getId() == c.getId())
-                    list1.remove(x);
+            list1.removeIf(x -> x.getId() == c.getId());
             if(!deck1.finished()){
                 p = deck1.getTop();
                 list1.add(deck1.getTop());
@@ -476,6 +474,8 @@ public class Game implements GameInterface, Serializable {
     public void removeColor(PlayersColor c) {
         availableColors.remove(c);
     }
+
+
 
     /**
      * This method initializes the decks of the game.

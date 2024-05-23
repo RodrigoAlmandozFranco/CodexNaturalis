@@ -229,7 +229,7 @@ public class ClientTCP implements Client {
     public void chooseGoal(String p, GoalCard goal) {
         Message message = new ChosenGoalMessage(p, goal);
         sendMessage(message);
-        /*
+
         Message answer;
 
         try {
@@ -238,14 +238,14 @@ public class ClientTCP implements Client {
             throw new RuntimeException(e);
         }
 
-         */
+
     }
 
     @Override
     public void pick(String p, PlayableCard card) {
         Message message = new PickMessage(p, card);
         sendMessage(message);
-        /*
+
         Message answer;
 
         try {
@@ -254,7 +254,7 @@ public class ClientTCP implements Client {
             throw new RuntimeException(e);
         }
 
-         */
+
     }
 
     @Override

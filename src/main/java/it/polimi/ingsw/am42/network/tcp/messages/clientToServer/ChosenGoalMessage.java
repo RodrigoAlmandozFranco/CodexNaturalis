@@ -27,8 +27,8 @@ public class ChosenGoalMessage extends Message {
 
     public Message execute(ClientHandler clientHandler, Controller controller) {
         controller.chooseGoal(nickname, goal);
-        return null;
-        // return new GoodMessage();
+        //return null;
+        return new GoodMessage();
     }
 }
 

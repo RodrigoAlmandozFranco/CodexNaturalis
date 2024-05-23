@@ -36,7 +36,7 @@ public class PlaceMessage extends Message {
         } catch (RequirementsNotMetException e) {
             return new NoRequirementsErrorMessage();
         }
-        return null;
-        //return new GoodMessage();
+        //return null;
+        return new GoodMessage();
     }
 }

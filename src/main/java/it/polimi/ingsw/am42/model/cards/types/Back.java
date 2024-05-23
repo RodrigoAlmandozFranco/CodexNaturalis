@@ -25,6 +25,10 @@ public class Back extends Face {
         this.resource = resource;
     }
 
+    public List<Resource> getListResource() {
+        return resource;
+    }
+
     /**
      * Returns the evaluator of the given face.
      *

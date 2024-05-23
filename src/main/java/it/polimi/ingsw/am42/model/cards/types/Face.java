@@ -30,6 +30,10 @@ public abstract class Face implements Serializable {
         this.color = color;
     }
 
+    public List<Resource >getListResource() {
+        return null;
+    }
+
     /**
      * Returns the corners of the face
      *

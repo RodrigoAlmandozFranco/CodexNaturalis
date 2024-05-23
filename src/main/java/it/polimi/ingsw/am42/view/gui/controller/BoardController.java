@@ -19,8 +19,6 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
@@ -30,7 +28,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -202,6 +199,9 @@ public class BoardController implements Initializable {
     }
 
     private void addFaceToBoard(Face face) {
+        handCard1.setEffect(null);
+        handCard2.setEffect(null);
+        handCard3.setEffect(null);
         Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(face.getSrcImage())));
         ImageView card = new ImageView(image);
         card.setFitHeight(chosenPositionButton.getPrefHeight());
@@ -209,6 +209,10 @@ public class BoardController implements Initializable {
         card.setLayoutX(chosenPositionButton.getLayoutX());
         card.setLayoutY(chosenPositionButton.getLayoutY());
         chosenPositionButton = null;
+        for(Button b : availablePositionsButtons) {
+            boardPane.getChildren().remove(b);
+            b.setEffect(null);
+        }
         availablePositionsButtons.clear();
         boardPane.getChildren().add(card);
     }
@@ -249,6 +253,10 @@ public class BoardController implements Initializable {
         }
         addFaceToBoard(chosenFace);
 
+        for(Button b : availablePositionsButtons) {
+            boardPane.getChildren().remove(b);
+            b.setEffect(null);
+        }
     }
 
     private void setupTurn(){
@@ -300,6 +308,9 @@ public class BoardController implements Initializable {
                 button.setLayoutY(finalOffsetY);
                 button.setOpacity(0.5);
                 availablePositionsButtons.add(button);
+
+                button.setOnMouseEntered(event -> button.setCursor(Cursor.HAND));
+                button.setOnMouseExited(event -> button.setCursor(Cursor.DEFAULT));
 
                 button.setOnAction(event -> {
                     for(Button b : availablePositionsButtons) {
@@ -426,6 +437,7 @@ public class BoardController implements Initializable {
             b.setOnMouseEntered(event -> b.setCursor(Cursor.HAND));
             b.setOnMouseExited(event -> b.setCursor(Cursor.DEFAULT));
         }
+        pickButton.setOpacity(1);
     }
 
     private void disablePickableButtons() {
@@ -434,6 +446,7 @@ public class BoardController implements Initializable {
             b.setOnMouseEntered(event -> b.setCursor(Cursor.DEFAULT));
             b.setOnMouseExited(event -> b.setCursor(Cursor.DEFAULT));
         }
+        pickButton.setOpacity(0);
     }
 
     private void enableHandAndControlButtons() {
@@ -460,8 +473,8 @@ public class BoardController implements Initializable {
     public void seeStandingsButtonAction(ActionEvent event){
         seeStandingsButton.setDisable(true);
         List<PlayerView> players = gameView.getPlayers();
-        ScreenPosition screenPosition = new ScreenPosition();
         for(PlayerView p : players) {
+            ScreenPosition screenPosition = new ScreenPosition();
             if(p.getColor() != null) {
                 Image image = null;
                 switch (p.getColor()) {
@@ -477,12 +490,8 @@ public class BoardController implements Initializable {
 
                 Image finalImage = image;
                 Platform.runLater(() -> {
-                    //Image image = new Image(String.valueOf(getClass().getResource(finalSrc)));
                     listTokens.get(players.indexOf(p)).setImage(finalImage);
                 });
-                //Image image = new Image(String.valueOf(getClass().getResource(src)));
-                //Platform.runLater(() -> listTokens.get(players.indexOf(p)).setImage(image));
-
             }
         }
 
@@ -622,8 +631,10 @@ public class BoardController implements Initializable {
                     goalPane.setDisable(true);
                 }
 
+                //Image parquet = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/it/polimi/ingsw/am42/graphical/gameStructure/parquet.png")));
+
                 List<PlayableCard> hand = myPlayer.getHand();
-                for(int i = 0; i < hand.size(); i++)
+                for(int i = 0; i < this.hand.size(); i++)
                     this.hand.get(i).setImage(null);
 
                 for(int i = 0; i < hand.size(); i++) {
@@ -826,41 +837,82 @@ public class BoardController implements Initializable {
     }
 
     public void firstCardResourceButtonEvent(ActionEvent event) {
-        PlayableCard card = null;
+        for(ImageView b : pickableCardsImages) {
+            b.setEffect(null);
+        }
+        firstCardResource.setEffect(highlightEffect);
         for(PlayableCard p : gameView.getPickableResourceCards()) {
             if(!p.getVisibility()) {
-                card = p;
+                chosenCardToPick = p;
                 break;
             }
         }
-        client.pick(myPlayer.getNickname(), card);
+        //client.pick(myPlayer.getNickname(), card);
     }
 
     public void firstCardGoldButtonEvent(ActionEvent event) {
-        PlayableCard card = null;
+        for(ImageView b : pickableCardsImages) {
+            b.setEffect(null);
+        }
+        firstCardGold.setEffect(highlightEffect);
         for(PlayableCard p : gameView.getPickableGoldCards()) {
             if(!p.getVisibility()) {
-                card = p;
+                chosenCardToPick = p;
                 break;
             }
         }
-        client.pick(myPlayer.getNickname(), card);
+        //client.pick(myPlayer.getNickname(), card);
     }
 
+    PlayableCard chosenCardToPick = null;
+    List<ImageView> pickableCardsImages;
+
     public void pickableResource1ButtonEvent(ActionEvent event) {
-        client.pick(myPlayer.getNickname(), gameView.getPickableResourceCards().getFirst());
+        for(ImageView b : pickableCardsImages) {
+            b.setEffect(null);
+        }
+        pickableResource1.setEffect(highlightEffect);
+        chosenCardToPick = gameView.getPickableResourceCards().getFirst();
+        //client.pick(myPlayer.getNickname(), gameView.getPickableResourceCards().getFirst());
     }
 
     public void pickableGold1ButtonEvent(ActionEvent event) {
-        client.pick(myPlayer.getNickname(), gameView.getPickableGoldCards().getFirst());
+        for(ImageView b : pickableCardsImages) {
+            b.setEffect(null);
+        }
+        pickableGold1.setEffect(highlightEffect);
+        chosenCardToPick = gameView.getPickableGoldCards().getFirst();
+        //client.pick(myPlayer.getNickname(), gameView.getPickableGoldCards().getFirst());
     }
 
     public void pickableResource2ButtonEvent(ActionEvent event) {
-        client.pick(myPlayer.getNickname(), gameView.getPickableResourceCards().get(1));
+        for(ImageView b : pickableCardsImages) {
+            b.setEffect(null);
+        }
+        pickableResource2.setEffect(highlightEffect);
+        chosenCardToPick = gameView.getPickableResourceCards().get(1);
+        //client.pick(myPlayer.getNickname(), gameView.getPickableResourceCards().get(1));
     }
 
     public void pickableGold2ButtonEvent(ActionEvent event) {
-        client.pick(myPlayer.getNickname(), gameView.getPickableGoldCards().get(1));
+        for(ImageView b : pickableCardsImages) {
+            b.setEffect(null);
+        }
+        pickableGold2.setEffect(highlightEffect);
+        chosenCardToPick = gameView.getPickableGoldCards().get(1);
+        //client.pick(myPlayer.getNickname(), gameView.getPickableGoldCards().get(1));
+    }
+    
+    @FXML
+    Button pickButton;
+    public void pickButtonAction(ActionEvent event) {
+        if(chosenCardToPick == null)
+            showAlert("You have to pick a card!");
+        client.pick(myPlayer.getNickname(), chosenCardToPick);
+        for(ImageView b : pickableCardsImages) {
+            b.setEffect(null);
+        }
+        chosenCardToPick = null;
     }
 
 
@@ -868,11 +920,7 @@ public class BoardController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-
-
         choiceBox.setValue("All");
-
-
 
 
         pickableCardsButton = new ArrayList<>();
@@ -882,6 +930,7 @@ public class BoardController implements Initializable {
         pickableCardsButton.add(firstCardGoldButton);
         pickableCardsButton.add(pickableGold1Button);
         pickableCardsButton.add(pickableGold2Button);
+        pickableCardsButton.add(pickButton);
 
         pickableGoldCards = new ArrayList<>();
         pickableGoldCards.add(pickableGold1);
@@ -914,6 +963,14 @@ public class BoardController implements Initializable {
         listTokens.add(tokenPlayer2);
         listTokens.add(tokenPlayer3);
         listTokens.add(tokenPlayer4);
+
+        pickableCardsImages = new ArrayList<>();
+        pickableCardsImages.add(firstCardResource);
+        pickableCardsImages.add(pickableResource1);
+        pickableCardsImages.add(pickableResource2);
+        pickableCardsImages.add(firstCardGold);
+        pickableCardsImages.add(pickableGold1);
+        pickableCardsImages.add(pickableGold2);
 
 
 
