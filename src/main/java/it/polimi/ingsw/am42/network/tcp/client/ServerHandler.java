@@ -4,6 +4,7 @@ import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.model.enumeration.State;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
+import it.polimi.ingsw.am42.network.tcp.messages.PingMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.ChangeMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.PlayerDisconnectedMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GoodMessage;
@@ -18,6 +19,7 @@ public class ServerHandler implements Runnable {
     private volatile Message message;
     private Socket socket;
     private ClientTCP client;
+    private boolean isRunning = true;
 
     private ObjectInputStream input;
 
@@ -30,8 +32,9 @@ public class ServerHandler implements Runnable {
     @Override
     public void run() {
         try {
+            new Thread(this::heartbeat).start();
             input = new ObjectInputStream(socket.getInputStream());
-            while(true) {
+            while(isRunning) {
                 if (socket.getInputStream().available() > 0) {
                     Message m = (Message) input.readObject();
                     if(m instanceof ChangeMessage){
@@ -40,7 +43,7 @@ public class ServerHandler implements Runnable {
                         client.receiveMessage(m);
                     } else if(m instanceof PlayerDisconnectedMessage) {
                         client.updateDisconnection();
-                    } else {
+                    } else if(!(m instanceof PingMessage)){
                         synchronized (this) {
                             message = m;
                             notify();
@@ -50,15 +53,30 @@ public class ServerHandler implements Runnable {
             }
 
         } catch (IOException | ClassNotFoundException e) {
-            //If everything ok, when the server stops the connection
-            //I will receive this Exception
-            try{
-                socket.close();
-                input.close();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            }
+            closeAll();
             client.connectionClosed();
+        }
+    }
+
+    private void heartbeat() {
+        while (true) {
+            try {
+                client.sendMessage(new PingMessage());
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                client.connectionClosed();
+                closeAll();
+            }
+        }
+    }
+
+    private void closeAll() {
+        try{
+            input.close();
+            socket.close();
+            isRunning = false;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

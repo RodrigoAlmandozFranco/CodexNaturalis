@@ -9,6 +9,7 @@ import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.network.MessageListener;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
+import it.polimi.ingsw.am42.network.tcp.messages.PingMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.ChangeMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.SendWinnerMessage;
 
@@ -29,6 +30,7 @@ public class ClientHandler implements Runnable, MessageListener {
     private ObjectInputStream input;
     private ObjectOutputStream output;
     private String nickname;
+    private boolean isRunning = true;
 
 
     public ClientHandler(Socket socket, Controller controller) throws IOException {
@@ -41,19 +43,17 @@ public class ClientHandler implements Runnable, MessageListener {
 
     public void run() {
         try {
-            while(true) {
+            new Thread(this::heartbeatTCP).start();
+            while(isRunning) {
                 if(socket.getInputStream().available() > 0) {
                     Message message = (Message) input.readObject();
                     Message answer;
 
                     if(message instanceof ChatMessage) {
                         controller.sendChatMessage((ChatMessage) message);
-                    } else {
+                    } else if (!(message instanceof PingMessage)) {
                         answer = message.execute(this, controller);
-                        if(answer != null)
-                            sendMessage(answer);
-                        if(answer instanceof SendWinnerMessage)
-                            break;
+                        sendMessage(answer);
                     }
                 }
             }
@@ -62,7 +62,22 @@ public class ClientHandler implements Runnable, MessageListener {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
 
+    private void heartbeatTCP() {
+        while (isRunning) {
+            try {
+                sendMessage(new PingMessage());
+                Thread.sleep(15000);
+            } catch (InterruptedException | IOException e) {
+                playerDisconnected();
+                isRunning = false;
+                closeAll();
+            }
+        }
+    }
+
+    private void closeAll() {
         try{
             input.close();
             output.close();
@@ -70,41 +85,43 @@ public class ClientHandler implements Runnable, MessageListener {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
-
 
     public void setNickname(String nickname){
         this.nickname = nickname;
     }
 
-    private void sendMessage(Message answer) {
-        try {
+    private void sendMessage(Message answer) throws IOException {
+        synchronized (output) {
             output.writeObject(answer);
             output.flush();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
     public void receiveMessage(Message message) {
-        sendMessage(message);
+        try {
+            sendMessage(message);
+        } catch (IOException e) {
+            playerDisconnected();
+        }
     }
 
 
-    public void playerDisconnected() {
+    private void playerDisconnected() {
         controller.playerDisconnected();
     }
 
     public void update (Change change) {
-        //sendMessage(new ChangeMessage(change));
         Message message = new ChangeMessage(change);
-        sendMessage(message);
+        try {
+            sendMessage(message);
+        } catch (IOException e) {
+            playerDisconnected();
+        }
     }
 
+
     public boolean heartbeat() {
-        // For TCP connection it is not necessary to send heartbeat to client
-        // Disconnection already revealed with exception
         return true;
     }
 

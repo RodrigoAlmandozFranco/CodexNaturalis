@@ -68,12 +68,20 @@ public class ClientTCP implements Client {
         }
     }
 
-    private void sendMessage(Message message) {
+    public void sendMessage(Message message) {
         try {
-            output.writeObject(message);
-            output.flush();
+            synchronized (output) {
+                output.writeObject(message);
+                output.flush();
+            }
         } catch (final IOException e) {
-            System.err.println(e.getMessage());
+            updateDisconnection();
+            try {
+                input.close();
+                output.close();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
@@ -288,7 +296,9 @@ public class ClientTCP implements Client {
 
     public void updateDisconnection(){
         //view.updateDisconnection();
+        view.setGameAborted(true);
     }
+
 
     public void connectionClosed(){
 

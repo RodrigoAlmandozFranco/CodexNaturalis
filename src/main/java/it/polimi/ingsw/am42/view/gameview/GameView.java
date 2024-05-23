@@ -32,7 +32,7 @@ public class GameView {
     private List<MethodChoice> usableMethods;
     private List<ChatMessage> allMessages;
     private List<ChatMessage> tmpMessages;
-
+    private boolean isGameAborted = false;
     private boolean startGame;
 
 
@@ -146,6 +146,12 @@ public class GameView {
 
     public void update(Change diff){
 
+        if(diff.getCurrentState().equals(State.DISCONNECTED)){
+            isGameAborted = true;
+            return;
+        }
+
+
         // First diff
         if (numberPlayers == 0) {
             for (Player p : diff.getPlayers())
@@ -177,6 +183,14 @@ public class GameView {
         newUpdate = true;
         
         handleState();
+    }
+
+    public boolean isGameAborted(){
+        return isGameAborted;
+    }
+
+    public void setGameAborted(boolean gameAborted){
+        isGameAborted = gameAborted;
     }
 
 
