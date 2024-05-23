@@ -49,7 +49,7 @@
             <ImageView fx:id="pickableGold1" fitHeight="85.0" fitWidth="137.0" layoutX="190.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="pickableResource2" fitHeight="85.0" fitWidth="137.0" layoutX="23.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="pickableGold2" fitHeight="85.0" fitWidth="137.0" layoutX="190.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true" />
-            <Label fx:id="updateText" layoutX="10.0" layoutY="328.0" prefHeight="66.0" prefWidth="300.0" text="UpdateText" />
+            <Label fx:id="updateText" layoutX="10.0" layoutY="341.0" prefHeight="53.0" prefWidth="300.0" text="UpdateText" />
             <ImageView fitHeight="564.0" fitWidth="669.0" layoutX="331.0" layoutY="-4.0" pickOnBounds="true">
                <image>
                   <Image url="@../graphical/gameStructure/structure.png" />
@@ -126,7 +126,7 @@
                   </Label>
                </children>
             </Pane>
-            <Button fx:id="pickButton" layoutX="233.0" layoutY="330.0" mnemonicParsing="false" onAction="#pickButtonAction" text="Pick!" />
+            <Button fx:id="pickButton" layoutX="149.0" layoutY="315.0" mnemonicParsing="false" onAction="#pickButtonAction" text="Pick!" />
          </children>
       </AnchorPane>
    </children>
