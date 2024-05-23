@@ -15,6 +15,7 @@ import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
+import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.PlayerDisconnectedMessage;
 import it.polimi.ingsw.am42.view.gameview.GameView;
 
 import java.io.Serializable;
@@ -54,7 +55,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         try {
             return stub.getGameInfo();
         } catch (RemoteException e) {
-            //TODO notify the view that the server is dead
+            updateDisconnection();
             return null;
         }
 
@@ -76,8 +77,8 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
             if (originalException instanceof NumberPlayerWrongException)
                 throw (NumberPlayerWrongException) originalException;
 
-            //TODO notify the view that the server is dead
-            else return -1;
+            updateDisconnection();
+            return -1;
         }
     }
 
@@ -93,8 +94,8 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
             if (originalException instanceof NicknameAlreadyInUseException)
                 throw (NicknameAlreadyInUseException) originalException;
 
-            //TODO notify the view that the server is dead
-            else return false;
+            updateDisconnection();
+            return false;
         }
     }
 
@@ -110,8 +111,8 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
             if (originalException instanceof NicknameAlreadyInUseException)
                 throw (NicknameAlreadyInUseException) originalException;
 
-            //TODO notify the view that the server is dead
-            else return false;
+            updateDisconnection();
+            return false;
         }
     }
 
@@ -119,7 +120,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         try {
             return stub.getAvailablePositions(p);
         } catch (RemoteException e) {
-            //TODO notify the view that the server is dead
+            updateDisconnection();
             return null;
         }
     }
@@ -132,8 +133,8 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
             if (originalException instanceof RequirementsNotMetException)
                 throw (RequirementsNotMetException) originalException;
 
-            //TODO notify the view that the server is dead
-            else return false;
+            updateDisconnection();
+            return false;
         }
     }
 
@@ -141,7 +142,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         try {
             return stub.placeStarting(p, face);
         } catch (RemoteException e) {
-            //TODO notify the view that the server is dead
+            updateDisconnection();
             return null;
         }
     }
@@ -150,7 +151,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         try {
             return stub.chooseColor(p, color);
         } catch (RemoteException e) {
-            //TODO notify the view that the server is dead
+            updateDisconnection();
             return null;
         }
     }
@@ -159,7 +160,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         try {
             stub.chooseGoal( p, goal);
         } catch (RemoteException e) {
-            //TODO notify the view that the server is dead
+            updateDisconnection();
         }
     }
 
@@ -167,7 +168,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         try {
             stub.pick(p, card);
         } catch (RemoteException e) {
-            //TODO notify the view that the server is dead
+            updateDisconnection();
         }
     }
 
@@ -180,7 +181,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         try {
             return stub.getWinner();
         } catch (RemoteException e) {
-            //TODO notify the view that the server is dead
+            updateDisconnection();
             return null;
         }
     }
@@ -195,22 +196,39 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         try {
             stub.sendChatMessage(message);
         } catch (RemoteException e) {
-            //TODO notify the view that the server is dead
+            updateDisconnection();
         }
     }
 
     @Override
     public void receiveMessage(Message message) {
-        view.updateMessage(message);
+        if (message instanceof ChatMessage)
+            view.updateMessage(message);
+        if (message instanceof PlayerDisconnectedMessage)
+            updateDisconnection();
     }
 
     public boolean heartbeat() throws RemoteException {
         return true;
     }
 
+    public void updateDisconnection(){
+        view.setGameAborted(true);
+    }
+
 
     public void setView(GameView view) {
         this.view = view;
+    }
+
+    @Override
+    public void playerDisconnected() {
+        try {
+            stub.playerDisconnected();
+        } catch (RemoteException e) {
+            updateDisconnection();
+        }
+        updateDisconnection();
     }
 
     public GameView getView() {
