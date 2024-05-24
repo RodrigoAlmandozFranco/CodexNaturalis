@@ -21,6 +21,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -136,8 +137,8 @@ public class BoardController implements Initializable {
     Button pickButton;
 
     GoalCard chosenGoal;
-    int constOffsetX = 97;
-    int constOffsetY = 49;
+    double constOffsetX = 97.00;
+    double constOffsetY = 48.00;
 
     List<Button> availablePositionsButtons;
     Button chosenPositionButton;
@@ -210,6 +211,8 @@ public class BoardController implements Initializable {
         pickableCardsImages.add(firstCardGold);
         pickableCardsImages.add(pickableGold1);
         pickableCardsImages.add(pickableGold2);
+
+        placedCards = new ArrayList<>();
 
 
         firstCardResourceButton.setOnAction(this::firstCardResourceButtonEvent);
@@ -653,17 +656,17 @@ public class BoardController implements Initializable {
 
         placeCard(chosenCard.getBack());
     }
-
+    String idCard;
     private void placeCard(Face face){
         String value = chosenPositionButton.getText();
         String x = "", y = "";
         for (int i = 0; i < value.length(); i++) {
             if (value.charAt(i) == ',') {
                 x = value.substring(0, i).trim();
-                y = value.substring(i + 1).trim();
+                y = value.substring(i+1).trim();
             }
         }
-
+        idCard = value;
         Position chosenPosition = new Position(Integer.parseInt(x), Integer.parseInt(y));
 
         chosenCard = null;
@@ -677,10 +680,6 @@ public class BoardController implements Initializable {
         }
         addFaceToBoard(face);
 
-        for (Button b : availablePositionsButtons) {
-            boardPane.getChildren().remove(b);
-            b.setEffect(null);
-        }
     }
 
     private void placeStartingCard(Face face) {
@@ -717,7 +716,7 @@ public class BoardController implements Initializable {
 
     //Start board control system
 
-    private void setupTurn() {
+    private boolean setupTurn() {
         Set<Position> availablePositions = client.getAvailablePositions(myPlayer.getNickname());
         for (Position position : availablePositions) {
             double offsetX = startingCard.getLayoutX();
@@ -730,15 +729,17 @@ public class BoardController implements Initializable {
                 offsetY -= constOffsetY;
                 x--;
             }
-            while (y > 0) {
-                offsetY -= constOffsetY;
-                offsetX -= constOffsetX;
-                y--;
-            }
+
             while (x < 0) {
                 offsetX -= constOffsetX;
                 offsetY += constOffsetY;
                 x++;
+            }
+
+            while (y > 0) {
+                offsetY -= constOffsetY;
+                offsetX -= constOffsetX;
+                y--;
             }
 
             while (y < 0) {
@@ -755,7 +756,10 @@ public class BoardController implements Initializable {
             double finalWidth = boardPane.getChildren().getFirst().getLayoutBounds().getWidth();
             double finalHeight = boardPane.getChildren().getFirst().getLayoutBounds().getHeight();
 
-
+            if((offsetX < 0)||(offsetX + finalWidth > boardPane.getPrefWidth())||(offsetY < 0)||(offsetY + finalHeight > boardPane.getPrefHeight())) {
+                resize();
+                return false;
+            }
             Platform.runLater(() -> {
                 Button button = new Button(position.getX() + ", " + position.getY());
                 boardPane.getChildren().add(button);
@@ -779,7 +783,93 @@ public class BoardController implements Initializable {
             });
 
         }
+        return true;
     }
+
+    private void resize (){
+        Platform.runLater(() -> {
+            List<Button> buttonsToRemove = new ArrayList<>(availablePositionsButtons);
+            for (Button b : buttonsToRemove) {
+                boardPane.getChildren().remove(b);
+                b.setEffect(null);
+            }
+            availablePositionsButtons.clear();
+        });
+        double newHeight = (boardPane.getChildren().getFirst().getLayoutBounds().getHeight())*0.75;
+        double newWidth = (boardPane.getChildren().getFirst().getLayoutBounds().getWidth())*0.75;
+
+        constOffsetX = constOffsetX * 0.75;
+        constOffsetY = constOffsetY * 0.75 - 0.50;
+
+        startingCard.setFitWidth(newWidth);
+        startingCard.setFitHeight(newHeight);
+        startingCard.setLayoutX(boardPane.getPrefWidth()/2-newWidth/2);
+        startingCard.setLayoutY((boardPane.getPrefHeight()/2-newHeight/2));
+
+        printImages(newWidth, newHeight, placedCards, constOffsetX, constOffsetY, startingCard);
+
+    }
+    List<ImageView> placedCards;
+
+    private void printImages (double newWidth, double newHeight, List<ImageView> cardsToBePlaced, double offX, double offY, ImageView start){
+        for(ImageView image : cardsToBePlaced){
+
+            image.setFitWidth(newWidth);
+            image.setFitHeight(newHeight);
+            String value = image.getId();
+            double offsetX = start.getLayoutX();
+            double offsetY = start.getLayoutY();
+
+            String x = "", y = "";
+
+            for (int i = 0; i < value.length(); i++) {
+                if (value.charAt(i) == ',') {
+                    x = value.substring(0, i).trim();
+                    y = value.substring(i+1).trim();
+                }
+            }
+
+            int LayoutX = Integer.parseInt(x);
+            int LayoutY = Integer.parseInt(y);
+
+
+            while (LayoutX > 0) {
+                offsetX += offX;
+                offsetY -= offY;
+                LayoutX--;
+            }
+
+            while (LayoutX < 0) {
+                offsetX -= offX;
+                offsetY += offY;
+                LayoutX++;
+            }
+
+            while (LayoutY > 0) {
+                offsetY -= offY;
+                offsetX -= offX;
+                LayoutY--;
+            }
+
+            while (LayoutY < 0) {
+                offsetY += offY;
+                offsetX += offX;
+                LayoutY++;
+            }
+
+            double finalOffsetX = offsetX;
+            double finalOffsetY = offsetY;
+
+
+            Platform.runLater(() -> {
+                image.setLayoutX(finalOffsetX);
+                image.setLayoutY(finalOffsetY);
+
+            });
+        }
+
+    }
+
 
     private void addFaceToBoard(Face face) {
         handCard1.setEffect(null);
@@ -791,17 +881,19 @@ public class BoardController implements Initializable {
         card.setFitWidth(chosenPositionButton.getPrefWidth());
         card.setLayoutX(chosenPositionButton.getLayoutX());
         card.setLayoutY(chosenPositionButton.getLayoutY());
+        card.setId(idCard);
+        placedCards.add(card);
+
         chosenPositionButton = null;
-        for (Button b : availablePositionsButtons) {
-            boardPane.getChildren().remove(b);
-            b.setEffect(null);
-        }
-        availablePositionsButtons.clear();
+        Platform.runLater(() -> {
+            List<Button> buttonsToRemove = new ArrayList<>(availablePositionsButtons);
+            for (Button b : buttonsToRemove) {
+                boardPane.getChildren().remove(b);
+                b.setEffect(null);
+            }
+            availablePositionsButtons.clear();
+        });
         boardPane.getChildren().add(card);
-    }
-
-    private void resizeBoardPane() {
-
     }
 
     //End board control system
@@ -911,6 +1003,13 @@ public class BoardController implements Initializable {
 
         if (gameView.getCurrentPlayer().equals(myPlayer)) {
             text += "It's your turn! You have to choose your personal color";
+            while (availableColors == null) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             disableHandAndControlButtons();
             disablePickableButtons();
             setColor();
@@ -952,7 +1051,10 @@ public class BoardController implements Initializable {
             text += "It's your turn! You have to place a card";
             boardPane.setOpacity(1);
             boardPane.setDisable(false);
-            setupTurn();
+            boolean resizedDone  = setupTurn();
+            while(!resizedDone){
+                resizedDone = setupTurn();
+            }
             enableHandAndControlButtons();
         } else {
             currentPlayer = gameView.getCurrentPlayer().getNickname();
@@ -1040,15 +1142,15 @@ public class BoardController implements Initializable {
 
                 if (gameView.getCurrentState().equals(State.SETHAND)) {
                    updateStateSetHand();
-                } else if (gameView.getCurrentState().toString().equals("SETCOLOR")) {
+                } else if (gameView.getCurrentState().equals(State.SETCOLOR)) {
                     updateStateSetColor();
-                } else if (gameView.getCurrentState().toString().equals("SETGOAL")) {
+                } else if (gameView.getCurrentState().equals(State.SETGOAL)) {
                     updateStateSetGoal();
-                } else if (gameView.getCurrentState().toString().equals("PLACE")) {
+                } else if (gameView.getCurrentState().equals(State.PLACE)) {
                     updateStatePlace();
-                } else if (gameView.getCurrentState().toString().equals("PICK")) {
+                } else if (gameView.getCurrentState().equals(State.PICK)) {
                     updateStatePick();
-                } else if (gameView.getCurrentState().toString().equals("LAST")) {
+                } else if (gameView.getCurrentState().equals(State.LAST)) {
                     updateStateLast();
                 } else {
                     updateStateDisconnected();
