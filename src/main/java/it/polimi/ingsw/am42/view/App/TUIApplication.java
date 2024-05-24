@@ -432,7 +432,7 @@ public class TUIApplication extends App {
             if (!sure)
                 return;
         }
-        // TODO: call client.playerDisconnected()
+        client.playerDisconnected();
         io.print("Thanks for Playing!");
         System.exit(0);
     }
@@ -467,6 +467,17 @@ public class TUIApplication extends App {
     }
 
     public static void selectChoice() {
+        if (client.getView().isGameAborted()) {
+            if (!client.getView().getCurrentState().equals(State.LAST)
+                    && !client.getView().getCurrentState().equals(State.DISCONNECTED)) {
+                io.print("Someone disconnected to the game");
+                io.print("Exiting game...");
+                System.exit(0);
+            }
+        }
+
+
+
         List<ChatMessage> newMessage = client.getView().getTmpMessages();
         String newMessages = "";
         if(newMessage != null && !newMessage.isEmpty())
@@ -483,6 +494,7 @@ public class TUIApplication extends App {
         }
         choices.get(choice).selectChoice().run();
     }
+
 
 
     private void  updatePlayer() {

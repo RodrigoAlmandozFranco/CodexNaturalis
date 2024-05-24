@@ -11,6 +11,7 @@ import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 import it.polimi.ingsw.am42.network.tcp.messages.PingMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.ChangeMessage;
+import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.PlayerDisconnectedMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.SendWinnerMessage;
 
 /**
@@ -51,6 +52,9 @@ public class ClientHandler implements Runnable, MessageListener {
 
                     if(message instanceof ChatMessage) {
                         controller.sendChatMessage((ChatMessage) message);
+                    } else if (message instanceof PlayerDisconnectedMessage) {
+                        playerDisconnected();
+
                     } else if (!(message instanceof PingMessage)) {
                         answer = message.execute(this, controller);
                         sendMessage(answer);
@@ -108,7 +112,9 @@ public class ClientHandler implements Runnable, MessageListener {
 
 
     private void playerDisconnected() {
-        controller.playerDisconnected();
+        if (controller.getListeners().contains(this))
+            controller.playerDisconnected();
+        isRunning = false;
     }
 
     public void update (Change change) {

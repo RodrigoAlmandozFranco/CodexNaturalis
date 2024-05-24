@@ -47,5 +47,8 @@ public interface Client {
     void receiveMessage(Message message);
     void setView(GameView view);
 
+    void playerDisconnected();
+
+    void updateDisconnection();
     GameView getView();
 }

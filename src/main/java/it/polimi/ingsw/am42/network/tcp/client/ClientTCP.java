@@ -295,8 +295,12 @@ public class ClientTCP implements Client {
     }
 
     public void updateDisconnection(){
-        //view.updateDisconnection();
         view.setGameAborted(true);
+    }
+
+    public void playerDisconnected() {
+        sendMessage(new PlayerDisconnectedMessage());
+        updateDisconnection();
     }
 
 
