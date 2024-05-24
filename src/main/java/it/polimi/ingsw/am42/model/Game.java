@@ -168,7 +168,13 @@ public class Game implements GameInterface, Serializable {
      * @return true if the game has to end, false otherwise
      */
     public boolean checkEndGamePoints() {
-        return currentPlayer.getPoints() >= 20;
+        for(Player player : players) {
+            if(player.getPoints() >= 20) {
+                return true;
+            }
+        }
+        return false;
+        //return currentPlayer.getPoints() >= 20;
     }
 
     /**
@@ -350,16 +356,21 @@ public class Game implements GameInterface, Serializable {
         if(!visibility){
             deck1.remove();
         } else {
+            int index = - 1;
+            for(PlayableCard card : list1) {
+                if(card.getId() == c.getId())
+                    index = list1.indexOf(card);
+            }
             list1.removeIf(x -> x.getId() == c.getId());
             if(!deck1.finished()){
                 p = deck1.getTop();
-                list1.add(deck1.getTop());
+                list1.add(index, deck1.getTop());
                 deck1.remove();
                 p.setVisibility(true);
             } else {
                 if(!deck2.finished()){
                     p = deck2.getTop();
-                    list2.add(deck2.getTop());
+                    list1.add(index, deck2.getTop());
                     deck2.remove();
                     p.setVisibility(true);
                 }

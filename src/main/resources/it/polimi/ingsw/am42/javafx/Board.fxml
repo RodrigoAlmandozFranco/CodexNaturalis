@@ -38,9 +38,9 @@
             <VBox layoutX="1013.0" layoutY="260.0" prefHeight="395.0" prefWidth="139.0">
                <children>
                   <Button fx:id="seeStandingsButton" mnemonicParsing="false" onAction="#seeStandingsButtonAction" prefHeight="97.0" prefWidth="139.0" text="SEE STANDIGS" />
-                  <Button mnemonicParsing="false" prefHeight="97.0" prefWidth="139.0" text="SEE STANDIGS" />
-                  <Button mnemonicParsing="false" prefHeight="97.0" prefWidth="139.0" text="SEE STANDIGS" />
-                  <Button mnemonicParsing="false" prefHeight="97.0" prefWidth="139.0" text="SEE STANDIGS" />
+                  <Button fx:id="player1Board" mnemonicParsing="false" onAction="#player1BoardButtonAction" prefHeight="97.0" prefWidth="139.0" />
+                  <Button fx:id="player2Board" mnemonicParsing="false" onAction="#player2BoardButtonAction" prefHeight="97.0" prefWidth="139.0" />
+                  <Button fx:id="player3Board" mnemonicParsing="false" onAction="#player3BoardButtonAction" prefHeight="97.0" prefWidth="139.0" />
                </children>
             </VBox>
             <ImageView fx:id="firstCardResource" fitHeight="85.0" fitWidth="137.0" layoutX="23.0" layoutY="22.0" pickOnBounds="true" preserveRatio="true" />
@@ -49,7 +49,7 @@
             <ImageView fx:id="pickableGold1" fitHeight="85.0" fitWidth="137.0" layoutX="190.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="pickableResource2" fitHeight="85.0" fitWidth="137.0" layoutX="23.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="pickableGold2" fitHeight="85.0" fitWidth="137.0" layoutX="190.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true" />
-            <Label fx:id="updateText" layoutX="10.0" layoutY="341.0" prefHeight="53.0" prefWidth="300.0" text="UpdateText" />
+            <Label fx:id="updateText" layoutY="341.0" prefHeight="54.0" prefWidth="330.0" text="UpdateText" />
             <ImageView fitHeight="564.0" fitWidth="669.0" layoutX="331.0" layoutY="-4.0" pickOnBounds="true">
                <image>
                   <Image url="@../graphical/gameStructure/structure.png" />
@@ -78,6 +78,7 @@
             <Pane fx:id="boardPane" disable="true" layoutX="360.0" layoutY="20.0" prefHeight="510.0" prefWidth="610.0">
                <children>
                   <ImageView fx:id="startingCard" fitHeight="85.0" fitWidth="137.0" layoutX="236.5" layoutY="212.5" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="tokenOnStarting" fitHeight="54.0" fitWidth="50.0" layoutX="275.0" layoutY="230.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </Pane>
             <Pane fx:id="standingPane" disable="true" layoutX="330.0" layoutY="1.0" opacity="0.0" prefHeight="566.0" prefWidth="682.0" style="-fx-background-color: white;">
@@ -126,7 +127,17 @@
                   </Label>
                </children>
             </Pane>
-            <Button fx:id="pickButton" layoutX="149.0" layoutY="315.0" mnemonicParsing="false" onAction="#pickButtonAction" text="Pick!" />
+            <Button fx:id="pickButton" disable="true" layoutX="149.0" layoutY="315.0" mnemonicParsing="false" onAction="#pickButtonAction" opacity="0.0" text="Pick!" />
+            <Pane disable="true" layoutX="329.0" layoutY="-2.0" opacity="0.0" prefHeight="659.0" prefWidth="680.0">
+               <children>
+                  <ImageView fitHeight="560.0" fitWidth="680.0" pickOnBounds="true">
+                     <image>
+                        <Image url="@../graphical/gameStructure/structure.png" />
+                     </image>
+                  </ImageView>
+                  <Label fx:id="boardLabelOtherPlayer" alignment="CENTER" layoutY="560.0" prefHeight="86.0" prefWidth="680.0" text="Label" />
+               </children>
+            </Pane>
          </children>
       </AnchorPane>
    </children>

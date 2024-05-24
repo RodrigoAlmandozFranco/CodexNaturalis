@@ -37,6 +37,7 @@ public class ClientHandler implements Runnable, MessageListener {
     public ClientHandler(Socket socket, Controller controller) throws IOException {
         this.socket = socket;
         this.controller = controller;
+        new Thread(this::checkIsRunning).start();
 
         input = new ObjectInputStream(socket.getInputStream());
         output = new ObjectOutputStream(socket.getOutputStream());
@@ -44,7 +45,6 @@ public class ClientHandler implements Runnable, MessageListener {
 
     public void run() {
         try {
-            new Thread(this::heartbeatTCP).start();
             while(isRunning) {
                 if(socket.getInputStream().available() > 0) {
                     Message message = (Message) input.readObject();
@@ -68,19 +68,6 @@ public class ClientHandler implements Runnable, MessageListener {
         }
     }
 
-    private void heartbeatTCP() {
-        while (isRunning) {
-            try {
-                sendMessage(new PingMessage());
-                Thread.sleep(15000);
-            } catch (InterruptedException | IOException e) {
-                playerDisconnected();
-                isRunning = false;
-                closeAll();
-            }
-        }
-    }
-
     private void closeAll() {
         try{
             input.close();
@@ -96,17 +83,22 @@ public class ClientHandler implements Runnable, MessageListener {
     }
 
     private void sendMessage(Message answer) throws IOException {
-        synchronized (output) {
-            output.writeObject(answer);
-            output.flush();
+        if(isRunning) {
+            synchronized (output) {
+                output.writeObject(answer);
+                output.flush();
+            }
         }
     }
 
     public void receiveMessage(Message message) {
-        try {
-            sendMessage(message);
-        } catch (IOException e) {
-            playerDisconnected();
+        if(isRunning) {
+            try {
+                sendMessage(message);
+            } catch (IOException e) {
+                isRunning = false;
+                playerDisconnected();
+            }
         }
     }
 
@@ -118,21 +110,41 @@ public class ClientHandler implements Runnable, MessageListener {
     }
 
     public void update (Change change) {
-        Message message = new ChangeMessage(change);
-        try {
-            sendMessage(message);
-        } catch (IOException e) {
-            playerDisconnected();
+        if(isRunning) {
+            Message message = new ChangeMessage(change);
+            try {
+                sendMessage(message);
+            } catch (IOException e) {
+                isRunning = false;
+                playerDisconnected();
+            }
         }
     }
 
 
     public boolean heartbeat() {
-        return true;
+        try {
+            sendMessage(new PingMessage());
+            return true;
+        } catch (IOException e) {
+            playerDisconnected();
+            isRunning = false;
+            closeAll();
+            return false;
+        }
     }
 
     public String getId(){
         return nickname;
     }
 
+    private void checkIsRunning() {
+        while(isRunning)
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        System.exit(1);
+    }
 }

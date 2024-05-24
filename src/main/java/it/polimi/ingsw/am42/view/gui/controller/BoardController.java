@@ -13,15 +13,20 @@ import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.view.gameview.GameView;
 import it.polimi.ingsw.am42.view.gameview.PlayerView;
+import it.polimi.ingsw.am42.view.gui.HelloApplication;
+import it.polimi.ingsw.am42.view.gui.utils.ClientHolder;
 import it.polimi.ingsw.am42.view.gui.utils.points.ScreenPosition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -36,8 +41,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.List;
@@ -136,6 +143,9 @@ public class BoardController implements Initializable {
     @FXML
     Button pickButton;
 
+    @FXML
+    ImageView tokenOnStarting;
+
     GoalCard chosenGoal;
     double constOffsetX = 97.00;
     double constOffsetY = 48.00;
@@ -148,8 +158,19 @@ public class BoardController implements Initializable {
 
     List<GoalCard> possibleGoals;
 
+    @FXML
+    Button player1Board, player2Board, player3Board;
+    List<Button> playersBoardButtons;
+
     String currentPlayer;
     String text = "";
+
+    @FXML
+    Pane boardPaneOtherPlayer;
+    @FXML
+    Label boardLabelOtherPlayer;
+
+    Thread messagesThread;
 
 
     public BoardController() {
@@ -170,7 +191,6 @@ public class BoardController implements Initializable {
         pickableCardsButton.add(firstCardGoldButton);
         pickableCardsButton.add(pickableGold1Button);
         pickableCardsButton.add(pickableGold2Button);
-        pickableCardsButton.add(pickButton);
 
         pickableGoldCards = new ArrayList<>();
         pickableGoldCards.add(pickableGold1);
@@ -214,6 +234,11 @@ public class BoardController implements Initializable {
 
         placedCards = new ArrayList<>();
 
+        playersBoardButtons = new ArrayList<>();
+        playersBoardButtons.add(player1Board);
+        playersBoardButtons.add(player2Board);
+        playersBoardButtons.add(player3Board);
+
 
         firstCardResourceButton.setOnAction(this::firstCardResourceButtonEvent);
         firstCardGoldButton.setOnAction(this::firstCardGoldButtonEvent);
@@ -234,9 +259,22 @@ public class BoardController implements Initializable {
         personalGoal2Button.setOnAction(this::personalGoal2ButtonAction);
         button.setOnAction(this::sendMessage);
         seeStandingsButton.setOnAction(this::seeStandingsButtonAction);
+        player1Board.setOnAction(this::player1BoardButtonAction);
+        player2Board.setOnAction(this::player2BoardButtonAction);
+        player3Board.setOnAction(this::player3BoardButtonAction);
+
+        Platform.runLater(this::disablePickButton);
+
+
+        seeStandingsButton.setStyle("-fx-background-color: brown; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10;");;
 
         seeStandingsButton.setOnMouseEntered(event -> seeStandingsButton.setCursor(Cursor.HAND));
         seeStandingsButton.setOnMouseExited(event -> seeStandingsButton.setCursor(Cursor.DEFAULT));
+
+        for(Button b : playersBoardButtons){
+            b.setOnMouseEntered(event -> b.setCursor(Cursor.HAND));
+            b.setOnMouseExited(event -> b.setCursor(Cursor.DEFAULT));
+        }
 
 
     }
@@ -259,8 +297,19 @@ public class BoardController implements Initializable {
             personalNickname.setStyle("-fx-background-color: #FFEBCD; -fx-text-fill: #DC143C; -fx-padding: 10;");
         });
 
-        Thread thread = new Thread(this::seeMessages);
-        thread.start();
+        for(Button b : playersBoardButtons){
+            b.setDisable(true);
+            b.setOpacity(0);
+        }
+
+        for (int i = 1; i < nicknames.size(); i++){
+            playersBoardButtons.get(i - 1).setDisable(false);
+            playersBoardButtons.get(i - 1).setOpacity(1);
+            playersBoardButtons.get(i - 1).setText(nicknames.get(i) + "'s board");
+        }
+
+        messagesThread = new Thread(this::seeMessages);
+        messagesThread.start();
         Thread threadGame = new Thread(this::updateGameView);
         threadGame.start();
         this.start();
@@ -299,12 +348,10 @@ public class BoardController implements Initializable {
                 try {
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    break;
                 }
             }
         }
-
-
     }
 
     private void updateListView(List<ChatMessage> newMessage) {
@@ -360,7 +407,6 @@ public class BoardController implements Initializable {
             b.setOnMouseEntered(event -> b.setCursor(Cursor.HAND));
             b.setOnMouseExited(event -> b.setCursor(Cursor.DEFAULT));
         }
-        pickButton.setOpacity(1);
     }
 
     private void disablePickableButtons() {
@@ -369,7 +415,6 @@ public class BoardController implements Initializable {
             b.setOnMouseEntered(event -> b.setCursor(Cursor.DEFAULT));
             b.setOnMouseExited(event -> b.setCursor(Cursor.DEFAULT));
         }
-        pickButton.setOpacity(0);
     }
 
     private void enableHandAndControlButtons() {
@@ -399,10 +444,10 @@ public class BoardController implements Initializable {
     private void setBackgroundNickname(PlayersColor color) {
         Platform.runLater(() -> {
             switch (color) {
-                case RED -> personalNickname.setStyle("-fx-background-color: red; -fx-padding: 10;");
-                case GREEN -> personalNickname.setStyle("-fx-background-color: green; -fx-padding: 10;");
-                case YELLOW -> personalNickname.setStyle("-fx-background-color: yellow; -fx-padding: 10;");
-                case BLUE -> personalNickname.setStyle("-fx-background-color: blue; -fx-padding: 10;");
+                case RED -> personalNickname.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10;");
+                case GREEN -> personalNickname.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10;");
+                case YELLOW -> personalNickname.setStyle("-fx-background-color: yellow; -fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 10;");
+                case BLUE -> personalNickname.setStyle("-fx-background-color: blue; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10;");
             }
         });
     }
@@ -426,6 +471,8 @@ public class BoardController implements Initializable {
         });
         colorPane.setOpacity(1);
         colorPane.setDisable(false);
+        chooseColorButton.setOnMouseEntered(event -> chooseColorButton.setCursor(Cursor.HAND));
+        chooseColorButton.setOnMouseExited(event -> chooseColorButton.setCursor(Cursor.DEFAULT));
     }
 
     public void chooseColorButtonAction(ActionEvent event) {
@@ -438,6 +485,21 @@ public class BoardController implements Initializable {
 
         colorPane.setOpacity(0);
         colorPane.setDisable(true);
+
+        Image image = null;
+        switch (chosenColor) {
+            case RED ->
+                    image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/it/polimi/ingsw/am42/tokens/red.png")));
+            case BLUE ->
+                    image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/it/polimi/ingsw/am42/tokens/blue.png")));
+            case YELLOW ->
+                    image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/it/polimi/ingsw/am42/tokens/yellow.png")));
+            case GREEN ->
+                    image = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/it/polimi/ingsw/am42/tokens/green.png")));
+        }
+
+        tokenOnStarting.setImage(image);
+
 
         possibleGoals = client.chooseColor(myPlayer.getNickname(), chosenColor);
         myPlayer.setColor(chosenColor);
@@ -488,6 +550,12 @@ public class BoardController implements Initializable {
 
         goalPane.setOpacity(1);
         goalPane.setDisable(false);
+        personalGoal1Button.setOnMouseEntered(event -> personalGoal1Button.setCursor(Cursor.HAND));
+        personalGoal1Button.setOnMouseExited(event -> personalGoal1Button.setCursor(Cursor.DEFAULT));
+        personalGoal2Button.setOnMouseEntered(event -> personalGoal2Button.setCursor(Cursor.HAND));
+        personalGoal2Button.setOnMouseExited(event -> personalGoal2Button.setCursor(Cursor.DEFAULT));
+        chooseGoalButton.setOnMouseEntered(event -> chooseGoalButton.setCursor(Cursor.HAND));
+        chooseGoalButton.setOnMouseExited(event -> chooseGoalButton.setCursor(Cursor.DEFAULT));
     }
 
     //End personal goal system
@@ -532,13 +600,18 @@ public class BoardController implements Initializable {
     }
 
     public void pickButtonAction(ActionEvent event) {
-        if (chosenCardToPick == null)
-            showAlert("You have to pick a card!");
-        client.pick(myPlayer.getNickname(), chosenCardToPick);
-        for (ImageView b : pickableCardsImages) {
-            b.setEffect(null);
+        if(gameView.getCurrentState().equals(State.PICK)){
+            if (chosenCardToPick == null)
+                showAlert("You have to pick a card!");
+            client.pick(myPlayer.getNickname(), chosenCardToPick);
+            for (ImageView b : pickableCardsImages) {
+                b.setEffect(null);
+            }
+            chosenCardToPick = null;
+            Platform.runLater(this::disablePickButton);
+        } else {
+            Platform.runLater(this::disablePickButton);
         }
-        chosenCardToPick = null;
     }
 
     public void firstCardResourceButtonEvent(ActionEvent event) {
@@ -910,6 +983,7 @@ public class BoardController implements Initializable {
 
     public void seeStandingsButtonAction(ActionEvent event) {
         seeStandingsButton.setDisable(true);
+
         List<PlayerView> players = gameView.getPlayers();
         for (PlayerView p : players) {
             ScreenPosition screenPosition = new ScreenPosition();
@@ -958,12 +1032,15 @@ public class BoardController implements Initializable {
                     standingPane.setDisable(true);
                     standingPane.setVisible(false);
                     seeStandingsButton.setDisable(false);
+                    Platform.runLater(() -> {
+                        if(gameView.getCurrentPlayer().equals(myPlayer)){
+                            enablePickButton();
+                        }
+                    });
                 }
         ));
         timeline.setCycleCount(1);
         timeline.play();
-
-
     }
 
     //End utils
@@ -974,10 +1051,21 @@ public class BoardController implements Initializable {
     private void disableAll() {
         disableHandAndControlButtons();
         disablePickableButtons();
+        disablePickButton();
         colorPane.setOpacity(0);
         colorPane.setDisable(true);
         goalPane.setOpacity(0);
         goalPane.setDisable(true);
+    }
+
+    private void disablePickButton() {
+        pickButton.setDisable(true);
+        pickButton.setOpacity(0);
+    }
+
+    private void enablePickButton() {
+        pickButton.setDisable(false);
+        pickButton.setOpacity(1);
     }
 
     private void updateStateSetHand(){
@@ -1044,10 +1132,12 @@ public class BoardController implements Initializable {
     }
 
     private void updateStatePlace() {
+
         text = "";
         currentPlayer = "";
 
         if (gameView.getCurrentPlayer().equals(myPlayer)) {
+
             text += "It's your turn! You have to place a card";
             boardPane.setOpacity(1);
             boardPane.setDisable(false);
@@ -1069,6 +1159,8 @@ public class BoardController implements Initializable {
 
         seeStandingsButtonAction(null);
 
+
+
         if (gameView.getCurrentPlayer().equals(myPlayer)) {
             text += "It's your turn! You have to pick a card";
             enablePickableButtons();
@@ -1080,8 +1172,23 @@ public class BoardController implements Initializable {
         }
     }
 
-    private void updateStateLast() {
-        //todo
+    private void updateStateLast() throws IOException {
+
+        messagesThread.interrupt();
+
+        String resource = "/it/polimi/ingsw/am42/javafx/Winning.fxml";
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
+        Parent root = fxmlLoader.load();
+        WinningController winningController = fxmlLoader.getController();
+        winningController.setClient(ClientHolder.getClient(), myPlayer);
+
+        Platform.runLater(() -> {
+            Scene scene = new Scene(root);
+            Stage stage = HelloApplication.getStage();
+            stage.setScene(scene);
+            stage.show();
+        });
     }
 
     private void updateStateDisconnected() {
@@ -1093,8 +1200,7 @@ public class BoardController implements Initializable {
 
     private void updateHandMyPlayer() {
         List<PlayableCard> hand = myPlayer.getHand();
-        for (int i = 0; i < this.hand.size(); i++)
-            this.hand.get(i).setImage(null);
+        for (ImageView imageView : this.hand) imageView.setImage(null);
 
         for (int i = 0; i < hand.size(); i++) {
             String src = hand.get(i).getFront().getSrcImage();
@@ -1135,23 +1241,101 @@ public class BoardController implements Initializable {
         }
     }
 
+    private void updateColorBoardPlayers() {
+        List<PlayerView> tmp = new ArrayList<>();
+        for(PlayerView player : gameView.getPlayers()) {
+            if(player.getColor() != null && !player.equals(myPlayer)) {
+                tmp.add(player);
+                PlayersColor color = player.getColor();
+                Button button = playersBoardButtons.get(tmp.indexOf(player));
+                switch (color) {
+                    case RED -> button.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10;");
+                    case GREEN -> button.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10;");
+                    case YELLOW -> button.setStyle("-fx-background-color: yellow; -fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 10;");
+                    case BLUE -> button.setStyle("-fx-background-color: blue; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10;");
+                }
+            }
+        }
+    }
+
+
+
+    public void showOtherBoardPlayer(int index){
+        for(Button b : playersBoardButtons){
+            b.setOpacity(0.5);
+            b.setDisable(true);
+        }
+        //todo: how to add a face to a board in the another pane
+        for(Face face : gameView.getPlayers().get(index).getBoard().getFaces()){
+            //addFaceToBoard(face);
+            //todo
+        }
+
+        boardLabelOtherPlayer.setText(gameView.getPlayers().get(index).getNickname() + "'s board");
+        boardLabelOtherPlayer.setStyle(playersBoardButtons.get(index).getStyle());
+
+        boardPaneOtherPlayer.setOpacity(1);
+        boardPaneOtherPlayer.setDisable(false);
+
+        Timeline timeline = new Timeline(new KeyFrame(
+                Duration.millis(5000),
+                ae -> {
+                    for(Button b : playersBoardButtons){
+                        b.setOpacity(1);
+                        b.setDisable(false);
+                    }
+                    boardPaneOtherPlayer.setOpacity(0);
+                    boardPaneOtherPlayer.setDisable(true);
+                }
+        ));
+        timeline.setCycleCount(1);
+        timeline.play();
+    }
+
+
+    public void player1BoardButtonAction(ActionEvent event) {
+        showOtherBoardPlayer(0);
+    }
+
+    public void player2BoardButtonAction(ActionEvent event) {
+        showOtherBoardPlayer(1);
+    }
+
+    public void player3BoardButtonAction(ActionEvent event) {
+        showOtherBoardPlayer(2);
+    }
+
 
     public void updateGameView() {
         while (true) {
             if (gameView.getNewUpdate()) {
+
+                disablePickButton();
 
                 if (gameView.getCurrentState().equals(State.SETHAND)) {
                    updateStateSetHand();
                 } else if (gameView.getCurrentState().equals(State.SETCOLOR)) {
                     updateStateSetColor();
                 } else if (gameView.getCurrentState().equals(State.SETGOAL)) {
+                    updateColorBoardPlayers();
                     updateStateSetGoal();
                 } else if (gameView.getCurrentState().equals(State.PLACE)) {
+                    if(gameView.isTurnFinal() && gameView.getCurrentPlayer().equals(gameView.getPlayers().getFirst()))
+                        Platform.runLater(() -> showAlert("This is the final turn. You will only be able to place a card."));
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     updateStatePlace();
                 } else if (gameView.getCurrentState().equals(State.PICK)) {
                     updateStatePick();
                 } else if (gameView.getCurrentState().equals(State.LAST)) {
-                    updateStateLast();
+                    try {
+                        updateStateLast();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     updateStateDisconnected();
                 }
@@ -1159,6 +1343,7 @@ public class BoardController implements Initializable {
                 updateHandMyPlayer();
 
                 updatePickableCards();
+
 
 
                 //todo points + boards

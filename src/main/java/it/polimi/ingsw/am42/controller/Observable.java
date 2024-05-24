@@ -23,7 +23,7 @@ public abstract class Observable {
     protected List<MessageListener> listeners;
     private Timer timer;
 
-    private long HEARTBEAT_INTERVAL = 30000; // 30 seconds
+    private long HEARTBEAT_INTERVAL = 15000; // 15 seconds
 
     public Observable() {
 
@@ -40,7 +40,11 @@ public abstract class Observable {
         public void run() {
             for (MessageListener l : listeners) {
                 try {
-                    l.heartbeat();
+                    boolean result = l.heartbeat();
+                    if(!result) {
+                        listeners.remove(l);
+                        handleDisconnection();
+                    }
                 } catch (Exception e) {
                     listeners.remove(l);
                     handleDisconnection();

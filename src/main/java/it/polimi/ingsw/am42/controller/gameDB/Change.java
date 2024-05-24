@@ -38,6 +38,7 @@ public class Change implements Serializable {
     private State currentState;
     private boolean gameStarted;
     private PlayersColor color;
+    private boolean isTurnFinal;
 
 
     public Change(GameInterface game, boolean gameStarted){
@@ -83,6 +84,8 @@ public class Change implements Serializable {
         numberPlayers = 0;
         this.gameStarted = gameStarted;
 
+        isTurnFinal = game.getTurnFinal();
+
         if(!gameStarted){
             players = new ArrayList<>(game.getPlayers());
             globalGoals = new ArrayList<>(game.getGoals());
@@ -95,6 +98,10 @@ public class Change implements Serializable {
 
     public void setFuturePlayer(String futurePlayer) {
         this.futurePlayer = futurePlayer;
+    }
+
+    public boolean isTurnFinal() {
+        return isTurnFinal;
     }
 
     public String getCurrentPlayer() {

@@ -42,18 +42,20 @@ public enum State implements Serializable {
                      return PLACE;
                  else return SETHAND;
 
+
              case PLACE:
                  if(game.getTurnFinal() && game.getCurrentPlayer().equals(game.getPlayers().getLast()))
                      return LAST;
-                 if(game.getCurrentPlayer().equals(game.getPlayers().getLast()))
-                     if (game.checkEndGameDecks() || game.checkEndGamePoints())
-                         game.setTurnFinal(true);
 
                  if(game.getTurnFinal())
                      return PLACE;
                  else  return PICK;
 
+
              case PICK:
+                 if(game.getCurrentPlayer().equals(game.getPlayers().getLast()))
+                     if (game.checkEndGameDecks() || game.checkEndGamePoints())
+                         game.setTurnFinal(true);
                  return PLACE;
 
              case LAST:

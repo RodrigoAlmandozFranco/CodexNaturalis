@@ -34,6 +34,7 @@ public class GameView {
     private List<ChatMessage> tmpMessages;
     private boolean isGameAborted = false;
     private boolean startGame;
+    private boolean isTurnFinal;
 
 
     public GameView() {
@@ -167,6 +168,8 @@ public class GameView {
 
         currentPlayer.update(diff);
 
+        isTurnFinal = diff.isTurnFinal();
+
         pickableGoldCards.clear();
         pickableGoldCards.addAll(diff.getPickableGoldCards());
         pickableGoldCards.add(diff.getFirstGoldCard());
@@ -191,6 +194,10 @@ public class GameView {
 
     public void setGameAborted(boolean gameAborted){
         isGameAborted = gameAborted;
+    }
+
+    public boolean isTurnFinal() {
+        return isTurnFinal;
     }
 
 
