@@ -216,7 +216,9 @@ public class Controller extends Observable{
     public void playerDisconnected() {
         System.out.println("someone disconnected to the game");
         game.setCurrentState(State.DISCONNECTED);
-        sendMessageAll(new PlayerDisconnectedMessage());
+        updateAll(gameDB.saveGame(true));
+        gameDB.fileDelete();
+        System.exit(0);
     }
 
     public void sendChatMessage(ChatMessage chatMessage) {

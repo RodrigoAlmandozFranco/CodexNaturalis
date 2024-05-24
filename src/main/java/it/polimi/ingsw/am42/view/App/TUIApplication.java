@@ -467,17 +467,6 @@ public class TUIApplication extends App {
     }
 
     public static void selectChoice() {
-        if (client.getView().isGameAborted()) {
-            if (!client.getView().getCurrentState().equals(State.LAST)
-                    && !client.getView().getCurrentState().equals(State.DISCONNECTED)) {
-                io.print("Someone disconnected to the game");
-                io.print("Exiting game...");
-                System.exit(0);
-            }
-        }
-
-
-
         List<ChatMessage> newMessage = client.getView().getTmpMessages();
         String newMessages = "";
         if(newMessage != null && !newMessage.isEmpty())
@@ -495,10 +484,22 @@ public class TUIApplication extends App {
         choices.get(choice).selectChoice().run();
     }
 
+    private void checkDisconnection(){
+        if (client.getView().isGameAborted()) {
+            if (!client.getView().getCurrentState().equals(State.LAST)
+                    && !client.getView().getCurrentState().equals(State.DISCONNECTED)) {
+                io.print("Someone disconnected to the game");
+                io.print("Exiting game...");
+                System.exit(0);
+            }
+        }
+    }
 
 
     private void  updatePlayer() {
         while (true) {
+            checkDisconnection();
+
             if (client.getView().getNewUpdate() && client.getView().getCurrentPlayer()!=null){
                 String current = client.getView().getCurrentPlayer().getNickname();
                 if (current.equals(nickname)) {

@@ -71,7 +71,7 @@ public class GameDB {
      * This method deletes the file located at path.
      * @return true if the file was deleted, false otherwise.
      */
-    private boolean fileDelete() {
+    public boolean fileDelete() {
         File file = new File(path);
         if(file.exists()) {
             return file.delete();

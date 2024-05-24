@@ -202,10 +202,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
 
     @Override
     public void receiveMessage(Message message) {
-        if (message instanceof ChatMessage)
-            view.updateMessage(message);
-        if (message instanceof PlayerDisconnectedMessage)
-            updateDisconnection();
+        view.updateMessage(message);
     }
 
     public boolean heartbeat() throws RemoteException {

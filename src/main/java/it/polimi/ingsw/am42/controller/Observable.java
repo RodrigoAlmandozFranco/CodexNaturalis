@@ -42,6 +42,7 @@ public abstract class Observable {
                 try {
                     l.heartbeat();
                 } catch (Exception e) {
+                    listeners.remove(l);
                     handleDisconnection();
                 }
             }
