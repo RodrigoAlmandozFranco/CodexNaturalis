@@ -112,7 +112,9 @@ public class ClientHandler implements Runnable, MessageListener {
 
 
     private void playerDisconnected() {
-        controller.playerDisconnected();
+        if (controller.getListeners().contains(this))
+            controller.playerDisconnected();
+        isRunning = false;
     }
 
     public void update (Change change) {
