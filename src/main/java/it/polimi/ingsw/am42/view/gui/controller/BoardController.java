@@ -172,6 +172,8 @@ public class BoardController implements Initializable {
 
     Thread messagesThread;
 
+    private boolean gameToBeLoad = false;
+
 
     public BoardController() {
     }
@@ -279,8 +281,9 @@ public class BoardController implements Initializable {
 
     }
 
-    public void setClient(Client client) {
+    public void setClient(Client client, boolean gameToBeLoad) {
         this.client = client;
+        this.gameToBeLoad = gameToBeLoad;
         gameView = client.getView();
         players = gameView.getPlayers();
         nicknames = new ArrayList<>();
@@ -1305,10 +1308,17 @@ public class BoardController implements Initializable {
         showOtherBoardPlayer(2);
     }
 
+    private void loadAllBoard() {
+        //todo
+        System.out.println("Loading my boards");
+    }
+
 
     public void updateGameView() {
         while (true) {
             if (gameView.getNewUpdate()) {
+
+                if(gameToBeLoad) loadAllBoard();
 
                 disablePickButton();
 

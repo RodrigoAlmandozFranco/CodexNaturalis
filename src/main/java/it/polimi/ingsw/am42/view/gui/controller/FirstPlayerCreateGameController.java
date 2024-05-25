@@ -76,7 +76,7 @@ public class FirstPlayerCreateGameController implements Initializable {
             client.createGame(nickname, numberOfPlayers);
             client.getView().setNickname(nickname);
         } catch (Exception exception) {
-            showAlert("Error creating game");
+            showAlert(exception.getMessage());
             System.exit(1);
         }
 
@@ -85,7 +85,7 @@ public class FirstPlayerCreateGameController implements Initializable {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
         Parent root = fxmlLoader.load();
         LobbyController lobbycontroller = fxmlLoader.getController();
-        lobbycontroller.setClient(ClientHolder.getClient());
+        lobbycontroller.setClient(ClientHolder.getClient(), false);
 
         Scene scene = new Scene(root);
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();

@@ -12,7 +12,12 @@ import it.polimi.ingsw.am42.network.tcp.messages.Message;
  * @author Mattia Brandi
  */
 public class NicknameInvalidErrorMessage extends Message {
-
-    public NicknameInvalidErrorMessage(){}
+    String message;
+    public NicknameInvalidErrorMessage(String message){
+        this.message = message;
+    }
+    public String getMessage(){
+        return message;
+    }
 
 }

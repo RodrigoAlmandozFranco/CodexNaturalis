@@ -55,11 +55,14 @@ public class Controller extends Observable{
                 return ConnectionState.LOAD;
             return ConnectionState.CREATE;
         }
+        if(this.gameDB.fileExists()) return ConnectionState.LOADING;
         return ConnectionState.CONNECT;
     }
 
 
     public int createGame(MessageListener l, String nickname, int numPlayers) throws NumberPlayerWrongException, GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+
+        gameDB.fileDelete();
 
         this.game = new Game(numPlayers);
         gameDB.setGame(this.game);

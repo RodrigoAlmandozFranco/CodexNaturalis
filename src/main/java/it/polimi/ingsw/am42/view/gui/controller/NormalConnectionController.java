@@ -26,6 +26,7 @@ public class NormalConnectionController {
     private String nickname = "";
     @FXML
     private Button LoginButton1;
+    private boolean isGameToLoad;
 
     @FXML
     TextField textField;
@@ -54,23 +55,24 @@ public class NormalConnectionController {
 
     private void connect(ActionEvent event) throws IOException {
         try {
-            if(client.getGameInfo().equals(ConnectionState.CONNECT))
+            if(client.getGameInfo().equals(ConnectionState.CONNECT)){
                 client.connect(nickname);
-            else
+                isGameToLoad = false;
+            } else {
                 client.reconnect(nickname);
+                isGameToLoad = true;
+            }
 
             client.getView().setNickname(nickname);
             load(event);
         } catch (GameFullException e) {
-            showAlert("The game is full");
+            showAlert(e.getMessage());
             showAlert("Closing the game...");
             Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
             stage.close();
             System.exit(1);
-        } catch (NicknameAlreadyInUseException e) {
-            showAlert("Nickname already in use");
-        } catch (NicknameInvalidException e) {
-            showAlert("Invalid nickname");
+        } catch (NicknameAlreadyInUseException | NicknameInvalidException e) {
+            showAlert(e.getMessage());
         }
     }
 
@@ -80,7 +82,7 @@ public class NormalConnectionController {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
         Parent root = fxmlLoader.load();
         LobbyController lobbycontroller = fxmlLoader.getController();
-        lobbycontroller.setClient(ClientHolder.getClient());
+        lobbycontroller.setClient(ClientHolder.getClient(), isGameToLoad);
 
         Scene scene = new Scene(root);
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -95,9 +97,5 @@ public class NormalConnectionController {
         alert.setContentText(message);
         alert.showAndWait();
     }
-
-
-
-
-
 }
+

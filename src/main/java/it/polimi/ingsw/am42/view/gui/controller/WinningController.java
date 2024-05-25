@@ -5,6 +5,7 @@ import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.view.gameview.GameView;
 import it.polimi.ingsw.am42.view.gameview.PlayerView;
+import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -114,11 +115,50 @@ public class WinningController {
         secondPlayerLabel.setTranslateX(0);
         thirdPlayerLabel.setTranslateX(100);
 
+        firstPlayerLabel.setOpacity(0);
+        firstPlayerLabel.setScaleX(0.5);
+        firstPlayerLabel.setScaleY(0.5);
+        secondPlayerLabel.setOpacity(0);
+        secondPlayerLabel.setScaleX(0.5);
+        secondPlayerLabel.setScaleY(0.5);
+        thirdPlayerLabel.setOpacity(0);
+        thirdPlayerLabel.setScaleX(0.5);
+        thirdPlayerLabel.setScaleY(0.5);
+
         Timeline timeline = new Timeline();
         timeline.getKeyFrames().addAll(
-                new KeyFrame(Duration.seconds(2), new KeyValue(thirdPlayerLabel.translateXProperty(), 0)),
-                new KeyFrame(Duration.seconds(5), new KeyValue(secondPlayerLabel.translateXProperty(), 0)),
-                new KeyFrame(Duration.seconds(7), new KeyValue(firstPlayerLabel.translateXProperty(), 0))
+                new KeyFrame(Duration.seconds(0),
+                        new KeyValue(thirdPlayerLabel.translateXProperty(), 100),
+                        new KeyValue(thirdPlayerLabel.opacityProperty(), 0),
+                        new KeyValue(thirdPlayerLabel.scaleXProperty(), 0.5),
+                        new KeyValue(thirdPlayerLabel.scaleYProperty(), 0.5)),
+                new KeyFrame(Duration.seconds(2),
+                        new KeyValue(thirdPlayerLabel.translateXProperty(), 0, Interpolator.EASE_BOTH),
+                        new KeyValue(thirdPlayerLabel.opacityProperty(), 1, Interpolator.EASE_BOTH),
+                        new KeyValue(thirdPlayerLabel.scaleXProperty(), 1, Interpolator.EASE_BOTH),
+                        new KeyValue(thirdPlayerLabel.scaleYProperty(), 1, Interpolator.EASE_BOTH)),
+
+                new KeyFrame(Duration.seconds(0),
+                        new KeyValue(secondPlayerLabel.translateXProperty(), 0),
+                        new KeyValue(secondPlayerLabel.opacityProperty(), 0),
+                        new KeyValue(secondPlayerLabel.scaleXProperty(), 0.5),
+                        new KeyValue(secondPlayerLabel.scaleYProperty(), 0.5)),
+                new KeyFrame(Duration.seconds(5),
+                        new KeyValue(secondPlayerLabel.translateXProperty(), 0, Interpolator.EASE_BOTH),
+                        new KeyValue(secondPlayerLabel.opacityProperty(), 1, Interpolator.EASE_BOTH),
+                        new KeyValue(secondPlayerLabel.scaleXProperty(), 1, Interpolator.EASE_BOTH),
+                        new KeyValue(secondPlayerLabel.scaleYProperty(), 1, Interpolator.EASE_BOTH)),
+
+                new KeyFrame(Duration.seconds(0),
+                        new KeyValue(firstPlayerLabel.translateXProperty(), -100),
+                        new KeyValue(firstPlayerLabel.opacityProperty(), 0),
+                        new KeyValue(firstPlayerLabel.scaleXProperty(), 0.5),
+                        new KeyValue(firstPlayerLabel.scaleYProperty(), 0.5)),
+                new KeyFrame(Duration.seconds(7),
+                        new KeyValue(firstPlayerLabel.translateXProperty(), 0, Interpolator.EASE_BOTH),
+                        new KeyValue(firstPlayerLabel.opacityProperty(), 1, Interpolator.EASE_BOTH),
+                        new KeyValue(firstPlayerLabel.scaleXProperty(), 1, Interpolator.EASE_BOTH),
+                        new KeyValue(firstPlayerLabel.scaleYProperty(), 1, Interpolator.EASE_BOTH))
         );
         timeline.play();
     }

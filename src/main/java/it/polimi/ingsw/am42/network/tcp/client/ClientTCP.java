@@ -110,11 +110,11 @@ public class ClientTCP implements Client {
 
         return switch (answer) {
             case NumberPlayersWrongErrorMessage numberPlayersWrongErrorMessage ->
-                    throw new NumberPlayerWrongException("Number Player Wrong");
+                    throw new NumberPlayerWrongException(numberPlayersWrongErrorMessage.getMessage());
             case NicknameInvalidErrorMessage nicknameInvalidErrorMessage ->
-                    throw new NicknameInvalidException("Nickname is invalid");
+                    throw new NicknameInvalidException(nicknameInvalidErrorMessage.getMessage());
             case NicknameAlreadyInUseErrorMessage nicknameAlreadyInUseErrorMessage ->
-                    throw new NicknameAlreadyInUseException("Nickname is already in use");
+                    throw new NicknameAlreadyInUseException(nicknameAlreadyInUseErrorMessage.getMessage());
             default -> 1;
         };
     }
@@ -132,11 +132,11 @@ public class ClientTCP implements Client {
         }
 
         return switch (answer) {
-            case GameFullErrorMessage gameFullErrorMessage -> throw new GameFullException("Game is full");
+            case GameFullErrorMessage gameFullErrorMessage -> throw new GameFullException(gameFullErrorMessage.getMessage());
             case NicknameInvalidErrorMessage nicknameInvalidErrorMessage ->
-                    throw new NicknameInvalidException("Nickname is invalid");
+                    throw new NicknameInvalidException(nicknameInvalidErrorMessage.getMessage());
             case NicknameAlreadyInUseErrorMessage nicknameAlreadyInUseErrorMessage ->
-                    throw new NicknameAlreadyInUseException("Nickname is already in use");
+                    throw new NicknameAlreadyInUseException(nicknameAlreadyInUseErrorMessage.getMessage());
             default -> true;
         };
     }
@@ -155,11 +155,11 @@ public class ClientTCP implements Client {
         }
 
         return switch (answer) {
-            case GameFullErrorMessage gameFullErrorMessage -> throw new GameFullException("Game is full");
+            case GameFullErrorMessage gameFullErrorMessage -> throw new GameFullException(gameFullErrorMessage.getMessage());
             case NicknameInvalidErrorMessage nicknameInvalidErrorMessage ->
-                    throw new NicknameInvalidException("Nickname is invalid");
+                    throw new NicknameInvalidException(nicknameInvalidErrorMessage.getMessage());
             case NicknameAlreadyInUseErrorMessage nicknameAlreadyInUseErrorMessage ->
-                    throw new NicknameAlreadyInUseException("Nickname is already in use");
+                    throw new NicknameAlreadyInUseException(nicknameAlreadyInUseErrorMessage.getMessage());
             default -> true;
         };
     }

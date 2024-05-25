@@ -12,8 +12,8 @@ public class ChangeAfterLoad extends Change {
     private List<Player> players;
     private int numberPlayers;
     private String currentPlayer;
-    private String nextPlayer;
-    private List<GoalCard> goals;
+    private String futurePlayer;
+    private List<GoalCard> globalGoals;
     private PlayableCard firstResourceCard;
     private PlayableCard firstGoldCard;
     private List<PlayableCard> pickableResourceCards;
@@ -25,8 +25,8 @@ public class ChangeAfterLoad extends Change {
         players = game.getPlayers();
         numberPlayers = game.getNumberPlayers();
         currentPlayer = game.getCurrentPlayer().getNickname();
-        nextPlayer = game.getNextPlayer().getNickname();
-        goals = game.getGoals();
+        futurePlayer = game.getNextPlayer().getNickname();
+        globalGoals = game.getGoals();
         firstResourceCard = game.getFirstResourceCard();
         firstGoldCard = game.getFirstGoldCard();
         pickableResourceCards = game.getPickableResourceCards();
@@ -48,12 +48,12 @@ public class ChangeAfterLoad extends Change {
         return currentPlayer;
     }
 
-    public String getNextPlayer() {
-        return nextPlayer;
+    public String getFuturePlayer() {
+        return futurePlayer;
     }
 
-    public List<GoalCard> getGoals() {
-        return goals;
+    public List<GoalCard> getGlobalGoals() {
+        return globalGoals;
     }
 
     @Override

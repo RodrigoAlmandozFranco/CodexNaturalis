@@ -25,10 +25,7 @@ public class StartingController{
     @FXML
     Button loginButton;
 
-    public StartingController() {
-
-
-    }
+    public StartingController() {}
 
 
     public void setClient(Client client){
@@ -43,9 +40,6 @@ public class StartingController{
         if(c.equals(ConnectionState.CREATE)){
             setter = "/it/polimi/ingsw/am42/javafx/NicknameFirstPlayerCreateGame.fxml";
         }
-        else if(c.equals(ConnectionState.CONNECT)){
-            setter = "/it/polimi/ingsw/am42/javafx/GeneralConnection.fxml";
-        }
         else if(c.equals(ConnectionState.LOAD)){
             setter = "/it/polimi/ingsw/am42/javafx/FirstPlayerMenu.fxml";
         } else {
@@ -57,20 +51,17 @@ public class StartingController{
         scene = new Scene(fxmlLoader.load());
         stage.setScene(scene);
 
-        if(c.equals(ConnectionState.CONNECT)) {
-            NormalConnectionController normal = fxmlLoader.getController();
-            normal.setClient(ClientHolder.getClient());
-        }
-        else if(c.equals(ConnectionState.LOAD)) {
+        if(c.equals(ConnectionState.LOAD)) {
             MenuController load = fxmlLoader.getController();
             load.setClient(ClientHolder.getClient());
         }
         else if(c.equals(ConnectionState.CREATE)) {
             FirstPlayerCreateGameController first = fxmlLoader.getController();
             first.setClient(ClientHolder.getClient());
+        } else {
+            NormalConnectionController normal = fxmlLoader.getController();
+            normal.setClient(ClientHolder.getClient());
         }
-
         stage.show();
-
     }
 }

@@ -33,13 +33,13 @@ public class FirstConnectionMessage extends Message {
         try {
             controller.createGame(clientHandler, nickname, numPlayers);
         } catch (NumberPlayerWrongException e) {
-            return new NumberPlayersWrongErrorMessage();
+            return new NumberPlayersWrongErrorMessage(e.getMessage());
         } catch (GameFullException e) {
-            return new GameFullErrorMessage();
+            return new GameFullErrorMessage(e.getMessage());
         } catch (NicknameInvalidException e){
-            return new NicknameInvalidErrorMessage();
+            return new NicknameInvalidErrorMessage(e.getMessage());
         } catch (NicknameAlreadyInUseException e) {
-            return new NicknameAlreadyInUseErrorMessage();
+            return new NicknameAlreadyInUseErrorMessage(e.getMessage());
         }
         clientHandler.setNickname(nickname);
         //return null;

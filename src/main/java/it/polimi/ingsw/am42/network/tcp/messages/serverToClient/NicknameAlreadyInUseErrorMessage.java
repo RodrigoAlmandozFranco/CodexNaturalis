@@ -13,7 +13,12 @@ import it.polimi.ingsw.am42.network.tcp.messages.Message;
  */
 
 public class NicknameAlreadyInUseErrorMessage extends Message {
+    String message;
+    public NicknameAlreadyInUseErrorMessage(String message){
+        this.message = message;
+    }
 
-    public NicknameAlreadyInUseErrorMessage(){}
-
+    public String getMessage() {
+        return message;
+    }
 }

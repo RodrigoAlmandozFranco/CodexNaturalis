@@ -11,6 +11,12 @@ import it.polimi.ingsw.am42.network.tcp.messages.Message;
  * @author Mattia Brandi
  */
 public class NumberPlayersWrongErrorMessage extends Message {
+    private String message;
+    public NumberPlayersWrongErrorMessage(String message){
+        this.message = message;
+    }
 
-    public NumberPlayersWrongErrorMessage(){}
+    public String getMessage() {
+        return message;
+    }
 }

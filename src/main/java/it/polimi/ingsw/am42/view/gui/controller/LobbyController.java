@@ -20,6 +20,7 @@ import java.io.IOException;
 public class LobbyController {
 
     private Client client;
+    private boolean gameToLoad;
     @FXML
     ProgressBar progressBar;
     @FXML
@@ -29,9 +30,9 @@ public class LobbyController {
 
     }
 
-    public void setClient(Client client) throws IOException {
+    public void setClient(Client client, boolean gameToLoad) throws IOException {
         this.client = client;
-
+        this.gameToLoad = gameToLoad;
         Thread thread = new Thread(() -> {
             try {
                 askReady();
@@ -69,7 +70,7 @@ public class LobbyController {
                 throw new RuntimeException(e);
             }
             BoardController boardController = fxmlLoader.getController();
-            boardController.setClient(ClientHolder.getClient());
+            boardController.setClient(ClientHolder.getClient(), gameToLoad);
 
             Scene scene = new Scene(root);
 

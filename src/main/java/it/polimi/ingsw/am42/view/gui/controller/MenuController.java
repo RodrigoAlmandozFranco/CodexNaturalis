@@ -50,11 +50,12 @@ public class MenuController {
     }
 
     public void loadGameAction(ActionEvent event) throws IOException {
-        String resource = "src/main/resources/it/polimi/ingsw/am42/nicknameLoadGame.fxml";
-        FXMLLoader root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(resource)));
+        String resource = "/it/polimi/ingsw/am42/javafx/GeneralConnection.fxml";
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root.load());
-        //TODO there isn't the constructor
+        Scene scene = new Scene(fxmlLoader.load());
+        NormalConnectionController normalConnectionController = fxmlLoader.getController();
+        normalConnectionController.setClient(ClientHolder.getClient());
         stage.setScene(scene);
         stage.show();
     }

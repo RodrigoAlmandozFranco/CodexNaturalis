@@ -33,11 +33,11 @@ public class ReconnectMessage extends Message {
         try {
             controller.reconnect(clientHandler, nickname);
         } catch (GameFullException e) {
-            return new GameFullErrorMessage();
+            return new GameFullErrorMessage(e.getMessage());
         } catch (NicknameInvalidException e){
-            return new NicknameInvalidErrorMessage();
+            return new NicknameInvalidErrorMessage(e.getMessage());
         } catch (NicknameAlreadyInUseException e) {
-            return new NicknameAlreadyInUseErrorMessage();
+            return new NicknameAlreadyInUseErrorMessage(e.getMessage());
         }
         clientHandler.setNickname(nickname);
         return new GoodMessage();
