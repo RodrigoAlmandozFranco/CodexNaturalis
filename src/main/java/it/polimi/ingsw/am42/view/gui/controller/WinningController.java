@@ -63,9 +63,10 @@ public class WinningController {
     }
 
     private void initializeMessages() {
-        List<String> players = gameView.getPlayers().stream().map(PlayerView::getNickname).collect(Collectors.toList());
-        players.addFirst("All");
-        choiceBox.getItems().addAll(players);
+        List<String> nicknames = gameView.getPlayers().stream().map(PlayerView::getNickname).collect(Collectors.toList());
+        nicknames.addFirst("All");
+        nicknames.remove(myPlayer.getNickname());
+        choiceBox.getItems().addAll(nicknames);
         choiceBox.setValue("All");
         Thread thread = new Thread(this::seeMessages);
         thread.start();

@@ -209,6 +209,10 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         return true;
     }
 
+    public void checkServerStatus() {
+        //todo
+    }
+
     public void updateDisconnection(){
         view.setGameAborted(true);
     }

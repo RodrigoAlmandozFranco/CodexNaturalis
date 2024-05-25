@@ -35,6 +35,7 @@ public class GameView {
     private boolean isGameAborted = false;
     private boolean startGame;
     private boolean isTurnFinal;
+    private boolean isServerDown = false;
 
 
     public GameView() {
@@ -124,6 +125,14 @@ public class GameView {
         else {
             System.out.println(message);
         }
+    }
+
+    public boolean getServerDown(){
+        return isServerDown;
+    }
+
+    public void setServerDown(boolean serverDown){
+        isServerDown = serverDown;
     }
 
     public List<ChatMessage> getAllMessages() {

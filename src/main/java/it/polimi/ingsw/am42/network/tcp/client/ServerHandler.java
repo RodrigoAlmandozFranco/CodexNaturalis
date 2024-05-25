@@ -32,7 +32,6 @@ public class ServerHandler implements Runnable {
     @Override
     public void run() {
         try {
-            new Thread(this::heartbeat).start();
             input = new ObjectInputStream(socket.getInputStream());
             while(isRunning) {
                 if (socket.getInputStream().available() > 0) {
@@ -54,26 +53,13 @@ public class ServerHandler implements Runnable {
 
         } catch (IOException | ClassNotFoundException e) {
             closeAll();
-            client.connectionClosed();
+            client.serverDown();
         }
     }
 
-    private void heartbeat() {
-        while (true) {
-            try {
-                client.sendMessage(new PingMessage());
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                client.connectionClosed();
-                closeAll();
-            }
-        }
-    }
-
-    private void closeAll() {
+    public void closeAll() {
         try{
             input.close();
-            socket.close();
             isRunning = false;
         } catch (IOException e) {
             throw new RuntimeException(e);

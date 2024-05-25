@@ -6,14 +6,13 @@ import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
-import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.Client;
-import it.polimi.ingsw.am42.network.MessageListener;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
+import it.polimi.ingsw.am42.network.tcp.messages.PingMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.clientToServer.*;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.*;
 import it.polimi.ingsw.am42.view.gameview.GameView;
@@ -24,7 +23,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Scanner;
 import java.util.Set;
 
 
@@ -38,6 +36,7 @@ public class ClientTCP implements Client {
     private ObjectInputStream input;
     private ObjectOutputStream output;
     private GameView view;
+    private boolean isRunning = true;
 
     public ClientTCP(String ip, int port) throws IOException {
         ClientTCP.ip = ip;
@@ -61,29 +60,26 @@ public class ClientTCP implements Client {
 
         try {
             new Thread(serverHandler).start();
-            while (true) {}
+            new Thread(this::checkServerStatus).start();
+            while (isRunning) {}
         } catch (final NoSuchElementException e) {
-            input.close();
-            output.close();
+            serverDown();
         }
     }
 
     public void sendMessage(Message message) {
-        try {
-            synchronized (output) {
-                output.writeObject(message);
-                output.flush();
-            }
-        } catch (final IOException e) {
-            updateDisconnection();
+        if(isRunning) {
             try {
-                input.close();
-                output.close();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
+                synchronized (output) {
+                    output.writeObject(message);
+                    output.flush();
+                }
+            } catch (final IOException e) {
+                serverDown();
             }
         }
     }
+
 
     @Override
     public ConnectionState getGameInfo() {
@@ -303,16 +299,34 @@ public class ClientTCP implements Client {
         updateDisconnection();
     }
 
-
-    public void connectionClosed(){
-
-        try{
-            output.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    public void checkServerStatus() {
+        while (isRunning) {
+            try {
+               sendMessage(new PingMessage());
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                serverDown();
+            }
         }
-        view.connectionClosed();
     }
+
+    public void serverDown() {
+        view.setServerDown(true);
+        isRunning = false;
+        serverHandler.closeAll();
+        try {
+            output.close();
+            socket.close();
+        } catch (IOException e) {
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException ignored) {
+                System.exit(0);
+            }
+        }
+    }
+
+
 
     public void setView(GameView view) {
         this.view = view;

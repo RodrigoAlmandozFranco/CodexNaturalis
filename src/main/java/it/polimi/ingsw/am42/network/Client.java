@@ -49,6 +49,8 @@ public interface Client {
 
     void playerDisconnected();
 
+    void checkServerStatus();
+
     void updateDisconnection();
     GameView getView();
 }

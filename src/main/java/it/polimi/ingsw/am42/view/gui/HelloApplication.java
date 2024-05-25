@@ -29,6 +29,7 @@ public class HelloApplication extends Application {
         startingController.setClient(ClientHolder.getClient());
 
         new Thread(this::isGameAborted).start();
+        new Thread(this::checkServerDown).start();
 
 
         stage.setTitle("Codex Naturalis");
@@ -47,6 +48,27 @@ public class HelloApplication extends Application {
 
     public static Stage getStage() {
         return stage;
+    }
+
+    private void checkServerDown() {
+        GameView gameView = ClientHolder.getClient().getView();
+        boolean gameInProcess = true;
+        while (gameInProcess) {
+            if (gameView.getServerDown()) {
+                gameInProcess = false;
+            } else {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        Platform.runLater(() -> {
+            showAlert("The game has been aborted because of server disconnection.");
+            showAlert("The application will now close.");
+            System.exit(0);
+        });
     }
 
     private void isGameAborted() {
