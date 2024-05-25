@@ -1318,7 +1318,12 @@ public class BoardController implements Initializable {
         while (true) {
             if (gameView.getNewUpdate()) {
 
-                if(gameToBeLoad) loadAllBoard();
+                if(gameToBeLoad) {
+                    loadAllBoard();
+                    setBackgroundNickname(myPlayer.getColor());
+                    updateColorBoardPlayers();
+                    gameToBeLoad = false;
+                }
 
                 disablePickButton();
 

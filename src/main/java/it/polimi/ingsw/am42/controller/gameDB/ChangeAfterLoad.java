@@ -22,6 +22,7 @@ public class ChangeAfterLoad extends Change {
 
 
     public ChangeAfterLoad(GameInterface game) {
+        super(game, true);
         players = game.getPlayers();
         numberPlayers = game.getNumberPlayers();
         currentPlayer = game.getCurrentPlayer().getNickname();

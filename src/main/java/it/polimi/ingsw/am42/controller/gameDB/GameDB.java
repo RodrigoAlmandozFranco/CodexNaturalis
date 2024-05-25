@@ -52,7 +52,7 @@ public class GameDB {
         return null;
     }
 
-    public ChangeAfterLoad afterLoad() {
+    public Change afterLoad() {
         return new ChangeAfterLoad(game);
     }
 
