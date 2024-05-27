@@ -209,8 +209,8 @@ public class Player implements Serializable {
     public void placeCard(Position position, Face face) {
 
         face.setPosition(position);
-        addPoints(calculatePoint(face));
         board.addFace(face);
+        addPoints(calculatePoint(face));
         removeCardFromHand(face);
     }
 
