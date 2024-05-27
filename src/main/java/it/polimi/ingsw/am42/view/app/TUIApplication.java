@@ -319,7 +319,7 @@ public class TUIApplication extends App {
             sameHighness.sort(Comparator.comparingInt(a -> -a.getPosition().leftness()));
 
             int lastLeft = leftest;
-            String to_print = "";
+            String to_print = "   ";
             for(Face f: sameHighness) {
 
                 for(int j=f.getPosition().leftness(); j<lastLeft; j++)
@@ -327,7 +327,7 @@ public class TUIApplication extends App {
                 if(f.getColor() == null)
                     to_print += " "+ faces.indexOf(f)+" ";
                 else
-                    to_print += f.getColor() + "███";
+                    to_print += f.getColor() + "███" + ColorChooser.RESET;
                 lastLeft = f.getPosition().leftness()-1;
             }
             to_print += ColorChooser.RESET;
@@ -390,17 +390,22 @@ public class TUIApplication extends App {
         }
         Position pos = availablePositions.getFirst();
         seeBoard(nickname, availablePositions);
-        String question = "Choose one of the following positions\n";
-        for (int i=0; i<availablePositions.size(); i++)
-            question += i + " - " + availablePositions.get(i) + "\n";
+        boolean sure = false;
+        String question;
+        while (!sure) {
+            question = "Choose one of the following positions\n";
+            for (int i = 0; i < availablePositions.size(); i++)
+                question += i + " - " + availablePositions.get(i) + "\n";
 
-        int choice = io.getInt(question);
-        while (choice < 0 || choice >= availablePositions.size()) {
-            io.print("Invalid choice");
-            choice = io.getInt(question);
+            int choice = io.getInt(question);
+            while (choice < 0 || choice >= availablePositions.size()) {
+                io.print("Invalid choice");
+                choice = io.getInt(question);
+            }
+            pos = availablePositions.get(choice);
+            zoom(pos);
+            sure = io.getBoolean("Are you sure?");
         }
-        pos = availablePositions.get(choice);
-
         //Selection of the face
         seeHand();
         PlayerClientModel p = client.getView().getPlayer(nickname);
