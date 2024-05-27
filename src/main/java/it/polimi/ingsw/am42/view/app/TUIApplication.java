@@ -308,7 +308,6 @@ public class TUIApplication extends App {
     }
 
     public static void place() {
-        seeBoard(nickname);
         //Selection of the position
         List<Position> availablePositions = client.getAvailablePositions(nickname).stream().toList();
         if(availablePositions.isEmpty()) {

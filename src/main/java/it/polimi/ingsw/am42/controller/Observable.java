@@ -67,8 +67,8 @@ public abstract class Observable {
             try {
                 l.update(message);
             } catch (RemoteException e) {
-                //TODO qui un client si potrebbe essere disconesso quindi si potrebbe pensare di passare allo stato DISCONNECTED
-                throw new RuntimeException(e);
+                listeners.remove(l);
+                handleDisconnection();
             }
         }
     }

@@ -153,6 +153,7 @@ public class Controller extends Observable{
         change.setFuturePlayer(game.getCurrentPlayer().getNickname());
         updateAll(change);
 
+        gameDB.saveGame(true);
         System.out.println(p + " placed a card in position " + position);
         return true;
     }
@@ -165,6 +166,8 @@ public class Controller extends Observable{
         game.setCurrentPlayer(game.getNextPlayer());
         change.setFuturePlayer(game.getCurrentPlayer().getNickname());
         updateAll(change);
+
+        gameDB.saveGame(true);
         System.out.println(p + "picked a card");
     }
 
@@ -202,6 +205,7 @@ public class Controller extends Observable{
         change.setFuturePlayer(game.getCurrentPlayer().getNickname());
         updateAll(change);
 
+        gameDB.saveGame(true);
         System.out.println(p + " chose his personal goal");
     }
 
