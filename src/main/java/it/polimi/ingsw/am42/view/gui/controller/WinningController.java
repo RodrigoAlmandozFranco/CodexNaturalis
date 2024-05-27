@@ -3,8 +3,8 @@ package it.polimi.ingsw.am42.view.gui.controller;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
-import it.polimi.ingsw.am42.view.gameview.GameView;
-import it.polimi.ingsw.am42.view.gameview.PlayerView;
+import it.polimi.ingsw.am42.view.clientModel.GameClientModel;
+import it.polimi.ingsw.am42.view.clientModel.PlayerClientModel;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -26,9 +26,9 @@ import java.util.stream.Collectors;
 
 public class WinningController {
     private Client client;
-    private GameView gameView;
+    private GameClientModel gameClientModel;
     private List<Player> winners;
-    private PlayerView myPlayer;
+    private PlayerClientModel myPlayer;
     @FXML
     ListView listView;
     @FXML
@@ -40,10 +40,10 @@ public class WinningController {
 
     public WinningController() {}
 
-    public void setClient(Client client, PlayerView myPlayer) {
+    public void setClient(Client client, PlayerClientModel myPlayer) {
         this.client = client;
         this.myPlayer = myPlayer;
-        gameView = client.getView();
+        gameClientModel = client.getView();
         initializeMessages();
         setLabel();
         showPodium();
@@ -54,17 +54,17 @@ public class WinningController {
         label.setWrapText(true);
         String text = "";
         text += "You achieved + " + myPlayer.getPoints() + " points and " + myPlayer.getNumberGoalsAchieved() + " goals! Well done!\n";
-        for(PlayerView playerView : gameView.getPlayers()) {
-            if(!playerView.getNickname().equals(myPlayer.getNickname())) {
-                text += playerView.getNickname() + " achieved + " + playerView.getPoints() + " points and "
-                        + playerView.getNumberGoalsAchieved() + " goals!\n";
+        for(PlayerClientModel playerClientModel : gameClientModel.getPlayers()) {
+            if(!playerClientModel.getNickname().equals(myPlayer.getNickname())) {
+                text += playerClientModel.getNickname() + " achieved + " + playerClientModel.getPoints() + " points and "
+                        + playerClientModel.getNumberGoalsAchieved() + " goals!\n";
             }
         }
         label.setText(text);
     }
 
     private void initializeMessages() {
-        List<String> nicknames = gameView.getPlayers().stream().map(PlayerView::getNickname).collect(Collectors.toList());
+        List<String> nicknames = gameClientModel.getPlayers().stream().map(PlayerClientModel::getNickname).collect(Collectors.toList());
         nicknames.addFirst("All");
         nicknames.remove(myPlayer.getNickname());
         choiceBox.getItems().addAll(nicknames);
@@ -80,9 +80,9 @@ public class WinningController {
         thirdPlayerLabel.setStyle("-fx-background-color: #cd7f32; -fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 10;");
 
 
-        List<PlayerView> standings = gameView.getPlayers();
+        List<PlayerClientModel> standings = gameClientModel.getPlayers();
 
-        standings = standings.stream().sorted(Comparator.comparingInt(PlayerView::getPoints).reversed()).toList();
+        standings = standings.stream().sorted(Comparator.comparingInt(PlayerClientModel::getPoints).reversed()).toList();
 
         List<Player> winners = client.getWinner();
 
@@ -100,12 +100,12 @@ public class WinningController {
             firstPlayerLabel.setText(winners.getFirst().getNickname());
         }
 
-        for(PlayerView playerView : standings) {
-            if(!winnersNicknames.contains(playerView.getNickname())) {
+        for(PlayerClientModel playerClientModel : standings) {
+            if(!winnersNicknames.contains(playerClientModel.getNickname())) {
                 if(secondPlayerLabel.getText().isEmpty()) {
-                    secondPlayerLabel.setText(playerView.getNickname());
+                    secondPlayerLabel.setText(playerClientModel.getNickname());
                 } else if(thirdPlayerLabel.getText().isEmpty()){
-                    thirdPlayerLabel.setText(playerView.getNickname());
+                    thirdPlayerLabel.setText(playerClientModel.getNickname());
                 }
             }
         }
@@ -165,10 +165,10 @@ public class WinningController {
 
 
     public void seeMessages() {
-        updateListView(gameView.getAllMessages());
+        updateListView(gameClientModel.getAllMessages());
 
         while (true) {
-            List<ChatMessage> newMessage = gameView.getTmpMessages();
+            List<ChatMessage> newMessage = gameClientModel.getTmpMessages();
             if (newMessage != null && !newMessage.isEmpty()) {
                 Platform.runLater(() -> {
                     updateListView(newMessage);
@@ -188,7 +188,7 @@ public class WinningController {
     private void updateListView(List<ChatMessage> newMessage) {
         for (ChatMessage message : newMessage) {
             String sender;
-            if (gameView.getNickname().equals(message.getSender()))
+            if (gameClientModel.getNickname().equals(message.getSender()))
                 sender = "You";
             else
                 sender = message.getSender();
@@ -209,7 +209,7 @@ public class WinningController {
 
     public void sendMessage(ActionEvent e) {
         String message = textField.getText();
-        String sender = gameView.getNickname();
+        String sender = gameClientModel.getNickname();
         String receiver = choiceBox.getValue();
 
         if (message.isEmpty()) return;

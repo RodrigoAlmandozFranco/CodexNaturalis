@@ -1,26 +1,20 @@
-package it.polimi.ingsw.am42.view.gameview;
+package it.polimi.ingsw.am42.view.clientModel;
 
 import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
-import it.polimi.ingsw.am42.model.cards.types.playables.GoldCard;
 import it.polimi.ingsw.am42.model.enumeration.State;
-import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Queue;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
-public class GameView {
+public class GameClientModel {
 
     private String nickname;
-    private List<PlayerView> players;
+    private List<PlayerClientModel> players;
     private List<GoalCard> globalGoals;
     private State currentState;
     private boolean newUpdate = false;
@@ -28,7 +22,7 @@ public class GameView {
     private List<PlayableCard> pickableResourceCards;
     private List<PlayableCard> pickableGoldCards;
     private int numberPlayers;
-    protected PlayerView currentPlayer;
+    protected PlayerClientModel currentPlayer;
     private List<MethodChoice> usableMethods;
     private List<ChatMessage> allMessages;
     private List<ChatMessage> tmpMessages;
@@ -38,7 +32,7 @@ public class GameView {
     private boolean isServerDown = false;
 
 
-    public GameView() {
+    public GameClientModel() {
         this.players = new ArrayList<>();
         this.globalGoals = new ArrayList<>();
         this.currentState = null;
@@ -165,7 +159,7 @@ public class GameView {
         // First diff
         if (numberPlayers == 0) {
             for (Player p : diff.getPlayers())
-                 players.add(new PlayerView(p));
+                 players.add(new PlayerClientModel(p));
             currentPlayer = getPlayer(diff.getCurrentPlayer());
             globalGoals = diff.getGlobalGoals();
             numberPlayers = diff.getNumberPlayers();
@@ -227,14 +221,14 @@ public class GameView {
         return tmp;
     }
 
-    public PlayerView getPlayer(String nickname) {
-        for (PlayerView p : players)
+    public PlayerClientModel getPlayer(String nickname) {
+        for (PlayerClientModel p : players)
             if (p.getNickname().equals(nickname))
                 return p;
         return null;
     }
 
-    public PlayerView getCurrentPlayer() {
+    public PlayerClientModel getCurrentPlayer() {
         return currentPlayer;
     }
 
@@ -255,11 +249,11 @@ public class GameView {
         this.pickableGoldCards = pickableGoldCards;
     }
 
-    public List<PlayerView> getPlayers() {
+    public List<PlayerClientModel> getPlayers() {
         return players;
     }
 
-    private void setPlayers(List<PlayerView> players) {
+    private void setPlayers(List<PlayerClientModel> players) {
         this.players = players;
     }
 

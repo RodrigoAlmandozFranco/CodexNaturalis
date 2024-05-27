@@ -1,4 +1,4 @@
-package it.polimi.ingsw.am42.view.App;
+package it.polimi.ingsw.am42.view.app;
 
 import it.polimi.ingsw.am42.model.cards.types.Back;
 import it.polimi.ingsw.am42.model.cards.types.Corner;
@@ -12,8 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class TUIApplicationTest {
 

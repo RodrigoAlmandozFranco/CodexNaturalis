@@ -1,11 +1,10 @@
-package it.polimi.ingsw.am42.view.App;
+package it.polimi.ingsw.am42.view.app;
 
 import it.polimi.ingsw.am42.controller.ConnectionState;
 import it.polimi.ingsw.am42.model.cards.types.Back;
 import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
-import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.enumeration.Resource;
 import it.polimi.ingsw.am42.model.enumeration.State;
@@ -16,8 +15,8 @@ import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.view.tui.ColorChooser;
 import it.polimi.ingsw.am42.view.tui.IOHandler;
-import it.polimi.ingsw.am42.view.gameview.MethodChoice;
-import it.polimi.ingsw.am42.view.gameview.PlayerView;
+import it.polimi.ingsw.am42.view.clientModel.MethodChoice;
+import it.polimi.ingsw.am42.view.clientModel.PlayerClientModel;
 
 import java.util.*;
 
@@ -123,7 +122,7 @@ public class TUIApplication extends App {
     public static void placeStarting() {
         seeCards();
         PlayableCard startingCard = null;
-        PlayerView p = client.getView().getPlayer(nickname);
+        PlayerClientModel p = client.getView().getPlayer(nickname);
         for(PlayableCard c: p.getHand()){
             startingCard = c;
         }
@@ -138,7 +137,7 @@ public class TUIApplication extends App {
 
     public static void chooseColor() {
         String question = "Choose one of the available colors\n";
-        PlayerView p = client.getView().getPlayer(nickname);
+        PlayerClientModel p = client.getView().getPlayer(nickname);
         List<PlayersColor> avcolors = p.getAvColors();
         for (int i=0; i<avcolors.size(); i++)
             question += i + " - " + avcolors.get(i).toString(true) + "\n";
@@ -153,7 +152,7 @@ public class TUIApplication extends App {
     }
 
     public static void chooseGoal() {
-        PlayerView p = client.getView().getPlayer(nickname);
+        PlayerClientModel p = client.getView().getPlayer(nickname);
         List<GoalCard> goals = p.getAvGoals();
         String question = "Choose one of the following goals\n";
         for (int i=0; i<goals.size(); i++)
@@ -180,7 +179,7 @@ public class TUIApplication extends App {
 
         List<String> names = new ArrayList<>();
         names.add(nickname);
-        for(PlayerView p:client.getView().getPlayers())
+        for(PlayerClientModel p:client.getView().getPlayers())
             if(!p.getNickname().equals(nickname))
                 names.add(p.getNickname());
 
@@ -273,7 +272,7 @@ public class TUIApplication extends App {
     }
 
     public static void seeCards() {
-        PlayerView p = client.getView().getPlayer(nickname);
+        PlayerClientModel p = client.getView().getPlayer(nickname);
             for (PlayableCard c : p.getHand()) {
                 c.setVisibility(true);
                 io.print(c.toString());
@@ -281,7 +280,7 @@ public class TUIApplication extends App {
     }
 
     public static void seeHand() {
-        PlayerView p = client.getView().getPlayer(nickname);
+        PlayerClientModel p = client.getView().getPlayer(nickname);
         int i = 0;
         for (PlayableCard c : p.getHand()) {
             c.setVisibility(true);
@@ -294,7 +293,7 @@ public class TUIApplication extends App {
 
     public static void seeStandings() {
         String message = "Scoreboard\n";
-        for (PlayerView p: client.getView().getPlayers())
+        for (PlayerClientModel p: client.getView().getPlayers())
             message +=  p.getNickname()  + (p.getNickname().equals(nickname)?" (You)":"")+" = "+ p.getPoints() + "\n";
         io.print(message);
     }
@@ -331,7 +330,7 @@ public class TUIApplication extends App {
 
         //Selection of the face
         seeHand();
-        PlayerView p = client.getView().getPlayer(nickname);
+        PlayerClientModel p = client.getView().getPlayer(nickname);
 
         question = "Choose one of the face\n";
 
@@ -405,7 +404,7 @@ public class TUIApplication extends App {
         }
         List<String> names = new ArrayList<>();
         names.add("all");
-        for(PlayerView p:client.getView().getPlayers())
+        for(PlayerClientModel p:client.getView().getPlayers())
             if(!p.getNickname().equals(nickname))
                 names.add(p.getNickname());
 

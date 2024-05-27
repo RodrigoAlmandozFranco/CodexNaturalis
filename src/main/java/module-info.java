@@ -29,7 +29,7 @@ module it.polimi.ingsw.am42 {
     requires java.base;
     exports it.polimi.ingsw.am42.model.structure;
 
-    exports it.polimi.ingsw.am42.view.gameview;
+    exports it.polimi.ingsw.am42.view.clientModel;
     exports it.polimi.ingsw.am42.controller.gameDB;
     exports it.polimi.ingsw.am42.controller;
 }

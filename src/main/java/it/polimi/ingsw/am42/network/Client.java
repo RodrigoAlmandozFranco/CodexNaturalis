@@ -1,22 +1,17 @@
 package it.polimi.ingsw.am42.network;
 
 import it.polimi.ingsw.am42.controller.ConnectionState;
-import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
-import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
-import it.polimi.ingsw.am42.view.gameview.GameView;
+import it.polimi.ingsw.am42.view.clientModel.GameClientModel;
 
-import java.rmi.Remote;
-import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Set;
 
@@ -45,12 +40,12 @@ public interface Client {
 
     void sendChatMessage(ChatMessage message);
     void receiveMessage(Message message);
-    void setView(GameView view);
+    void setView(GameClientModel view);
 
     void playerDisconnected();
 
     void checkServerStatus();
 
     void updateDisconnection();
-    GameView getView();
+    GameClientModel getView();
 }

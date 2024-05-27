@@ -5,18 +5,15 @@ import it.polimi.ingsw.am42.controller.ConnectionState;
 import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.exceptions.*;
-import it.polimi.ingsw.am42.network.MessageListener;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
-import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
-import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.PlayerDisconnectedMessage;
-import it.polimi.ingsw.am42.view.gameview.GameView;
+import it.polimi.ingsw.am42.view.clientModel.GameClientModel;
 
 import java.io.Serializable;
 import java.rmi.RemoteException;
@@ -35,7 +32,7 @@ import java.util.Set;
 public class RMIClient extends UnicastRemoteObject implements Client, RMIMessageListener, Serializable {
     private Registry registry;
     private RMISpeaker stub;
-    private GameView view;
+    private GameClientModel view;
     private String nickname;
     public RMIClient(String host, int port) throws RemoteException {
         //TODO da riga di comando ricevo se voglio un view GUI o TUI
@@ -218,7 +215,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
     }
 
 
-    public void setView(GameView view) {
+    public void setView(GameClientModel view) {
         this.view = view;
     }
 
@@ -232,7 +229,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         updateDisconnection();
     }
 
-    public GameView getView() {
+    public GameClientModel getView() {
         return view;
     }
 }

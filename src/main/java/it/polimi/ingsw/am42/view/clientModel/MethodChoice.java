@@ -1,6 +1,6 @@
-package it.polimi.ingsw.am42.view.gameview;
+package it.polimi.ingsw.am42.view.clientModel;
 
-import it.polimi.ingsw.am42.view.App.TUIApplication;
+import it.polimi.ingsw.am42.view.app.TUIApplication;
 import it.polimi.ingsw.am42.view.tui.ColorChooser;
 
 /**

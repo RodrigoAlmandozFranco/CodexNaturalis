@@ -1,4 +1,4 @@
-package it.polimi.ingsw.am42.view.App;
+package it.polimi.ingsw.am42.view.app;
 
 import it.polimi.ingsw.am42.network.Client;
 

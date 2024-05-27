@@ -11,8 +11,8 @@ import it.polimi.ingsw.am42.model.exceptions.RequirementsNotMetException;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
-import it.polimi.ingsw.am42.view.gameview.GameView;
-import it.polimi.ingsw.am42.view.gameview.PlayerView;
+import it.polimi.ingsw.am42.view.clientModel.GameClientModel;
+import it.polimi.ingsw.am42.view.clientModel.PlayerClientModel;
 import it.polimi.ingsw.am42.view.gui.HelloApplication;
 import it.polimi.ingsw.am42.view.gui.utils.ClientHolder;
 import it.polimi.ingsw.am42.view.gui.utils.points.ScreenPosition;
@@ -24,7 +24,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -52,9 +51,9 @@ import java.util.List;
 public class BoardController implements Initializable {
 
     private Client client;
-    private GameView gameView;
-    private PlayerView myPlayer;
-    private List<PlayerView> players;
+    private GameClientModel gameClientModel;
+    private PlayerClientModel myPlayer;
+    private List<PlayerClientModel> players;
     private List<String> nicknames;
     private final DropShadow highlightEffect = new DropShadow(20, Color.YELLOW);
     //Chat labels
@@ -284,13 +283,13 @@ public class BoardController implements Initializable {
     public void setClient(Client client, boolean gameToBeLoad) {
         this.client = client;
         this.gameToBeLoad = gameToBeLoad;
-        gameView = client.getView();
-        players = gameView.getPlayers();
+        gameClientModel = client.getView();
+        players = gameClientModel.getPlayers();
         nicknames = new ArrayList<>();
         nicknames.add("All");
 
-        for (PlayerView p : players) {
-            if (!p.getNickname().equals(gameView.getNickname()))
+        for (PlayerClientModel p : players) {
+            if (!p.getNickname().equals(gameClientModel.getNickname()))
                 nicknames.add(p.getNickname());
             else
                 myPlayer = p;
@@ -326,7 +325,7 @@ public class BoardController implements Initializable {
             choiceBox.setValue("All");
         });
 
-        List<GoalCard> goals = gameView.getGlobalGoals();
+        List<GoalCard> goals = gameClientModel.getGlobalGoals();
         for (int i = 0; i < goals.size(); i++) {
             String src = goals.get(i).getSrcImage();
             Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
@@ -342,7 +341,7 @@ public class BoardController implements Initializable {
     public void seeMessages() {
 
         while (true) {
-            List<ChatMessage> newMessage = gameView.getTmpMessages();
+            List<ChatMessage> newMessage = gameClientModel.getTmpMessages();
             if (newMessage != null && !newMessage.isEmpty()) {
                 Platform.runLater(() -> {
                     updateListView(newMessage);
@@ -360,7 +359,7 @@ public class BoardController implements Initializable {
     private void updateListView(List<ChatMessage> newMessage) {
         for (ChatMessage message : newMessage) {
             String sender;
-            if (gameView.getNickname().equals(message.getSender()))
+            if (gameClientModel.getNickname().equals(message.getSender()))
                 sender = "You";
             else
                 sender = message.getSender();
@@ -381,7 +380,7 @@ public class BoardController implements Initializable {
 
     public void sendMessage(ActionEvent e) {
         String message = textField.getText();
-        String sender = gameView.getNickname();
+        String sender = gameClientModel.getNickname();
         String receiver = choiceBox.getValue();
 
         if (message.isEmpty()) return;
@@ -571,7 +570,7 @@ public class BoardController implements Initializable {
             b.setEffect(null);
         }
         pickableResource1.setEffect(highlightEffect);
-        chosenCardToPick = gameView.getPickableResourceCards().getFirst();
+        chosenCardToPick = gameClientModel.getPickableResourceCards().getFirst();
         //client.pick(myPlayer.getNickname(), gameView.getPickableResourceCards().getFirst());
     }
 
@@ -580,7 +579,7 @@ public class BoardController implements Initializable {
             b.setEffect(null);
         }
         pickableGold1.setEffect(highlightEffect);
-        chosenCardToPick = gameView.getPickableGoldCards().getFirst();
+        chosenCardToPick = gameClientModel.getPickableGoldCards().getFirst();
         //client.pick(myPlayer.getNickname(), gameView.getPickableGoldCards().getFirst());
     }
 
@@ -589,7 +588,7 @@ public class BoardController implements Initializable {
             b.setEffect(null);
         }
         pickableResource2.setEffect(highlightEffect);
-        chosenCardToPick = gameView.getPickableResourceCards().get(1);
+        chosenCardToPick = gameClientModel.getPickableResourceCards().get(1);
         //client.pick(myPlayer.getNickname(), gameView.getPickableResourceCards().get(1));
     }
 
@@ -598,12 +597,12 @@ public class BoardController implements Initializable {
             b.setEffect(null);
         }
         pickableGold2.setEffect(highlightEffect);
-        chosenCardToPick = gameView.getPickableGoldCards().get(1);
+        chosenCardToPick = gameClientModel.getPickableGoldCards().get(1);
         //client.pick(myPlayer.getNickname(), gameView.getPickableGoldCards().get(1));
     }
 
     public void pickButtonAction(ActionEvent event) {
-        if(gameView.getCurrentState().equals(State.PICK)){
+        if(gameClientModel.getCurrentState().equals(State.PICK)){
             if (chosenCardToPick == null)
                 showAlert("You have to pick a card!");
             client.pick(myPlayer.getNickname(), chosenCardToPick);
@@ -622,7 +621,7 @@ public class BoardController implements Initializable {
             b.setEffect(null);
         }
         firstCardResource.setEffect(highlightEffect);
-        for (PlayableCard p : gameView.getPickableResourceCards()) {
+        for (PlayableCard p : gameClientModel.getPickableResourceCards()) {
             if (!p.getVisibility()) {
                 chosenCardToPick = p;
                 break;
@@ -636,7 +635,7 @@ public class BoardController implements Initializable {
             b.setEffect(null);
         }
         firstCardGold.setEffect(highlightEffect);
-        for (PlayableCard p : gameView.getPickableGoldCards()) {
+        for (PlayableCard p : gameClientModel.getPickableGoldCards()) {
             if (!p.getVisibility()) {
                 chosenCardToPick = p;
                 break;
@@ -987,8 +986,8 @@ public class BoardController implements Initializable {
     public void seeStandingsButtonAction(ActionEvent event) {
         seeStandingsButton.setDisable(true);
 
-        List<PlayerView> players = gameView.getPlayers();
-        for (PlayerView p : players) {
+        List<PlayerClientModel> players = gameClientModel.getPlayers();
+        for (PlayerClientModel p : players) {
             ScreenPosition screenPosition = new ScreenPosition();
             if (p.getColor() != null) {
                 Image image = null;
@@ -1036,7 +1035,7 @@ public class BoardController implements Initializable {
                     standingPane.setVisible(false);
                     seeStandingsButton.setDisable(false);
                     Platform.runLater(() -> {
-                        if(gameView.getCurrentPlayer().equals(myPlayer)){
+                        if(gameClientModel.getCurrentPlayer().equals(myPlayer)){
                             enablePickButton();
                         }
                     });
@@ -1076,12 +1075,12 @@ public class BoardController implements Initializable {
         text = "";
         currentPlayer = "";
 
-        if (gameView.getCurrentPlayer().equals(myPlayer)) {
+        if (gameClientModel.getCurrentPlayer().equals(myPlayer)) {
             text += "It's your turn! You have to place your starting card";
             enableHandAndControlButtons();
             disablePickableButtons();
         } else {
-            currentPlayer = gameView.getCurrentPlayer().getNickname();
+            currentPlayer = gameClientModel.getCurrentPlayer().getNickname();
             text += currentPlayer + " is playing. " + currentPlayer + " has to place the starting card";
             disableAll();
         }
@@ -1092,7 +1091,7 @@ public class BoardController implements Initializable {
         text = "";
         currentPlayer = "";
 
-        if (gameView.getCurrentPlayer().equals(myPlayer)) {
+        if (gameClientModel.getCurrentPlayer().equals(myPlayer)) {
             text += "It's your turn! You have to choose your personal color";
             while (availableColors == null) {
                 try {
@@ -1105,7 +1104,7 @@ public class BoardController implements Initializable {
             disablePickableButtons();
             setColor();
         } else {
-            currentPlayer = gameView.getCurrentPlayer().getNickname();
+            currentPlayer = gameClientModel.getCurrentPlayer().getNickname();
             text += currentPlayer + " is playing. " + currentPlayer + " has to choose the personal color";
             disableAll();
         }
@@ -1115,7 +1114,7 @@ public class BoardController implements Initializable {
         text = "";
         currentPlayer = "";
 
-        if (gameView.getCurrentPlayer().equals(myPlayer)) {
+        if (gameClientModel.getCurrentPlayer().equals(myPlayer)) {
             text += "It's your turn! You have to choose your personal goal";
             while (possibleGoals == null) {
                 try {
@@ -1128,7 +1127,7 @@ public class BoardController implements Initializable {
             disablePickableButtons();
             setGoal();
         } else {
-            currentPlayer = gameView.getCurrentPlayer().getNickname();
+            currentPlayer = gameClientModel.getCurrentPlayer().getNickname();
             text += currentPlayer + " is playing. " + currentPlayer + " has to choose the personal goal";
             disableAll();
         }
@@ -1139,7 +1138,7 @@ public class BoardController implements Initializable {
         text = "";
         currentPlayer = "";
 
-        if (gameView.getCurrentPlayer().equals(myPlayer)) {
+        if (gameClientModel.getCurrentPlayer().equals(myPlayer)) {
 
             text += "It's your turn! You have to place a card";
             boardPane.setOpacity(1);
@@ -1150,7 +1149,7 @@ public class BoardController implements Initializable {
             }
             enableHandAndControlButtons();
         } else {
-            currentPlayer = gameView.getCurrentPlayer().getNickname();
+            currentPlayer = gameClientModel.getCurrentPlayer().getNickname();
             text += currentPlayer + " is playing. " + currentPlayer + " has to place a card";
             disableAll();
         }
@@ -1164,12 +1163,12 @@ public class BoardController implements Initializable {
 
 
 
-        if (gameView.getCurrentPlayer().equals(myPlayer)) {
+        if (gameClientModel.getCurrentPlayer().equals(myPlayer)) {
             text += "It's your turn! You have to pick a card";
             enablePickableButtons();
             disableHandAndControlButtons();
         } else {
-            currentPlayer = gameView.getCurrentPlayer().getNickname();
+            currentPlayer = gameClientModel.getCurrentPlayer().getNickname();
             text += currentPlayer + " is playing. " + currentPlayer + " has to pick a card";
             disableAll();
         }
@@ -1213,8 +1212,8 @@ public class BoardController implements Initializable {
     }
 
     private void updatePickableCards() {
-        List<PlayableCard> pickableResources = gameView.getPickableResourceCards();
-        List<PlayableCard> pickableGold = gameView.getPickableGoldCards();
+        List<PlayableCard> pickableResources = gameClientModel.getPickableResourceCards();
+        List<PlayableCard> pickableGold = gameClientModel.getPickableGoldCards();
 
         List<List<PlayableCard>> pickables = new ArrayList<>();
         pickables.add(pickableResources);
@@ -1245,8 +1244,8 @@ public class BoardController implements Initializable {
     }
 
     private void updateColorBoardPlayers() {
-        List<PlayerView> tmp = new ArrayList<>();
-        for(PlayerView player : gameView.getPlayers()) {
+        List<PlayerClientModel> tmp = new ArrayList<>();
+        for(PlayerClientModel player : gameClientModel.getPlayers()) {
             if(player.getColor() != null && !player.equals(myPlayer)) {
                 tmp.add(player);
                 PlayersColor color = player.getColor();
@@ -1269,12 +1268,12 @@ public class BoardController implements Initializable {
             b.setDisable(true);
         }
         //todo: how to add a face to a board in the another pane
-        for(Face face : gameView.getPlayers().get(index).getBoard().getFaces()){
+        for(Face face : gameClientModel.getPlayers().get(index).getBoard().getFaces()){
             //addFaceToBoard(face);
             //todo
         }
 
-        boardLabelOtherPlayer.setText(gameView.getPlayers().get(index).getNickname() + "'s board");
+        boardLabelOtherPlayer.setText(gameClientModel.getPlayers().get(index).getNickname() + "'s board");
         boardLabelOtherPlayer.setStyle(playersBoardButtons.get(index).getStyle());
 
         boardPaneOtherPlayer.setOpacity(1);
@@ -1316,7 +1315,7 @@ public class BoardController implements Initializable {
 
     public void updateGameView() {
         while (true) {
-            if (gameView.getNewUpdate()) {
+            if (gameClientModel.getNewUpdate()) {
 
                 if(gameToBeLoad) {
                     loadAllBoard();
@@ -1327,15 +1326,15 @@ public class BoardController implements Initializable {
 
                 disablePickButton();
 
-                if (gameView.getCurrentState().equals(State.SETHAND)) {
+                if (gameClientModel.getCurrentState().equals(State.SETHAND)) {
                    updateStateSetHand();
-                } else if (gameView.getCurrentState().equals(State.SETCOLOR)) {
+                } else if (gameClientModel.getCurrentState().equals(State.SETCOLOR)) {
                     updateStateSetColor();
-                } else if (gameView.getCurrentState().equals(State.SETGOAL)) {
+                } else if (gameClientModel.getCurrentState().equals(State.SETGOAL)) {
                     updateColorBoardPlayers();
                     updateStateSetGoal();
-                } else if (gameView.getCurrentState().equals(State.PLACE)) {
-                    if(gameView.isTurnFinal() && gameView.getCurrentPlayer().equals(gameView.getPlayers().getFirst()))
+                } else if (gameClientModel.getCurrentState().equals(State.PLACE)) {
+                    if(gameClientModel.isTurnFinal() && gameClientModel.getCurrentPlayer().equals(gameClientModel.getPlayers().getFirst()))
                         Platform.runLater(() -> showAlert("This is the final turn. You will only be able to place a card."));
                     try {
                         Thread.sleep(1000);
@@ -1343,9 +1342,9 @@ public class BoardController implements Initializable {
                         e.printStackTrace();
                     }
                     updateStatePlace();
-                } else if (gameView.getCurrentState().equals(State.PICK)) {
+                } else if (gameClientModel.getCurrentState().equals(State.PICK)) {
                     updateStatePick();
-                } else if (gameView.getCurrentState().equals(State.LAST)) {
+                } else if (gameClientModel.getCurrentState().equals(State.LAST)) {
                     try {
                         updateStateLast();
                     } catch (IOException e) {

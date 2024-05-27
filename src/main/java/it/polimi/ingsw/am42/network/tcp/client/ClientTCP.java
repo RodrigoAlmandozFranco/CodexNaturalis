@@ -15,7 +15,7 @@ import it.polimi.ingsw.am42.network.tcp.messages.Message;
 import it.polimi.ingsw.am42.network.tcp.messages.PingMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.clientToServer.*;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.*;
-import it.polimi.ingsw.am42.view.gameview.GameView;
+import it.polimi.ingsw.am42.view.clientModel.GameClientModel;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -35,7 +35,7 @@ public class ClientTCP implements Client {
     private final Socket socket;
     private ObjectInputStream input;
     private ObjectOutputStream output;
-    private GameView view;
+    private GameClientModel view;
     private boolean isRunning = true;
 
     public ClientTCP(String ip, int port) throws IOException {
@@ -328,11 +328,11 @@ public class ClientTCP implements Client {
 
 
 
-    public void setView(GameView view) {
+    public void setView(GameClientModel view) {
         this.view = view;
     }
 
-    public GameView getView() {
+    public GameClientModel getView() {
         return view;
     }
 }

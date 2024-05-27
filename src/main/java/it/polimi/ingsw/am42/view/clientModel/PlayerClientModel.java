@@ -1,17 +1,16 @@
-package it.polimi.ingsw.am42.view.gameview;
+package it.polimi.ingsw.am42.view.clientModel;
 
 import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
-import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.structure.Board;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayerView {
+public class PlayerClientModel {
 
     private int points;
     private  String nickname;
@@ -23,7 +22,7 @@ public class PlayerView {
     private List<PlayersColor> avColors;
     private List<GoalCard> avGoals;
 
-    public PlayerView() {
+    public PlayerClientModel() {
         this.points = 0;
         this.nickname = "";
         this.hand = new ArrayList<>();
@@ -33,7 +32,7 @@ public class PlayerView {
         this.numberGoalsAchieved = 0;
     }
 
-    public PlayerView(Player p) {
+    public PlayerClientModel(Player p) {
         this.points = p.getPoints();
         this.nickname = p.getNickname();
         this.hand = new ArrayList<>();

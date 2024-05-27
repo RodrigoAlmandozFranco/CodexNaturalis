@@ -3,10 +3,10 @@ package it.polimi.ingsw.am42;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.rmi.RMIClient;
 import it.polimi.ingsw.am42.network.tcp.client.ClientTCP;
-import it.polimi.ingsw.am42.view.App.App;
-import it.polimi.ingsw.am42.view.App.GUIApplication;
-import it.polimi.ingsw.am42.view.App.TUIApplication;
-import it.polimi.ingsw.am42.view.gameview.GameView;
+import it.polimi.ingsw.am42.view.app.App;
+import it.polimi.ingsw.am42.view.app.GUIApplication;
+import it.polimi.ingsw.am42.view.app.TUIApplication;
+import it.polimi.ingsw.am42.view.clientModel.GameClientModel;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -82,7 +82,7 @@ public class ClientMain extends UnicastRemoteObject {
             }
         }
 
-        GameView view = new GameView();
+        GameClientModel view = new GameClientModel();
 
         client.setView(view);
 

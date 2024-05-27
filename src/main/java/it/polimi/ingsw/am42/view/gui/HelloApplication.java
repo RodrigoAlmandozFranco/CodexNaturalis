@@ -1,7 +1,6 @@
 package it.polimi.ingsw.am42.view.gui;
 
-import it.polimi.ingsw.am42.network.Client;
-import it.polimi.ingsw.am42.view.gameview.GameView;
+import it.polimi.ingsw.am42.view.clientModel.GameClientModel;
 import it.polimi.ingsw.am42.view.gui.controller.StartingController;
 import it.polimi.ingsw.am42.view.gui.utils.ClientHolder;
 import javafx.application.Application;
@@ -51,10 +50,10 @@ public class HelloApplication extends Application {
     }
 
     private void checkServerDown() {
-        GameView gameView = ClientHolder.getClient().getView();
+        GameClientModel gameClientModel = ClientHolder.getClient().getView();
         boolean gameInProcess = true;
         while (gameInProcess) {
-            if (gameView.getServerDown()) {
+            if (gameClientModel.getServerDown()) {
                 gameInProcess = false;
             } else {
                 try {
@@ -72,10 +71,10 @@ public class HelloApplication extends Application {
     }
 
     private void isGameAborted() {
-        GameView gameView = ClientHolder.getClient().getView();
+        GameClientModel gameClientModel = ClientHolder.getClient().getView();
         boolean gameInProcess = true;
         while (gameInProcess) {
-            if (gameView.isGameAborted()) {
+            if (gameClientModel.isGameAborted()) {
                 gameInProcess = false;
             } else {
                 try {
