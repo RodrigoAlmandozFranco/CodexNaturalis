@@ -725,7 +725,7 @@ public class BoardController implements Initializable {
         if (checkBeforePlace()) return;
 
         if (chosenCard instanceof StartingCard) {
-            placeStartingCard(chosenCard.getBack());
+            placeStartingCard(chosenCard.getFront());
             return;
         }
 
@@ -1205,7 +1205,11 @@ public class BoardController implements Initializable {
         for (ImageView imageView : this.hand) imageView.setImage(null);
 
         for (int i = 0; i < hand.size(); i++) {
-            String src = hand.get(i).getFront().getSrcImage();
+            String src;
+            if(hand.get(i) instanceof StartingCard)
+                src = hand.get(i).getBack().getSrcImage();
+            else
+                src = hand.get(i).getFront().getSrcImage();
             Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(src)));
             this.hand.get(i).setImage(image);
         }
@@ -1322,6 +1326,10 @@ public class BoardController implements Initializable {
                     setBackgroundNickname(myPlayer.getColor());
                     updateColorBoardPlayers();
                     gameToBeLoad = false;
+                    if (myPlayer.getPersonalGoal() != null) {
+                        Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(myPlayer.getPersonalGoal().getSrcImage())));
+                        personalGoal.setImage(image);
+                    }
                 }
 
                 disablePickButton();

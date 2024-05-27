@@ -53,7 +53,7 @@ public class GameDB {
     }
 
     public Change afterLoad() {
-        return new ChangeAfterLoad(game);
+        return new Change(game, false);
     }
 
 

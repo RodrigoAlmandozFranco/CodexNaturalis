@@ -67,8 +67,14 @@ public class Change implements Serializable {
 
             }
         }
-        if(lastPlacedFace !=  null)
+        if(lastPlacedFace !=  null){
             lastPlacedFace.setPosition(game.getCurrentPlayer().getBoard().getLastPlacedFace().getPosition());
+            lastPlacedFace.setId(game.getCurrentPlayer().getBoard().getLastPlacedFace().getId());
+        }
+
+
+
+
 
         firstResourceCard = new PlayableCard(game.getFirstResourceCard().getId(), game.getFirstResourceCard().getFront(), game.getFirstResourceCard().getBack());
         firstGoldCard = new PlayableCard(game.getFirstGoldCard().getId(), game.getFirstGoldCard().getFront(), game.getFirstGoldCard().getBack());
