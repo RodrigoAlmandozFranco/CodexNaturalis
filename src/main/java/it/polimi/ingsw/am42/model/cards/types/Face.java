@@ -144,7 +144,7 @@ public abstract class Face implements Serializable {
         if (getEvaluator() == null)
             to_print += "               ";
         else
-            to_print += "     " + getEvaluator().toString(true) + "     ";
+            to_print += "     " + getEvaluator().toString(color) + "     ";
         if (getCorner(Direction.UPRIGHT).getState().equals(CornerState.CLOSED))
             to_print += "    |\n";
         else
@@ -210,7 +210,7 @@ public abstract class Face implements Serializable {
             to_print += totalValues != 0 ? "|" : " ";
             for (Resource r : getRequirements().keySet())
                 for (int i=0; i< getRequirements().get(r); i++)
-                    to_print += r.toString() + "|";
+                    to_print += r.toString() + colorStr + "|";
             to_print += " ".repeat(7 - totalValues);
         }
         if (getCorner(Direction.DOWNRIGHT).getState().equals(CornerState.CLOSED))

@@ -434,9 +434,9 @@ public class TUIApplication extends App {
         int i = 0;
         for (PlayableCard c : cards) {
             if(c.getVisibility())
-                io.print("\n"+ i + " : " + c.getFront());
+                io.print("\n"+ i + " :\n" + c.getFront());
             else
-                io.print("\n" + i + " : " + c.getBack());
+                io.print("\n" + i + " :\n" + c.getBack());
             i++;
         }
     }

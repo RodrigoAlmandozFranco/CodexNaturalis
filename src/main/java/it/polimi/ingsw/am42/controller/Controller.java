@@ -120,7 +120,7 @@ public class Controller extends Observable{
             }
 
         if(!wasInPrevGame)
-            throw new NicknameInvalidException(nickname + " was not in the previous game");
+            throw new NicknameInvalidException(game.getPlayer(nickname) + " was not in the previous game");
 
         this.addListener(l);
 
@@ -129,7 +129,7 @@ public class Controller extends Observable{
             updateAll(change);
         }
 
-        System.out.println(nickname + " reconncted");
+        System.out.println(nickname + " reconnected");
 
         return true;
     }
@@ -137,7 +137,7 @@ public class Controller extends Observable{
     public Set<Position> getAvailablePositions(String p) {
         //if (p.equals(game.getCurrentPlayer().getNickname()))
 
-        System.out.println(p + " requested available positions");
+        System.out.println(game.getPlayer(p) + " requested available positions");
         return game.getCurrentPlayer().getBoard().getPossiblePositions();
     }
 
@@ -155,7 +155,7 @@ public class Controller extends Observable{
         updateAll(change);
 
         gameDB.saveGame(true);
-        System.out.println(p + " placed a card in position " + position);
+        System.out.println(game.getPlayer(p) + " placed a card in position " + position);
         return true;
     }
 
@@ -169,7 +169,7 @@ public class Controller extends Observable{
         updateAll(change);
 
         gameDB.saveGame(true);
-        System.out.println(p + "picked a card");
+        System.out.println(game.getPlayer(p) + " picked a card");
     }
 
     public List<PlayersColor> placeStarting(String p, Face face){
@@ -179,7 +179,7 @@ public class Controller extends Observable{
         change = gameDB.saveGame(true);
         updateAll(change);
 
-        System.out.println(p + " placed starting card");
+        System.out.println(game.getPlayer(p)  + " placed starting card");
         return game.getAvailableColors();
     }
 
@@ -191,7 +191,7 @@ public class Controller extends Observable{
         //game.initializeHandCurrentPlayer();
         Change change = gameDB.saveGame(false);
         updateAll(change);
-        System.out.println(p + " chose color" + color);
+        System.out.println(game.getPlayer(p) + " chose color" + color);
 
         return game.choosePersonalGoal();
     }
@@ -207,7 +207,7 @@ public class Controller extends Observable{
         updateAll(change);
 
         gameDB.saveGame(true);
-        System.out.println(p + " chose his personal goal");
+        System.out.println(game.getPlayer(p) + " chose his personal goal");
     }
 
 

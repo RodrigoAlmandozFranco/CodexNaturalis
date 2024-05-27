@@ -43,9 +43,9 @@ public class EvaluatorPointsPerResource extends Evaluator{
 
 
 
-    public String toString(boolean small) {
-        if (small)
-            return numPoints + " | " + resourceMap.keySet().toArray()[0];
+    public String toString(Color color) {
+        if (color != null)
+            return "" + numPoints + color + " | " + resourceMap.keySet().toArray()[0] + color;
         else
             return toString();
     }

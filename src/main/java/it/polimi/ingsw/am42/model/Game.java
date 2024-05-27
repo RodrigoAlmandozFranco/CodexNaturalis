@@ -638,4 +638,12 @@ public class Game implements GameInterface, Serializable {
         return possibleWinners.subList(0, numWinners);
     }
 
+
+    public Player getPlayer(String nickname) {
+        for (Player p : players)
+            if (p.getNickname().equals(nickname))
+                return p;
+
+        return null;
+    }
 }

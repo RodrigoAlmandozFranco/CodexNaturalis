@@ -48,4 +48,5 @@ public interface GameInterface {
     List<PlayersColor> getAvailableColors();
     void removeColor(PlayersColor c);
     State getCurrentState();
+    Player getPlayer(String nickname);
 }

@@ -21,8 +21,8 @@ public abstract class Evaluator implements Serializable {
         return 0;
     }
 
-    public String toString(boolean small) {
-        if (small)
+    public String toString(Color color) {
+        if (color != null)
             return "  " + numPoints + "  ";
         else
             return toString();

@@ -72,9 +72,9 @@ public class EvaluatorPointsPerChair extends Evaluator{
     }
 
 
-    public String toString(boolean small) {
-        if (small)
-            return numPoints + " | L" ;
+    public String toString(Color color) {
+        if (color != null)
+            return "" + numPoints + color + " | L";
         else
             return toString();
     }

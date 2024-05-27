@@ -11,6 +11,7 @@ import it.polimi.ingsw.am42.model.evaluator.Evaluator;
 import it.polimi.ingsw.am42.model.exceptions.RequirementsNotMetException;
 import it.polimi.ingsw.am42.model.structure.Board;
 import it.polimi.ingsw.am42.model.structure.Position;
+import it.polimi.ingsw.am42.view.tui.ColorChooser;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -269,5 +270,10 @@ public class Player implements Serializable {
      */
     public void addGoalAchieved() {
         numberGoalsAchieved += 1;
+    }
+
+    @Override
+    public String toString() {
+        return (color==null ? "": color) + nickname + ColorChooser.RESET;
     }
 }

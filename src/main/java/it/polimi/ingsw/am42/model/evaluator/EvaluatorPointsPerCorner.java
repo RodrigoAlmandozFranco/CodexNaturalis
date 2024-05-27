@@ -26,9 +26,9 @@ public class EvaluatorPointsPerCorner extends Evaluator{
         return cornerCovered*numPoints;
     }
 
-    public String toString(boolean small) {
-        if (small)
-            return numPoints + " | C"  ;
+    public String toString(Color color) {
+        if (color != null)
+            return "" + numPoints + color + " | C" ;
         else
             return toString();
     }

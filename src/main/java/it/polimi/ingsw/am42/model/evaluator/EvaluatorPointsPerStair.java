@@ -43,9 +43,9 @@ public class EvaluatorPointsPerStair extends Evaluator {
 
 
 
-    public String toString(boolean small) {
-        if (small)
-            return numPoints + " | /" ;
+    public String toString(Color color) {
+        if (color != null)
+            return "" + numPoints + color + " | /" ;
         else
             return toString();
     }

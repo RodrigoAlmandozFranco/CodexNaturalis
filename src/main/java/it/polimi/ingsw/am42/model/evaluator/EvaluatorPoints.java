@@ -22,8 +22,8 @@ public class EvaluatorPoints extends Evaluator{
     }
 
 
-    public String toString(boolean small) {
-        if (small)
+    public String toString(Color color) {
+        if (color != null)
             return "  " + (numPoints != 0 ? numPoints : " ") + "  ";
         else
             return toString();
