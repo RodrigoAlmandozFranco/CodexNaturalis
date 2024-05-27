@@ -22,6 +22,7 @@ import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 
 /**
@@ -118,7 +119,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
             return stub.getAvailablePositions(p);
         } catch (RemoteException e) {
             updateDisconnection();
-            return null;
+            return new TreeSet<Position>();
         }
     }
 

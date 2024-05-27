@@ -22,4 +22,9 @@ public class ColorChooser {
     public static final String LIGHT_YELLOW = "\033[38;5;227m";
     public static final String GRAY = "\033[38;5;240m";
 
+
+    public static final String BRONZE = "\033[38;5;136m";
+    public static final String SILVER = "\033[38;5;15m";
+    public static final String GOLD = "\033[38;5;226m";
+
 }

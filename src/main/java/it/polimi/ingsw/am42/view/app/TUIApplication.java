@@ -5,9 +5,7 @@ import it.polimi.ingsw.am42.model.cards.types.Back;
 import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
-import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
-import it.polimi.ingsw.am42.model.enumeration.Resource;
-import it.polimi.ingsw.am42.model.enumeration.State;
+import it.polimi.ingsw.am42.model.enumeration.*;
 import it.polimi.ingsw.am42.model.exceptions.RequirementsNotMetException;
 import it.polimi.ingsw.am42.model.structure.Board;
 import it.polimi.ingsw.am42.model.structure.Position;
@@ -38,7 +36,7 @@ public class TUIApplication extends App {
     }
 
     private void printLogo() {
-        io.print( "\u001B[33m" +
+        io.print(
                 "\n" +
                 "                ▄████████  ▄██████▄  ████████▄     ▄████████ ▀████    ▐████▀                        \n" +
                 "               ███    ███ ███    ███ ███   ▀███   ███    ███   ███▌   ████▀                         \n" +
@@ -63,7 +61,7 @@ public class TUIApplication extends App {
         );
     }
 
-    private void createGame() {
+    private static void createGame() {
 
         int numPlayers = 0;
         try {
@@ -82,7 +80,7 @@ public class TUIApplication extends App {
         }
     }
 
-    private void connect() {
+    private static void connect() {
         String nickname;
         io.print("Connecting to game:");
 
@@ -100,11 +98,11 @@ public class TUIApplication extends App {
         }
     }
 
-    private void reconnect() {
+    private static void reconnect() {
 
         try {
 
-            nickname = io.getString("What will your nickname be?");
+            nickname = io.getString("What was your nickname in the previous game?");
 
             client.getView().setNickname(nickname);
             client.reconnect(nickname);
@@ -166,6 +164,82 @@ public class TUIApplication extends App {
         p.setPersonalGoal(goals.get(choice));
         client.chooseGoal(nickname,goals.get(choice));
 
+    }
+
+
+
+    private static void zoom(Position pos) {
+        Map<Direction, Face> nearby = client.getView().getPlayer(nickname).getBoard().getNearbyFaces(pos);
+        String cLeft = null;
+        String resLeft = " ";
+        if (nearby.containsKey(Direction.UPLEFT)) {
+            cLeft = nearby.get(Direction.UPLEFT).getColor().toString();
+            Resource res = nearby.get(Direction.UPLEFT).getCorner(Direction.DOWNRIGHT).getResource();
+            if (res!=null)
+                resLeft = res.toString();
+        }
+        String cRight = null;
+        String resRight = " ";
+        if (nearby.containsKey(Direction.UPRIGHT)) {
+            cRight = nearby.get(Direction.UPRIGHT).getColor().toString();
+            Resource res = nearby.get(Direction.UPRIGHT).getCorner(Direction.DOWNLEFT).getResource();
+            if (res!=null)
+                resRight = res.toString();
+        }
+
+        String to_print = "";
+
+        // 1
+        to_print += "         " + (cLeft==null ? " ": cLeft + "|");
+        to_print += "               ";
+        to_print += (cRight==null ? " ": cRight + "|") + "      \n"+ColorChooser.RESET;
+        // 2
+        to_print +=  ColorChooser.YELLOW  +"     +---+---------------+---+\n";
+        // 3
+        to_print += "     " + "| " + resLeft + (cLeft==null ? "  ": cLeft + " |");
+        to_print += "               ";
+        to_print += (cRight==null ? "  ": cRight + "| ") + resRight + ColorChooser.YELLOW + " |" + "\n";
+        // 4
+        to_print += "   " + (cLeft==null ? "  ": cLeft + "--") + ColorChooser.YELLOW + "+" + (cLeft==null ? "    ": cLeft + "---+");
+        to_print += "               ";
+        to_print += (cRight==null ? "    ": cRight + "+---") + ColorChooser.YELLOW + "+" + (cRight==null ? "": cRight + "--") + "\n";
+        // 5 6 7
+        for (int i = 0; i < 3; i++)
+            to_print += "     " + ColorChooser.YELLOW + "|" + "                       " + "|" + ColorChooser.RESET + "\n";
+
+        cLeft = null;
+        resLeft = " ";
+        if (nearby.containsKey(Direction.DOWNLEFT)) {
+            cLeft = nearby.get(Direction.DOWNLEFT).getColor().toString();
+            Resource res = nearby.get(Direction.DOWNLEFT).getCorner(Direction.UPRIGHT).getResource();
+            if (res!=null)
+                resLeft = res.toString();
+        }
+        cRight = null;
+        resRight = " ";
+        if (nearby.containsKey(Direction.DOWNRIGHT)) {
+            cRight = nearby.get(Direction.DOWNRIGHT).getColor().toString();
+            Resource res = nearby.get(Direction.DOWNRIGHT).getCorner(Direction.UPLEFT).getResource();
+            if (res!=null)
+                resRight = res.toString();
+        }
+
+        // 9
+        to_print += "   " + (cLeft==null ? "  ": cLeft + "--") + ColorChooser.YELLOW + "+" + (cLeft==null ? "    ": cLeft + "---+");
+        to_print += "               ";
+        to_print += (cRight==null ? "    ": cRight + "+---") + ColorChooser.YELLOW + "+" + (cRight==null ? "": cRight + "--") + "\n";
+        // 10
+        to_print += "     " + ColorChooser.YELLOW  + "| " + resLeft + (cLeft==null ? "  ": cLeft + " |");
+        to_print += "               ";
+        to_print += (cRight==null ? "  ": cRight + "| ") + resRight +ColorChooser.YELLOW  + " |" + "\n";
+        // 11
+        to_print +=  ColorChooser.YELLOW  +"     +---+---------------+---+\n";
+        // 12
+        to_print += "         " + (cLeft==null ? " ": cLeft + "|");
+        to_print += "               ";
+        to_print += (cRight==null ? " ": cRight + "|") + "      \n"+ColorChooser.RESET;
+
+        io.print(to_print);
     }
 
     /**
@@ -333,7 +407,7 @@ public class TUIApplication extends App {
 
         question = "Choose one of the face\n";
 
-        choice = io.getInt(question);
+        int choice = io.getInt(question);
         while (choice < 0 || choice >= p.getHand().size()*2) {
             io.print("Invalid choice");
             choice = io.getInt(question);
@@ -437,7 +511,7 @@ public class TUIApplication extends App {
 
 
 
-    private void handleConnection() {
+    private static void handleConnection() {
         ConnectionState c;
         try {
             c = client.getGameInfo();
@@ -457,14 +531,20 @@ public class TUIApplication extends App {
                 io.print("Creating new game...");
                 createGame();
             }
-        }
-        else {
+        } else if (c.equals(ConnectionState.LOADING)) {
+            reconnect();
+
+        } else {
             io.print("Creating new game...");
             createGame();
         }
     }
 
     public static void selectChoice() {
+
+        if (client.getView().getCurrentState() == null)
+            io.print("Waiting for Players");
+
         List<ChatMessage> newMessage = client.getView().getTmpMessages();
         String newMessages = "";
         if(newMessage != null && !newMessage.isEmpty())
@@ -494,14 +574,53 @@ public class TUIApplication extends App {
     }
 
 
+    private void printFinalStandings() {
+
+        io.print("\n" +
+                "----------------------------------------------------------------------------\n" +
+                "    _______             __   _____ __                  ___                 \n" +
+                "   / ____(_)___  ____ _/ /  / ___// /_____ _____  ____/ (_)___  ____ ______\n" +
+                "  / /_  / / __ \\/ __ `/ /   \\__ \\/ __/ __ `/ __ \\/ __  / / __ \\/ __ `/ ___/\n" +
+                " / __/ / / / / / /_/ / /   ___/ / /_/ /_/ / / / / /_/ / / / / / /_/ (__  ) \n" +
+                "/_/   /_/_/ /_/\\__,_/_/   /____/\\__/\\__,_/_/ /_/\\__,_/_/_/ /_/\\__, /____/  \n" +
+                "                                                             /____/        \n" +
+                "----------------------------------------------------------------------------\n");
+
+        List<PlayerClientModel> standings = client.getView().getPlayers();
+        standings.sort(Comparator.comparingInt(PlayerClientModel::getPoints));
+
+        Stack<String> colors = new Stack<>();
+        List<String> medals = Arrays.asList(ColorChooser.GOLD, ColorChooser.SILVER, ColorChooser.BRONZE, ColorChooser.PURPLE);
+
+        for(int i =0; i< client.getView().getNumberPlayers(); i++) {
+            colors.push(medals.get(i));
+        }
+        long time = 1000;
+        for (PlayerClientModel p : standings) {
+            String message = colors.pop() + p.getNickname() + (p.getNickname().equals(nickname) ? " (You)" : "") + " = " + p.getPoints() + ColorChooser.RESET + "\n";
+            try {
+                Thread.sleep(time);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            time *= (long) 1.30;
+            io.print(message);
+
+        }
+    }
+
     private void  updatePlayer() {
         while (true) {
             checkDisconnection();
 
             if (client.getView().getNewUpdate() && client.getView().getCurrentPlayer()!=null){
                 String current = client.getView().getCurrentPlayer().getNickname();
-                if (current.equals(nickname)) {
-                    System.out.println("\n" +
+                if (client.getView().getCurrentState().equals(State.LAST)) {
+                        printFinalStandings();
+                }
+
+                else if (current.equals(nickname)) {
+                    io.print("\n" +
                             "-------------------------------------------------\n" +
                             "                              __                 \n" +
                             "   __  ______  __  _______   / /___  ___________ \n" +
