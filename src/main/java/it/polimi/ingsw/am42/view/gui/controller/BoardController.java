@@ -15,6 +15,7 @@ import it.polimi.ingsw.am42.view.clientModel.GameClientModel;
 import it.polimi.ingsw.am42.view.clientModel.PlayerClientModel;
 import it.polimi.ingsw.am42.view.gui.HelloApplication;
 import it.polimi.ingsw.am42.view.gui.utils.ClientHolder;
+import it.polimi.ingsw.am42.view.gui.utils.Coordinates;
 import it.polimi.ingsw.am42.view.gui.utils.points.ScreenPosition;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -146,8 +147,8 @@ public class BoardController implements Initializable {
     ImageView tokenOnStarting;
 
     GoalCard chosenGoal;
-    double constOffsetX = 97.00;
-    double constOffsetY = 48.00;
+    double constOffsetX = 80.5;
+    double constOffsetY = 40.5;
 
     List<Button> availablePositionsButtons;
     Button chosenPositionButton;
@@ -176,6 +177,11 @@ public class BoardController implements Initializable {
 
     public BoardController() {
     }
+
+
+    // 669 564
+
+
 
     //Start setup BoardController
 
@@ -309,6 +315,9 @@ public class BoardController implements Initializable {
             playersBoardButtons.get(i - 1).setOpacity(1);
             playersBoardButtons.get(i - 1).setText(nicknames.get(i) + "'s board");
         }
+
+        for(int i = nicknames.size() - 1; i < playersBoardButtons.size(); i++)
+            playersBoardButtons.remove(playersBoardButtons.get(i));
 
         messagesThread = new Thread(this::seeMessages);
         messagesThread.start();
@@ -731,9 +740,10 @@ public class BoardController implements Initializable {
 
         placeCard(chosenCard.getBack());
     }
-    String idCard;
+
     private void placeCard(Face face){
         String value = chosenPositionButton.getText();
+        idCard = value;
         String x = "", y = "";
         for (int i = 0; i < value.length(); i++) {
             if (value.charAt(i) == ',') {
@@ -741,7 +751,7 @@ public class BoardController implements Initializable {
                 y = value.substring(i+1).trim();
             }
         }
-        idCard = value;
+
         Position chosenPosition = new Position(Integer.parseInt(x), Integer.parseInt(y));
 
         chosenCard = null;
@@ -764,6 +774,10 @@ public class BoardController implements Initializable {
         handCard3.setEffect(null);
         Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(face.getSrcImage())));
         startingCard.setImage(image);
+        startingCard.setLayoutX(boardPane.getPrefWidth()/2 - startingCard.getFitWidth()/2 + 1);
+        startingCard.setLayoutY(boardPane.getPrefHeight()/2 - startingCard.getFitHeight()/2);
+        tokenOnStarting.setLayoutX(boardPane.getPrefWidth()/2 - tokenOnStarting.getFitWidth()/2);
+        tokenOnStarting.setLayoutY(boardPane.getPrefHeight()/2 - tokenOnStarting.getFitHeight()/2 - startingCard.getFitHeight()/2);
         chosenCard = null;
     }
 
@@ -832,7 +846,17 @@ public class BoardController implements Initializable {
             double finalHeight = boardPane.getChildren().getFirst().getLayoutBounds().getHeight();
 
             if((offsetX < 0)||(offsetX + finalWidth > boardPane.getPrefWidth())||(offsetY < 0)||(offsetY + finalHeight > boardPane.getPrefHeight())) {
-                resize();
+                Platform.runLater(() -> {
+                    List<Button> buttonsToRemove = new ArrayList<>(availablePositionsButtons);
+                    for (Button b : buttonsToRemove) {
+                        boardPane.getChildren().remove(b);
+                        b.setEffect(null);
+                    }
+                    availablePositionsButtons.clear();
+                });
+                resize(boardPane, startingCard, tokenOnStarting, constOffsetX, constOffsetY, placedCards);
+                constOffsetX = constOffsetX * 0.90;
+                constOffsetY = constOffsetY * 0.90;
                 return false;
             }
             Platform.runLater(() -> {
@@ -861,30 +885,35 @@ public class BoardController implements Initializable {
         return true;
     }
 
-    private void resize (){
-        Platform.runLater(() -> {
-            List<Button> buttonsToRemove = new ArrayList<>(availablePositionsButtons);
-            for (Button b : buttonsToRemove) {
-                boardPane.getChildren().remove(b);
-                b.setEffect(null);
-            }
-            availablePositionsButtons.clear();
-        });
-        double newHeight = (boardPane.getChildren().getFirst().getLayoutBounds().getHeight())*0.75;
-        double newWidth = (boardPane.getChildren().getFirst().getLayoutBounds().getWidth())*0.75;
+    private void resize (Pane pane, ImageView sCard, ImageView token, double offX, double offY, List<ImageView> cardsToBePlaced){
+        double newHeight, newWidth;
+        if(pane == boardPane) {
+            newHeight = (pane.getChildren().getFirst().getLayoutBounds().getHeight())*0.90;
+            newWidth = (pane.getChildren().getFirst().getLayoutBounds().getWidth())*0.90;
+        } else {
+            newHeight = sCard.getFitHeight()*0.9;
+            newWidth = sCard.getFitWidth()*0.9;
+        }
 
-        constOffsetX = constOffsetX * 0.75;
-        constOffsetY = constOffsetY * 0.75 - 0.50;
 
-        startingCard.setFitWidth(newWidth);
-        startingCard.setFitHeight(newHeight);
-        startingCard.setLayoutX(boardPane.getPrefWidth()/2-newWidth/2);
-        startingCard.setLayoutY((boardPane.getPrefHeight()/2-newHeight/2));
+        offX = offX * 0.9;
+        offY = offY * 0.9;
 
-        printImages(newWidth, newHeight, placedCards, constOffsetX, constOffsetY, startingCard);
+        sCard.setFitWidth(newWidth);
+        sCard.setFitHeight(newHeight);
+        sCard.setLayoutX(pane.getPrefWidth()/2-newWidth/2);
+        sCard.setLayoutY((pane.getPrefHeight()/2-newHeight/2));
+        token.setFitWidth(token.getFitWidth()*0.90);
+        token.setFitHeight(token.getFitHeight()*0.90);
+
+        token.setLayoutX(pane.getPrefWidth()/2 - token.getFitWidth()/2 + 1);
+        token.setLayoutY(pane.getPrefHeight()/2 - token.getFitHeight()/2 - sCard.getFitHeight()/2);
+
+        printImages(newWidth, newHeight, cardsToBePlaced, offX, offY, sCard);
 
     }
     List<ImageView> placedCards;
+    String idCard;
 
     private void printImages (double newWidth, double newHeight, List<ImageView> cardsToBePlaced, double offX, double offY, ImageView start){
         for(ImageView image : cardsToBePlaced){
@@ -892,8 +921,8 @@ public class BoardController implements Initializable {
             image.setFitWidth(newWidth);
             image.setFitHeight(newHeight);
             String value = image.getId();
-            double offsetX = start.getLayoutX();
-            double offsetY = start.getLayoutY();
+//            double offsetX = start.getLayoutX();
+//            double offsetY = start.getLayoutY();
 
             String x = "", y = "";
 
@@ -904,36 +933,37 @@ public class BoardController implements Initializable {
                 }
             }
 
-            int LayoutX = Integer.parseInt(x);
-            int LayoutY = Integer.parseInt(y);
+            int positionX = Integer.parseInt(x);
+            int positionY = Integer.parseInt(y);
 
+            Position position = new Position(positionX, positionY);
+            Coordinates coords = switchFromPositionToCoords(position, offX, offY, start);
+//            while (LayoutX > 0) {
+//                offsetX += offX;
+//                offsetY -= offY;
+//                LayoutX--;
+//            }
+//
+//            while (LayoutX < 0) {
+//                offsetX -= offX;
+//                offsetY += offY;
+//                LayoutX++;
+//            }
+//
+//            while (LayoutY > 0) {
+//                offsetY -= offY;
+//                offsetX -= offX;
+//                LayoutY--;
+//            }
+//
+//            while (LayoutY < 0) {
+//                offsetY += offY;
+//                offsetX += offX;
+//                LayoutY++;
+//            }
 
-            while (LayoutX > 0) {
-                offsetX += offX;
-                offsetY -= offY;
-                LayoutX--;
-            }
-
-            while (LayoutX < 0) {
-                offsetX -= offX;
-                offsetY += offY;
-                LayoutX++;
-            }
-
-            while (LayoutY > 0) {
-                offsetY -= offY;
-                offsetX -= offX;
-                LayoutY--;
-            }
-
-            while (LayoutY < 0) {
-                offsetY += offY;
-                offsetX += offX;
-                LayoutY++;
-            }
-
-            double finalOffsetX = offsetX;
-            double finalOffsetY = offsetY;
+            double finalOffsetX = coords.getX();
+            double finalOffsetY = coords.getY();
 
 
             Platform.runLater(() -> {
@@ -944,7 +974,6 @@ public class BoardController implements Initializable {
         }
 
     }
-
 
     private void addFaceToBoard(Face face) {
         handCard1.setEffect(null);
@@ -1264,21 +1293,145 @@ public class BoardController implements Initializable {
         }
     }
 
+    private Coordinates switchFromPositionToCoords(Position position, double offX, double offY, ImageView sCard) {
+        int x = position.getX();
+        int y = position.getY();
+
+        double tmpx = sCard.getLayoutX();
+        double tmpy = sCard.getLayoutY();
+
+        while (x > 0) {
+            tmpx += offX;
+            tmpy -= offY;
+            x--;
+        }
+
+        while (x < 0) {
+            tmpx -= offX;
+            tmpy += offY;
+            x++;
+        }
+
+        while (y > 0) {
+            tmpy -= offY;
+            tmpx -= offX;
+            y--;
+        }
+
+        while (y < 0) {
+            tmpy += offY;
+            tmpx += offX;
+            y++;
+        }
+
+        return new Coordinates(tmpx, tmpy);
+
+    }
+
+    private Image getTokenColor(PlayersColor color) {
+        switch (color) {
+            case RED -> {
+                return new Image(Objects.requireNonNull(getClass().getResourceAsStream("/it/polimi/ingsw/am42/tokens/red.png")));
+            }
+            case BLUE -> {
+                return new Image(Objects.requireNonNull(getClass().getResourceAsStream("/it/polimi/ingsw/am42/tokens/blue.png")));
+            }
+
+            case YELLOW -> {
+               return new Image(Objects.requireNonNull(getClass().getResourceAsStream("/it/polimi/ingsw/am42/tokens/yellow.png")));
+            }
+
+            case GREEN -> {
+                return new Image(Objects.requireNonNull(getClass().getResourceAsStream("/it/polimi/ingsw/am42/tokens/green.png")));
+            }
+        }
+        return null;
+    }
 
 
-    public void showOtherBoardPlayer(int index){
+    public void showOtherBoardPlayer(String name, int index){
         for(Button b : playersBoardButtons){
             b.setOpacity(0.5);
             b.setDisable(true);
         }
-        //todo: how to add a face to a board in the another pane
-        for(Face face : gameClientModel.getPlayers().get(index).getBoard().getFaces()){
-            //addFaceToBoard(face);
-            //todo
+
+        PlayerClientModel player = gameClientModel.getPlayer(name);
+
+        if(myPlayer.equals(gameClientModel.getCurrentPlayer())) disableHandAndControlButtons();
+
+        seeStandingsButton.setDisable(true);
+        boardPane.setOpacity(0);
+        List<ImageView> cardToBePlaced = new ArrayList<>();
+        ImageView sCard = null;
+        double offXOtherPlayer = 80.5;
+        double offYOtherPlayer = 40.5;
+
+        ImageView token = new ImageView(getTokenColor(player.getColor()));
+
+
+
+        for(Face face : player.getBoard().getFaces()){
+
+            if(player.getBoard().getFaces().getFirst().equals(face)) {
+                Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(face.getSrcImage())));
+                sCard = new ImageView(image);
+                ImageView finalSCard = sCard;
+                Platform.runLater(() -> {
+                    boardPaneOtherPlayer.getChildren().add(finalSCard);
+                    boardPaneOtherPlayer.getChildren().add(token);
+
+                });
+                finalSCard.setFitWidth(110);
+                finalSCard.setFitHeight(70);
+                finalSCard.setLayoutX(boardPaneOtherPlayer.getPrefWidth()/2 - finalSCard.getFitWidth()/2 + 1);
+                finalSCard.setLayoutY(boardPaneOtherPlayer.getPrefHeight()/2 - finalSCard.getFitHeight()/2);
+                token.setFitWidth(32);
+                token.setFitHeight(32);
+                token.setLayoutX(boardPaneOtherPlayer.getPrefWidth()/2 - token.getFitWidth()/2 + 1);
+                token.setLayoutY(boardPaneOtherPlayer.getPrefHeight()/2 - token.getFitHeight()/2 - sCard.getFitHeight()/2);
+
+            }
+            else{
+                Coordinates coords = switchFromPositionToCoords(face.getPosition(), offXOtherPlayer, offYOtherPlayer, sCard);
+                Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(face.getSrcImage())));
+                ImageView card = new ImageView(image);
+                Platform.runLater(() -> {
+                    boardPaneOtherPlayer.getChildren().add(card);
+                });
+
+                card.setLayoutX(coords.getX());
+                card.setLayoutY(coords.getY());
+                card.setFitWidth(110);
+                card.setFitHeight(70);
+                String id = face.getPosition().getX() + ", " + face.getPosition().getY();
+                card.setId(id);
+                cardToBePlaced.add(card);
+
+            }
+
         }
 
-        boardLabelOtherPlayer.setText(gameClientModel.getPlayers().get(index).getNickname() + "'s board");
+        boolean finished = false;
+
+        while(!finished) {
+            finished = true;
+            for(ImageView image : cardToBePlaced){
+                double x = image.getLayoutX();
+                double y = image.getLayoutY();
+
+                if((x < 0)||(x + image.getFitWidth() > boardPaneOtherPlayer.getPrefWidth())||(y < 0)||(y + image.getFitHeight() > boardPaneOtherPlayer.getPrefHeight())) {
+                    resize(boardPaneOtherPlayer, sCard, token, offXOtherPlayer, offYOtherPlayer, cardToBePlaced);
+                    offXOtherPlayer = offXOtherPlayer * 0.9;
+                    offYOtherPlayer = offYOtherPlayer * 0.9;
+                    finished = false;
+                    break;
+                }
+            }
+        }
+        boardLabelOtherPlayer.setOpacity(1);
+        boardLabelOtherPlayer.setText(player.getNickname() + "'s board");
         boardLabelOtherPlayer.setStyle(playersBoardButtons.get(index).getStyle());
+
 
         boardPaneOtherPlayer.setOpacity(1);
         boardPaneOtherPlayer.setDisable(false);
@@ -1290,25 +1443,42 @@ public class BoardController implements Initializable {
                         b.setOpacity(1);
                         b.setDisable(false);
                     }
+                    if(myPlayer.equals(gameClientModel.getCurrentPlayer()) &&
+                            gameClientModel.getCurrentState().equals(State.PLACE)) enableHandAndControlButtons();
                     boardPaneOtherPlayer.setOpacity(0);
                     boardPaneOtherPlayer.setDisable(true);
+                    boardPane.setOpacity(1);
+                    boardPaneOtherPlayer.getChildren().clear();
+                    boardLabelOtherPlayer.setOpacity(0);
+
                 }
         ));
         timeline.setCycleCount(1);
         timeline.play();
     }
 
+    // prendo per copia i getChildren e se si fa la resize allora non faccio nulla,
+    // altrimenti metto i getChildren precedenti avuti grazie alla copia
+
+
+
 
     public void player1BoardButtonAction(ActionEvent event) {
-        showOtherBoardPlayer(0);
+        String text = player1Board.getText();
+        text = text.substring(0, text.length() - 8);
+        showOtherBoardPlayer(text, 0);
     }
 
     public void player2BoardButtonAction(ActionEvent event) {
-        showOtherBoardPlayer(1);
+        String text = player2Board.getText();
+        text = text.substring(0, text.length() - 8);
+        showOtherBoardPlayer(text, 1);
     }
 
     public void player3BoardButtonAction(ActionEvent event) {
-        showOtherBoardPlayer(2);
+        String text = player3Board.getText();
+        text = text.substring(0, text.length() - 8);
+        showOtherBoardPlayer(text, 2);
     }
 
     private void loadAllBoard() {
@@ -1366,9 +1536,6 @@ public class BoardController implements Initializable {
 
                 updatePickableCards();
 
-
-
-                //todo points + boards
 
 
                 String finalText = text;
