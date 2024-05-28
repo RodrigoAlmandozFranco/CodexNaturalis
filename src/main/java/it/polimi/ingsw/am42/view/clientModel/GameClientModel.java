@@ -86,6 +86,7 @@ public class GameClientModel {
                 usableMethods.add(MethodChoice.SEECARDS);
                 usableMethods.add(MethodChoice.SEEBOARD);
                 usableMethods.add(MethodChoice.SEEGOALS);
+                usableMethods.add(MethodChoice.SEEPICKABLE);
                 if (currentPlayer.getNickname().equals(nickname))
                     usableMethods.add(MethodChoice.PLACE);
 
@@ -95,6 +96,7 @@ public class GameClientModel {
                 usableMethods.add(MethodChoice.SEECARDS);
                 usableMethods.add(MethodChoice.SEEBOARD);
                 usableMethods.add(MethodChoice.SEEGOALS);
+                usableMethods.add(MethodChoice.SEEPICKABLE);
                 if (currentPlayer.getNickname().equals(nickname))
                     usableMethods.add(MethodChoice.PICK);
             }

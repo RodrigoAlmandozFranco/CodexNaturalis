@@ -36,8 +36,6 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
     private GameClientModel view;
     private String nickname;
     public RMIClient(String host, int port) throws RemoteException {
-        //TODO da riga di comando ricevo se voglio un view GUI o TUI
-        //this.view = new View(this);
         try {
             this.registry = LocateRegistry.getRegistry(host, port);// si potrebbe mettere anche la porta
             this.stub = (RMISpeaker) registry.lookup("RMIHandler");
@@ -47,13 +45,14 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
             e.printStackTrace();
         }
         this.nickname = "Still missing";
+        new Thread(this::checkServerStatus).start();
     }
 
     public ConnectionState getGameInfo(){
         try {
             return stub.getGameInfo();
         } catch (RemoteException e) {
-            updateDisconnection();
+            serverDown();
             return null;
         }
 
@@ -75,7 +74,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
             if (originalException instanceof NumberPlayerWrongException)
                 throw (NumberPlayerWrongException) originalException;
 
-            updateDisconnection();
+            serverDown();
             return -1;
         }
     }
@@ -92,7 +91,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
             if (originalException instanceof NicknameAlreadyInUseException)
                 throw (NicknameAlreadyInUseException) originalException;
 
-            updateDisconnection();
+            serverDown();
             return false;
         }
     }
@@ -109,7 +108,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
             if (originalException instanceof NicknameAlreadyInUseException)
                 throw (NicknameAlreadyInUseException) originalException;
 
-            updateDisconnection();
+            serverDown();
             return false;
         }
     }
@@ -118,7 +117,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         try {
             return stub.getAvailablePositions(p);
         } catch (RemoteException e) {
-            updateDisconnection();
+            serverDown();
             return new TreeSet<Position>();
         }
     }
@@ -131,7 +130,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
             if (originalException instanceof RequirementsNotMetException)
                 throw (RequirementsNotMetException) originalException;
 
-            updateDisconnection();
+            serverDown();
             return false;
         }
     }
@@ -140,7 +139,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         try {
             return stub.placeStarting(p, face);
         } catch (RemoteException e) {
-            updateDisconnection();
+            serverDown();
             return null;
         }
     }
@@ -149,7 +148,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         try {
             return stub.chooseColor(p, color);
         } catch (RemoteException e) {
-            updateDisconnection();
+            serverDown();
             return null;
         }
     }
@@ -158,7 +157,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         try {
             stub.chooseGoal( p, goal);
         } catch (RemoteException e) {
-            updateDisconnection();
+            serverDown();
         }
     }
 
@@ -166,7 +165,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         try {
             stub.pick(p, card);
         } catch (RemoteException e) {
-            updateDisconnection();
+            serverDown();
         }
     }
 
@@ -179,7 +178,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         try {
             return stub.getWinner();
         } catch (RemoteException e) {
-            updateDisconnection();
+            serverDown();
             return null;
         }
     }
@@ -194,7 +193,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         try {
             stub.sendChatMessage(message);
         } catch (RemoteException e) {
-            updateDisconnection();
+            serverDown();
         }
     }
 
@@ -208,11 +207,23 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
     }
 
     public void checkServerStatus() {
-        //todo
+        while (true) {
+            try {
+                stub.getStatus();
+                Thread.sleep(10000);
+            } catch (InterruptedException | RemoteException e) {
+                serverDown();
+                break;
+            }
+        }
+    }
+
+    public void serverDown() {
+        view.setServerDown(true);
     }
 
     public void updateDisconnection(){
-        view.setGameAborted(true);
+         view.setGameAborted(true);
     }
 
 
@@ -225,7 +236,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         try {
             stub.playerDisconnected();
         } catch (RemoteException e) {
-            updateDisconnection();
+            serverDown();
         }
         updateDisconnection();
     }

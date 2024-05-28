@@ -57,12 +57,17 @@ public class PlayableCard extends Card {
     @Override
     public String toString() {
         String to_print = "";
-        if (visible) {
-            to_print += "Front:\n";
-            to_print += front;
-        }
-        to_print += "\nBack:\n";
-        to_print += back;
+
+        to_print += "Front:                      Back:\n";
+        to_print += front.firstRow("\t") + back.firstRow("\n");
+        to_print += front.secondRow("\t") + back.secondRow("\n");
+        to_print += front.thirdRow("\t") + back.thirdRow("\n");
+        to_print += front.fourthRow("\t") + back.fourthRow("\n");
+        to_print += front.fifthRow("\t") + back.fifthRow("\n");
+        to_print += front.sixthRow("\t") + back.sixthRow("\n");
+        to_print += front.seventhRow("\t") + back.seventhRow("\n");
+        to_print += front.eighthRow("\t") + back.eighthRow("\n");
+        to_print += front.ninthRow("\t") + back.ninthRow("\n");
 
         return to_print;
     }

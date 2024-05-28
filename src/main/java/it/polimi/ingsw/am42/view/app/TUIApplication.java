@@ -358,9 +358,7 @@ public class TUIApplication extends App {
         int i = 0;
         for (PlayableCard c : p.getHand()) {
             c.setVisibility(true);
-            io.print(i + " : \n" + c.getFront());
-            i++;
-            io.print(i + " : \n" + c.getBack());
+            io.print(i + " : \n" + c);
             i++;
         }
     }
@@ -410,27 +408,35 @@ public class TUIApplication extends App {
         seeHand();
         PlayerClientModel p = client.getView().getPlayer(nickname);
 
-        question = "Choose one of the face\n";
+        question = "Choose one of the cards\n";
 
         int choice = io.getInt(question);
-        while (choice < 0 || choice >= p.getHand().size()*2) {
+        while (choice < 0 || choice >= p.getHand().size()) {
             io.print("Invalid choice");
             choice = io.getInt(question);
         }
 
-        boolean faceSide = (choice%2 == 0) ? true : false;
+        boolean faceSide = io.getBoolean("Would you like to place the starting card face up??");
+
         try {
             if (faceSide)
-                client.place(nickname, p.getHand().get(choice/2).getFront(), pos);
+                client.place(nickname, p.getHand().get(choice).getFront(), pos);
             else
-                client.place(nickname, p.getHand().get(choice/2).getBack(), pos);
+                client.place(nickname, p.getHand().get(choice).getBack(), pos);
         } catch (RequirementsNotMetException e) {
             io.print(e.getMessage());
             place();
         }
     }
 
-    public static void seePickableCards(List<PlayableCard> cards) {
+    public static void seePickableCards() {
+        List<PlayableCard> cards = new ArrayList<>();
+        cards.addAll(client.getView().getPickableResourceCards());
+        cards.addAll(client.getView().getPickableGoldCards());
+        seePickableCards(cards);
+    }
+
+    private static void seePickableCards(List<PlayableCard> cards) {
         int i = 0;
         for (PlayableCard c : cards) {
             if(c.getVisibility())
@@ -441,9 +447,12 @@ public class TUIApplication extends App {
         }
     }
     public static void pick() {
+        seeResources(nickname);
+
         List<PlayableCard> cards = new ArrayList<>();
         cards.addAll(client.getView().getPickableResourceCards());
         cards.addAll(client.getView().getPickableGoldCards());
+
         seePickableCards(cards);
 
         String question = "Select which card to pick\n";
@@ -550,6 +559,7 @@ public class TUIApplication extends App {
         if (client.getView().getCurrentState() == null)
             io.print("Waiting for Players");
 
+
         List<ChatMessage> newMessage = client.getView().getTmpMessages();
         String newMessages = "";
         if(newMessage != null && !newMessage.isEmpty())
@@ -575,6 +585,11 @@ public class TUIApplication extends App {
                 io.print("Exiting game...");
                 System.exit(0);
             }
+        }
+        if (client.getView().getServerDown()) {
+            io.print("Server has fallen");
+            io.print("Exiting game...");
+            System.exit(0);
         }
     }
 
@@ -625,16 +640,29 @@ public class TUIApplication extends App {
                 }
 
                 else if (current.equals(nickname)) {
-                    io.print("\n" +
-                            "-------------------------------------------------\n" +
-                            "                              __                 \n" +
-                            "   __  ______  __  _______   / /___  ___________ \n" +
-                            "  / / / / __ \\/ / / / ___/  / __/ / / / ___/ __ \\\n" +
-                            " / /_/ / /_/ / /_/ / /     / /_/ /_/ / /  / / / /\n" +
-                            " \\__, /\\____/\\__,_/_/      \\__/\\__,_/_/  /_/ /_/ \n" +
-                            "/____/                                           \n" +
-                            "-------------------------------------------------\n");
-                    System.out.println("Press 0 to reload your choices");
+                    if (client.getView().isTurnFinal()) {
+                        io.print(ColorChooser.RED +
+                                "\n" +
+                                "--------------------------------------------------\n" +
+                                "    _______             __   ______               \n" +
+                                "   / ____(_)___  ____ _/ /  /_  __/_  ___________ \n" +
+                                "  / /_  / / __ \\/ __ `/ /    / / / / / / ___/ __ \\\n" +
+                                " / __/ / / / / / /_/ / /    / / / /_/ / /  / / / /\n" +
+                                "/_/   /_/_/ /_/\\__,_/_/    /_/  \\__,_/_/  /_/ /_/ \n" +
+                                "--------------------------------------------------\n" + ColorChooser.RESET);
+                    }
+                    else {
+                        io.print("\n" +
+                                "-------------------------------------------------\n" +
+                                "                              __                 \n" +
+                                "   __  ______  __  _______   / /___  ___________ \n" +
+                                "  / / / / __ \\/ / / / ___/  / __/ / / / ___/ __ \\\n" +
+                                " / /_/ / /_/ / /_/ / /     / /_/ /_/ / /  / / / /\n" +
+                                " \\__, /\\____/\\__,_/_/      \\__/\\__,_/_/  /_/ /_/ \n" +
+                                "/____/                                           \n" +
+                                "-------------------------------------------------\n");
+                    }
+                    io.print("Press 0 to reload your choices");
                 }
                 else {
                     PlayersColor c = client.getView().getPlayer(current).getColor();
@@ -659,8 +687,8 @@ public class TUIApplication extends App {
 
         handleConnection();
 
-        Thread threadGame = new Thread(this::updatePlayer);
-        threadGame.start();
+        new Thread(this::updatePlayer).start();
+
 
         while (true)
             selectChoice();

@@ -81,37 +81,38 @@ public class Back extends Face {
         return resources;
     }
 
+    public String fourthRow(String sep){
+        if (sep == null)
+            sep = "\n";
 
-    @Override
-    protected String middlePart() {
         String colorStr = color.toString();
         String to_print = colorStr;
-        if (resource.isEmpty())
-            for (int i=0; i<3; i++)
-                to_print += "|                       |\n";
-        else {
-            // 1
-            to_print += "|" + " ".repeat(10 - resource.size())
-                    + "+-" + "--".repeat(resource.size()) + "+"
-                    + " ".repeat(10 - resource.size()) + "|\n";
-            // 2
-            to_print += "|" + " ".repeat(10 - resource.size())
-                    + "| ";
-            for (Resource r : resource)
-                to_print += r +colorStr + " ";
-            to_print += "|"+ " ".repeat(10 - resource.size()) + "|\n";
-            // 3
-            to_print += "|" + " ".repeat(10 - resource.size())
-                    + "+-" + "--".repeat(resource.size()) + "+"
-                    + " ".repeat(10 - resource.size()) + "|\n";
-        }
 
+        to_print += "|" + " ".repeat(10 - resource.size())
+                + "+-" + "--".repeat(resource.size()) + "+"
+                + " ".repeat(10 - resource.size()) + "|" + sep;
+        return  to_print;
+    }
 
+    public String fifthRow(String sep){
+        if (sep == null)
+            sep = "\n";
 
-        to_print += ColorChooser.RESET;
+        String colorStr = color.toString();
+        String to_print = colorStr;
+
+        to_print += "|" + " ".repeat(10 - resource.size())
+                + "| ";
+        for (Resource r : resource)
+            to_print += r +colorStr + " ";
+        to_print += "|"+ " ".repeat(10 - resource.size()) + "|" +sep;
+
         return to_print;
+    }
 
-
+    public String sixthRow(String sep){
+        // Same String
+        return fourthRow(sep);
     }
 
 

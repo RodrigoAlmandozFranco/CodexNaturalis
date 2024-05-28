@@ -15,6 +15,7 @@ public enum MethodChoice {
     SEECARDS,
     SEESTANDINGS,
     SEEGOALS,
+    SEEPICKABLE,
     PLACE,
     PICK,
     SEECHAT,
@@ -41,6 +42,9 @@ public enum MethodChoice {
             }
             case SEECARDS -> {
                 return "See your cards";
+            }
+            case SEEPICKABLE -> {
+                return  "See pickable cards";
             }
             case SEESTANDINGS -> {
                 return "See the standings";
@@ -79,7 +83,6 @@ public enum MethodChoice {
             case CHOOSECOLOR -> {
                 return TUIApplication::chooseColor;
             }
-
             case CHOOSEGOAL -> {
                 return TUIApplication::chooseGoal;
             }
@@ -94,6 +97,9 @@ public enum MethodChoice {
             }
             case SEEGOALS -> {
                 return TUIApplication::seeGoals;
+            }
+            case SEEPICKABLE ->  {
+                return TUIApplication::seePickableCards;
             }
             case PLACE -> {
                 return TUIApplication::place;
