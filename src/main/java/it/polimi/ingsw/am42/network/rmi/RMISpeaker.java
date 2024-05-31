@@ -57,4 +57,6 @@ public interface RMISpeaker extends Remote {
     public void playerDisconnected() throws RemoteException;
 
     public void sendChatMessage(ChatMessage chatMessage) throws RemoteException;
+
+    void getStatus() throws RemoteException;
 }

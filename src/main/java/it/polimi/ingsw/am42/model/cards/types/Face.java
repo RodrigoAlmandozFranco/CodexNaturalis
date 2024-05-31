@@ -128,12 +128,24 @@ public abstract class Face implements Serializable {
         this.id = id;
     }
 
-    private String upperPart() {
+    public String firstRow(String sep) {
+        if (sep == null)
+            sep = "\n";
+
         String colorStr = color.toString();
         String to_print = colorStr;
 
-        // 1
-        to_print += "+---+---------------+---+\n";
+        to_print += "+---+---------------+---+" + sep;
+
+        return  to_print;
+    }
+
+    public String secondRow(String sep) {
+        if (sep == null)
+            sep = "\n";
+
+        String colorStr = color.toString();
+        String to_print = colorStr;
 
         // 2
         if (getCorner(Direction.UPLEFT).getState().equals(CornerState.CLOSED))
@@ -146,9 +158,20 @@ public abstract class Face implements Serializable {
         else
             to_print += "     " + getEvaluator().toString(color) + "     ";
         if (getCorner(Direction.UPRIGHT).getState().equals(CornerState.CLOSED))
-            to_print += "    |\n";
+            to_print += "    |" + sep;
         else
-            to_print += "| " + (getCorner(Direction.UPRIGHT).getResource() == null ? " " : getCorner(Direction.UPRIGHT).getResource().toString()+colorStr) + " |\n";
+            to_print += "| " + (getCorner(Direction.UPRIGHT).getResource() == null ? " " : getCorner(Direction.UPRIGHT).getResource().toString()+colorStr) + " |" + sep;
+
+        return to_print;
+    }
+
+    public String thirdRow(String sep) {
+        if (sep == null)
+            sep = "\n";
+
+        String colorStr = color.toString();
+        String to_print = colorStr;
+
 
         // 3
         if (getCorner(Direction.UPLEFT).getState().equals(CornerState.CLOSED))
@@ -157,42 +180,98 @@ public abstract class Face implements Serializable {
             to_print += "+---+";
         to_print += "               ";
         if (getCorner(Direction.UPRIGHT).getState().equals(CornerState.CLOSED))
-            to_print += "    |\n";
+            to_print += "    |" + sep;
         else
-            to_print += "+---+\n";
+            to_print += "+---+" + sep;
 
         to_print += ColorChooser.RESET;
         return to_print;
     }
 
+    private String upperPart(String sep) {
+        String to_print = "";
 
-    protected String middlePart() {
-        String colorStr = color.toString();
-        String to_print = colorStr;
-        for (int i=0; i<3; i++)
-            to_print += "|                       |\n";
+        to_print += firstRow(sep);
+        to_print += secondRow(sep);
+        to_print += thirdRow(sep);
 
-        to_print += ColorChooser.RESET;
         return to_print;
     }
 
-    private String finalPart() {
+    public String fourthRow(String sep) {
+        if (sep == null)
+            sep = "\n";
+
         String colorStr = color.toString();
         String to_print = colorStr;
 
-        // 1
+        to_print += "|                       |" + sep;
+
+        return  to_print;
+    }
+
+    public String fifthRow(String sep) {
+        if (sep == null)
+            sep = "\n";
+
+        String colorStr = color.toString();
+        String to_print = colorStr;
+
+        to_print += "|                       |" + sep;
+
+        return  to_print;
+    }
+
+    public String sixthRow(String sep) {
+        if (sep == null)
+            sep = "\n";
+
+        String colorStr = color.toString();
+        String to_print = colorStr;
+
+        to_print += "|                       |" + sep;
+
+        return  to_print;
+    }
+
+
+    private String middlePart(String sep) {
+        String to_print = "";
+
+        to_print += fourthRow(sep);
+        to_print += fifthRow(sep);
+        to_print += sixthRow(sep);
+
+        return  to_print;
+    }
+
+    public String seventhRow(String sep) {
+        if (sep == null)
+            sep = "\n";
+
+        String colorStr = color.toString();
+        String to_print = colorStr;
+
         if (getCorner(Direction.DOWNLEFT).getState().equals(CornerState.CLOSED))
             to_print += "|    ";
         else
             to_print += "+---+";
         to_print += "               ";
         if (getCorner(Direction.DOWNRIGHT).getState().equals(CornerState.CLOSED))
-            to_print += "    |\n";
+            to_print += "    |" + sep;
         else
-            to_print += "+---+\n";
+            to_print += "+---+" + sep;
 
+        return to_print;
+    }
 
-        // 2
+    public String eighthRow(String sep) {
+        if (sep == null)
+            sep = "\n";
+
+        String colorStr = color.toString();
+        String to_print = colorStr;
+
         if (getCorner(Direction.DOWNLEFT).getState().equals(CornerState.CLOSED))
             to_print += "|    ";
         else
@@ -214,27 +293,42 @@ public abstract class Face implements Serializable {
             to_print += " ".repeat(7 - totalValues);
         }
         if (getCorner(Direction.DOWNRIGHT).getState().equals(CornerState.CLOSED))
-            to_print += "    |\n";
+            to_print += "    |" + sep;
         else
-            to_print += "| " + (getCorner(Direction.DOWNRIGHT).getResource() == null ? " " : getCorner(Direction.DOWNRIGHT).getResource().toString()+colorStr) + " |\n";
+            to_print += "| " + (getCorner(Direction.DOWNRIGHT).getResource() == null ? " " : getCorner(Direction.DOWNRIGHT).getResource().toString()+colorStr) + " |" + sep;
 
-
-        // 3
-        to_print += "+---+---------------+---+\n";
-
-        to_print += ColorChooser.RESET;;
         return to_print;
-
     }
+
+    public String ninthRow(String sep) {
+        // Same String
+        return firstRow(sep);
+    }
+
+
+
+    private String finalPart(String sep) {
+
+        String to_print = "";
+        to_print += seventhRow(sep);
+        to_print += eighthRow(sep);
+        to_print += ninthRow(sep);
+
+        return to_print;
+    }
+
+
 
     @Override
     public String toString() {
 
         String to_print = "";
 
-        to_print += upperPart();
-        to_print += middlePart();
-        to_print += finalPart();
+        to_print += upperPart("\n");
+        to_print += middlePart("\n");
+        to_print += finalPart("\n");
+
+        to_print += ColorChooser.RESET;
 
 
         return to_print;

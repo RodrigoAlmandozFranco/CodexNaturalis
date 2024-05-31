@@ -1,6 +1,5 @@
 package it.polimi.ingsw.am42.view.tui;
 
-import it.polimi.ingsw.am42.network.Client;
 
 import java.io.PrintStream;
 import java.util.Arrays;
@@ -105,6 +104,7 @@ public class IOHandler {
         while (s == null || s.isEmpty()) {
             if(in.hasNextLine())
                 s = in.nextLine();
+
             else {
                 try {
                     Thread.sleep(500);

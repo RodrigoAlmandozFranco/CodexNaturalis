@@ -99,4 +99,8 @@ public class RMIHandler implements RMISpeaker{
         controller.sendChatMessage(chatMessage);
 
     }
+
+    @Override
+    public void getStatus() throws RemoteException{
+    };
 }
