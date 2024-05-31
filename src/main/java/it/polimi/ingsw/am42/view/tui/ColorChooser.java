@@ -1,7 +1,12 @@
 package it.polimi.ingsw.am42.view.tui;
 
+
+/**
+ * Auxiliary class to change the color of the terminal characters
+ *
+ * @author Tommaso Crippa
+ */
 public class ColorChooser {
-    // Reset
     public static final String RESET = "\033[0m";
     public static final String BLACK = "\033[0;30m";
     public static final String RED = "\033[0;31m";
@@ -21,7 +26,6 @@ public class ColorChooser {
     public static final String LIGHT_CYAN = "\033[38;5;195m";
     public static final String LIGHT_YELLOW = "\033[38;5;227m";
     public static final String GRAY = "\033[38;5;240m";
-
 
     public static final String BRONZE = "\033[38;5;136m";
     public static final String SILVER = "\033[38;5;15m";
