@@ -14,7 +14,6 @@ import java.io.ObjectInputStream;
 import java.net.Socket;
 
 
-//TODO disconnected, close socket, while loop
 public class ServerHandler implements Runnable {
     private volatile Message message;
     private Socket socket;

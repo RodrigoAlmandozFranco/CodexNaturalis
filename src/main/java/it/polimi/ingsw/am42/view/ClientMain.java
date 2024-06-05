@@ -1,4 +1,4 @@
-package it.polimi.ingsw.am42;
+package it.polimi.ingsw.am42.view;
 
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.rmi.RMIClient;

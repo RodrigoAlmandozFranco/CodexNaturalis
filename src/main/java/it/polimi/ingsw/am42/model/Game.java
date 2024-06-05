@@ -25,9 +25,7 @@ import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
 import it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException;
 import it.polimi.ingsw.am42.model.structure.Board;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -89,14 +87,25 @@ public class Game implements GameInterface, Serializable {
         }
     }
 
+    /**
+     * This method sets the current state of the game
+     * @param currentState the state of the game
+     */
     public void setCurrentState(State currentState) {
         this.currentState = currentState;
     }
 
+    /**
+     * This method returns the current state of the game
+     * @return the current state of the game
+     */
     public State getCurrentState() {
         return currentState;
     }
 
+    /**
+     * This method changes the state of the game
+     */
     public void changeState(){
         this.currentState = this.currentState.changeState(this);
     }
@@ -437,7 +446,6 @@ public class Game implements GameInterface, Serializable {
      * It sets the global goals for the game.
      * Controller calls this method when the number of players is equal to the size of the list of players.
      */
-
     private void initializeGameForPlayers() {
         Collections.shuffle(players);
         currentPlayer = players.getFirst();
@@ -450,6 +458,9 @@ public class Game implements GameInterface, Serializable {
         }
     }
 
+    /**
+     * This method initializes the hand of the current player.
+     */
     public void initializeHandCurrentPlayer() {
         List<PlayableCard> list = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
@@ -460,28 +471,50 @@ public class Game implements GameInterface, Serializable {
         currentPlayer.setHand(list);
     }
 
+    /**
+     * This method returns the pickable resource cards
+     * @return the list of pickable resource cards
+     */
     public List<PlayableCard> getPickableResourceCards(){
         return pickableResourceCards;
     }
 
+    /**
+     * This method returns the pickable gold cards
+     * @return the list of pickable gold cards
+     */
     public List<PlayableCard> getPickableGoldCards(){
         return pickableGoldCards;
     }
 
+    /**
+     * This method returns the first resource card of the resource deck
+      * @return the first resource card
+     */
     public PlayableCard getFirstResourceCard() {
         return resourceDeck.getTop();
     }
 
+    /**
+     * This method returns the first gold card of the gold deck
+     * @return the first gold card
+     */
     public PlayableCard getFirstGoldCard() {
         return goldDeck.getTop();
     }
 
-
+    /**
+     * This method returns the list of available colors
+     * @return the list of available colors
+     */
     public List<PlayersColor> getAvailableColors() {
         return availableColors;
     }
 
-
+    /**
+     * This method removes the color from the list of available colors
+     * @param c the color to remove
+     */
     public void removeColor(PlayersColor c) {
         availableColors.remove(c);
     }
@@ -508,9 +541,9 @@ public class Game implements GameInterface, Serializable {
 
         PlayableDeck d;
 
-        String resource = "src/main/resources/it/polimi/ingsw/am42/json/resource.json";
-        String gold = "src/main/resources/it/polimi/ingsw/am42/json/gold.json";
-        String starting = "src/main/resources/it/polimi/ingsw/am42/json/starting.json";
+        String resource = "it/polimi/ingsw/am42/json/resource.json";
+        String gold = "it/polimi/ingsw/am42/json/gold.json";
+        String starting = "it/polimi/ingsw/am42/json/starting.json";
 
         List<String> sources = new ArrayList<>();
         sources.add(resource);
@@ -518,38 +551,33 @@ public class Game implements GameInterface, Serializable {
         sources.add(starting);
 
         for(String src : sources) {
-            try{
-                if(src.contains("resource.json")) d = resourceDeck;
-                else if(src.contains(("gold"))) d = goldDeck;
-                else d = startingDeck;
+            if(src.contains("resource.json")) d = resourceDeck;
+            else if(src.contains(("gold"))) d = goldDeck;
+            else d = startingDeck;
 
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(src);
+            Reader reader = new InputStreamReader(inputStream);
 
-                FileReader reader = new FileReader(src);
-                JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
-
-                for(int i = 0; i < jsonArray.size(); i++) {
-                    JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
-                    PlayableCard card = gson.fromJson(jsonObject, PlayableCard.class);
-                    d.addCard(card);
-                }
-            } catch (FileNotFoundException e)   {
-                throw new RuntimeException(e);
-            }
-        }
-
-        String goal = "src/main/resources/it/polimi/ingsw/am42/json/goal.json";
-
-        try {
-            FileReader reader = new FileReader(goal);
             JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
 
             for(int i = 0; i < jsonArray.size(); i++) {
                 JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
-                GoalCard card = gson.fromJson(jsonObject, GoalCard.class);
-                goalDeck.addCard(card);
+                PlayableCard card = gson.fromJson(jsonObject, PlayableCard.class);
+                d.addCard(card);
             }
-        } catch (FileNotFoundException e)   {
-            throw new RuntimeException(e);
+        }
+
+        String goal = "it/polimi/ingsw/am42/json/goal.json";
+
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(goal);
+        Reader reader = new InputStreamReader(inputStream);
+
+        JsonArray jsonArray = gson.fromJson(reader, JsonArray.class);
+
+        for(int i = 0; i < jsonArray.size(); i++) {
+            JsonObject jsonObject = jsonArray.get(i).getAsJsonObject();
+            GoalCard card = gson.fromJson(jsonObject, GoalCard.class);
+            goalDeck.addCard(card);
         }
 
         resourceDeck.shuffle();
@@ -638,7 +666,11 @@ public class Game implements GameInterface, Serializable {
         return possibleWinners.subList(0, numWinners);
     }
 
-
+    /**
+     * This method returns the player with the corresponding nickname
+     * @param nickname the nickname of the player
+     * @return the player with the corresponding nickname
+     */
     public Player getPlayer(String nickname) {
         for (Player p : players)
             if (p.getNickname().equals(nickname))

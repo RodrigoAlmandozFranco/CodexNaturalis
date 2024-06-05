@@ -12,47 +12,14 @@ import java.util.List;
 
 /**
  * This class represents a deck of playable cards
- * It has a list of playable cards
- * It can be shuffled
- * It can be drawn from the top
- * It can be checked if it's finished
+ * @see Deck
  * @see PlayableCard
  * @author Rodrigo Almandoz Franco
  * @author Mattia Brandi
  */
 
-public class PlayableDeck implements Serializable, Iterable<PlayableCard>{
-    private List<PlayableCard> deck;
-
+public class PlayableDeck extends Deck<PlayableCard> {
     public PlayableDeck() {
-        deck = new ArrayList<>();
-    }
-    public void shuffle() {
-        Collections.shuffle(deck);
-    }
-    public PlayableCard getTop() {
-        return deck.getFirst();
-    }
-    public boolean finished() {
-        return deck.isEmpty();
-    }
-
-    public void remove() {
-        deck.removeFirst();
-    }
-
-    public void addCard(PlayableCard card) {
-        deck.add(card);
-    }
-
-    public PlayableCard pop() {
-        PlayableCard c = deck.getFirst();
-        remove();
-        return c;
-    }
-
-    @Override
-    public Iterator<PlayableCard> iterator() {
-        return deck.iterator();
+        super();
     }
 }

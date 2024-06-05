@@ -45,7 +45,7 @@ public class Controller extends Observable{
     }
 
 
-    public ConnectionState getGameInfo() {
+    public synchronized ConnectionState getGameInfo() {
 
         System.out.println("sending game info");
 
@@ -61,7 +61,9 @@ public class Controller extends Observable{
     }
 
 
-    public int createGame(MessageListener l, String nickname, int numPlayers) throws NumberPlayerWrongException, GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+    public synchronized int createGame(MessageListener l, String nickname, int numPlayers) throws NumberPlayerWrongException, GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+
+        // todo a player has already started a game and therefore this.game != null
 
         gameDB.fileDelete();
 
@@ -78,7 +80,7 @@ public class Controller extends Observable{
     }
 
 
-    public boolean connect(MessageListener l, String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+    public synchronized boolean connect(MessageListener l, String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         this.game.addToGame(nickname);
         this.addListener(l);
 
@@ -97,7 +99,7 @@ public class Controller extends Observable{
     }
 
 
-    public boolean reconnect(MessageListener l, String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+    public synchronized boolean reconnect(MessageListener l, String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         boolean wasInPrevGame = false;
 
         if(listeners.isEmpty()) {

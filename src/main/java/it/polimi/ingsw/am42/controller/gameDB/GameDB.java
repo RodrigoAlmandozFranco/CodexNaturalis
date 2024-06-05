@@ -16,9 +16,12 @@ import java.io.*;
  */
 public class GameDB {
     protected GameInterface game;
-    private static final String path = "src/main/resources/it/polimi/ingsw/am42/gamePersistence/game.dat";
+    private static final String file = "it/polimi/ingsw/gamePersistence/game.dat";
+    private final String path;
 
-    public GameDB() {}
+    public GameDB() {
+        this.path = new File(System.getProperty("user.dir"), file).getAbsolutePath();
+    }
 
     public void setGame(GameInterface game) {
         this.game = game;
@@ -37,6 +40,9 @@ public class GameDB {
     public Change saveGame(boolean gs) {
 
         try {
+            File file = new File(path);
+            file.getParentFile().mkdirs();
+
             if (fileExists()) fileDelete();
 
             ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(path));

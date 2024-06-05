@@ -1,0 +1,1 @@
+memberSearchIndex = [{"p":"it.polimi.ingsw.am42","c":"CodexNaturalis","l":"CodexNaturalis()","u":"%3Cinit%3E()"},{"p":"it.polimi.ingsw.am42","c":"CodexNaturalis","l":"main(String[])","u":"main(java.lang.String[])"}];updateSearchResults();

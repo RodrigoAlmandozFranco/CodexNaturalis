@@ -16,41 +16,13 @@ import java.util.List;
  * It can be drawn from the top
  * It can be checked if it's finished
  * @see GoalCard
+ * @see Deck
  * @author Rodrigo Almandoz Franco
  * @author Mattia Brandi
  */
 
-public class GoalDeck implements Serializable, Iterable<GoalCard>{
-    private List<GoalCard> deck;
-
+public class GoalDeck extends Deck<GoalCard> {
     public GoalDeck() {
-        deck = new ArrayList<>();
-    }
-    public void shuffle() {
-        Collections.shuffle(deck);
-    }
-    public GoalCard getTop() {
-        return deck.getFirst();
-    }
-    public GoalCard pop() {
-        GoalCard c = deck.getFirst();
-        remove();
-        return c;
-    }
-
-    public boolean finished() {
-        return deck.isEmpty();
-    }
-
-    public void remove() {
-        deck.removeFirst();
-    }
-
-    public void addCard(GoalCard card) {
-        deck.add(card);
-    }
-
-    public Iterator<GoalCard> iterator() {
-        return deck.iterator();
+        super();
     }
 }
