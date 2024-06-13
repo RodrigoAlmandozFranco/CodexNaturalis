@@ -111,39 +111,6 @@ public class Game implements GameInterface, Serializable {
     }
 
     /**
-     * Constructor of the class Player for the reconstruction
-     * of the game after network disconnections.
-     * @param numberPlayers
-     * @param players
-     * @param globalGoals
-     * @param resourceDeck
-     * @param goldDeck
-     * @param startingDeck
-     * @param goalDeck
-     * @param pickableResourceCards
-     * @param pickableGoldCards
-     * @param currentPlayer
-     */
-
-
-    public Game(int numberPlayers, List<Player> players, List<GoalCard> globalGoals, PlayableDeck resourceDeck,
-                PlayableDeck goldDeck, PlayableDeck startingDeck, GoalDeck goalDeck,
-                List<PlayableCard> pickableResourceCards, List<PlayableCard> pickableGoldCards, Player currentPlayer) {
-
-        this.players = players;
-        this.globalGoals = globalGoals;
-        this.resourceDeck = resourceDeck;
-        this.goldDeck = goldDeck;
-        this.startingDeck = startingDeck;
-        this.goalDeck = goalDeck;
-        this.pickableResourceCards = pickableResourceCards;
-        this.pickableGoldCards = pickableGoldCards;
-        this.currentPlayer = currentPlayer;
-        this.numberPlayers = numberPlayers;
-        this.availableColors = null;
-    }
-
-    /**
      * This method initializes the game.
      * It creates the decks and initializes the pickable cards.
      */
