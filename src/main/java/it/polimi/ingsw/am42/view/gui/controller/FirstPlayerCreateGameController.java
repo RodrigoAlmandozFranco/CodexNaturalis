@@ -36,12 +36,21 @@ public class FirstPlayerCreateGameController implements Initializable {
 
     public FirstPlayerCreateGameController() {}
 
+    /**
+     * This method set the Client in the Controller
+     * @param client
+     * @author Mattia Brandi
+     */
     public void setClient(Client client) {
         this.client = client;
         LoginButton1.setOnMouseEntered(event -> LoginButton1.setCursor(Cursor.HAND));
         LoginButton1.setOnMouseExited(event -> LoginButton1.setCursor(Cursor.DEFAULT));
     }
 
+    /**
+     * This method extracts the user's name from the JavaFx text box
+     * @author Mattia Brandi
+     */
     public void submit() {
         this.nickname = textField.getText();
     }
@@ -52,10 +61,22 @@ public class FirstPlayerCreateGameController implements Initializable {
         choiceBox.setOnAction(this::getNumber);
     }
 
+    /**
+     * This method extracts the number of players from the JavaFx choice box
+     * @param event
+     * @author Mattia Brandi
+     */
     public void getNumber(ActionEvent event) {
         numberOfPlayers = Integer.parseInt(choiceBox.getValue());
     }
 
+    /**
+     * This method is called once the button is clicked
+     * This method verifies that all the fields are filled correctly, it sends to the
+     * server the request to create the game
+     * @param event
+     * @author Mattia Brandi
+     */
     public void createGameAction(ActionEvent event) throws IOException {
 
         if(numberOfPlayers == 0 && nickname.trim().isEmpty() && textField.getText().trim().isEmpty()) {
@@ -70,7 +91,12 @@ public class FirstPlayerCreateGameController implements Initializable {
             connect(event);
         }
     }
-
+    /**
+     * This method it sends to the server the request to create the game
+     * and sets on the JavaFx stage the new Scene with the new Controller
+     * @param event
+     * @author Mattia Brandi
+     */
     private void connect(ActionEvent event) throws IOException {
         try {
             client.createGame(nickname, numberOfPlayers);
@@ -94,6 +120,11 @@ public class FirstPlayerCreateGameController implements Initializable {
 
     }
 
+    /**
+     * This method shows an alert once called
+     * @param message
+     * @author Mattia Brandi
+     */
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");

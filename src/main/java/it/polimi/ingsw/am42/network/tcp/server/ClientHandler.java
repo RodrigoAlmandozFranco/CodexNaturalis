@@ -43,6 +43,11 @@ public class ClientHandler implements Runnable, MessageListener {
         output = new ObjectOutputStream(socket.getOutputStream());
     }
 
+    /**
+     * This method waits for messages from the client
+     * It uses the type of the message to decide the methods to call
+     * It always sends back to the client a message
+     */
     public void run() {
         try {
             while(isRunning) {
@@ -68,6 +73,11 @@ public class ClientHandler implements Runnable, MessageListener {
         }
     }
 
+    /**
+     * This method closes the input and the output streams
+     * It closes the socket connection
+     * @throws RuntimeException if something goes wrong during the closing process
+     */
     private void closeAll() {
         try{
             input.close();
@@ -77,11 +87,19 @@ public class ClientHandler implements Runnable, MessageListener {
             throw new RuntimeException(e);
         }
     }
-
+    /**
+     * This method sets the nickname
+     * @param nickname
+     */
     public void setNickname(String nickname){
         this.nickname = nickname;
     }
 
+    /**
+     * This method sends message to the client using the output stream
+     * @param answer
+     * @throws IOException if something goes wring during the sending process
+     */
     private void sendMessage(Message answer) throws IOException {
         if(isRunning) {
             synchronized (output) {
