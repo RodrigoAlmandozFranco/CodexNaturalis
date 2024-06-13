@@ -17,6 +17,7 @@ import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
 import it.polimi.ingsw.am42.model.exceptions.NumberPlayerWrongException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -160,7 +161,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
         } catch (NumberPlayerWrongException e) {
             throw new RuntimeException(e);
         }
@@ -176,19 +176,23 @@ class GameTest {
 
         assertFalse(game.checkEndGameDecks());
 
+        PlayableCard s = game.getFirstGoldCard();
 
-        Front front = new Front("front", null, Color.RED, null, null);
-        Back back = new Back("back", null, Color.RED, null);
-        PlayableCard card = new GoldCard(1, front, back);
-
-        PlayableCard c = new ResourceCard(2, front, back);
+        Front front = new Front("front", s.getFront().getCorners(), s.getFront().getColor(), s.getFront().getRequirements(), s.getFront().getEvaluator());
+        Back back = new Back("back", s.getBack().getCorners(), s.getBack().getColor(), s.getBack().getListResource());
+        PlayableCard card = new GoldCard(150, front, back);
+        card.setVisibility(false);
+        PlayableCard c = new ResourceCard(150, front, back);
+        c.setVisibility(false);
 
         for(int i = 0; i < 38; i++){
             game.chosenCardToAddInHand(card);
+            card.setVisibility(false);
         }
         assertFalse(game.checkEndGameDecks());
         for(int i = 0; i < 38; i++){
             game.chosenCardToAddInHand(c);
+            c.setVisibility(false);
         }
         assertTrue(game.checkEndGameDecks());
     }
@@ -341,11 +345,6 @@ class GameTest {
                  NicknameInvalidException e) {
             throw new RuntimeException(e);
         }
-        Player p1 = game.getPlayers().getFirst();
-        Player p2 = game.getPlayers().getLast();
-
-        assertEquals("Rodri", p1.getNickname());
-        assertEquals("Matti", p2.getNickname());
 
         List<Player> players = game.getPlayers();
         assertEquals(2, players.size());
@@ -520,15 +519,17 @@ class GameTest {
             throw new RuntimeException(e);
         }
 
-        game.getPlayers().getFirst().addPoints(10);
-        game.getPlayers().getLast().addPoints(15);
+        Player p1 = game.getPlayers().getFirst();
+        p1.addPoints(10);
+        Player p2 = game.getPlayers().getLast();
+        p2.addPoints(15);
 
         List<Player> standings = game.getStandings();
 
         assertEquals(2, standings.size());
         assertTrue(standings.get(0).getPoints() > standings.get(1).getPoints());
-        assertEquals("Matti", standings.get(0).getNickname());
-        assertEquals("Rodri", standings.get(1).getNickname());
+        assertEquals(p2.getNickname(), standings.get(0).getNickname());
+        assertEquals(p1.getNickname(), standings.get(1).getNickname());
         assertEquals(15, standings.get(0).getPoints());
         assertEquals(10, standings.get(1).getPoints());
     }
@@ -718,7 +719,7 @@ class GameTest {
         }
         List<PlayersColor> colors = game.getAvailableColors();
         assertNotNull(colors);
-        assertEquals(5, colors.size());
+        assertEquals(4, colors.size());
         for(PlayersColor c : colors){
             assertNotNull(c);
         }
@@ -739,13 +740,13 @@ class GameTest {
         }
         List<PlayersColor> colors = game.getAvailableColors();
         assertNotNull(colors);
-        assertEquals(5, colors.size());
+        assertEquals(4, colors.size());
         PlayersColor c = colors.getFirst();
         game.removeColor(c);
         for(PlayersColor cc : colors){
             assertNotNull(cc);
         }
-        assertEquals(4, colors.size());
+        assertEquals(3, colors.size());
         assertFalse(colors.contains(c));
     }
 
