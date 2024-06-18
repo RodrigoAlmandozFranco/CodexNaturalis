@@ -174,7 +174,11 @@ public class BoardController implements Initializable {
 
     private boolean gameToBeLoad = false;
 
+    /**
 
+     * @author Mattia Brandi
+     * @author Rodrigo Almandoz Franco
+     */
     public BoardController() {
     }
 
@@ -741,6 +745,11 @@ public class BoardController implements Initializable {
         placeCard(chosenCard.getBack());
     }
 
+    /**
+     * This method places the card in the Board
+     * This method verifies if the requirements of the card are satisfied
+     * @param face the face chosen by the player
+     */
     private void placeCard(Face face){
         String value = chosenPositionButton.getText();
         idCard = value;
@@ -766,7 +775,11 @@ public class BoardController implements Initializable {
         addFaceToBoard(face);
 
     }
-
+    /**
+     * This method places the StartingCard and the Player's token in the Board
+     * This method sets the card and the token in the centre of the boardPane
+     * @param face the face chosen by the player
+     */
     private void placeStartingCard(Face face) {
         availableColors = client.placeStarting(myPlayer.getNickname(), face);
         handCard1.setEffect(null);
@@ -780,7 +793,10 @@ public class BoardController implements Initializable {
         tokenOnStarting.setLayoutY(boardPane.getPrefHeight()/2 - tokenOnStarting.getFitHeight()/2 - startingCard.getFitHeight()/2);
         chosenCard = null;
     }
-
+    /**
+     * This method verifies if the user has selected all the values useful to move forward
+     * @return boolean
+     */
     private boolean checkBeforePlace() {
         if (chosenCard == null) {
             showAlert("You have to choose a card");
@@ -805,7 +821,14 @@ public class BoardController implements Initializable {
 
     //Start board control system
 
-    private boolean setupTurn() {
+    List<Position> buttonsOutOfBounds = new ArrayList<>();
+
+    /**
+     * This method gives a graphical view of the possible position represented as buttons
+     * This method stores in a list all the buttons whose dimensions
+     * are out of the board's space
+     */
+    private void setupTurn() {
         Set<Position> availablePositions = client.getAvailablePositions(myPlayer.getNickname());
         for (Position position : availablePositions) {
             double offsetX = startingCard.getLayoutX();
@@ -846,18 +869,19 @@ public class BoardController implements Initializable {
             double finalHeight = boardPane.getChildren().getFirst().getLayoutBounds().getHeight();
 
             if((offsetX < 0)||(offsetX + finalWidth > boardPane.getPrefWidth())||(offsetY < 0)||(offsetY + finalHeight > boardPane.getPrefHeight())) {
-                Platform.runLater(() -> {
-                    List<Button> buttonsToRemove = new ArrayList<>(availablePositionsButtons);
-                    for (Button b : buttonsToRemove) {
-                        boardPane.getChildren().remove(b);
-                        b.setEffect(null);
-                    }
-                    availablePositionsButtons.clear();
-                });
-                resize(boardPane, startingCard, tokenOnStarting, constOffsetX, constOffsetY, placedCards);
-                constOffsetX = constOffsetX * 0.90;
-                constOffsetY = constOffsetY * 0.90;
-                return false;
+//                Platform.runLater(() -> {
+//                    List<Button> buttonsToRemove = new ArrayList<>(availablePositionsButtons);
+//                    for (Button b : buttonsToRemove) {
+//                        boardPane.getChildren().remove(b);
+//                        b.setEffect(null);
+//                    }
+//                    availablePositionsButtons.clear();
+//                });
+//                resize(boardPane, startingCard, tokenOnStarting, constOffsetX, constOffsetY, placedCards);
+//                constOffsetX = constOffsetX * 0.90;
+//                constOffsetY = constOffsetY * 0.90;
+//                return false;
+                buttonsOutOfBounds.add(position);
             }
             Platform.runLater(() -> {
                 Button button = new Button(position.getX() + ", " + position.getY());
@@ -882,9 +906,12 @@ public class BoardController implements Initializable {
             });
 
         }
-        return true;
     }
-
+    /**
+     * This method reduces the size of the StartingCard and
+     * sets the new cards' dimensions in order to keep the
+     * right proportion inside the board's pane
+     */
     private void resize (Pane pane, ImageView sCard, ImageView token, double offX, double offY, List<ImageView> cardsToBePlaced){
         double newHeight, newWidth;
         if(pane == boardPane) {
@@ -915,6 +942,10 @@ public class BoardController implements Initializable {
     List<ImageView> placedCards;
     String idCard;
 
+    /**
+     * This method modifies the dimensions and the layout of the Player's cards
+     * using the new parametres setted by @see resize
+     */
     private void printImages (double newWidth, double newHeight, List<ImageView> cardsToBePlaced, double offX, double offY, ImageView start){
         for(ImageView image : cardsToBePlaced){
 
@@ -974,7 +1005,11 @@ public class BoardController implements Initializable {
         }
 
     }
-
+    /**
+     * This method adds the chosen face in the board's pane
+     * This method verifies if all the card are inside the board's pane
+     * @param face chosen by player
+     */
     private void addFaceToBoard(Face face) {
         handCard1.setEffect(null);
         handCard2.setEffect(null);
@@ -987,6 +1022,11 @@ public class BoardController implements Initializable {
         card.setLayoutY(chosenPositionButton.getLayoutY());
         card.setId(idCard);
         placedCards.add(card);
+        boardPane.getChildren().add(card);
+
+        if(buttonsOutOfBounds.contains(chosenPosition)){
+            resize(boardPane, startingCard, tokenOnStarting, constOffsetX, constOffsetY, placedCards);
+        }
 
         chosenPositionButton = null;
         Platform.runLater(() -> {
@@ -997,7 +1037,7 @@ public class BoardController implements Initializable {
             }
             availablePositionsButtons.clear();
         });
-        boardPane.getChildren().add(card);
+
     }
 
     //End board control system
@@ -1172,10 +1212,11 @@ public class BoardController implements Initializable {
             text += "It's your turn! You have to place a card";
             boardPane.setOpacity(1);
             boardPane.setDisable(false);
-            boolean resizedDone  = setupTurn();
-            while(!resizedDone){
-                resizedDone = setupTurn();
-            }
+            setupTurn();
+//            boolean resizedDone  = setupTurn();
+//            while(!resizedDone){
+//                resizedDone = setupTurn();
+//            }
             enableHandAndControlButtons();
         } else {
             currentPlayer = gameClientModel.getCurrentPlayer().getNickname();
@@ -1354,8 +1395,13 @@ public class BoardController implements Initializable {
             b.setOpacity(0.5);
             b.setDisable(true);
         }
-
-        PlayerClientModel player = gameClientModel.getPlayer(name);
+        PlayerClientModel player;
+        if(name == null){
+            player = myPlayer;
+        }
+        else {
+            player = gameClientModel.getPlayer(name);
+        }
 
         if(myPlayer.equals(gameClientModel.getCurrentPlayer())) disableHandAndControlButtons();
 
@@ -1482,7 +1528,7 @@ public class BoardController implements Initializable {
     }
 
     private void loadAllBoard() {
-        //todo
+        showOtherBoardPlayer(null, 0);
         System.out.println("Loading my boards");
     }
 

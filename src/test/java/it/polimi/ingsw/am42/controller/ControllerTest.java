@@ -1,0 +1,203 @@
+package it.polimi.ingsw.am42.controller;
+
+import it.polimi.ingsw.am42.controller.gameDB.Change;
+import it.polimi.ingsw.am42.model.Game;
+import it.polimi.ingsw.am42.model.Player;
+import it.polimi.ingsw.am42.model.cards.types.*;
+import it.polimi.ingsw.am42.model.cards.types.playables.GoldCard;
+import it.polimi.ingsw.am42.model.enumeration.Color;
+import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
+import it.polimi.ingsw.am42.model.enumeration.State;
+import it.polimi.ingsw.am42.model.evaluator.EvaluatorPoints;
+import it.polimi.ingsw.am42.model.exceptions.*;
+import it.polimi.ingsw.am42.model.structure.Position;
+import it.polimi.ingsw.am42.network.MessageListener;
+import it.polimi.ingsw.am42.network.chat.ChatMessage;
+import it.polimi.ingsw.am42.network.tcp.messages.Message;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class ControllerTest {
+
+    private Change change;
+    private Controller controller;
+    MessageListener messageListener1, messageListener2;
+    List<Player> players;
+
+    @BeforeEach
+    void setup() {
+        File file = new File(System.getProperty("user.dir"), "it/polimi/ingsw/gamePersistence/game.dat");
+        file.delete();
+
+        controller = new Controller();
+        messageListener1 = new MessageListener() {
+            @Override
+            public String getId() throws RemoteException {
+                return "Rodri";
+            }
+
+            @Override
+            public void update(Change diff) throws RemoteException {
+                change = diff;
+                if(change.getPlayers() != null) {
+                    players = new ArrayList<>(change.getPlayers());
+                }
+            }
+
+            @Override
+            public void receiveMessage(Message message) throws RemoteException {
+                assertNotNull(message);
+            }
+
+            @Override
+            public boolean heartbeat() throws RemoteException {
+                return false;
+            }
+        };
+        messageListener2 = new MessageListener() {
+            @Override
+            public String getId() throws RemoteException {
+                return "Matti";
+            }
+
+            @Override
+            public void update(Change diff) throws RemoteException {
+                assertNotNull(diff);
+                change = diff;
+                if(change.getPlayers() != null) {
+                    players = new ArrayList<>(change.getPlayers());
+                }
+            }
+
+            @Override
+            public void receiveMessage(Message message) throws RemoteException {
+                assertNotNull(message);
+            }
+
+            @Override
+            public boolean heartbeat() throws RemoteException {
+                return true;
+            }
+        };
+    }
+
+    @Test
+    void setupGameTest(){
+        assertEquals(controller.getGameInfo(), ConnectionState.CREATE);
+        try {
+            controller.createGame(messageListener1, "Rodri", 2);
+        } catch (NumberPlayerWrongException | GameFullException | NicknameInvalidException | NicknameAlreadyInUseException e) {
+            e.printStackTrace();
+        }
+        assertEquals(controller.getGameInfo(), ConnectionState.CONNECT);
+        try {
+            controller.connect(messageListener2, "Matti");
+        } catch (NicknameInvalidException | NicknameAlreadyInUseException | GameFullException e) {
+            e.printStackTrace();
+        }
+
+        controller = null;
+        controller = new Controller();
+        assertEquals(controller.getGameInfo(), ConnectionState.LOAD);
+        try {
+            controller.reconnect(messageListener1, "Rodri");
+        } catch (GameFullException | NicknameInvalidException | NicknameAlreadyInUseException e) {
+            e.printStackTrace();
+        }
+        assertEquals(controller.getGameInfo(), ConnectionState.LOADING);
+        try {
+            controller.reconnect(null, "Tommy");
+        } catch (GameFullException | NicknameInvalidException | NicknameAlreadyInUseException e) {
+            assertInstanceOf(NicknameInvalidException.class, e);
+        }
+        try {
+            controller.reconnect(messageListener2, "Matti");
+        } catch (GameFullException | NicknameInvalidException | NicknameAlreadyInUseException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    @Test
+    void setupCurrentPlayerTest() {
+        try {
+            controller.createGame(messageListener1, "Rodri", 2);
+            controller.connect(messageListener2, "Matti");
+        } catch (NumberPlayerWrongException | GameFullException | NicknameInvalidException | NicknameAlreadyInUseException e) {
+            e.printStackTrace();
+        }
+
+        for(int i = 0; i < 2; i++) {
+            int id = change.getHand().getFirst().getId();
+            List<PlayersColor> colors = controller.placeStarting(change.getCurrentPlayer(), change.getHand().getFirst().getFront());
+            List<PlayersColor> copyColors = new ArrayList<>(colors);
+            assertNotNull(colors);
+            assertEquals(change.getLastPlacedFace().getId(), id);
+            List<GoalCard> goals = controller.chooseColor(change.getCurrentPlayer(), colors.getFirst());
+            assertNotNull(goals);
+            controller.chooseGoal(change.getCurrentPlayer(), goals.getFirst());
+
+            for (Player player : change.getPlayers()) {
+                if (player.getNickname().equals(change.getCurrentPlayer())) {
+                    assertEquals(player.getColor(), copyColors.getFirst());
+                    assertEquals(player.getPersonalGoal().getId(), goals.getFirst().getId());
+                }
+            }
+        }
+
+        int points = 20;
+
+
+        try{
+            for(int i = 0; i < 2; i++) {
+                String player = change.getCurrentPlayer();
+                Set<Position> availablePos = controller.getAvailablePositions(player);
+                assertNotNull(availablePos);
+                Front front = new Front("", new ArrayList<>(), Color.CYAN, new HashMap<>(), new EvaluatorPoints(points++));
+                front.setId(150);
+
+                controller.place(player, front, availablePos.iterator().next());
+                assertEquals(change.getLastPlacedFace().getId(), 150);
+                int id2 = change.getFirstGoldCard().getId();
+                controller.pick(player, change.getFirstGoldCard());
+                boolean ok = false;
+                for(PlayableCard card : change.getHand())
+                    if (card.getId() == id2) {
+                        ok = true;
+                        break;
+                    }
+                assertTrue(ok);
+            }
+
+            assertTrue(change.isTurnFinal());
+
+            assertEquals(controller.getWinner().size(), 1);
+            assertEquals(controller.getWinner().getFirst().getNickname(), players.getLast().getNickname());
+
+        } catch (RequirementsNotMetException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void sendMessageTest(){
+        try {
+            controller.createGame(messageListener1, "Rodri", 2);
+            controller.connect(messageListener2, "Matti");
+        } catch (NumberPlayerWrongException | GameFullException | NicknameInvalidException | NicknameAlreadyInUseException e) {
+            e.printStackTrace();
+        }
+
+        ChatMessage chatMessage = new ChatMessage("Rodri", "Matti", "Hello");
+        controller.sendChatMessage(chatMessage);
+    }
+}

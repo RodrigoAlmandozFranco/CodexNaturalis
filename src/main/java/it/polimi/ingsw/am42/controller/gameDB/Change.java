@@ -99,8 +99,6 @@ public class Change implements Serializable {
         }
     }
 
-    public Change() {
-    }
 
     public void setFuturePlayer(String futurePlayer) {
         this.futurePlayer = futurePlayer;
