@@ -34,7 +34,9 @@ public abstract class Observable {
     }
 
 
-
+    /**
+     * Thread to check if all players are still connected
+     */
     private class HeartbeatTask extends TimerTask {
         @Override
         public void run() {
@@ -53,14 +55,26 @@ public abstract class Observable {
         }
     }
 
+    /**
+     * Adds a listener that can be notified
+     * @param l Reference to listener
+     */
     public void addListener(MessageListener l) {
         listeners.add(l);
     }
 
+    /**
+     * Get reference to all the listeners
+     * @return list of listeners
+     */
     public List<MessageListener> getListeners() {
         return listeners;
     }
 
+    /**
+     * Notify every listener with the following Change message
+     * @param message diff of the effects caused by an action
+     */
     protected void updateAll(Change message){
         System.out.println("Updating listeners");
         for(MessageListener l : listeners) {
@@ -73,6 +87,10 @@ public abstract class Observable {
         }
     }
 
+    /**
+     * Notify everyone with a general message
+     * @param message unspecified message
+     */
     protected void sendMessageAll(Message message) {
         for(MessageListener l : listeners) {
             try {
@@ -83,6 +101,11 @@ public abstract class Observable {
         }
     }
 
+    /**
+     * Send a message to a specific listener
+     * @param message generic message
+     * @param id identifier of the listener
+     */
     protected void sendMessage(Message message, String id) {
         for(MessageListener l : listeners) {
             try {
@@ -93,6 +116,10 @@ public abstract class Observable {
             }
         }
     }
+
+    /**
+     * Method called by heartbeat task to handle disconnections
+     */
     protected void handleDisconnection() {
         sendMessageAll(new PlayerDisconnectedMessage());
     }

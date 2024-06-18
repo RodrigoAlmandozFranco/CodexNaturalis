@@ -44,7 +44,11 @@ public class Controller extends Observable{
         this.game = null;
     }
 
-
+    /**
+     * Method to request which kind of way to connect to the game
+     *
+     * @return ConnectionState
+     */
     public synchronized ConnectionState getGameInfo() {
 
         System.out.println("sending game info");
@@ -60,7 +64,19 @@ public class Controller extends Observable{
         return ConnectionState.CONNECT;
     }
 
-
+    /**
+     * Method to create new game
+     *
+     * @param l Reference to the calling object, used to receive notification for observer pattern
+     * @param nickname Name of the player
+     * @param numPlayers Number of players that are going to play the game
+     * @return 0 if game successfully created, otherwise an exception is raised
+     *
+     * @throws NumberPlayerWrongException if the numPlayers provided is not in the possible interval
+     * @throws GameFullException if the game has already all players connected
+     * @throws NicknameInvalidException if the nickname doesn't have a valid format
+     * @throws NicknameAlreadyInUseException if the nickname has already been chosen by another player
+     */
     public synchronized int createGame(MessageListener l, String nickname, int numPlayers) throws NumberPlayerWrongException, GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
 
         // todo a player has already started a game and therefore this.game != null
@@ -79,7 +95,18 @@ public class Controller extends Observable{
         return 0;
     }
 
-
+    /**
+     *
+     * Standard way of connecting to newly created game
+     *
+     * @param l Reference to the calling object, used to receive notification for observer pattern
+     * @param nickname Name of the player
+     * @return true if the connection works without problems, otherwise it throws an exception
+     *
+     * @throws GameFullException if the game has already all players connected
+     * @throws NicknameInvalidException if the nickname doesn't have a valid format
+     * @throws NicknameAlreadyInUseException if the nickname has already been chosen by another player
+     */
     public synchronized boolean connect(MessageListener l, String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         this.game.addToGame(nickname);
         this.addListener(l);
@@ -98,7 +125,18 @@ public class Controller extends Observable{
         return true;
     }
 
-
+    /**
+     *
+     * Standard way of connecting to saved game
+     *
+     * @param l Reference to the calling object, used to receive notification for observer pattern
+     * @param nickname Name of the player
+     * @return true if the connection works without problems, otherwise it throws an exception
+     *
+     * @throws GameFullException if the game has already all players connected
+     * @throws NicknameInvalidException if the nickname doesn't have a valid format
+     * @throws NicknameAlreadyInUseException if the nickname has already been chosen by another player
+     */
     public synchronized boolean reconnect(MessageListener l, String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         boolean wasInPrevGame = false;
 
@@ -136,6 +174,12 @@ public class Controller extends Observable{
         return true;
     }
 
+    /**
+     * Method to get the available positions to place of the current player
+     * @param p Nickname of method caller
+     *
+     * @return set with available positions
+     */
     public Set<Position> getAvailablePositions(String p) {
         //if (p.equals(game.getCurrentPlayer().getNickname()))
 
@@ -143,7 +187,16 @@ public class Controller extends Observable{
         return game.getCurrentPlayer().getBoard().getPossiblePositions();
     }
 
-
+    /**
+     * Method called by the current player to place a specific face on a specific position
+     *
+     * @param p Nickname of method caller
+     * @param face Selected Face
+     * @param position Selected Position
+     * @return true if placed successfully, otherwise throws an exception
+     *
+     * @throws RequirementsNotMetException if the player's board doesn't fulfill the face requirements
+     */
     public boolean place(String p, Face face, Position position) throws RequirementsNotMetException {
         game.getCurrentPlayer().checkRequirements(face);
 
@@ -161,7 +214,12 @@ public class Controller extends Observable{
         return true;
     }
 
-
+    /**
+     * Method called by the current player to pick one of the pickable cards from the deck
+     *
+     * @param p Nickname of method caller
+     * @param card Selected Card to add to hand
+     */
     public void pick(String p, PlayableCard card) {
         game.chosenCardToAddInHand(card);
         game.changeState();
@@ -174,6 +232,12 @@ public class Controller extends Observable{
         System.out.println(game.getPlayer(p) + " picked a card");
     }
 
+    /**
+     * Method called by the current player to place THE FIRST face (of the starting card) on the board
+     * @param p Nickname of method caller
+     * @param face Selected face
+     * @return The list of available colors, the player now has to choose which one to use
+     */
     public List<PlayersColor> placeStarting(String p, Face face){
         Change change;
         game.getCurrentPlayer().placeCard(new Position(0,0), face);
@@ -185,7 +249,12 @@ public class Controller extends Observable{
         return game.getAvailableColors();
     }
 
-
+    /**
+     * Method called by the current player to select which color to identify itself
+     * @param p Nickname of method caller
+     * @param color the Selected Color
+     * @return The list of objectives, the player now has to select which one it should choose
+     */
     public List<GoalCard> chooseColor(String p, PlayersColor color) {
         game.getCurrentPlayer().setColor(color);
         game.removeColor(color);
@@ -199,7 +268,11 @@ public class Controller extends Observable{
     }
 
 
-
+    /**
+     * Method called by the current player to select which objective to try and fulfill during the game
+     * @param p Nickname of method caller
+     * @param goal Selected Goal
+     */
     public void chooseGoal(String p, GoalCard goal) {
         game.getCurrentPlayer().setPersonalGoal(goal);
         game.changeState();
@@ -212,17 +285,26 @@ public class Controller extends Observable{
         System.out.println(game.getPlayer(p) + " chose his personal goal");
     }
 
-
+    /**
+     * Returns the list of winners (more than one if there is a tie)
+     * @return list of winners
+     */
     public List<Player> getWinner(){
         System.out.println("sending final results");
         return game.getWinner();
     }
 
+    /**
+     * Method called when a disconnection is detected
+     */
     @Override
     protected void handleDisconnection() {
         playerDisconnected();
     }
 
+    /**
+     * Method called by the players to disconnect
+     */
     public void playerDisconnected() {
         System.out.println("someone disconnected to the game");
         game.setCurrentState(State.DISCONNECTED);
@@ -231,6 +313,10 @@ public class Controller extends Observable{
         System.exit(0);
     }
 
+    /**
+     * Method to send messages to other players
+     * @param chatMessage the message to send
+     */
     public void sendChatMessage(ChatMessage chatMessage) {
         System.out.println("delivering chat message");
         if (chatMessage.getReceiver().equals("all"))
