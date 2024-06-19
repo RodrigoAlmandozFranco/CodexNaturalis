@@ -2,6 +2,8 @@ package it.polimi.ingsw.am42.network.tcp.client;
 
 import it.polimi.ingsw.am42.controller.ConnectionState;
 import it.polimi.ingsw.am42.controller.gameDB.Change;
+import it.polimi.ingsw.am42.exceptions.GameAlreadyCreatedException;
+import it.polimi.ingsw.am42.exceptions.WrongTurnException;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
@@ -95,7 +97,7 @@ public class ClientTCP implements Client {
     }
 
     @Override
-    public int createGame(String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException {
+    public int createGame(String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException, GameAlreadyCreatedException {
         Message message = new FirstConnectionMessage(nickname, numPlayers);
         sendMessage(message);
 
@@ -115,6 +117,8 @@ public class ClientTCP implements Client {
                     throw new NicknameInvalidException(nicknameInvalidErrorMessage.getMessage());
             case NicknameAlreadyInUseErrorMessage nicknameAlreadyInUseErrorMessage ->
                     throw new NicknameAlreadyInUseException(nicknameAlreadyInUseErrorMessage.getMessage());
+            case GameAlreadyCreatedErrorMessage gameAlreadyCreatedErrorMessage ->
+                    throw new GameAlreadyCreatedException("Game is already created");
             default -> 1;
         };
     }
@@ -142,7 +146,7 @@ public class ClientTCP implements Client {
     }
 
     @Override
-    public boolean reconnect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+    public boolean reconnect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, GameAlreadyCreatedException {
         Message message = new ReconnectMessage(nickname);
         sendMessage(message);
 
@@ -160,13 +164,15 @@ public class ClientTCP implements Client {
                     throw new NicknameInvalidException(nicknameInvalidErrorMessage.getMessage());
             case NicknameAlreadyInUseErrorMessage nicknameAlreadyInUseErrorMessage ->
                     throw new NicknameAlreadyInUseException(nicknameAlreadyInUseErrorMessage.getMessage());
+            case GameAlreadyCreatedErrorMessage gameAlreadyCreatedErrorMessage ->
+                    throw new GameAlreadyCreatedException("Game is already created");
             default -> true;
         };
     }
 
 
     @Override
-    public Set<Position> getAvailablePositions(String p) {
+    public Set<Position> getAvailablePositions(String p) throws WrongTurnException {
         Message message = new GetAvailablePositionMessage(p);
         sendMessage(message);
         SendAvailablePositionMessage answer;
@@ -175,12 +181,13 @@ public class ClientTCP implements Client {
             answer = (SendAvailablePositionMessage) serverHandler.getMessage();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        } catch (ClassCastException e) {
+            throw new WrongTurnException("You can't do this action now!");
         }
-
         return answer.getPositions();
     }
 
-    public List<PlayersColor> placeStarting(String p, Face face) {
+    public List<PlayersColor> placeStarting(String p, Face face) throws WrongTurnException {
         Message message = new PlaceStartingMessage(p, face);
         sendMessage(message);
 
@@ -189,13 +196,14 @@ public class ClientTCP implements Client {
             answer = (SendAvailableColorsMessage) serverHandler.getMessage();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        } catch (ClassCastException e) {
+            throw new WrongTurnException("You can't do this action now!");
         }
-
         return answer.getColors();
     }
 
     @Override
-    public boolean place(String p, Face face, Position pos) throws RequirementsNotMetException {
+    public boolean place(String p, Face face, Position pos) throws RequirementsNotMetException, WrongTurnException {
         Message message = new PlaceMessage(p, face, pos);
         sendMessage(message);
 
@@ -209,13 +217,14 @@ public class ClientTCP implements Client {
 
         if(answer instanceof NoRequirementsErrorMessage)
             throw new RequirementsNotMetException("Requirements are not met");
-
+        if(answer instanceof WrongTurnErrorMessage)
+            throw new WrongTurnException("You can't do this action now!");
 
         return true;
     }
 
     @Override
-    public List<GoalCard> chooseColor(String p, PlayersColor color) {
+    public List<GoalCard> chooseColor(String p, PlayersColor color) throws WrongTurnException {
         Message message = new ChosenColorMessage(p, color);
         sendMessage(message);
         SendPossibleGoalsMessage answer;
@@ -223,6 +232,8 @@ public class ClientTCP implements Client {
             answer = (SendPossibleGoalsMessage) serverHandler.getMessage();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        } catch (ClassCastException e) {
+            throw new WrongTurnException("You can't do this action now!");
         }
 
         return answer.getGoals();
@@ -230,7 +241,7 @@ public class ClientTCP implements Client {
 
 
     @Override
-    public void chooseGoal(String p, GoalCard goal) {
+    public void chooseGoal(String p, GoalCard goal) throws WrongTurnException {
         Message message = new ChosenGoalMessage(p, goal);
         sendMessage(message);
 
@@ -242,11 +253,12 @@ public class ClientTCP implements Client {
             throw new RuntimeException(e);
         }
 
-
+        if(answer instanceof WrongTurnErrorMessage)
+            throw new WrongTurnException("You can't do this action now!");
     }
 
     @Override
-    public void pick(String p, PlayableCard card) {
+    public void pick(String p, PlayableCard card) throws WrongTurnException {
         Message message = new PickMessage(p, card);
         sendMessage(message);
 
@@ -257,12 +269,12 @@ public class ClientTCP implements Client {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
-
+        if(answer instanceof WrongTurnErrorMessage)
+            throw new WrongTurnException("You can't do this action now!");
     }
 
     @Override
-    public List<Player> getWinner() {
+    public List<Player> getWinner() throws WrongTurnException {
         Message message = new GetWinnerMessage();
         sendMessage(message);
 
@@ -272,6 +284,8 @@ public class ClientTCP implements Client {
             answer = (SendWinnerMessage) serverHandler.getMessage();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
+        } catch (ClassCastException e) {
+            throw new WrongTurnException("You can't do this action now!");
         }
 
         return answer.getWinners();

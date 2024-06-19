@@ -3,6 +3,7 @@ package it.polimi.ingsw.am42.network.rmi;
 
 import it.polimi.ingsw.am42.controller.ConnectionState;
 import it.polimi.ingsw.am42.controller.gameDB.Change;
+import it.polimi.ingsw.am42.exceptions.WrongTurnException;
 import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.model.Player;
@@ -63,17 +64,10 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
             int gameID = stub.createGame(this, nickname, numPlayers);
             this.nickname = nickname;
             return gameID;
-        } catch (RemoteException e) {
-            Throwable originalException = e.getCause();
-            if (originalException instanceof GameFullException)
-                throw (GameFullException) originalException;
-            if (originalException instanceof NicknameInvalidException)
-                throw (NicknameInvalidException) originalException;
-            if (originalException instanceof NicknameAlreadyInUseException)
-                throw (NicknameAlreadyInUseException) originalException;
-            if (originalException instanceof NumberPlayerWrongException)
-                throw (NumberPlayerWrongException) originalException;
-
+        } catch (GameFullException | NicknameInvalidException | NicknameAlreadyInUseException | NumberPlayerWrongException e) {
+            throw e;
+        }
+        catch (RemoteException e) {
             serverDown();
             return -1;
         }
@@ -82,15 +76,10 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
     public boolean connect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         try {
             return stub.connect(this, nickname);
-        } catch (RemoteException e) {
-            Throwable originalException = e.getCause();
-            if (originalException instanceof GameFullException)
-                throw (GameFullException) originalException;
-            if (originalException instanceof NicknameInvalidException)
-                throw (NicknameInvalidException) originalException;
-            if (originalException instanceof NicknameAlreadyInUseException)
-                throw (NicknameAlreadyInUseException) originalException;
-
+        } catch (GameFullException | NicknameInvalidException | NicknameAlreadyInUseException e) {
+            throw e;
+        }
+        catch (RemoteException e) {
             serverDown();
             return false;
         }
@@ -99,72 +88,79 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
     public boolean reconnect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         try {
             return stub.reconnect(this, nickname);
+        } catch (GameFullException | NicknameAlreadyInUseException | NicknameInvalidException e) {
+            throw e;
         } catch (RemoteException e) {
-            Throwable originalException = e.getCause();
-            if (originalException instanceof GameFullException)
-                throw (GameFullException) originalException;
-            if (originalException instanceof NicknameInvalidException)
-                throw (NicknameInvalidException) originalException;
-            if (originalException instanceof NicknameAlreadyInUseException)
-                throw (NicknameAlreadyInUseException) originalException;
-
             serverDown();
             return false;
         }
     }
 
-    public Set<Position> getAvailablePositions(String p){
+    public Set<Position> getAvailablePositions(String p) throws WrongTurnException {
         try {
             return stub.getAvailablePositions(p);
-        } catch (RemoteException e) {
+        } catch (WrongTurnException e) {
+            throw e;
+        }
+        catch (RemoteException e) {
             serverDown();
             return new TreeSet<Position>();
         }
     }
 
-    public boolean place(String p, Face face, Position pos) throws RequirementsNotMetException {
+    public boolean place(String p, Face face, Position pos) throws RequirementsNotMetException, WrongTurnException {
         try {
             return stub.place( p, face, pos);
-        } catch (RemoteException e) {
-            Throwable originalException = e.getCause();
-            if (originalException instanceof RequirementsNotMetException)
-                throw (RequirementsNotMetException) originalException;
+        } catch (WrongTurnException | RequirementsNotMetException e) {
+            throw e;
+        }
+        catch (RemoteException e) {
 
             serverDown();
             return false;
         }
     }
 
-    public List<PlayersColor> placeStarting(String p, Face face){
+    public List<PlayersColor> placeStarting(String p, Face face) throws WrongTurnException {
         try {
             return stub.placeStarting(p, face);
-        } catch (RemoteException e) {
+        } catch (WrongTurnException e) {
+            throw e;
+        }
+        catch (RemoteException e) {
             serverDown();
             return null;
         }
     }
 
-    public List<GoalCard> chooseColor(String p, PlayersColor color) {
+    public List<GoalCard> chooseColor(String p, PlayersColor color) throws WrongTurnException {
         try {
             return stub.chooseColor(p, color);
-        } catch (RemoteException e) {
+        } catch (WrongTurnException e) {
+            throw e;
+        }
+        catch (RemoteException e) {
             serverDown();
             return null;
         }
     }
 
-    public void chooseGoal(String p, GoalCard goal){
+    public void chooseGoal(String p, GoalCard goal) throws WrongTurnException{
         try {
             stub.chooseGoal( p, goal);
+        } catch (WrongTurnException e) {
+            throw e;
         } catch (RemoteException e) {
             serverDown();
         }
     }
 
-    public void pick(String p, PlayableCard card){
+    public void pick(String p, PlayableCard card) throws WrongTurnException {
         try {
             stub.pick(p, card);
-        } catch (RemoteException e) {
+        } catch (WrongTurnException e) {
+            throw e;
+        }catch (RemoteException e) {
             serverDown();
         }
     }
@@ -174,10 +170,13 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         return this.nickname;
     }
 
-    public List<Player> getWinner() {
+    public List<Player> getWinner() throws WrongTurnException {
         try {
             return stub.getWinner();
-        } catch (RemoteException e) {
+        } catch (WrongTurnException e) {
+            throw e;
+        }
+        catch (RemoteException e) {
             serverDown();
             return null;
         }

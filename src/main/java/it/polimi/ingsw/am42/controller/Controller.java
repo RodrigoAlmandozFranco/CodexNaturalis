@@ -2,6 +2,8 @@ package it.polimi.ingsw.am42.controller;
 
 import it.polimi.ingsw.am42.controller.gameDB.Change;
 import it.polimi.ingsw.am42.controller.gameDB.GameDB;
+import it.polimi.ingsw.am42.exceptions.GameAlreadyCreatedException;
+import it.polimi.ingsw.am42.exceptions.WrongTurnException;
 import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.enumeration.State;
 import it.polimi.ingsw.am42.model.Game;
@@ -15,13 +17,12 @@ import it.polimi.ingsw.am42.model.exceptions.*;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.MessageListener;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
-import it.polimi.ingsw.am42.network.rmi.RMISpeaker;
-import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.PlayerDisconnectedMessage;
 
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -77,9 +78,10 @@ public class Controller extends Observable{
      * @throws NicknameInvalidException if the nickname doesn't have a valid format
      * @throws NicknameAlreadyInUseException if the nickname has already been chosen by another player
      */
-    public synchronized int createGame(MessageListener l, String nickname, int numPlayers) throws NumberPlayerWrongException, GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+    public synchronized int createGame(MessageListener l, String nickname, int numPlayers) throws NumberPlayerWrongException, GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, GameAlreadyCreatedException {
 
-        // todo a player has already started a game and therefore this.game != null
+        if(game != null) throw new GameAlreadyCreatedException("Game has already started");
+
 
         gameDB.fileDelete();
 
@@ -127,7 +129,7 @@ public class Controller extends Observable{
 
     /**
      *
-     * Standard way of connecting to saved game
+     * Standard way of connecting to saved game AND loading up saved game
      *
      * @param l Reference to the calling object, used to receive notification for observer pattern
      * @param nickname Name of the player
@@ -137,8 +139,10 @@ public class Controller extends Observable{
      * @throws NicknameInvalidException if the nickname doesn't have a valid format
      * @throws NicknameAlreadyInUseException if the nickname has already been chosen by another player
      */
-    public synchronized boolean reconnect(MessageListener l, String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+    public synchronized boolean reconnect(MessageListener l, String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, GameAlreadyCreatedException {
         boolean wasInPrevGame = false;
+
+        if(!gameDB.fileExists()) throw new GameAlreadyCreatedException("Game has already started");
 
         if(listeners.isEmpty()) {
             this.game = this.gameDB.loadGame();
@@ -180,9 +184,13 @@ public class Controller extends Observable{
      *
      * @return set with available positions
      */
-    public Set<Position> getAvailablePositions(String p) {
-        //if (p.equals(game.getCurrentPlayer().getNickname()))
-
+    public Set<Position> getAvailablePositions(String p) throws WrongTurnException {
+        if(!p.equals(game.getCurrentPlayer().getNickname())
+                || !game.getCurrentState().equals(State.PLACE)) {
+            Change change = gameDB.saveGame(true);
+            updateAll(change);
+            throw new WrongTurnException("You can't do this action now");
+        }
         System.out.println(game.getPlayer(p) + " requested available positions");
         return game.getCurrentPlayer().getBoard().getPossiblePositions();
     }
@@ -197,7 +205,14 @@ public class Controller extends Observable{
      *
      * @throws RequirementsNotMetException if the player's board doesn't fulfill the face requirements
      */
-    public boolean place(String p, Face face, Position position) throws RequirementsNotMetException {
+    public boolean place(String p, Face face, Position position) throws RequirementsNotMetException, WrongTurnException {
+        if(!p.equals(game.getCurrentPlayer().getNickname())
+                || !game.getCurrentState().equals(State.PLACE)) {
+            Change change = gameDB.saveGame(true);
+            updateAll(change);
+            throw new WrongTurnException("You can't do this action now");
+        }
+
         game.getCurrentPlayer().checkRequirements(face);
 
         Change change;
@@ -220,7 +235,14 @@ public class Controller extends Observable{
      * @param p Nickname of method caller
      * @param card Selected Card to add to hand
      */
-    public void pick(String p, PlayableCard card) {
+    public void pick(String p, PlayableCard card) throws WrongTurnException {
+        if(!p.equals(game.getCurrentPlayer().getNickname())
+                || !game.getCurrentState().equals(State.PICK)) {
+            Change change = gameDB.saveGame(true);
+            updateAll(change);
+            throw new WrongTurnException("You can't do this action now");
+        }
+
         game.chosenCardToAddInHand(card);
         game.changeState();
         Change change = gameDB.saveGame(true);
@@ -238,7 +260,13 @@ public class Controller extends Observable{
      * @param face Selected face
      * @return The list of available colors, the player now has to choose which one to use
      */
-    public List<PlayersColor> placeStarting(String p, Face face){
+    public List<PlayersColor> placeStarting(String p, Face face) throws WrongTurnException {
+        if(!p.equals(game.getCurrentPlayer().getNickname())
+        || !game.getCurrentState().equals(State.SETHAND)) {
+            Change change = gameDB.saveGame(true);
+            updateAll(change);
+            throw new WrongTurnException("You can't do this action now");
+        }
         Change change;
         game.getCurrentPlayer().placeCard(new Position(0,0), face);
         game.changeState();
@@ -255,7 +283,14 @@ public class Controller extends Observable{
      * @param color the Selected Color
      * @return The list of objectives, the player now has to select which one it should choose
      */
-    public List<GoalCard> chooseColor(String p, PlayersColor color) {
+    public List<GoalCard> chooseColor(String p, PlayersColor color) throws WrongTurnException {
+        if(!p.equals(game.getCurrentPlayer().getNickname())
+            || !game.getCurrentState().equals(State.SETCOLOR)) {
+            Change change = gameDB.saveGame(true);
+            updateAll(change);
+            throw new WrongTurnException("You can't do this action now");
+        }
+
         game.getCurrentPlayer().setColor(color);
         game.removeColor(color);
         game.changeState();
@@ -273,7 +308,13 @@ public class Controller extends Observable{
      * @param p Nickname of method caller
      * @param goal Selected Goal
      */
-    public void chooseGoal(String p, GoalCard goal) {
+    public void chooseGoal(String p, GoalCard goal) throws WrongTurnException {
+        if(!p.equals(game.getCurrentPlayer().getNickname())
+        || !game.getCurrentState().equals(State.SETGOAL)){
+            Change change = gameDB.saveGame(true);
+            updateAll(change);
+            throw new WrongTurnException("You can't do this action now");
+        }
         game.getCurrentPlayer().setPersonalGoal(goal);
         game.changeState();
         Change change = gameDB.saveGame(false);
@@ -289,7 +330,12 @@ public class Controller extends Observable{
      * Returns the list of winners (more than one if there is a tie)
      * @return list of winners
      */
-    public List<Player> getWinner(){
+    public List<Player> getWinner() throws WrongTurnException{
+        if (!game.getCurrentState().equals(State.LAST)) {
+            Change change = gameDB.saveGame(true);
+            updateAll(change);
+            throw new WrongTurnException("You can't do this action now");
+        }
         System.out.println("sending final results");
         return game.getWinner();
     }

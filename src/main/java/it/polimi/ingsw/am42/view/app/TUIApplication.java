@@ -1,6 +1,8 @@
 package it.polimi.ingsw.am42.view.app;
 
 import it.polimi.ingsw.am42.controller.ConnectionState;
+import it.polimi.ingsw.am42.exceptions.GameAlreadyCreatedException;
+import it.polimi.ingsw.am42.exceptions.WrongTurnException;
 import it.polimi.ingsw.am42.model.cards.types.Back;
 import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
@@ -11,6 +13,7 @@ import it.polimi.ingsw.am42.model.structure.Board;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
+import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GameAlreadyCreatedErrorMessage;
 import it.polimi.ingsw.am42.view.tui.ColorChooser;
 import it.polimi.ingsw.am42.view.tui.IOHandler;
 import it.polimi.ingsw.am42.view.clientModel.MethodChoice;
@@ -73,6 +76,9 @@ public class TUIApplication extends App {
 
             client.getView().setNickname(nickname);
             int gameid = client.createGame(nickname, numPlayers);
+        }catch(GameAlreadyCreatedException e){
+            io.print("Someone already created a game, restarting connection");
+            handleConnection();
         }
         catch (Exception e) {
             io.print(e.getMessage());
@@ -100,12 +106,17 @@ public class TUIApplication extends App {
 
     private static void reconnect() {
 
+
+        nickname = io.getString("What was your nickname in the previous game?");
+
+        client.getView().setNickname(nickname);
+
         try {
-
-            nickname = io.getString("What was your nickname in the previous game?");
-
-            client.getView().setNickname(nickname);
             client.reconnect(nickname);
+        }
+        catch(GameAlreadyCreatedException e){
+            io.print("Someone already created a game, restarting connection");
+            handleConnection();
         }
         catch (Exception e) {
             io.print(e.getMessage());
@@ -126,9 +137,15 @@ public class TUIApplication extends App {
         }
         boolean faceSide = io.getBoolean("Would you like to place the starting card face up??");
         if(startingCard != null) {
+            Face face = startingCard.getBack();
             if (faceSide)
-                p.setAvColors(client.placeStarting(nickname, startingCard.getFront()));
-            else p.setAvColors(client.placeStarting(nickname, startingCard.getBack()));
+                face = startingCard.getFront();
+            try {
+                p.setAvColors(client.placeStarting(nickname, face));
+            } catch (WrongTurnException e) {
+                io.print(ColorChooser.RED + e.getMessage() + ColorChooser.RESET);
+                selectChoice();
+            }
         }
         else io.print("Starting card not found!!!");
     }
@@ -146,7 +163,12 @@ public class TUIApplication extends App {
             choice = io.getInt(question);
         }
         p.setColor(avcolors.get(choice));
-        p.setAvGoals(client.chooseColor(nickname,avcolors.get(choice)));
+        try {
+            p.setAvGoals(client.chooseColor(nickname,avcolors.get(choice)));
+        } catch (WrongTurnException e) {
+            io.print(ColorChooser.RED + e.getMessage() + ColorChooser.RESET);
+            selectChoice();
+        }
     }
 
     public static void chooseGoal() {
@@ -162,7 +184,12 @@ public class TUIApplication extends App {
             choice = io.getInt(question);
         }
         p.setPersonalGoal(goals.get(choice));
-        client.chooseGoal(nickname,goals.get(choice));
+        try {
+            client.chooseGoal(nickname,goals.get(choice));
+        } catch (WrongTurnException e) {
+            io.print(ColorChooser.RED + e.getMessage() + ColorChooser.RESET);
+            selectChoice();
+        }
 
     }
 
@@ -334,7 +361,6 @@ public class TUIApplication extends App {
             io.print(to_print);
 
         }
-
     }
 
     private static void seeResources(String nickname){
@@ -381,7 +407,14 @@ public class TUIApplication extends App {
 
     public static void place() {
         //Selection of the position
-        List<Position> availablePositions = client.getAvailablePositions(nickname).stream().toList();
+        List<Position> availablePositions = null;
+        try {
+            availablePositions = client.getAvailablePositions(nickname).stream().toList();
+        } catch (WrongTurnException e) {
+            io.print(ColorChooser.RED + e.getMessage() + ColorChooser.RESET);
+            selectChoice();
+            return;
+        }
         if(availablePositions.isEmpty()) {
             io.print("No position available");
             return;
@@ -426,6 +459,9 @@ public class TUIApplication extends App {
         } catch (RequirementsNotMetException e) {
             io.print(e.getMessage());
             place();
+        } catch (WrongTurnException e) {
+            io.print(ColorChooser.RED + e.getMessage() + ColorChooser.RESET);
+            selectChoice();
         }
     }
 
@@ -462,7 +498,12 @@ public class TUIApplication extends App {
             io.print("Invalid choice");
             choice = io.getInt(question);
         }
-        client.pick(nickname,cards.get(choice));
+        try {
+            client.pick(nickname, cards.get(choice));
+        } catch (WrongTurnException e) {
+            io.print(ColorChooser.RED + e.getMessage() + ColorChooser.RESET);
+            selectChoice();
+        }
     }
 
     public static void seeChat() {

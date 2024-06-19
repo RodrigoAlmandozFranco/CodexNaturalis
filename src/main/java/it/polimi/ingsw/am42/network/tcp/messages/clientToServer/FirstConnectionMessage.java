@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am42.network.tcp.messages.clientToServer;
 
 import it.polimi.ingsw.am42.controller.Controller;
+import it.polimi.ingsw.am42.exceptions.GameAlreadyCreatedException;
 import it.polimi.ingsw.am42.model.exceptions.GameFullException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
@@ -40,9 +41,10 @@ public class FirstConnectionMessage extends Message {
             return new NicknameInvalidErrorMessage(e.getMessage());
         } catch (NicknameAlreadyInUseException e) {
             return new NicknameAlreadyInUseErrorMessage(e.getMessage());
+        } catch (GameAlreadyCreatedException e){
+            return new GameAlreadyCreatedErrorMessage();
         }
         clientHandler.setNickname(nickname);
-        //return null;
         return new GoodMessage();
     }
 }

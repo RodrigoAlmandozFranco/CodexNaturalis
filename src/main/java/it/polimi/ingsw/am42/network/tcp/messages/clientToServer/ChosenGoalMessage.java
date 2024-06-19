@@ -1,9 +1,13 @@
 package it.polimi.ingsw.am42.network.tcp.messages.clientToServer;
 
 import it.polimi.ingsw.am42.controller.Controller;
+import it.polimi.ingsw.am42.exceptions.GameAlreadyCreatedException;
+import it.polimi.ingsw.am42.exceptions.WrongTurnException;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
+import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GameAlreadyCreatedErrorMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GoodMessage;
+import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.WrongTurnErrorMessage;
 import it.polimi.ingsw.am42.network.tcp.server.ClientHandler;
 
 /**
@@ -26,9 +30,13 @@ public class ChosenGoalMessage extends Message {
     }
 
     public Message execute(ClientHandler clientHandler, Controller controller) {
-        controller.chooseGoal(nickname, goal);
-        //return null;
-        return new GoodMessage();
+        try {
+            controller.chooseGoal(nickname, goal);
+            return new GoodMessage();
+        } catch (WrongTurnException e) {
+            return new WrongTurnErrorMessage();
+        }
+
     }
 }
 

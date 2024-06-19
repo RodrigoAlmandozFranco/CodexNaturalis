@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.view.gui.controller;
 
+import it.polimi.ingsw.am42.exceptions.GameAlreadyCreatedException;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.view.gui.utils.ClientHolder;
 import javafx.event.ActionEvent;
@@ -98,26 +99,45 @@ public class FirstPlayerCreateGameController implements Initializable {
      * @author Mattia Brandi
      */
     private void connect(ActionEvent event) throws IOException {
+        String resource = "";
+
         try {
             client.createGame(nickname, numberOfPlayers);
             client.getView().setNickname(nickname);
-        } catch (Exception exception) {
+            resource = "/it/polimi/ingsw/am42/javafx/Lobby.fxml";
+            load(resource, event);
+        } catch (GameAlreadyCreatedException e) {
+            showAlert("Game already created. We are redirecting you to the connection page. Please be patient.");
+            resource = "/it/polimi/ingsw/am42/javafx/GeneralConnection.fxml";
+            load(resource, event);
+        }
+        catch (Exception exception) {
             showAlert(exception.getMessage());
             System.exit(1);
         }
+    }
 
-        String resource = "/it/polimi/ingsw/am42/javafx/Lobby.fxml";
+    private void load(String resource, ActionEvent event) throws IOException {
+        FXMLLoader fxmlLoader;
+        Parent root;
+        fxmlLoader = new FXMLLoader(getClass().getResource(resource));
+        root = fxmlLoader.load();
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
-        Parent root = fxmlLoader.load();
-        LobbyController lobbycontroller = fxmlLoader.getController();
-        lobbycontroller.setClient(ClientHolder.getClient(), false);
+        switch (resource) {
+            case "/it/polimi/ingsw/am42/javafx/Lobby.fxml" -> {
+                LobbyController lobbycontroller = fxmlLoader.getController();
+                lobbycontroller.setClient(ClientHolder.getClient(), false);
+            }
+            case "/it/polimi/ingsw/am42/javafx/GeneralConnection.fxml" -> {
+                NormalConnectionController normalConnectionController = fxmlLoader.getController();
+                normalConnectionController.setClient(ClientHolder.getClient());
+            }
+        }
 
         Scene scene = new Scene(root);
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
-
     }
 
     /**

@@ -1,10 +1,16 @@
 package it.polimi.ingsw.am42.network.tcp.messages.clientToServer;
 
 import it.polimi.ingsw.am42.controller.Controller;
+import it.polimi.ingsw.am42.exceptions.WrongTurnException;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
+import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GoodMessage;
+import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.SendAvailableColorsMessage;
+import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.WrongTurnErrorMessage;
 import it.polimi.ingsw.am42.network.tcp.server.ClientHandler;
+
+import java.util.List;
 
 /**
  * Message sent by the client to the server to pick a card
@@ -27,8 +33,11 @@ public class PickMessage extends Message {
 
     @Override
     public Message execute(ClientHandler clientHandler, Controller controller) {
-        controller.pick(nickname, card);
-        return new GoodMessage();
-        //return null;
+        try {
+            controller.pick(nickname, card);
+            return new GoodMessage();
+        } catch (WrongTurnException e) {
+            return new WrongTurnErrorMessage();
+        }
     }
 }

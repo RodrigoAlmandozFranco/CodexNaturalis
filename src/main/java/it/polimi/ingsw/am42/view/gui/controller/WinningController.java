@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.view.gui.controller;
 
+import it.polimi.ingsw.am42.exceptions.WrongTurnException;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
@@ -12,10 +13,7 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
@@ -83,9 +81,15 @@ public class WinningController {
         List<PlayerClientModel> standings = gameClientModel.getPlayers();
 
         standings = standings.stream().sorted(Comparator.comparingInt(PlayerClientModel::getPoints).reversed()).toList();
-
-        List<Player> winners = client.getWinner();
-
+        try {
+            List<Player> winners = client.getWinner();
+        } catch (WrongTurnException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
         List<String> winnersNicknames = winners.stream().map(Player::getNickname).toList();
 
         firstPlayerLabel.setWrapText(true);
