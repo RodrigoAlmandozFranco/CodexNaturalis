@@ -6,7 +6,6 @@ import it.polimi.ingsw.am42.network.tcp.messages.Message;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.PlayerDisconnectedMessage;
 
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -116,6 +115,8 @@ public abstract class Observable {
             }
         }
     }
+
+
 
     /**
      * Method called by heartbeat task to handle disconnections

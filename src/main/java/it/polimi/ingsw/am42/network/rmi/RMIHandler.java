@@ -55,7 +55,7 @@ public class RMIHandler implements RMISpeaker{
     }
 
     @Override
-    public Set<Position> getAvailablePositions(String p) {
+    public Set<Position> getAvailablePositions(String p) throws RemoteException {
         return controller.getAvailablePositions(p);
     }
 
@@ -65,27 +65,27 @@ public class RMIHandler implements RMISpeaker{
     }
 
     @Override
-    public void pick(String p, PlayableCard card) {
+    public void pick(String p, PlayableCard card) throws RemoteException {
         controller.pick(p, card);
     }
 
     @Override
-    public List<GoalCard> chooseColor(String p, PlayersColor color) {
+    public List<GoalCard> chooseColor(String p, PlayersColor color) throws RemoteException {
         return controller.chooseColor(p, color);
     }
 
     @Override
-    public void chooseGoal(String p, GoalCard goal) {
+    public void chooseGoal(String p, GoalCard goal) throws RemoteException {
         controller.chooseGoal(p, goal);
     }
 
     @Override
-    public List<Player> getWinner() {
+    public List<Player> getWinner() throws RemoteException {
         return controller.getWinner();
     }
 
     @Override
-    public List<PlayersColor> placeStarting(String p, Face face) {
+    public List<PlayersColor> placeStarting(String p, Face face) throws RemoteException {
         return controller.placeStarting(p, face);
     }
 

@@ -1,12 +1,14 @@
 package it.polimi.ingsw.am42.network.tcp.messages.clientToServer;
 
 import it.polimi.ingsw.am42.controller.Controller;
+import it.polimi.ingsw.am42.exceptions.WrongTurnException;
 import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.exceptions.RequirementsNotMetException;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GoodMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.NoRequirementsErrorMessage;
+import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.WrongTurnErrorMessage;
 import it.polimi.ingsw.am42.network.tcp.server.ClientHandler;
 
 /**
@@ -35,8 +37,9 @@ public class PlaceMessage extends Message {
             controller.place(nickname, face, position);
         } catch (RequirementsNotMetException e) {
             return new NoRequirementsErrorMessage();
+        } catch (WrongTurnException e) {
+            return new WrongTurnErrorMessage();
         }
-        //return null;
         return new GoodMessage();
     }
 }

@@ -1,14 +1,12 @@
 package it.polimi.ingsw.am42.network.tcp.messages.clientToServer;
 
 import it.polimi.ingsw.am42.controller.Controller;
+import it.polimi.ingsw.am42.exceptions.GameAlreadyCreatedException;
 import it.polimi.ingsw.am42.model.exceptions.GameFullException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
-import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GameFullErrorMessage;
-import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GoodMessage;
-import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.NicknameAlreadyInUseErrorMessage;
-import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.NicknameInvalidErrorMessage;
+import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.*;
 import it.polimi.ingsw.am42.network.tcp.server.ClientHandler;
 
 /**
@@ -38,9 +36,10 @@ public class ReconnectMessage extends Message {
             return new NicknameInvalidErrorMessage(e.getMessage());
         } catch (NicknameAlreadyInUseException e) {
             return new NicknameAlreadyInUseErrorMessage(e.getMessage());
+        } catch (GameAlreadyCreatedException e){
+            return new GameAlreadyCreatedErrorMessage();
         }
         clientHandler.setNickname(nickname);
         return new GoodMessage();
-        //return null;
     }
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.am42.view.gui.controller;
 
+import it.polimi.ingsw.am42.exceptions.WrongTurnException;
 import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
@@ -515,8 +516,13 @@ public class BoardController implements Initializable {
 
         tokenOnStarting.setImage(image);
 
+        try {
+            possibleGoals = client.chooseColor(myPlayer.getNickname(), chosenColor);
+        } catch (WrongTurnException e){
+            showAlert(e.getMessage());
+            return;
+        }
 
-        possibleGoals = client.chooseColor(myPlayer.getNickname(), chosenColor);
         myPlayer.setColor(chosenColor);
         setBackgroundNickname(chosenColor);
     }
@@ -547,7 +553,12 @@ public class BoardController implements Initializable {
         goalPane.setOpacity(0);
         goalPane.setDisable(true);
 
-        client.chooseGoal(myPlayer.getNickname(), chosenGoal);
+        try {
+            client.chooseGoal(myPlayer.getNickname(), chosenGoal);
+        } catch (WrongTurnException e){
+            showAlert(e.getMessage());
+            return;
+        }
         personalGoal.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(chosenGoal.getSrcImage()))));
     }
 
@@ -618,7 +629,14 @@ public class BoardController implements Initializable {
         if(gameClientModel.getCurrentState().equals(State.PICK)){
             if (chosenCardToPick == null)
                 showAlert("You have to pick a card!");
-            client.pick(myPlayer.getNickname(), chosenCardToPick);
+
+            try {
+                client.pick(myPlayer.getNickname(), chosenCardToPick);
+            } catch (WrongTurnException e){
+                showAlert(e.getMessage());
+                return;
+            }
+
             for (ImageView b : pickableCardsImages) {
                 b.setEffect(null);
             }
@@ -771,6 +789,9 @@ public class BoardController implements Initializable {
         } catch (RequirementsNotMetException e) {
             showAlert("The requirements are not met");
             return;
+        }catch (WrongTurnException e){
+            showAlert(e.getMessage());
+            return;
         }
         addFaceToBoard(face);
 
@@ -781,7 +802,13 @@ public class BoardController implements Initializable {
      * @param face the face chosen by the player
      */
     private void placeStartingCard(Face face) {
-        availableColors = client.placeStarting(myPlayer.getNickname(), face);
+        try {
+            availableColors = client.placeStarting(myPlayer.getNickname(), face);
+        } catch (WrongTurnException e){
+            showAlert(e.getMessage());
+            return;
+        }
+
         handCard1.setEffect(null);
         handCard2.setEffect(null);
         handCard3.setEffect(null);
@@ -829,7 +856,14 @@ public class BoardController implements Initializable {
      * are out of the board's space
      */
     private void setupTurn() {
-        Set<Position> availablePositions = client.getAvailablePositions(myPlayer.getNickname());
+        Set<Position> availablePositions;
+        try {
+            availablePositions = client.getAvailablePositions(myPlayer.getNickname());
+        } catch (WrongTurnException e){
+            showAlert(e.getMessage());
+            return;
+        }
+
         for (Position position : availablePositions) {
             double offsetX = startingCard.getLayoutX();
             double offsetY = startingCard.getLayoutY();
