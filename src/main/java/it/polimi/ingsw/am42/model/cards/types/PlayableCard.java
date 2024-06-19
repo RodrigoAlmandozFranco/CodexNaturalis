@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am42.model.cards.types;
 
 import it.polimi.ingsw.am42.model.cards.Card;
+import it.polimi.ingsw.am42.view.tui.ColorChooser;
 
 /**
  * This class represents a Playable Card
@@ -69,6 +70,7 @@ public class PlayableCard extends Card {
         to_print += front.eighthRow("\t") + back.eighthRow("\n");
         to_print += front.ninthRow("\t") + back.ninthRow("\n");
 
+        to_print += ColorChooser.RESET;
         return to_print;
     }
 

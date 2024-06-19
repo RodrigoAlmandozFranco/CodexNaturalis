@@ -28,7 +28,7 @@ public class EvaluatorPointsPerCorner extends Evaluator{
 
     public String toString(Color color) {
         if (color != null)
-            return "" + numPoints + color + " | C" ;
+            return "" + numPoints + color + " | □" ;
         else
             return toString();
     }
@@ -40,7 +40,7 @@ public class EvaluatorPointsPerCorner extends Evaluator{
 
         for (int i=0; i<4; i++)
             to_print += "|                       |\n";
-        to_print += "|          C |" + numPoints + "          |\n";
+        to_print += "|          □ |" + numPoints + "          |\n";
         for (int i=0; i<4; i++)
             to_print += "|                       |\n";
 
