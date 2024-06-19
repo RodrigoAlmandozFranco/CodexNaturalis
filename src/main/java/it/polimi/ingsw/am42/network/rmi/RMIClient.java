@@ -81,6 +81,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
 
     public boolean connect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         try {
+            this.nickname = nickname;
             return stub.connect(this, nickname);
         } catch (RemoteException e) {
             Throwable originalException = e.getCause();
@@ -98,6 +99,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
 
     public boolean reconnect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
         try {
+            this.nickname = nickname;
             return stub.reconnect(this, nickname);
         } catch (RemoteException e) {
             Throwable originalException = e.getCause();
