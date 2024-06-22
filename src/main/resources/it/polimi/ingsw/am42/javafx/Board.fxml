@@ -66,7 +66,7 @@
             <Button fx:id="handCard2Button" layoutX="503.0" layoutY="567.0" mnemonicParsing="false" onAction="#handCard2ButtonAction" opacity="0.0" prefHeight="85.0" prefWidth="137.0" />
             <Button fx:id="handCard3Button" layoutX="663.0" layoutY="567.0" mnemonicParsing="false" onAction="#handCard3ButtonAction" opacity="0.0" prefHeight="85.0" prefWidth="137.0" />
             <Label fx:id="personalNickname" layoutX="10.0" layoutY="396.0" prefHeight="46.0" prefWidth="318.0" text="Label" />
-            <Pane fx:id="boardPane" disable="true" layoutX="331.0" layoutY="2.0" prefHeight="560.0" prefWidth="674.0">
+            <Pane fx:id="boardPane" disable="true" layoutX="331.0" layoutY="2.0" prefHeight="525.0" prefWidth="669.0">
                <children>
                   <ImageView fx:id="startingCard" fitHeight="70.0" fitWidth="110.0" layoutX="236.5" layoutY="212.5" pickOnBounds="true" preserveRatio="true" />
                   <ImageView fx:id="tokenOnStarting" fitHeight="32.0" fitWidth="32.0" layoutX="278.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true" />
@@ -74,7 +74,7 @@
             </Pane>
             <Pane fx:id="standingPane" disable="true" layoutX="330.0" layoutY="1.0" opacity="0.0" prefHeight="560.0" prefWidth="669.0" style="-fx-background-color: white;">
                <children>
-                  <ImageView fx:id="standingsImage" fitHeight="566.0" fitWidth="308.0" layoutX="190.0" pickOnBounds="true" preserveRatio="true" style="-fx-background: white;">
+                  <ImageView fx:id="standingsImage" fitHeight="560.0" fitWidth="283.0" layoutX="190.0" pickOnBounds="true" preserveRatio="true" style="-fx-background: white;">
                      <image>
                         <Image url="@../graphical/gameStructure/scoreboard.png" />
                      </image>
@@ -120,7 +120,7 @@
             </Pane>
             <Button fx:id="pickButton" disable="true" layoutX="149.0" layoutY="315.0" mnemonicParsing="false" onAction="#pickButtonAction" opacity="0.0" text="Pick!" />
             <Pane prefHeight="200.0" prefWidth="200.0" />
-            <Pane fx:id="boardPaneOtherPlayer" disable="true" layoutX="329.0" layoutY="-2.0" opacity="0.0" prefHeight="566.0" prefWidth="669.0">
+            <Pane fx:id="boardPaneOtherPlayer" disable="true" layoutX="331.0" layoutY="2.0" opacity="0.0" prefHeight="525.0" prefWidth="669.0">
                <children>
                   <ImageView fitHeight="560.0" fitWidth="680.0" pickOnBounds="true">
                      <image>

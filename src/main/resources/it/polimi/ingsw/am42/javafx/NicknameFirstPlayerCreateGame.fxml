@@ -7,30 +7,100 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="648.0" prefWidth="1152.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.am42.view.gui.controller.FirstPlayerCreateGameController">
+<AnchorPane prefHeight="648.0" prefWidth="1152.0" style="-fx-background-color: linear-gradient(to bottom, #000000, #3533cd);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.am42.view.gui.controller.FirstPlayerCreateGameController">
    <children>
-      <ImageView fitHeight="649.0" fitWidth="1152.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true">
+      <AnchorPane layoutX="427.0" prefHeight="648.0" prefWidth="784.0">
+         <children>
+            <Label layoutX="93.0" layoutY="202.0" text="Choose your nickname">
+               <font>
+                  <Font name="Futura Bold Italic BT" size="40.0" />
+               </font>
+               <textFill>
+                  <RadialGradient centerX="0.48895027624309395" centerY="0.5" radius="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.5098039507865906" green="0.4588235318660736" blue="0.8156862854957581" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </RadialGradient>
+               </textFill>
+            </Label>
+            <Button fx:id="LoginButton1" layoutX="341.0" layoutY="447.0" mnemonicParsing="false" onAction="#createGameAction" prefHeight="44.0" prefWidth="103.0" style="-fx-background-color: teal;" text="OK!" textFill="WHITE">
+               <font>
+                  <Font size="34.0" />
+               </font>
+            </Button>
+            <ChoiceBox fx:id="choiceBox" layoutX="561.0" layoutY="348.0" prefHeight="59.0" prefWidth="94.0" />
+            <TextField fx:id="textField" layoutX="95.0" layoutY="348.0" onAction="#submit" prefHeight="59.0" prefWidth="415.0" promptText="Nickname">
+               <font>
+                  <Font size="28.0" />
+               </font>
+            </TextField>
+            <Label layoutX="156.0" layoutY="91.0" text="YOU ARE THE FIRST">
+               <font>
+                  <Font name="Futura Bold Italic BT" size="45.0" />
+               </font>
+               <textFill>
+                  <RadialGradient centerX="0.48895027624309395" centerY="0.5" radius="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.5098039507865906" green="0.4588235318660736" blue="0.8156862854957581" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </RadialGradient>
+               </textFill>
+            </Label>
+            <Label layoutX="95.0" layoutY="258.0" text="and the number of players">
+               <font>
+                  <Font name="Futura Bold Italic BT" size="40.0" />
+               </font>
+               <textFill>
+                  <RadialGradient centerX="0.48895027624309395" centerY="0.5" radius="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.5098039507865906" green="0.4588235318660736" blue="0.8156862854957581" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </RadialGradient>
+               </textFill>
+            </Label>
+         </children>
+      </AnchorPane>
+      <ImageView fitHeight="450.0" fitWidth="427.0" layoutX="73.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../graphical/codex2.png" />
+            <Image url="@../graphical/gameStructure/codex.png" />
          </image>
       </ImageView>
-      <TextField fx:id="textField" layoutX="434.0" layoutY="116.0" onAction="#submit" prefHeight="59.0" prefWidth="415.0" promptText="Nickname">
-         <font>
-            <Font size="28.0" />
-         </font>
-      </TextField>
-      <Label layoutX="392.0" layoutY="42.0" style="-fx-background-color: snow;" text="Choose your nickname and the number of players">
-         <font>
-            <Font size="34.0" />
-         </font>
-      </Label>
-      <ChoiceBox fx:id="choiceBox" layoutX="436.0" layoutY="206.0" prefHeight="26.0" prefWidth="109.0" />
-      <Button fx:id="LoginButton1" layoutX="995.0" layoutY="160.0" mnemonicParsing="false" onAction="#createGameAction" prefHeight="44.0" prefWidth="103.0" style="-fx-background-color: teal;" text="OK!" textFill="WHITE">
-         <font>
-            <Font size="34.0" />
-         </font>
-      </Button>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="231.0" layoutY="474.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../graphical/cranio.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

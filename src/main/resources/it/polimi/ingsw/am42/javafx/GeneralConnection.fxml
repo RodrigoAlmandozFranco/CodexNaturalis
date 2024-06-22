@@ -1,34 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Lighting?>
+<?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="648.0" prefWidth="1152.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.am42.view.gui.controller.NormalConnectionController">
+<AnchorPane prefHeight="648.0" prefWidth="1152.0" style="-fx-background-color: linear-gradient(to bottom, #000000, #3533cd);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.am42.view.gui.controller.NormalConnectionController">
     <children>
-        <ImageView fitHeight="649.0" fitWidth="1152.0" layoutX="10.0" layoutY="10.0" pickOnBounds="true">
-            <image>
-                <Image url="@../graphical/codex2.png" />
-            </image>
-        </ImageView>
-        <TextField fx:id="textField" layoutX="434.0" layoutY="116.0" onAction="#submit" prefHeight="59.0" prefWidth="415.0" promptText="Nickname">
-            <font>
-                <Font size="28.0" />
-            </font>
-        </TextField>
-        <Label layoutX="392.0" layoutY="42.0" style="-fx-background-color: snow;" text="Choose your nickname">
-            <font>
-                <Font size="34.0" />
-            </font>
-        </Label>
-        <Button fx:id="LoginButton1" layoutX="995.0" layoutY="160.0" mnemonicParsing="false" onAction="#connectGameAction" prefHeight="44.0" prefWidth="103.0" style="-fx-background-color: teal;" text="OK!" textFill="WHITE">
-            <font>
-                <Font size="34.0" />
-            </font>
-        </Button>
+      <AnchorPane layoutX="441.0" layoutY="14.0" prefHeight="659.0" prefWidth="743.0">
+         <children>
+              <Label layoutX="236.0" layoutY="106.0" prefHeight="84.0" prefWidth="199.0" text="LOGIN" textFill="WHITE" underline="true">
+                  <font>
+                      <Font name="Futura Bold Italic BT" size="49.0" />
+                  </font>
+              </Label>
+              <TextField fx:id="textField" layoutX="120.0" layoutY="300.0" onAction="#submit" prefHeight="72.0" prefWidth="452.0" promptText="Nickname">
+                  <font>
+                      <Font size="28.0" />
+                  </font>
+              </TextField>
+            <Text fill="WHITE" layoutX="120.0" layoutY="274.0" strokeType="OUTSIDE" strokeWidth="0.0" text="INSERT YOUR NICKNAME" wrappingWidth="502.591796875">
+               <font>
+                  <Font name="Futura Bold Italic BT" size="36.0" />
+               </font>
+            </Text>
+              <Button fx:id="LoginButton1" layoutX="594.0" layoutY="298.0" mnemonicParsing="false" onAction="#connectGameAction" prefHeight="23.0" prefWidth="103.0" style="-fx-background-color: teal;" text="OK!" textFill="WHITE">
+                  <font>
+                      <Font size="34.0" />
+                  </font>
+              </Button>
+            <ImageView fitHeight="176.0" fitWidth="154.0" layoutX="295.0" layoutY="404.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+               <image>
+                  <Image url="@../graphical/profile_icon.png" />
+               </image>
+               <effect>
+                  <Lighting light="$null">
+                     <bumpInput>
+                        <Shadow />
+                     </bumpInput>
+                  </Lighting>
+               </effect>
+               <cursor>
+                  <Cursor fx:constant="DEFAULT" />
+               </cursor>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="208.0" layoutY="509.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../graphical/cranio.png" />
+         </image>
+      </ImageView>
+      <ImageView fitHeight="450.0" fitWidth="427.0" layoutX="50.0" layoutY="86.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../graphical/gameStructure/codex.png" />
+         </image>
+      </ImageView>
     </children>
 </AnchorPane>
