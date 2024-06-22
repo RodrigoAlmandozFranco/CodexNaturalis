@@ -316,7 +316,7 @@ public class BoardController implements Initializable {
         }
 
         for (int i = 1; i < nicknames.size(); i++){
-            playersBoardButtons.get(i - 1).setDisable(false);
+            playersBoardButtons.get(i - 1).setDisable(true);
             playersBoardButtons.get(i - 1).setOpacity(1);
             playersBoardButtons.get(i - 1).setText(nicknames.get(i) + "'s board");
         }
@@ -423,6 +423,7 @@ public class BoardController implements Initializable {
             b.setOnMouseEntered(event -> b.setCursor(Cursor.HAND));
             b.setOnMouseExited(event -> b.setCursor(Cursor.DEFAULT));
         }
+        enablePickButton();
     }
 
     private void disablePickableButtons() {
@@ -431,6 +432,7 @@ public class BoardController implements Initializable {
             b.setOnMouseEntered(event -> b.setCursor(Cursor.DEFAULT));
             b.setOnMouseExited(event -> b.setCursor(Cursor.DEFAULT));
         }
+        disablePickButton();
     }
 
     private void enableHandAndControlButtons() {
@@ -779,7 +781,7 @@ public class BoardController implements Initializable {
             }
         }
 
-        Position chosenPosition = new Position(Integer.parseInt(x), Integer.parseInt(y));
+        chosenPosition = new Position(Integer.parseInt(x), Integer.parseInt(y));
 
         chosenCard = null;
 
@@ -949,23 +951,23 @@ public class BoardController implements Initializable {
     private void resize (Pane pane, ImageView sCard, ImageView token, double offX, double offY, List<ImageView> cardsToBePlaced){
         double newHeight, newWidth;
         if(pane == boardPane) {
-            newHeight = (pane.getChildren().getFirst().getLayoutBounds().getHeight())*0.90;
-            newWidth = (pane.getChildren().getFirst().getLayoutBounds().getWidth())*0.90;
+            newHeight = (pane.getChildren().getFirst().getLayoutBounds().getHeight())*0.80;
+            newWidth = (pane.getChildren().getFirst().getLayoutBounds().getWidth())*0.80;
         } else {
-            newHeight = sCard.getFitHeight()*0.9;
-            newWidth = sCard.getFitWidth()*0.9;
+            newHeight = sCard.getFitHeight()*0.8;
+            newWidth = sCard.getFitWidth()*0.8;
         }
 
 
-        offX = offX * 0.9;
-        offY = offY * 0.9;
+        offX = offX * 0.8;
+        offY = offY * 0.8;
 
         sCard.setFitWidth(newWidth);
         sCard.setFitHeight(newHeight);
         sCard.setLayoutX(pane.getPrefWidth()/2-newWidth/2);
         sCard.setLayoutY((pane.getPrefHeight()/2-newHeight/2));
-        token.setFitWidth(token.getFitWidth()*0.90);
-        token.setFitHeight(token.getFitHeight()*0.90);
+        token.setFitWidth(token.getFitWidth()*0.80);
+        token.setFitHeight(token.getFitHeight()*0.80);
 
         token.setLayoutX(pane.getPrefWidth()/2 - token.getFitWidth()/2 + 1);
         token.setLayoutY(pane.getPrefHeight()/2 - token.getFitHeight()/2 - sCard.getFitHeight()/2);
@@ -1031,11 +1033,11 @@ public class BoardController implements Initializable {
             double finalOffsetY = coords.getY();
 
 
-            Platform.runLater(() -> {
-                image.setLayoutX(finalOffsetX);
-                image.setLayoutY(finalOffsetY);
 
-            });
+            image.setLayoutX(finalOffsetX);
+            image.setLayoutY(finalOffsetY);
+
+
         }
 
     }
@@ -1058,8 +1060,10 @@ public class BoardController implements Initializable {
         placedCards.add(card);
         boardPane.getChildren().add(card);
 
-        if(buttonsOutOfBounds.contains(chosenPosition)){
+        if((!buttonsOutOfBounds.isEmpty())&&(buttonsOutOfBounds.contains(chosenPosition))){
             resize(boardPane, startingCard, tokenOnStarting, constOffsetX, constOffsetY, placedCards);
+            constOffsetX = constOffsetX * 0.80;
+            constOffsetY = constOffsetY * 0.80;
         }
 
         chosenPositionButton = null;
@@ -1088,6 +1092,13 @@ public class BoardController implements Initializable {
 
     public void seeStandingsButtonAction(ActionEvent event) {
         seeStandingsButton.setDisable(true);
+
+        for(Button b : playersBoardButtons){
+            b.setDisable(true);
+        }
+
+        disableHandAndControlButtons();
+        disablePickableButtons();
 
         List<PlayerClientModel> players = gameClientModel.getPlayers();
         for (PlayerClientModel p : players) {
@@ -1137,11 +1148,23 @@ public class BoardController implements Initializable {
                     standingPane.setDisable(true);
                     standingPane.setVisible(false);
                     seeStandingsButton.setDisable(false);
-                    Platform.runLater(() -> {
-                        if(gameClientModel.getCurrentPlayer().equals(myPlayer)){
-                            enablePickButton();
-                        }
-                    });
+
+                    for(Button b : playersBoardButtons){
+                        b.setDisable(false);
+                    }
+
+                    if(myPlayer.equals(gameClientModel.getCurrentPlayer()) &&
+                            (gameClientModel.getCurrentState().equals(State.PLACE)))
+                        enableHandAndControlButtons();
+                    else if (myPlayer.equals(gameClientModel.getCurrentPlayer()) &&
+                            gameClientModel.getCurrentState().equals(State.PICK))
+                        enablePickableButtons();
+
+//                    Platform.runLater(() -> {
+//                        if(gameClientModel.getCurrentPlayer().equals(myPlayer)){
+//                            enablePickButton();
+//                        }
+//                    });
                 }
         ));
         timeline.setCycleCount(1);
@@ -1156,7 +1179,6 @@ public class BoardController implements Initializable {
     private void disableAll() {
         disableHandAndControlButtons();
         disablePickableButtons();
-        disablePickButton();
         colorPane.setOpacity(0);
         colorPane.setDisable(true);
         goalPane.setOpacity(0);
@@ -1182,6 +1204,10 @@ public class BoardController implements Initializable {
             text += "It's your turn! You have to place your starting card";
             enableHandAndControlButtons();
             disablePickableButtons();
+            seeStandingsButton.setDisable(true);
+            for(Button b : playersBoardButtons){
+                b.setDisable(true);
+            }
         } else {
             currentPlayer = gameClientModel.getCurrentPlayer().getNickname();
             text += currentPlayer + " is playing. " + currentPlayer + " has to place the starting card";
@@ -1205,6 +1231,12 @@ public class BoardController implements Initializable {
             }
             disableHandAndControlButtons();
             disablePickableButtons();
+
+//            seeStandingsButton.setDisable(true);
+//            for(Button b : playersBoardButtons){
+//                b.setDisable(true);
+//            }
+
             setColor();
         } else {
             currentPlayer = gameClientModel.getCurrentPlayer().getNickname();
@@ -1228,6 +1260,12 @@ public class BoardController implements Initializable {
             }
             disableHandAndControlButtons();
             disablePickableButtons();
+
+//            seeStandingsButton.setDisable(true);
+//            for(Button b : playersBoardButtons){
+//                b.setDisable(true);
+//            }
+
             setGoal();
         } else {
             currentPlayer = gameClientModel.getCurrentPlayer().getNickname();
@@ -1263,9 +1301,7 @@ public class BoardController implements Initializable {
         text = "";
         currentPlayer = "";
 
-        seeStandingsButtonAction(null);
-
-
+        //seeStandingsButtonAction(null);
 
         if (gameClientModel.getCurrentPlayer().equals(myPlayer)) {
             text += "It's your turn! You have to pick a card";
@@ -1423,24 +1459,10 @@ public class BoardController implements Initializable {
         return null;
     }
 
+Pane board;
+    private int loadBoard (PlayerClientModel player, Pane tmpBoard){
 
-    public void showOtherBoardPlayer(String name, int index){
-        for(Button b : playersBoardButtons){
-            b.setOpacity(0.5);
-            b.setDisable(true);
-        }
-        PlayerClientModel player;
-        if(name == null){
-            player = myPlayer;
-        }
-        else {
-            player = gameClientModel.getPlayer(name);
-        }
-
-        if(myPlayer.equals(gameClientModel.getCurrentPlayer())) disableHandAndControlButtons();
-
-        seeStandingsButton.setDisable(true);
-        boardPane.setOpacity(0);
+        board = tmpBoard;
         List<ImageView> cardToBePlaced = new ArrayList<>();
         ImageView sCard = null;
         double offXOtherPlayer = 80.5;
@@ -1448,35 +1470,48 @@ public class BoardController implements Initializable {
 
         ImageView token = new ImageView(getTokenColor(player.getColor()));
 
-
-
         for(Face face : player.getBoard().getFaces()){
 
             if(player.getBoard().getFaces().getFirst().equals(face)) {
-                Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(face.getSrcImage())));
-                sCard = new ImageView(image);
-                ImageView finalSCard = sCard;
-                Platform.runLater(() -> {
-                    boardPaneOtherPlayer.getChildren().add(finalSCard);
-                    boardPaneOtherPlayer.getChildren().add(token);
 
+                Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(face.getSrcImage())));
+
+                if(player == myPlayer) {
+                    startingCard.setImage(image);
+                    sCard = startingCard;
+                }
+                else{
+                    sCard = new ImageView(image);
+                }
+
+                ImageView finalSCard = sCard;
+
+                Platform.runLater(() -> {
+                    board.getChildren().add(finalSCard);
+                    board.getChildren().add(token);
                 });
+
                 finalSCard.setFitWidth(110);
                 finalSCard.setFitHeight(70);
-                finalSCard.setLayoutX(boardPaneOtherPlayer.getPrefWidth()/2 - finalSCard.getFitWidth()/2 + 1);
-                finalSCard.setLayoutY(boardPaneOtherPlayer.getPrefHeight()/2 - finalSCard.getFitHeight()/2);
+                finalSCard.setLayoutX(board.getPrefWidth()/2 - finalSCard.getFitWidth()/2 + 1);
+                finalSCard.setLayoutY(board.getPrefHeight()/2 - finalSCard.getFitHeight()/2);
+
                 token.setFitWidth(32);
                 token.setFitHeight(32);
-                token.setLayoutX(boardPaneOtherPlayer.getPrefWidth()/2 - token.getFitWidth()/2 + 1);
-                token.setLayoutY(boardPaneOtherPlayer.getPrefHeight()/2 - token.getFitHeight()/2 - sCard.getFitHeight()/2);
+                token.setLayoutX(board.getPrefWidth()/2 - token.getFitWidth()/2 + 1);
+                token.setLayoutY(board.getPrefHeight()/2 - token.getFitHeight()/2 - sCard.getFitHeight()/2);
 
             }
             else{
                 Coordinates coords = switchFromPositionToCoords(face.getPosition(), offXOtherPlayer, offYOtherPlayer, sCard);
                 Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(face.getSrcImage())));
                 ImageView card = new ImageView(image);
+
+                if(player == myPlayer){
+                    placedCards.add(card);
+                }
                 Platform.runLater(() -> {
-                    boardPaneOtherPlayer.getChildren().add(card);
+                    board.getChildren().add(card);
                 });
 
                 card.setLayoutX(coords.getX());
@@ -1492,6 +1527,7 @@ public class BoardController implements Initializable {
         }
 
         boolean finished = false;
+        int counterNumberResizeDone = 0;
 
         while(!finished) {
             finished = true;
@@ -1499,15 +1535,100 @@ public class BoardController implements Initializable {
                 double x = image.getLayoutX();
                 double y = image.getLayoutY();
 
-                if((x < 0)||(x + image.getFitWidth() > boardPaneOtherPlayer.getPrefWidth())||(y < 0)||(y + image.getFitHeight() > boardPaneOtherPlayer.getPrefHeight())) {
-                    resize(boardPaneOtherPlayer, sCard, token, offXOtherPlayer, offYOtherPlayer, cardToBePlaced);
-                    offXOtherPlayer = offXOtherPlayer * 0.9;
-                    offYOtherPlayer = offYOtherPlayer * 0.9;
+                if((x < 0)||(x + image.getFitWidth() > board.getPrefWidth())||(y < 0)||(y + image.getFitHeight() > board.getPrefHeight())) {
+                    resize(board, sCard, token, offXOtherPlayer, offYOtherPlayer, cardToBePlaced);
+                    counterNumberResizeDone++;
+                    offXOtherPlayer = offXOtherPlayer * 0.8;
+                    offYOtherPlayer = offYOtherPlayer * 0.8;
                     finished = false;
                     break;
                 }
             }
         }
+        return counterNumberResizeDone;
+    }
+    public void showOtherBoardPlayer(String name, int index){
+        for(Button b : playersBoardButtons){
+            b.setOpacity(0.5);
+            b.setDisable(true);
+        }
+
+        seeStandingsButton.setDisable(true);
+
+        disableHandAndControlButtons();
+        disablePickableButtons();
+
+        PlayerClientModel player = gameClientModel.getPlayer(name);
+
+
+        boardPane.setOpacity(0);
+        loadBoard(player, boardPaneOtherPlayer);
+//        List<ImageView> cardToBePlaced = new ArrayList<>();
+//        ImageView sCard = null;
+//        double offXOtherPlayer = 80.5;
+//        double offYOtherPlayer = 40.5;
+//
+//        ImageView token = new ImageView(getTokenColor(player.getColor()));
+//
+//        for(Face face : player.getBoard().getFaces()){
+//
+//            if(player.getBoard().getFaces().getFirst().equals(face)) {
+//                Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(face.getSrcImage())));
+//                sCard = new ImageView(image);
+//                ImageView finalSCard = sCard;
+//                Platform.runLater(() -> {
+//                    boardPaneOtherPlayer.getChildren().add(finalSCard);
+//                    boardPaneOtherPlayer.getChildren().add(token);
+//
+//                });
+//                finalSCard.setFitWidth(110);
+//                finalSCard.setFitHeight(70);
+//                finalSCard.setLayoutX(boardPaneOtherPlayer.getPrefWidth()/2 - finalSCard.getFitWidth()/2 + 1);
+//                finalSCard.setLayoutY(boardPaneOtherPlayer.getPrefHeight()/2 - finalSCard.getFitHeight()/2);
+//
+//                token.setFitWidth(32);
+//                token.setFitHeight(32);
+//                token.setLayoutX(boardPaneOtherPlayer.getPrefWidth()/2 - token.getFitWidth()/2 + 1);
+//                token.setLayoutY(boardPaneOtherPlayer.getPrefHeight()/2 - token.getFitHeight()/2 - sCard.getFitHeight()/2);
+//
+//            }
+//            else{
+//                Coordinates coords = switchFromPositionToCoords(face.getPosition(), offXOtherPlayer, offYOtherPlayer, sCard);
+//                Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(face.getSrcImage())));
+//                ImageView card = new ImageView(image);
+//                Platform.runLater(() -> {
+//                    boardPaneOtherPlayer.getChildren().add(card);
+//                });
+//
+//                card.setLayoutX(coords.getX());
+//                card.setLayoutY(coords.getY());
+//                card.setFitWidth(110);
+//                card.setFitHeight(70);
+//                String id = face.getPosition().getX() + ", " + face.getPosition().getY();
+//                card.setId(id);
+//                cardToBePlaced.add(card);
+//
+//            }
+//
+//        }
+//
+//        boolean finished = false;
+//
+//        while(!finished) {
+//            finished = true;
+//            for(ImageView image : cardToBePlaced){
+//                double x = image.getLayoutX();
+//                double y = image.getLayoutY();
+//
+//                if((x < 0)||(x + image.getFitWidth() > boardPaneOtherPlayer.getPrefWidth())||(y < 0)||(y + image.getFitHeight() > boardPaneOtherPlayer.getPrefHeight())) {
+//                    resize(boardPaneOtherPlayer, sCard, token, offXOtherPlayer, offYOtherPlayer, cardToBePlaced);
+//                    offXOtherPlayer = offXOtherPlayer * 0.8;
+//                    offYOtherPlayer = offYOtherPlayer * 0.8;
+//                    finished = false;
+//                    break;
+//                }
+//            }
+//        }
         boardLabelOtherPlayer.setOpacity(1);
         boardLabelOtherPlayer.setText(player.getNickname() + "'s board");
         boardLabelOtherPlayer.setStyle(playersBoardButtons.get(index).getStyle());
@@ -1525,11 +1646,16 @@ public class BoardController implements Initializable {
                     }
                     if(myPlayer.equals(gameClientModel.getCurrentPlayer()) &&
                             gameClientModel.getCurrentState().equals(State.PLACE)) enableHandAndControlButtons();
+                    else if(myPlayer.equals(gameClientModel.getCurrentPlayer()) &&
+                            gameClientModel.getCurrentState().equals(State.PICK)) enablePickableButtons();
+
                     boardPaneOtherPlayer.setOpacity(0);
                     boardPaneOtherPlayer.setDisable(true);
                     boardPane.setOpacity(1);
                     boardPaneOtherPlayer.getChildren().clear();
                     boardLabelOtherPlayer.setOpacity(0);
+
+                    seeStandingsButton.setDisable(false);
 
                 }
         ));
@@ -1539,8 +1665,6 @@ public class BoardController implements Initializable {
 
     // prendo per copia i getChildren e se si fa la resize allora non faccio nulla,
     // altrimenti metto i getChildren precedenti avuti grazie alla copia
-
-
 
 
     public void player1BoardButtonAction(ActionEvent event) {
@@ -1562,7 +1686,11 @@ public class BoardController implements Initializable {
     }
 
     private void loadAllBoard() {
-        showOtherBoardPlayer(null, 0);
+        int counter = loadBoard(myPlayer, boardPane);
+        for(int i=0; i<counter; i++){
+            constOffsetX = constOffsetX * 0.8;
+            constOffsetY = constOffsetY * 0.8;
+        }
         System.out.println("Loading my boards");
     }
 
@@ -1582,8 +1710,6 @@ public class BoardController implements Initializable {
                     }
                 }
 
-                disablePickButton();
-
                 if (gameClientModel.getCurrentState().equals(State.SETHAND)) {
                    updateStateSetHand();
                 } else if (gameClientModel.getCurrentState().equals(State.SETCOLOR)) {
@@ -1592,6 +1718,10 @@ public class BoardController implements Initializable {
                     updateColorBoardPlayers();
                     updateStateSetGoal();
                 } else if (gameClientModel.getCurrentState().equals(State.PLACE)) {
+                    seeStandingsButton.setDisable(false);
+                    for(Button b : playersBoardButtons){
+                        b.setDisable(false);
+                    }
                     if(gameClientModel.isTurnFinal() && gameClientModel.getCurrentPlayer().equals(gameClientModel.getPlayers().getFirst()))
                         Platform.runLater(() -> showAlert("This is the final turn. You will only be able to place a card."));
                     try {
