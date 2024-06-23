@@ -32,8 +32,8 @@ Here are the features we have added to our implementation of the board game [Cod
 | Chat           | ✅ |
 | Persistence    | ✅                |
 
-Requirements (<a href="https://github.com/TommasoCrippa-Polimi/IS24-AM42/blob/main/documents/regolamento.pdf">ITA</a> | <a href="https://github.com/TommasoCrippa-Polimi/IS24-AM42/blob/main/documents/rulebook.pdf">ENG</a>) <br>
-Rulebook (<a href="https://github.com/TommasoCrippa-Polimi/IS24-AM42/blob/main/documents/requiremnts.pdf">ITA</a>)<br>
+Rulebook (<a href="https://github.com/TommasoCrippa-Polimi/IS24-AM42/blob/main/documents/regolamento.pdf">ITA</a> | <a href="https://github.com/TommasoCrippa-Polimi/IS24-AM42/blob/main/documents/rulebook.pdf">ENG</a>) <br>
+Requirements (<a href="https://github.com/TommasoCrippa-Polimi/IS24-AM42/blob/main/documents/requirements.pdf">ITA</a>)<br>
 
 
 ## Game Screenshots
