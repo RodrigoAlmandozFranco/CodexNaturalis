@@ -5,6 +5,9 @@ import it.polimi.ingsw.am42.model.Player;
 
 import java.io.Serializable;
 
+/**
+ * Enumeration that stores all of the possible game states
+ */
 public enum State implements Serializable {
 
     INITIAL,
@@ -21,6 +24,9 @@ public enum State implements Serializable {
     LAST,
     DISCONNECTED;
 
+    /**
+     * Method called after an action has been completed correctly returns the next game state
+     */
     public State changeState(GameInterface game){
          switch (this){
              case INITIAL:

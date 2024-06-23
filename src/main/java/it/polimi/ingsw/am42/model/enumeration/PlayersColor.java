@@ -4,12 +4,18 @@ import it.polimi.ingsw.am42.view.tui.ColorChooser;
 
 import java.io.Serializable;
 
+/**
+ * Enumeration that stores the player's colors
+ */
 public enum PlayersColor implements Serializable {
     RED,
     BLUE,
     GREEN,
     YELLOW;
 
+    /**
+     * Returns the terminal's color to display
+     */
     @Override
     public String toString() {
         switch (this) {
@@ -29,6 +35,10 @@ public enum PlayersColor implements Serializable {
         return "";
     }
 
+    /**
+     * Method used to select how to display the color
+     * @param literal if true, get the literal name of the color, otherwise get only the terminal's color
+     */
     public String toString(boolean literal) {
         if (literal) {
             switch (this) {
