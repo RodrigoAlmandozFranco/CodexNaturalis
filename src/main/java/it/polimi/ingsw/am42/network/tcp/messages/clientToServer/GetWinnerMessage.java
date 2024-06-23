@@ -26,6 +26,15 @@ public class GetWinnerMessage extends Message {
 
     public GetWinnerMessage() {}
 
+    /**
+     * This method is called by the ClientHandler and gets the list of winners
+     *
+     * @param clientHandler ClientHandler unique for each client
+     * @param controller controller of the Game
+     *
+     * @return message with the list of winners or a message to notify a WrongTurnException
+     *
+     */
     @Override
     public Message execute(ClientHandler clientHandler, Controller controller) {
         try {

@@ -1,9 +1,8 @@
 package it.polimi.ingsw.am42.network.tcp.messages.serverToClient;
 
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
-
 /**
- * Message sent by the server to the client to notify that the number of players is wrong.
+ * Message sent by the server to the client to notify that the chosen number of players is wrong.
  * @see it.polimi.ingsw.am42.network.tcp.messages.Message
  * @see it.polimi.ingsw.am42.network.tcp.server.ClientHandler
  *
@@ -16,6 +15,10 @@ public class NumberPlayersWrongErrorMessage extends Message {
         this.message = message;
     }
 
+    /**
+     * This method gets the message
+     * @return message
+     */
     public String getMessage() {
         return message;
     }

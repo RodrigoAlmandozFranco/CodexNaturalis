@@ -44,9 +44,11 @@ public class ClientHandler implements Runnable, MessageListener {
     }
 
     /**
-     * This method waits for messages from the client
-     * It uses the type of the message to decide the methods to call
-     * It always sends back to the client a message
+     * This method waits for messages from the client and managed them based on their type
+     * This method continues to listen for incoming messages from the client until the connection is open
+     * It always sends back a response message to the client
+     *
+     * @throws RuntimeException if the message's class is not known
      */
     public void run() {
         try {
@@ -76,6 +78,7 @@ public class ClientHandler implements Runnable, MessageListener {
     /**
      * This method closes the input and the output streams
      * It closes the socket connection
+     *
      * @throws RuntimeException if something goes wrong during the closing process
      */
     private void closeAll() {
@@ -89,7 +92,8 @@ public class ClientHandler implements Runnable, MessageListener {
     }
     /**
      * This method sets the nickname
-     * @param nickname
+     *
+     * @param nickname nickname of the Player
      */
     public void setNickname(String nickname){
         this.nickname = nickname;
@@ -97,7 +101,8 @@ public class ClientHandler implements Runnable, MessageListener {
 
     /**
      * This method sends message to the client using the output stream
-     * @param answer
+     *
+     * @param answer message to be sent
      * @throws IOException if something goes wring during the sending process
      */
     private void sendMessage(Message answer) throws IOException {
@@ -109,8 +114,15 @@ public class ClientHandler implements Runnable, MessageListener {
         }
     }
 
+    /**
+     * This method receives a message and sends it to the client if the connection is still open
+     * If occurs an error the server sets the flag to stop running and manages the player disconnection
+     *
+     * @param message message to be sent to the client
+     *
+     */
     public void receiveMessage(Message message) {
-        if(isRunning) {
+        if (isRunning) {
             try {
                 sendMessage(message);
             } catch (IOException e) {
@@ -120,13 +132,26 @@ public class ClientHandler implements Runnable, MessageListener {
         }
     }
 
-
+    /**
+     * This method manages the Player's disconnection
+     * It controls if the ClientHandler is contained in the list of listeners and manages the disconnection
+     * It sets a flag to stop running
+     *
+     */
     private void playerDisconnected() {
         if (controller.getListeners().contains(this))
             controller.playerDisconnected();
         isRunning = false;
     }
 
+    /**
+     * This method is used to notify the client that it has to update its internal values
+     * with those one contained in the Change
+     * If occurs an error the server sets the flag to stop running and manages the player disconnection
+     *
+     * @param change Change object made by the server that contains all the update values
+     *
+     */
     public void update (Change change) {
         if(isRunning) {
             Message message = new ChangeMessage(change);
@@ -139,7 +164,12 @@ public class ClientHandler implements Runnable, MessageListener {
         }
     }
 
-
+    /**
+     * This method controls if the client is still connected and manages
+     * the player's disconnection if the player has closed the connection
+     * If everything is ok it returns. If it catches an IOException it sets
+     * the flag to stop running the server and manages the player's disconnection
+     */
     public boolean heartbeat() {
         try {
             sendMessage(new PingMessage());
@@ -152,10 +182,20 @@ public class ClientHandler implements Runnable, MessageListener {
         }
     }
 
+    /**
+     * This method returns the nickname of the player associated to the ClientHandler
+     *
+     * @return nickname of the Player
+     */
     public String getId(){
         return nickname;
     }
 
+    /**
+     * This method controls if the server is running
+     *
+     * @throws RuntimeException when the Thread isn't running
+     */
     private void checkIsRunning() {
         while(isRunning)
             try {

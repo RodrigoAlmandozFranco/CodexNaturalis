@@ -93,6 +93,15 @@ public class Server extends UnicastRemoteObject {
         System.out.println("Server RMI ready");
     }
 
+    /**
+     * This method starts the TCP connection for the server
+     * It initializes a server Socket on a specified port and waits for the clients' connections
+     * It manages each connection using a separate thread
+     *
+     * @param controller passed to each ClientHandler created
+     * @throws GenericException if there is an error creating a new ServerSocket
+     */
+
     public static void startServerTCP(Controller controller) throws GenericException {
 
         ExecutorService executor = Executors.newCachedThreadPool();

@@ -4,7 +4,6 @@ import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 
 import java.util.List;
-
 /**
  * Message sent by the server to the client to send the possible goals to choose from
  * @see it.polimi.ingsw.am42.network.tcp.messages.Message
@@ -21,6 +20,10 @@ public class SendPossibleGoalsMessage extends Message {
         goals = g;
     }
 
+    /**
+     * This method returns the goals
+     * @return List of Goal Card
+     */
     public List<GoalCard> getGoals() {
         return goals;
     }

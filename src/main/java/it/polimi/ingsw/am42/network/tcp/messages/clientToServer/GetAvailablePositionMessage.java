@@ -29,7 +29,15 @@ public class GetAvailablePositionMessage extends Message {
         this.nickname = nickname;
     }
 
-
+    /**
+     * This method is called by the ClientHandler, and it gets the list of available positions
+     *
+     * @param clientHandler ClientHandler unique for each client
+     * @param controller controller of the Game
+     *
+     * @return message with the list of available Positions or a message to notify a WrongTurnException
+     *
+     */
     public Message execute(ClientHandler clientHandler, Controller controller) {
         try {
             Set<Position> positions = controller.getAvailablePositions(nickname);

@@ -29,6 +29,15 @@ public class ChosenGoalMessage extends Message {
         goal = g;
     }
 
+    /**
+     * This method is called by the ClientHandler, and it sets the Goal chosen by the player on the server
+     *
+     * @param clientHandler ClientHandler unique for each client
+     * @param controller controller of the Game
+     *
+     * @return message to notify that everything has been done correctly or a message to notify a WrongTurnException
+     *
+     */
     public Message execute(ClientHandler clientHandler, Controller controller) {
         try {
             controller.chooseGoal(nickname, goal);

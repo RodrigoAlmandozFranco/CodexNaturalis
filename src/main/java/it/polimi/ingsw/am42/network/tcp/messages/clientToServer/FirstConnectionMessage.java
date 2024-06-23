@@ -29,6 +29,16 @@ public class FirstConnectionMessage extends Message {
         numPlayers = num;
     }
 
+    /**
+     * This method is called by the ClientHandler, and it connects the First Player to the Game
+     *
+     * @param clientHandler ClientHandler unique for each client
+     * @param controller controller of the Game
+     *
+     * @return message that notifies if everything has been done correctly or if there are
+     * exceptions to be managed by the client
+     *
+     */
     public Message execute(ClientHandler clientHandler, Controller controller) {
 
         try {

@@ -20,6 +20,12 @@ public class Message  implements Serializable {
     public Message() {
     }
 
+    /**
+     * This method is meant to be overridden by all the messages sent by the client to the server
+     * @param clientHandler
+     * @param controller
+     * @return null
+     */
     public Message execute(ClientHandler clientHandler, Controller controller) {
         return null;
     }

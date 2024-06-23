@@ -4,7 +4,6 @@ import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.tcp.messages.Message;
 
 import java.util.Set;
-
 /**
  * Message sent by the server to the client to send the available positions to the client
  * @see it.polimi.ingsw.am42.network.tcp.messages.Message
@@ -22,7 +21,10 @@ public class SendAvailablePositionMessage extends Message {
         positions = pos;
     }
 
-
+    /**
+     * This method returns the available Positions
+     * @return Set of Positions
+     */
     public Set<Position> getPositions() {
         return positions;
     }

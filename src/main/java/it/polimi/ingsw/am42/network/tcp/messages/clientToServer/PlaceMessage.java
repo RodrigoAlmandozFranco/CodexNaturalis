@@ -31,6 +31,16 @@ public class PlaceMessage extends Message {
         position = p;
     }
 
+    /**
+     * This method is called by the ClientHandler, and it calls the controller to place the chosen Card
+     *
+     * @param clientHandler ClientHandler unique for each client
+     * @param controller controller of the Game
+     *
+     * @return message to notify that everything has been done correctly or a message to notify a WrongTurnException
+     * or a RequirementsNotMetException
+     *
+     */
     public Message execute(ClientHandler clientHandler, Controller controller) {
 
         try {

@@ -30,6 +30,16 @@ public class ChosenColorMessage extends Message {
         color = c;
     }
 
+    /**
+     * This method is called by the ClientHandler, and it sets the color chosen by the player
+     * and receives the List of possible Goals
+     *
+     * @param clientHandler ClientHandler unique for each client
+     * @param controller controller of the Game
+     *
+     * @return message that contains the possible Goals or a message to notify a WrongTurnException
+     *
+     */
     public Message execute(ClientHandler clientHandler, Controller controller) {
         List<GoalCard> goals = null;
         try {

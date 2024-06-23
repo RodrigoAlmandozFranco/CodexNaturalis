@@ -31,6 +31,15 @@ public class PickMessage extends Message {
         card = c;
     }
 
+    /**
+     * This method is called by the ClientHandler, and it calls the controller to pick the chosen Card
+     *
+     * @param clientHandler ClientHandler unique for each client
+     * @param controller controller of the Game
+     *
+     * @return message to notify that everything has been done correctly of a message to notify a WrongTurnException
+     *
+     */
     @Override
     public Message execute(ClientHandler clientHandler, Controller controller) {
         try {
