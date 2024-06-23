@@ -5,6 +5,10 @@ import it.polimi.ingsw.am42.model.structure.Board;
 import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.view.tui.ColorChooser;
 
+
+/**
+ * Subclass of evaluator, returns the number of points times the corners covered by the last placed face on the board
+ */
 public class EvaluatorPointsPerCorner extends Evaluator{
     public EvaluatorPointsPerCorner(int numPoints) {
         super(numPoints);
@@ -28,7 +32,7 @@ public class EvaluatorPointsPerCorner extends Evaluator{
 
     public String toString(Color color) {
         if (color != null)
-            return "" + numPoints + color + " | □" ;
+            return "" + numPoints + color + " │ □" ;
         else
             return toString();
     }
@@ -36,15 +40,15 @@ public class EvaluatorPointsPerCorner extends Evaluator{
     public String toString() {
         String to_print = ColorChooser.YELLOW;
 
-        to_print += "+-----------------------+\n";
+        to_print += "┌――――――――――――――┐\n";
 
         for (int i=0; i<4; i++)
-            to_print += "|                       |\n";
-        to_print += "|          □ |" + numPoints + "          |\n";
+            to_print += "│                       │\n";
+        to_print += "│          □ │" + numPoints + "          │\n";
         for (int i=0; i<4; i++)
-            to_print += "|                       |\n";
+            to_print += "│                       │\n";
 
-        to_print += "+-----------------------+";
+        to_print += "└――――――――――――――┘";
 
 
         to_print += ColorChooser.RESET;

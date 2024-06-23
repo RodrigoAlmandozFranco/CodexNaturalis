@@ -7,10 +7,18 @@ import it.polimi.ingsw.am42.model.structure.Board;
 import it.polimi.ingsw.am42.view.tui.ColorChooser;
 
 import java.util.Map;
-
+/**
+ * Subclass of evaluator, returns the number of points given the requested resources the number of resources on the board
+ */
 public class EvaluatorPointsPerResource extends Evaluator{
 
     private final Map<Resource, Integer> resourceMap;
+
+    /**
+     * Constructor of the class
+     * @param numPoints the number of points given by the card
+     * @param resourceMap the number of resources needed to award the points
+     */
     public EvaluatorPointsPerResource(int numPoints, Map<Resource, Integer> resourceMap) {
         super(numPoints);
 
@@ -45,7 +53,7 @@ public class EvaluatorPointsPerResource extends Evaluator{
 
     public String toString(Color color) {
         if (color != null)
-            return "" + numPoints + color + " | " + resourceMap.keySet().toArray()[0] + color;
+            return "" + numPoints + color + " │ " + resourceMap.keySet().toArray()[0] + color;
         else
             return toString();
     }
@@ -57,17 +65,18 @@ public class EvaluatorPointsPerResource extends Evaluator{
         String to_print = color;
 
 
-        to_print += "+-----------------------+\n";
-        to_print += "|   ___                 |\n";
-        to_print += "|  /   \\        " + numPoints + "       |\n";
-        to_print += "|  | X |                |\n";
+        to_print += "┌――――――――――――――┐\n";
+        to_print += "│   ___                 │\n";
+        to_print += "│  /   \\        " + numPoints + "       │\n";
+        to_print += "│  │ " + resource+color + " │                │\n";
 
-        to_print += "|  |   |       " + resource+color+ "        |\n";
-        to_print += "|  |   |      " + resource+color+ "         |\n";
-        to_print += "|  |   |        " + resource+color+ "       |\n";
+        to_print += "│  │   │        " + resource+color+ "       │\n";
+        to_print += "│  │   │      /   \\     │\n";
+        to_print += "│  │   │     " + resource+color+ "  -  " + resource+color+ "    │\n";
 
-        to_print += "|  |   |                |\n";
-        to_print += "+-----------------------+";
+        to_print += "│  │   │                │\n";
+        to_print += "└――――――――――――――┘";
+        to_print += "\n";
 
         to_print += ColorChooser.RESET;
         return to_print;
@@ -77,21 +86,20 @@ public class EvaluatorPointsPerResource extends Evaluator{
         String color = ColorChooser.YELLOW;
         String to_print = color;
 
-        Resource first = resourceMap.keySet().stream().toList().get(0);
-        Resource second = resourceMap.keySet().stream().toList().get(1);
+        Resource res = resourceMap.keySet().stream().toList().get(0);
 
 
-        to_print += "+-----------------------+\n";
-        to_print += "|   ___                 |\n";
-        to_print += "|  /   \\        " + numPoints + "       |\n";
-        to_print += "|  | X |                |\n";
+        to_print += "┌――――――――――――――┐\n";
+        to_print += "│   ___                 │\n";
+        to_print += "│  /   \\        " + numPoints + "       │\n";
+        to_print += "│  │ " + res + color + " │                │\n";
 
-        to_print += "|  |   |                |\n";
-        to_print += "|  |   |         " + first+color + " | " + second+color +"     |\n";
-        to_print += "|  |   |                |\n";
+        to_print += "│  │   │                │\n";
+        to_print += "│  │   │      " + res+color + " │ " + res+color +"     │\n";
+        to_print += "│  │   │                │\n";
 
-        to_print += "|  |   |                |\n";
-        to_print += "+-----------------------+";
+        to_print += "│  │   │                │\n";
+        to_print += "└――――――――――――――┘";
 
         to_print += ColorChooser.RESET;
         return to_print;
@@ -106,17 +114,16 @@ public class EvaluatorPointsPerResource extends Evaluator{
         Resource third = resourceMap.keySet().stream().toList().get(2);
 
 
-        to_print += "+-----------------------+\n";
-        to_print += "|   ___                 |\n";
-        to_print += "|  /   \\        " + numPoints + "       |\n";
-        to_print += "|  | X |                |\n";
+        to_print += "┌――――――――――――――┐\n";
+        to_print += "│   ___                 │\n";
+        to_print += "│  /   \\        " + numPoints + "       │\n";
+        to_print += "│  │ " + ColorChooser.WHITE + "X" + color + " │                │\n";
+        to_print += "│  │   │                │\n";
+        to_print += "│  │   │     " + first+color + " │ " + second+color + " │ " + third+color + "  │\n";
+        to_print += "│  │   │                │\n";
 
-        to_print += "|  |   |                |\n";
-        to_print += "|  |   |     " + first+color + " | " + second+color + " | " + third+color + "  |\n";
-        to_print += "|  |   |                |\n";
-
-        to_print += "|  |   |                |\n";
-        to_print += "+-----------------------+";
+        to_print += "│  │   │                │\n";
+        to_print += "└――――――――――――――┘";
 
         to_print += ColorChooser.RESET;
 
@@ -130,10 +137,13 @@ public class EvaluatorPointsPerResource extends Evaluator{
 
         if (resourceMap == null || resourceMap.isEmpty())
             return super.toString();
-        if (resourceMap.keySet().size() == 1)
-            return threeOfAKind();
-        if (resourceMap.keySet().size() == 2)
-            return pair();
+        if (resourceMap.keySet().size() == 1) {
+            Resource res = resourceMap.keySet().stream().toList().get(0);
+            if (resourceMap.get(res) == 3)
+                return threeOfAKind();
+            else
+                return pair();
+        }
         if (resourceMap.keySet().size() == 3)
             return oneOfEach();
         return super.toString();

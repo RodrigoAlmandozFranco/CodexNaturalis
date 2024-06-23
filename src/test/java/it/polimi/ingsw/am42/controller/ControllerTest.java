@@ -1,6 +1,8 @@
 package it.polimi.ingsw.am42.controller;
 
 import it.polimi.ingsw.am42.controller.gameDB.Change;
+import it.polimi.ingsw.am42.exceptions.GameAlreadyCreatedException;
+import it.polimi.ingsw.am42.exceptions.WrongTurnException;
 import it.polimi.ingsw.am42.model.Game;
 import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.*;
@@ -95,7 +97,8 @@ class ControllerTest {
         assertEquals(controller.getGameInfo(), ConnectionState.CREATE);
         try {
             controller.createGame(messageListener1, "Rodri", 2);
-        } catch (NumberPlayerWrongException | GameFullException | NicknameInvalidException | NicknameAlreadyInUseException e) {
+        } catch (NumberPlayerWrongException | GameFullException | NicknameInvalidException | NicknameAlreadyInUseException |
+                 GameAlreadyCreatedException e) {
             e.printStackTrace();
         }
         assertEquals(controller.getGameInfo(), ConnectionState.CONNECT);
@@ -107,21 +110,25 @@ class ControllerTest {
 
         controller = null;
         controller = new Controller();
+
         assertEquals(controller.getGameInfo(), ConnectionState.LOAD);
         try {
             controller.reconnect(messageListener1, "Rodri");
-        } catch (GameFullException | NicknameInvalidException | NicknameAlreadyInUseException e) {
+        } catch (GameFullException | NicknameInvalidException | NicknameAlreadyInUseException |
+                 GameAlreadyCreatedException e) {
             e.printStackTrace();
         }
         assertEquals(controller.getGameInfo(), ConnectionState.LOADING);
         try {
             controller.reconnect(null, "Tommy");
-        } catch (GameFullException | NicknameInvalidException | NicknameAlreadyInUseException e) {
+        } catch (GameFullException | NicknameInvalidException | NicknameAlreadyInUseException |
+                 GameAlreadyCreatedException e) {
             assertInstanceOf(NicknameInvalidException.class, e);
         }
         try {
             controller.reconnect(messageListener2, "Matti");
-        } catch (GameFullException | NicknameInvalidException | NicknameAlreadyInUseException e) {
+        } catch (GameFullException | NicknameInvalidException | NicknameAlreadyInUseException |
+                 GameAlreadyCreatedException e) {
             e.printStackTrace();
         }
     }
@@ -132,19 +139,34 @@ class ControllerTest {
         try {
             controller.createGame(messageListener1, "Rodri", 2);
             controller.connect(messageListener2, "Matti");
-        } catch (NumberPlayerWrongException | GameFullException | NicknameInvalidException | NicknameAlreadyInUseException e) {
+        } catch (NumberPlayerWrongException | GameFullException | NicknameInvalidException |
+                 NicknameAlreadyInUseException | GameAlreadyCreatedException e) {
             e.printStackTrace();
         }
 
         for(int i = 0; i < 2; i++) {
             int id = change.getHand().getFirst().getId();
-            List<PlayersColor> colors = controller.placeStarting(change.getCurrentPlayer(), change.getHand().getFirst().getFront());
+            List<PlayersColor> colors = null;
+            try {
+                colors = controller.placeStarting(change.getCurrentPlayer(), change.getHand().getFirst().getFront());
+            } catch (WrongTurnException e) {
+                e.printStackTrace();
+            }
             List<PlayersColor> copyColors = new ArrayList<>(colors);
             assertNotNull(colors);
             assertEquals(change.getLastPlacedFace().getId(), id);
-            List<GoalCard> goals = controller.chooseColor(change.getCurrentPlayer(), colors.getFirst());
+            List<GoalCard> goals = null;
+            try {
+                goals = controller.chooseColor(change.getCurrentPlayer(), colors.getFirst());
+            } catch (WrongTurnException e) {
+                e.printStackTrace();
+            }
             assertNotNull(goals);
-            controller.chooseGoal(change.getCurrentPlayer(), goals.getFirst());
+            try {
+                controller.chooseGoal(change.getCurrentPlayer(), goals.getFirst());
+            } catch (WrongTurnException e) {
+                e.printStackTrace();
+            }
 
             for (Player player : change.getPlayers()) {
                 if (player.getNickname().equals(change.getCurrentPlayer())) {
@@ -185,6 +207,8 @@ class ControllerTest {
 
         } catch (RequirementsNotMetException e) {
             e.printStackTrace();
+        } catch (WrongTurnException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -193,7 +217,8 @@ class ControllerTest {
         try {
             controller.createGame(messageListener1, "Rodri", 2);
             controller.connect(messageListener2, "Matti");
-        } catch (NumberPlayerWrongException | GameFullException | NicknameInvalidException | NicknameAlreadyInUseException e) {
+        } catch (NumberPlayerWrongException | GameFullException | NicknameInvalidException |
+                 NicknameAlreadyInUseException | GameAlreadyCreatedException e) {
             e.printStackTrace();
         }
 

@@ -7,7 +7,8 @@ import it.polimi.ingsw.am42.view.tui.ColorChooser;
 import java.io.Serializable;
 
 /**
- * Subclass of evaluator, returning numPoints
+ * Evaluator class, used by goal cards and gold cards to give the players points
+ * Strategy design pattern implemented
  * @author Tommaso Crippa
  */
 public abstract class Evaluator implements Serializable {
