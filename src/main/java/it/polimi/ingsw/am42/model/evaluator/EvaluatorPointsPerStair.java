@@ -6,17 +6,36 @@ import it.polimi.ingsw.am42.model.enumeration.Direction;
 import it.polimi.ingsw.am42.model.structure.Board;
 import it.polimi.ingsw.am42.view.tui.ColorChooser;
 
+
+/**
+ * Subclass of evaluator, returns the number of points given by the card by counting the number of stairs in the board
+ *
+ * Example of stair:
+ *           #
+ *              #
+ *                  #
+ *  This particular stair is pointed in the UPLEFT Direction (0, +1)
+ */
 public class EvaluatorPointsPerStair extends Evaluator {
 
     private final Color color;
     private final Direction direction;
 
+    /**
+     * Constructor of the class
+     * @param numPoints the number of points given by the card
+     * @param color the color of the stair
+     * @param direction the direction of the stair (only up direction allowed)
+     */
     public EvaluatorPointsPerStair(int numPoints, Color color, Direction direction) {
         super(numPoints);
         this.color = color;
         this.direction = direction;
     }
 
+    /**
+     * Awards the number of points given the number of stairs in the board
+     */
     @Override
     public int getPoints(Board board) {
 
@@ -45,7 +64,7 @@ public class EvaluatorPointsPerStair extends Evaluator {
 
     public String toString(Color color) {
         if (color != null)
-            return "" + numPoints + color + " | /" ;
+            return "" + numPoints + color + " │ /" ;
         else
             return toString();
     }
@@ -54,23 +73,23 @@ public class EvaluatorPointsPerStair extends Evaluator {
         String colorStr = color.toString();
         String to_print = colorStr;
 
-        to_print += "+-----------------------+\n";
-        to_print += "|   ___                 |\n";
-        to_print += "|  /   \\        " + numPoints + "       |\n";
-        to_print += "|  | " + color.colorToResource()+colorStr + " |                |\n";
+        to_print += "┌――――――――――――――┐\n";
+        to_print += "│   ___                 │\n";
+        to_print += "│  /   \\        " + numPoints + "       │\n";
+        to_print += "│  │ " + color.colorToResource()+colorStr + " │                │\n";
 
         if (direction.equals(Direction.UPRIGHT)) {
-            to_print += "|  |   |          ██    |\n";
-            to_print += "|  |   |        ██      |\n";
-            to_print += "|  |   |      ██        |\n";
+            to_print += "│  │   │          ██    │\n";
+            to_print += "│  │   │        ██      │\n";
+            to_print += "│  │   │      ██        │\n";
         }
         else {
-            to_print += "|  |   |      ██        |\n";
-            to_print += "|  |   |        ██      |\n";
-            to_print += "|  |   |          ██    |\n";
+            to_print += "│  │   │      ██        │\n";
+            to_print += "│  │   │        ██      │\n";
+            to_print += "│  │   │          ██    │\n";
         }
-        to_print += "|  |   |                |\n";
-        to_print += "+-----------------------+";
+        to_print += "│  │   │                │\n";
+        to_print += "└――――――――――――――┘";
 
         to_print += ColorChooser.RESET;
         return to_print;

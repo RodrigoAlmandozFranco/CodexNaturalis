@@ -4,8 +4,14 @@ import it.polimi.ingsw.am42.model.enumeration.Color;
 import it.polimi.ingsw.am42.model.structure.Board;
 import it.polimi.ingsw.am42.view.tui.ColorChooser;
 
+/**
+ * Subclass of evaluator, simply returns the number of points given by the card
+ */
 public class EvaluatorPoints extends Evaluator{
-
+    /**
+     * Class constructor
+     * @param numPoints the number of points given by the card
+     */
     public EvaluatorPoints(int numPoints) {
         super(numPoints);
     }

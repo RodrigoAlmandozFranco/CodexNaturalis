@@ -5,14 +5,19 @@ import it.polimi.ingsw.am42.view.tui.ColorChooser;
 
 import java.io.Serializable;
 
+/**
+ * Enumeration that stores the game's cards color
+ */
 public enum Color implements Serializable {
     GREEN,
     CYAN,
     RED,
     PURPLE,
-    WHITE;
+    WHITE; // For starting card
 
-
+    /**
+     * Returns the terminal's color to display
+     */
     public String toString() {
         return  switch (this) {
             case RED -> ColorChooser.RED;
@@ -24,6 +29,10 @@ public enum Color implements Serializable {
         };
     }
 
+    /**
+     * Method used to select how to display the color
+     * @param literal if true, get the literal name of the color, otherwise get only the terminal's color
+     */
     public String toString(boolean literal) {
         if (literal) {
             return switch (this) {
@@ -37,7 +46,9 @@ public enum Color implements Serializable {
         } else return toString();
     }
 
-
+    /**
+     * For each color (except white) get its respective associated resource
+     */
     public Resource colorToResource() {
         return  switch (this) {
             case RED -> Resource.FUNGIKINGDOM;

@@ -3,6 +3,7 @@ package it.polimi.ingsw.am42.network.rmi;
 
 import it.polimi.ingsw.am42.controller.ConnectionState;
 import it.polimi.ingsw.am42.controller.gameDB.Change;
+import it.polimi.ingsw.am42.exceptions.GameAlreadyCreatedException;
 import it.polimi.ingsw.am42.exceptions.WrongTurnException;
 import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.exceptions.*;
@@ -59,12 +60,12 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
 
     }
 
-    public int createGame(String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException {
+    public int createGame(String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException, GameAlreadyCreatedException {
         try {
             int gameID = stub.createGame(this, nickname, numPlayers);
             this.nickname = nickname;
             return gameID;
-        } catch (GameFullException | NicknameInvalidException | NicknameAlreadyInUseException | NumberPlayerWrongException e) {
+        } catch (GameFullException | NicknameInvalidException | NicknameAlreadyInUseException | NumberPlayerWrongException | GameAlreadyCreatedException e) {
             throw e;
         }
         catch (RemoteException e) {
@@ -86,11 +87,11 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         }
     }
 
-    public boolean reconnect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+    public boolean reconnect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, GameAlreadyCreatedException {
         try {
             this.nickname = nickname;
             return stub.reconnect(this, nickname);
-        } catch (GameFullException | NicknameAlreadyInUseException | NicknameInvalidException e) {
+        } catch (GameFullException | NicknameAlreadyInUseException | NicknameInvalidException | GameAlreadyCreatedException e) {
             throw e;
         } catch (RemoteException e) {
             serverDown();
