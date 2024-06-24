@@ -103,7 +103,7 @@ public class FirstPlayerCreateGameController implements Initializable {
 
         try {
             client.createGame(nickname, numberOfPlayers);
-            client.getView().setNickname(nickname);
+            client.getClientModel().setNickname(nickname);
             resource = "/it/polimi/ingsw/am42/javafx/Lobby.fxml";
             load(resource, event);
         } catch (GameAlreadyCreatedException e) {

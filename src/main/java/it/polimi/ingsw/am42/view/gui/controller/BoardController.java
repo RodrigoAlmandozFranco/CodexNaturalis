@@ -283,7 +283,7 @@ public class BoardController implements Initializable {
     public void setClient(Client client, boolean gameToBeLoad) {
         this.client = client;
         this.gameToBeLoad = gameToBeLoad;
-        gameClientModel = client.getView();
+        gameClientModel = client.getClientModel();
         players = gameClientModel.getPlayers();
         nicknames = new ArrayList<>();
         nicknames.add("All");

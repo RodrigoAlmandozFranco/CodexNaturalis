@@ -46,7 +46,7 @@ public class ClientTCP implements Client {
     private final Socket socket;
     private ObjectInputStream input;
     private ObjectOutputStream output;
-    private GameClientModel view;
+    private GameClientModel clientModel;
     private boolean isRunning = true;
 
     public ClientTCP(String ip, int port) throws IOException {
@@ -416,7 +416,7 @@ public class ClientTCP implements Client {
      * @param change Change with the updated information
      */
     public void update(Change change) {
-        view.update(change);
+        clientModel.update(change);
     }
 
     /**
@@ -435,14 +435,14 @@ public class ClientTCP implements Client {
      * @param message Message received from the server
      */
     public void receiveMessage(Message message){
-        view.updateMessage(message);
+        clientModel.updateMessage(message);
     }
 
     /**
      * This method updates the view because a Player has disconnected
      */
     public void updateDisconnection(){
-        view.setGameAborted(true);
+        clientModel.setGameAborted(true);
     }
 
     /**
@@ -476,7 +476,7 @@ public class ClientTCP implements Client {
      * If something goes wrong during these closing process it waits before closing the program
      */
     public void serverDown() {
-        view.setServerDown(true);
+        clientModel.setServerDown(true);
         isRunning = false;
         serverHandler.closeAll();
         try {
@@ -492,20 +492,19 @@ public class ClientTCP implements Client {
     }
 
     /**
-     * This method sets the View
+     * This method sets the Client Model
      *
-     * @param view GameClientModel associated to the client
+     * @param clientModel GameClientModel associated to the client
      */
-    public void setView(GameClientModel view) {
-        this.view = view;
+    public void setClientModel(GameClientModel clientModel) {
+        this.clientModel = clientModel;
     }
-
     /**
-     * This method returns the view
+     * This method returns the client model
      *
      * @return the GameClientModel of the player
      */
-    public GameClientModel getView() {
-        return view;
+    public GameClientModel getClientModel() {
+        return clientModel;
     }
 }

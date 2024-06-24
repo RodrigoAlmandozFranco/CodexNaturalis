@@ -13,7 +13,6 @@ import it.polimi.ingsw.am42.model.structure.Board;
 import it.polimi.ingsw.am42.model.structure.Position;
 import it.polimi.ingsw.am42.network.Client;
 import it.polimi.ingsw.am42.network.chat.ChatMessage;
-import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GameAlreadyCreatedErrorMessage;
 import it.polimi.ingsw.am42.view.tui.ColorChooser;
 import it.polimi.ingsw.am42.view.tui.IOHandler;
 import it.polimi.ingsw.am42.view.clientModel.MethodChoice;
@@ -74,7 +73,7 @@ public class TUIApplication extends App {
 
             nickname = io.getString("What will your nickname be?");
 
-            client.getView().setNickname(nickname);
+            client.getClientModel().setNickname(nickname);
             int gameid = client.createGame(nickname, numPlayers);
         }catch(GameAlreadyCreatedException e){
             io.print("Someone already created a game, restarting connection");
@@ -95,7 +94,7 @@ public class TUIApplication extends App {
 
 
             TUIApplication.nickname = nickname;
-            client.getView().setNickname(TUIApplication.nickname);
+            client.getClientModel().setNickname(TUIApplication.nickname);
             client.connect(nickname);
         }
         catch (Exception e) {
@@ -109,7 +108,7 @@ public class TUIApplication extends App {
 
         nickname = io.getString("What was your nickname in the previous game?");
 
-        client.getView().setNickname(nickname);
+        client.getClientModel().setNickname(nickname);
 
         try {
             client.reconnect(nickname);
@@ -131,7 +130,7 @@ public class TUIApplication extends App {
     public static void placeStarting() {
         seeCards();
         PlayableCard startingCard = null;
-        PlayerClientModel p = client.getView().getPlayer(nickname);
+        PlayerClientModel p = client.getClientModel().getPlayer(nickname);
         for(PlayableCard c: p.getHand()){
             startingCard = c;
         }
@@ -152,7 +151,7 @@ public class TUIApplication extends App {
 
     public static void chooseColor() {
         String question = "Choose one of the available colors\n";
-        PlayerClientModel p = client.getView().getPlayer(nickname);
+        PlayerClientModel p = client.getClientModel().getPlayer(nickname);
         List<PlayersColor> avcolors = p.getAvColors();
         for (int i=0; i<avcolors.size(); i++)
             question += i + " - " + avcolors.get(i).toString(true) + "\n";
@@ -172,7 +171,7 @@ public class TUIApplication extends App {
     }
 
     public static void chooseGoal() {
-        PlayerClientModel p = client.getView().getPlayer(nickname);
+        PlayerClientModel p = client.getClientModel().getPlayer(nickname);
         List<GoalCard> goals = p.getAvGoals();
         String question = "Choose one of the following goals\n";
         for (int i=0; i<goals.size(); i++)
@@ -196,7 +195,7 @@ public class TUIApplication extends App {
 
 
     private static void zoom(Position pos) {
-        Map<Direction, Face> nearby = client.getView().getPlayer(nickname).getBoard().getNearbyFaces(pos);
+        Map<Direction, Face> nearby = client.getClientModel().getPlayer(nickname).getBoard().getNearbyFaces(pos);
         String cLeft = null;
         String resLeft = " ";
         if (nearby.containsKey(Direction.UPLEFT)) {
@@ -280,7 +279,7 @@ public class TUIApplication extends App {
 
         List<String> names = new ArrayList<>();
         names.add(nickname);
-        for(PlayerClientModel p:client.getView().getPlayers())
+        for(PlayerClientModel p:client.getClientModel().getPlayers())
             if(!p.getNickname().equals(nickname))
                 names.add(p.getNickname());
 
@@ -301,7 +300,7 @@ public class TUIApplication extends App {
      * @author Tommaso Crippa
      */
     private static void seeBoard(String nickname) {
-        Board board = client.getView().getPlayer(nickname).getBoard();
+        Board board = client.getClientModel().getPlayer(nickname).getBoard();
         seeBoard(board.getFaces());
         seeResources(nickname);
     }
@@ -323,7 +322,7 @@ public class TUIApplication extends App {
             allFaces.add(f);
         }
 
-        allFaces.addAll(client.getView().getPlayer(nickname).getBoard().getFaces());
+        allFaces.addAll(client.getClientModel().getPlayer(nickname).getBoard().getFaces());
         seeBoard(allFaces);
         seeResources(nickname);
     }
@@ -364,7 +363,7 @@ public class TUIApplication extends App {
     }
 
     private static void seeResources(String nickname){
-        Map<Resource, Integer> resources = client.getView().getPlayer(nickname).getBoard().getTotalResources();
+        Map<Resource, Integer> resources = client.getClientModel().getPlayer(nickname).getBoard().getTotalResources();
         String message = "These are your resources and objects\n";
         for (Resource r: Resource.values())
             message += r.fullName() + " (" +r+") = "+ resources.get(r) + "\n";
@@ -372,7 +371,7 @@ public class TUIApplication extends App {
     }
 
     public static void seeCards() {
-        PlayerClientModel p = client.getView().getPlayer(nickname);
+        PlayerClientModel p = client.getClientModel().getPlayer(nickname);
             for (PlayableCard c : p.getHand()) {
                 c.setVisibility(true);
                 io.print(c.toString());
@@ -380,7 +379,7 @@ public class TUIApplication extends App {
     }
 
     public static void seeHand() {
-        PlayerClientModel p = client.getView().getPlayer(nickname);
+        PlayerClientModel p = client.getClientModel().getPlayer(nickname);
         int i = 0;
         for (PlayableCard c : p.getHand()) {
             c.setVisibility(true);
@@ -391,18 +390,18 @@ public class TUIApplication extends App {
 
     public static void seeStandings() {
         String message = "Scoreboard\n";
-        for (PlayerClientModel p: client.getView().getPlayers())
+        for (PlayerClientModel p: client.getClientModel().getPlayers())
             message +=  p.getNickname()  + (p.getNickname().equals(nickname)?" (You)":"")+" = "+ p.getPoints() + "\n";
         io.print(message);
     }
 
     public static void seeGoals() {
         io.print("Global goals:");
-        for (GoalCard g : client.getView().getGlobalGoals())
+        for (GoalCard g : client.getClientModel().getGlobalGoals())
             io.print(""+g);
 
         io.print("Personal goal:");
-        io.print(""+client.getView().getPlayer(nickname).getPersonalGoal());
+        io.print(""+client.getClientModel().getPlayer(nickname).getPersonalGoal());
     }
 
     public static void place() {
@@ -439,7 +438,7 @@ public class TUIApplication extends App {
         }
         //Selection of the face
         seeHand();
-        PlayerClientModel p = client.getView().getPlayer(nickname);
+        PlayerClientModel p = client.getClientModel().getPlayer(nickname);
 
         question = "Choose one of the cards\n";
 
@@ -467,8 +466,8 @@ public class TUIApplication extends App {
 
     public static void seePickableCards() {
         List<PlayableCard> cards = new ArrayList<>();
-        cards.addAll(client.getView().getPickableResourceCards());
-        cards.addAll(client.getView().getPickableGoldCards());
+        cards.addAll(client.getClientModel().getPickableResourceCards());
+        cards.addAll(client.getClientModel().getPickableGoldCards());
         seePickableCards(cards);
     }
 
@@ -486,8 +485,8 @@ public class TUIApplication extends App {
         seeResources(nickname);
 
         List<PlayableCard> cards = new ArrayList<>();
-        cards.addAll(client.getView().getPickableResourceCards());
-        cards.addAll(client.getView().getPickableGoldCards());
+        cards.addAll(client.getClientModel().getPickableResourceCards());
+        cards.addAll(client.getClientModel().getPickableGoldCards());
 
         seePickableCards(cards);
 
@@ -507,7 +506,7 @@ public class TUIApplication extends App {
     }
 
     public static void seeChat() {
-        List<ChatMessage> chat = client.getView().getAllMessages();
+        List<ChatMessage> chat = client.getClientModel().getAllMessages();
         String to_print = "";
         for (ChatMessage message : chat) {
             if (message.getReceiver().equals( "all"))
@@ -526,13 +525,13 @@ public class TUIApplication extends App {
         String receiver = "all";
         String question = "Who do you want to write to?\n";
 
-        if (client.getView().getPlayers().isEmpty()) {
+        if (client.getClientModel().getPlayers().isEmpty()) {
 
             return;
         }
         List<String> names = new ArrayList<>();
         names.add("all");
-        for(PlayerClientModel p:client.getView().getPlayers())
+        for(PlayerClientModel p:client.getClientModel().getPlayers())
             if(!p.getNickname().equals(nickname))
                 names.add(p.getNickname());
 
@@ -540,7 +539,7 @@ public class TUIApplication extends App {
             question += (i) + " - " + names.get(i) + "\n";
 
         int choice = io.getInt(question);
-        while (choice < 0 || choice >= client.getView().getPlayers().size()) {
+        while (choice < 0 || choice >= client.getClientModel().getPlayers().size()) {
             io.print("Invalid choice");
             choice = io.getInt(question);
         }
@@ -551,9 +550,9 @@ public class TUIApplication extends App {
     }
 
     public static void disconnect() {
-        if (client.getView().getCurrentState() != null
-            && !client.getView().getCurrentState().equals(State.LAST)
-            && !client.getView().getCurrentState().equals(State.DISCONNECTED)) {
+        if (client.getClientModel().getCurrentState() != null
+            && !client.getClientModel().getCurrentState().equals(State.LAST)
+            && !client.getClientModel().getCurrentState().equals(State.DISCONNECTED)) {
 
             boolean sure = io.getBoolean("Are you sure?");
             if (!sure)
@@ -597,15 +596,15 @@ public class TUIApplication extends App {
 
     public static void selectChoice() {
 
-        if (client.getView().getCurrentState() == null)
+        if (client.getClientModel().getCurrentState() == null)
             io.print("Waiting for Players");
 
 
-        List<ChatMessage> newMessage = client.getView().getTmpMessages();
+        List<ChatMessage> newMessage = client.getClientModel().getTmpMessages();
         String newMessages = "";
         if(newMessage != null && !newMessage.isEmpty())
             newMessages += " ("+newMessage.size()+" not read)";
-        List<MethodChoice> choices = client.getView().getUsableMethods();
+        List<MethodChoice> choices = client.getClientModel().getUsableMethods();
         String question = "What do you want to do?\n";
         for (int i=0; i<choices.size(); i++)
             question += i + " - " + choices.get(i).getChoice() + (choices.get(i).equals(MethodChoice.SEECHAT)?newMessages:"") + "\n";
@@ -619,15 +618,15 @@ public class TUIApplication extends App {
     }
 
     private void checkDisconnection(){
-        if (client.getView().isGameAborted()) {
-            if (!client.getView().getCurrentState().equals(State.LAST)
-                    && !client.getView().getCurrentState().equals(State.DISCONNECTED)) {
+        if (client.getClientModel().isGameAborted()) {
+            if (!client.getClientModel().getCurrentState().equals(State.LAST)
+                    && !client.getClientModel().getCurrentState().equals(State.DISCONNECTED)) {
                 io.print("Someone disconnected to the game");
                 io.print("Exiting game...");
                 System.exit(0);
             }
         }
-        if (client.getView().getServerDown()) {
+        if (client.getClientModel().getServerDown()) {
             io.print("Server has fallen");
             io.print("Exiting game...");
             System.exit(0);
@@ -647,13 +646,13 @@ public class TUIApplication extends App {
                 "                                                             /____/        \n" +
                 "----------------------------------------------------------------------------\n");
 
-        List<PlayerClientModel> standings = client.getView().getPlayers();
+        List<PlayerClientModel> standings = client.getClientModel().getPlayers();
         standings.sort(Comparator.comparingInt(PlayerClientModel::getPoints));
 
         Stack<String> colors = new Stack<>();
         List<String> medals = Arrays.asList(ColorChooser.GOLD, ColorChooser.SILVER, ColorChooser.BRONZE, ColorChooser.PURPLE);
 
-        for(int i =0; i< client.getView().getNumberPlayers(); i++) {
+        for(int i = 0; i< client.getClientModel().getNumberPlayers(); i++) {
             colors.push(medals.get(i));
         }
         long time = 1000;
@@ -674,14 +673,14 @@ public class TUIApplication extends App {
         while (true) {
             checkDisconnection();
 
-            if (client.getView().getNewUpdate() && client.getView().getCurrentPlayer()!=null){
-                String current = client.getView().getCurrentPlayer().getNickname();
-                if (client.getView().getCurrentState().equals(State.LAST)) {
+            if (client.getClientModel().getNewUpdate() && client.getClientModel().getCurrentPlayer()!=null){
+                String current = client.getClientModel().getCurrentPlayer().getNickname();
+                if (client.getClientModel().getCurrentState().equals(State.LAST)) {
                         printFinalStandings();
                 }
 
                 else if (current.equals(nickname)) {
-                    if (client.getView().isTurnFinal()) {
+                    if (client.getClientModel().isTurnFinal()) {
                         io.print(ColorChooser.RED +
                                 "\n" +
                                 "--------------------------------------------------\n" +
@@ -706,10 +705,10 @@ public class TUIApplication extends App {
                     io.print("Press 0 to reload your choices");
                 }
                 else {
-                    PlayersColor c = client.getView().getPlayer(current).getColor();
+                    PlayersColor c = client.getClientModel().getPlayer(current).getColor();
                     if (c != null)
                         current = c + current + ColorChooser.RESET;
-                    System.out.println(client.getView().getCurrentState().showState(current));
+                    System.out.println(client.getClientModel().getCurrentState().showState(current));
                 }
 
             }

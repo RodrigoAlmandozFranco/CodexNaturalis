@@ -41,7 +41,7 @@ public class WinningController {
     public void setClient(Client client, PlayerClientModel myPlayer) {
         this.client = client;
         this.myPlayer = myPlayer;
-        gameClientModel = client.getView();
+        gameClientModel = client.getClientModel();
         initializeMessages();
         setLabel();
         showPodium();

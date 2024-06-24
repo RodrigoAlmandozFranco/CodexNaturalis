@@ -50,7 +50,7 @@ public class HelloApplication extends Application {
     }
 
     private void checkServerDown() {
-        GameClientModel gameClientModel = ClientHolder.getClient().getView();
+        GameClientModel gameClientModel = ClientHolder.getClient().getClientModel();
         boolean gameInProcess = true;
         while (gameInProcess) {
             if (gameClientModel.getServerDown()) {
@@ -71,7 +71,7 @@ public class HelloApplication extends Application {
     }
 
     private void isGameAborted() {
-        GameClientModel gameClientModel = ClientHolder.getClient().getView();
+        GameClientModel gameClientModel = ClientHolder.getClient().getClientModel();
         boolean gameInProcess = true;
         while (gameInProcess) {
             if (gameClientModel.isGameAborted()) {
