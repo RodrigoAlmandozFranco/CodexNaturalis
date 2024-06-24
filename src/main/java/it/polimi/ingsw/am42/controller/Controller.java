@@ -148,13 +148,19 @@ public class Controller extends Observable{
             this.game = this.gameDB.loadGame();
             System.out.println(nickname + " loaded up new game");
         }
+
+        if(listeners.size() == game.getNumberPlayers()) throw new GameFullException("Game is full");
+
+        String id = "";
+
         for (MessageListener lis : listeners) {
             try {
-                if (lis.getId().equals(nickname))
-                    throw new NicknameAlreadyInUseException(nickname + "is already connected");
+                id = lis.getId();
             } catch (RemoteException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException();
             }
+            if (id.equals(nickname))
+                throw new NicknameAlreadyInUseException(nickname + " is already connected");
         }
 
         for (Player p : game.getPlayers())
@@ -164,7 +170,7 @@ public class Controller extends Observable{
             }
 
         if(!wasInPrevGame)
-            throw new NicknameInvalidException(game.getPlayer(nickname) + " was not in the previous game");
+            throw new NicknameInvalidException(nickname + " was not in the previous game");
 
         this.addListener(l);
 

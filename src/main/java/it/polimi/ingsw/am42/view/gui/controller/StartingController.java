@@ -60,7 +60,7 @@ public class StartingController{
             first.setClient(ClientHolder.getClient());
         } else {
             NormalConnectionController normal = fxmlLoader.getController();
-            normal.setClient(ClientHolder.getClient());
+            normal.setClient(ClientHolder.getClient(), !c.equals(ConnectionState.CONNECT));
         }
         stage.show();
     }

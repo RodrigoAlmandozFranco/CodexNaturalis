@@ -315,14 +315,22 @@ public class BoardController implements Initializable {
             b.setOpacity(0);
         }
 
-        for (int i = 1; i < nicknames.size(); i++){
+        int i;
+
+        for (i = 1; i < nicknames.size(); i++){
             playersBoardButtons.get(i - 1).setDisable(true);
             playersBoardButtons.get(i - 1).setOpacity(1);
             playersBoardButtons.get(i - 1).setText(nicknames.get(i) + "'s board");
         }
 
-        for(int i = nicknames.size() - 1; i < playersBoardButtons.size(); i++)
-            playersBoardButtons.remove(playersBoardButtons.get(i));
+        int size = playersBoardButtons.size();
+
+        int removed = 0;
+        for(i = i - 1; i < size; i++) {
+            playersBoardButtons.remove(i - removed);
+            removed++;
+        }
+           
 
         messagesThread = new Thread(this::seeMessages);
         messagesThread.start();

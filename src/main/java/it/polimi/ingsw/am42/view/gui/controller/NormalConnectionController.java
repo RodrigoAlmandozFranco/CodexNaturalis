@@ -6,6 +6,7 @@ import it.polimi.ingsw.am42.model.exceptions.GameFullException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
 import it.polimi.ingsw.am42.network.Client;
+import it.polimi.ingsw.am42.network.tcp.messages.Message;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GameAlreadyCreatedErrorMessage;
 import it.polimi.ingsw.am42.view.gui.utils.ClientHolder;
 import javafx.event.ActionEvent;
@@ -21,6 +22,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.rmi.RemoteException;
 
 public class NormalConnectionController {
 
@@ -29,16 +31,18 @@ public class NormalConnectionController {
     @FXML
     private Button LoginButton1;
     private boolean isGameToLoad;
+    private boolean gameToBeLoad;
 
     @FXML
     TextField textField;
 
     public NormalConnectionController() {}
 
-    public void setClient(Client client) {
+    public void setClient(Client client, boolean gameToBeLoad) {
         this.client = client;
         LoginButton1.setOnMouseEntered(event -> LoginButton1.setCursor(Cursor.HAND));
         LoginButton1.setOnMouseExited(event -> LoginButton1.setCursor(Cursor.DEFAULT));
+        this.gameToBeLoad = gameToBeLoad;
     }
 
     public void submit() {
@@ -55,32 +59,54 @@ public class NormalConnectionController {
         }
     }
 
-    private void connect(ActionEvent event) throws IOException {
-        try {
-            if(client.getGameInfo().equals(ConnectionState.CONNECT)){
-                client.connect(nickname);
-                isGameToLoad = false;
-            } else {
-                client.reconnect(nickname);
-                isGameToLoad = true;
-            }
 
-            client.getView().setNickname(nickname);
-            load(event);
-        } catch (GameAlreadyCreatedException e ) {
-            showAlert("Game has already been created. We are connecting you to the active game...");
+    private void connectAction(ActionEvent event) throws IOException {
+
+        try {
             client.connect(nickname);
             isGameToLoad = false;
             client.getView().setNickname(nickname);
             load(event);
         } catch (GameFullException e) {
+            gameFull(e, event);
+        } catch (NicknameInvalidException | NicknameAlreadyInUseException e) {
             showAlert(e.getMessage());
-            showAlert("Closing the game...");
-            Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-            stage.close();
-            System.exit(1);
-        } catch (NicknameAlreadyInUseException | NicknameInvalidException e) {
+        }
+    }
+
+    private void reconnectAction(ActionEvent event) throws IOException {
+        try {
+            client.reconnect(nickname);
+            isGameToLoad = true;
+            client.getView().setNickname(nickname);
+            load(event);
+        } catch (GameFullException e) {
+            gameFull(e, event);
+        } catch (NicknameInvalidException | NicknameAlreadyInUseException e) {
             showAlert(e.getMessage());
+        } catch (GameAlreadyCreatedException e) {
+            gameAlreadyCreated(e, event);
+        }
+    }
+
+    private void gameFull(GameFullException e, ActionEvent event){
+        showAlert(e.getMessage());
+        showAlert("Closing the game...");
+        Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage.close();
+        System.exit(1);
+    }
+
+    private void gameAlreadyCreated(GameAlreadyCreatedException e, ActionEvent event) throws IOException {
+        showAlert("Game has already been created. We are connecting you to the active game...");
+        connectAction(event);
+    }
+
+    private void connect(ActionEvent event) throws IOException {
+        if(!gameToBeLoad){
+            connectAction(event);
+        } else {
+            reconnectAction(event);
         }
     }
 

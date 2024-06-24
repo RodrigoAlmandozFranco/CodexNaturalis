@@ -50,12 +50,13 @@ public class MenuController {
     }
 
     public void loadGameAction(ActionEvent event) throws IOException {
+        boolean gameToBeLoad = true;
         String resource = "/it/polimi/ingsw/am42/javafx/GeneralConnection.fxml";
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
         Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         Scene scene = new Scene(fxmlLoader.load());
         NormalConnectionController normalConnectionController = fxmlLoader.getController();
-        normalConnectionController.setClient(ClientHolder.getClient());
+        normalConnectionController.setClient(ClientHolder.getClient(), gameToBeLoad);
         stage.setScene(scene);
         stage.show();
     }
