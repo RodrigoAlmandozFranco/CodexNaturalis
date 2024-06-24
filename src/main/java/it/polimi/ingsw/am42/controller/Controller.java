@@ -273,10 +273,10 @@ public class Controller extends Observable{
             updateAll(change);
             throw new WrongTurnException("You can't do this action now");
         }
-        Change change;
         game.getCurrentPlayer().placeCard(new Position(0,0), face);
         game.changeState();
-        change = gameDB.saveGame(true);
+        //change = gameDB.saveGame(true);
+        Change change = new Change(game, true);
         updateAll(change);
 
         System.out.println(game.getPlayer(p)  + " placed starting card");
@@ -301,7 +301,8 @@ public class Controller extends Observable{
         game.removeColor(color);
         game.changeState();
         //game.initializeHandCurrentPlayer();
-        Change change = gameDB.saveGame(false);
+        //Change change = gameDB.saveGame(false);
+        Change change = new Change(game, true);
         updateAll(change);
         System.out.println(game.getPlayer(p) + " chose color" + color);
 

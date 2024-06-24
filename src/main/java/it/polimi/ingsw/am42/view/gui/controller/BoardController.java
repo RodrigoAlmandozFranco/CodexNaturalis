@@ -468,14 +468,16 @@ public class BoardController implements Initializable {
     //Start personal color system
 
     private void setBackgroundNickname(PlayersColor color) {
-        Platform.runLater(() -> {
-            switch (color) {
-                case RED -> personalNickname.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10;");
-                case GREEN -> personalNickname.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10;");
-                case YELLOW -> personalNickname.setStyle("-fx-background-color: yellow; -fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 10;");
-                case BLUE -> personalNickname.setStyle("-fx-background-color: blue; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10;");
-            }
-        });
+        if(color != null) {
+            Platform.runLater(() -> {
+                switch (color) {
+                    case RED -> personalNickname.setStyle("-fx-background-color: red; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10;");
+                    case GREEN -> personalNickname.setStyle("-fx-background-color: green; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10;");
+                    case YELLOW -> personalNickname.setStyle("-fx-background-color: yellow; -fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 10;");
+                    case BLUE -> personalNickname.setStyle("-fx-background-color: blue; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10;");
+                }
+            });
+        }
     }
 
     private void setColor() {
@@ -1494,7 +1496,12 @@ Pane board;
         double offXOtherPlayer = 80.5;
         double offYOtherPlayer = 40.5;
 
-        ImageView token = new ImageView(getTokenColor(player.getColor()));
+        ImageView token;
+        if(player.getColor() != null)
+            token = new ImageView(getTokenColor(player.getColor()));
+        else {
+            token = null;
+        }
 
         for(Face face : player.getBoard().getFaces()){
 
