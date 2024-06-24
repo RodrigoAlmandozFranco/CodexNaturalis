@@ -103,7 +103,7 @@ public class NormalConnectionController {
     }
 
     private void connect(ActionEvent event) throws IOException {
-        if(!gameToBeLoad){
+        if(!gameToBeLoad && !client.getGameInfo().equals(ConnectionState.LOADING)){
             connectAction(event);
         } else {
             reconnectAction(event);

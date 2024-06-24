@@ -183,18 +183,12 @@ public class BoardController implements Initializable {
     public BoardController() {
     }
 
-
-    // 669 564
-
-
-
     //Start setup BoardController
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         choiceBox.setValue("All");
-
 
         pickableCardsButton = new ArrayList<>();
         pickableCardsButton.add(firstCardResourceButton);
@@ -251,7 +245,6 @@ public class BoardController implements Initializable {
         playersBoardButtons.add(player2Board);
         playersBoardButtons.add(player3Board);
 
-
         firstCardResourceButton.setOnAction(this::firstCardResourceButtonEvent);
         firstCardGoldButton.setOnAction(this::firstCardGoldButtonEvent);
         pickableResource1Button.setOnAction(this::pickableResource1ButtonEvent);
@@ -275,9 +268,6 @@ public class BoardController implements Initializable {
         player2Board.setOnAction(this::player2BoardButtonAction);
         player3Board.setOnAction(this::player3BoardButtonAction);
 
-        //Platform.runLater(this::disablePickButton);
-
-
         seeStandingsButton.setStyle("-fx-background-color: brown; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10;");;
 
         seeStandingsButton.setOnMouseEntered(event -> seeStandingsButton.setCursor(Cursor.HAND));
@@ -287,7 +277,6 @@ public class BoardController implements Initializable {
             b.setOnMouseEntered(event -> b.setCursor(Cursor.HAND));
             b.setOnMouseExited(event -> b.setCursor(Cursor.DEFAULT));
         }
-
 
     }
 
@@ -330,7 +319,6 @@ public class BoardController implements Initializable {
             playersBoardButtons.remove(i - removed);
             removed++;
         }
-           
 
         messagesThread = new Thread(this::seeMessages);
         messagesThread.start();
@@ -464,6 +452,7 @@ public class BoardController implements Initializable {
     }
 
     //End Button control system
+
 
     //Start personal color system
 
@@ -607,7 +596,6 @@ public class BoardController implements Initializable {
         }
         pickableResource1.setEffect(highlightEffect);
         chosenCardToPick = gameClientModel.getPickableResourceCards().getFirst();
-        //client.pick(myPlayer.getNickname(), gameView.getPickableResourceCards().getFirst());
     }
 
     public void pickableGold1ButtonEvent(ActionEvent event) {
@@ -616,7 +604,6 @@ public class BoardController implements Initializable {
         }
         pickableGold1.setEffect(highlightEffect);
         chosenCardToPick = gameClientModel.getPickableGoldCards().getFirst();
-        //client.pick(myPlayer.getNickname(), gameView.getPickableGoldCards().getFirst());
     }
 
     public void pickableResource2ButtonEvent(ActionEvent event) {
@@ -625,7 +612,6 @@ public class BoardController implements Initializable {
         }
         pickableResource2.setEffect(highlightEffect);
         chosenCardToPick = gameClientModel.getPickableResourceCards().get(1);
-        //client.pick(myPlayer.getNickname(), gameView.getPickableResourceCards().get(1));
     }
 
     public void pickableGold2ButtonEvent(ActionEvent event) {
@@ -634,7 +620,6 @@ public class BoardController implements Initializable {
         }
         pickableGold2.setEffect(highlightEffect);
         chosenCardToPick = gameClientModel.getPickableGoldCards().get(1);
-        //client.pick(myPlayer.getNickname(), gameView.getPickableGoldCards().get(1));
     }
 
     public void pickButtonAction(ActionEvent event) {
@@ -670,7 +655,6 @@ public class BoardController implements Initializable {
                 break;
             }
         }
-        //client.pick(myPlayer.getNickname(), card);
     }
 
     public void firstCardGoldButtonEvent(ActionEvent event) {
@@ -684,7 +668,6 @@ public class BoardController implements Initializable {
                 break;
             }
         }
-        //client.pick(myPlayer.getNickname(), card);
     }
 
     //End Pickable cards system
@@ -915,18 +898,6 @@ public class BoardController implements Initializable {
             double finalHeight = boardPane.getChildren().getFirst().getLayoutBounds().getHeight();
 
             if((offsetX < 0)||(offsetX + finalWidth > boardPane.getPrefWidth())||(offsetY < 0)||(offsetY + finalHeight > boardPane.getPrefHeight())) {
-//                Platform.runLater(() -> {
-//                    List<Button> buttonsToRemove = new ArrayList<>(availablePositionsButtons);
-//                    for (Button b : buttonsToRemove) {
-//                        boardPane.getChildren().remove(b);
-//                        b.setEffect(null);
-//                    }
-//                    availablePositionsButtons.clear();
-//                });
-//                resize(boardPane, startingCard, tokenOnStarting, constOffsetX, constOffsetY, placedCards);
-//                constOffsetX = constOffsetX * 0.90;
-//                constOffsetY = constOffsetY * 0.90;
-//                return false;
                 buttonsOutOfBounds.add(position);
             }
             Platform.runLater(() -> {
@@ -998,8 +969,6 @@ public class BoardController implements Initializable {
             image.setFitWidth(newWidth);
             image.setFitHeight(newHeight);
             String value = image.getId();
-//            double offsetX = start.getLayoutX();
-//            double offsetY = start.getLayoutY();
 
             String x = "", y = "";
 
@@ -1015,39 +984,12 @@ public class BoardController implements Initializable {
 
             Position position = new Position(positionX, positionY);
             Coordinates coords = switchFromPositionToCoords(position, offX, offY, start);
-//            while (LayoutX > 0) {
-//                offsetX += offX;
-//                offsetY -= offY;
-//                LayoutX--;
-//            }
-//
-//            while (LayoutX < 0) {
-//                offsetX -= offX;
-//                offsetY += offY;
-//                LayoutX++;
-//            }
-//
-//            while (LayoutY > 0) {
-//                offsetY -= offY;
-//                offsetX -= offX;
-//                LayoutY--;
-//            }
-//
-//            while (LayoutY < 0) {
-//                offsetY += offY;
-//                offsetX += offX;
-//                LayoutY++;
-//            }
 
             double finalOffsetX = coords.getX();
             double finalOffsetY = coords.getY();
 
-
-
             image.setLayoutX(finalOffsetX);
             image.setLayoutY(finalOffsetY);
-
-
         }
 
     }
@@ -1089,6 +1031,7 @@ public class BoardController implements Initializable {
     }
 
     //End board control system
+
 
     //Start utils
 
@@ -1171,11 +1114,6 @@ public class BoardController implements Initializable {
                     else if (myPlayer.equals(gameClientModel.getCurrentPlayer()) &&
                             gameClientModel.getCurrentState().equals(State.PICK))
                         enablePickableButtons();
-//                    Platform.runLater(() -> {
-//                        if(gameClientModel.getCurrentPlayer().equals(myPlayer)){
-//                            enablePickButton();
-//                        }
-//                    });
                 }
         ));
         timeline.setCycleCount(1);
@@ -1313,10 +1251,6 @@ public class BoardController implements Initializable {
             boardPane.setOpacity(1);
             boardPane.setDisable(false);
             setupTurn();
-//            boolean resizedDone  = setupTurn();
-//            while(!resizedDone){
-//                resizedDone = setupTurn();
-//            }
             enableHandAndControlButtons();
         } else {
             currentPlayer = gameClientModel.getCurrentPlayer().getNickname();
@@ -1328,8 +1262,6 @@ public class BoardController implements Initializable {
     private void updateStatePick() {
         text = "";
         currentPlayer = "";
-
-        //seeStandingsButtonAction(null);
 
         if (gameClientModel.getCurrentPlayer().equals(myPlayer)) {
             text += "It's your turn! You have to pick a card";
@@ -1516,12 +1448,13 @@ Pane board;
                 else{
                     sCard = new ImageView(image);
                 }
-
                 ImageView finalSCard = sCard;
 
                 Platform.runLater(() -> {
-                    board.getChildren().add(finalSCard);
-                    board.getChildren().add(token);
+                    if(!(finalSCard==startingCard)) {
+                        board.getChildren().add(finalSCard);
+                        board.getChildren().add(token);
+                    }
                 });
 
                 finalSCard.setFitWidth(110);
@@ -1595,72 +1528,7 @@ Pane board;
 
         boardPane.setOpacity(0);
         loadBoard(player, boardPaneOtherPlayer);
-//        List<ImageView> cardToBePlaced = new ArrayList<>();
-//        ImageView sCard = null;
-//        double offXOtherPlayer = 80.5;
-//        double offYOtherPlayer = 40.5;
-//
-//        ImageView token = new ImageView(getTokenColor(player.getColor()));
-//
-//        for(Face face : player.getBoard().getFaces()){
-//
-//            if(player.getBoard().getFaces().getFirst().equals(face)) {
-//                Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(face.getSrcImage())));
-//                sCard = new ImageView(image);
-//                ImageView finalSCard = sCard;
-//                Platform.runLater(() -> {
-//                    boardPaneOtherPlayer.getChildren().add(finalSCard);
-//                    boardPaneOtherPlayer.getChildren().add(token);
-//
-//                });
-//                finalSCard.setFitWidth(110);
-//                finalSCard.setFitHeight(70);
-//                finalSCard.setLayoutX(boardPaneOtherPlayer.getPrefWidth()/2 - finalSCard.getFitWidth()/2 + 1);
-//                finalSCard.setLayoutY(boardPaneOtherPlayer.getPrefHeight()/2 - finalSCard.getFitHeight()/2);
-//
-//                token.setFitWidth(32);
-//                token.setFitHeight(32);
-//                token.setLayoutX(boardPaneOtherPlayer.getPrefWidth()/2 - token.getFitWidth()/2 + 1);
-//                token.setLayoutY(boardPaneOtherPlayer.getPrefHeight()/2 - token.getFitHeight()/2 - sCard.getFitHeight()/2);
-//
-//            }
-//            else{
-//                Coordinates coords = switchFromPositionToCoords(face.getPosition(), offXOtherPlayer, offYOtherPlayer, sCard);
-//                Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(face.getSrcImage())));
-//                ImageView card = new ImageView(image);
-//                Platform.runLater(() -> {
-//                    boardPaneOtherPlayer.getChildren().add(card);
-//                });
-//
-//                card.setLayoutX(coords.getX());
-//                card.setLayoutY(coords.getY());
-//                card.setFitWidth(110);
-//                card.setFitHeight(70);
-//                String id = face.getPosition().getX() + ", " + face.getPosition().getY();
-//                card.setId(id);
-//                cardToBePlaced.add(card);
-//
-//            }
-//
-//        }
-//
-//        boolean finished = false;
-//
-//        while(!finished) {
-//            finished = true;
-//            for(ImageView image : cardToBePlaced){
-//                double x = image.getLayoutX();
-//                double y = image.getLayoutY();
-//
-//                if((x < 0)||(x + image.getFitWidth() > boardPaneOtherPlayer.getPrefWidth())||(y < 0)||(y + image.getFitHeight() > boardPaneOtherPlayer.getPrefHeight())) {
-//                    resize(boardPaneOtherPlayer, sCard, token, offXOtherPlayer, offYOtherPlayer, cardToBePlaced);
-//                    offXOtherPlayer = offXOtherPlayer * 0.8;
-//                    offYOtherPlayer = offYOtherPlayer * 0.8;
-//                    finished = false;
-//                    break;
-//                }
-//            }
-//        }
+
         boardLabelOtherPlayer.setOpacity(1);
         boardLabelOtherPlayer.setVisible(true);
         boardLabelOtherPlayer.setText(player.getNickname() + "'s board");
