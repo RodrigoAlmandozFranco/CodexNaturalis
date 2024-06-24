@@ -65,7 +65,7 @@ public class NormalConnectionController {
         try {
             client.connect(nickname);
             isGameToLoad = false;
-            client.getView().setNickname(nickname);
+            client.getClientModel().setNickname(nickname);
             load(event);
         } catch (GameFullException e) {
             gameFull(e, event);
@@ -78,7 +78,7 @@ public class NormalConnectionController {
         try {
             client.reconnect(nickname);
             isGameToLoad = true;
-            client.getView().setNickname(nickname);
+            client.getClientModel().setNickname(nickname);
             load(event);
         } catch (GameFullException e) {
             gameFull(e, event);
