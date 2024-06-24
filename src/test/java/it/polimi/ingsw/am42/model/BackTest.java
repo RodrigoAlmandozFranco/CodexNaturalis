@@ -72,7 +72,8 @@ class BackTest {
         corners.add(new Corner(Resource.QUILLOBJECT, CornerState.OPEN, Direction.DOWNRIGHT));
 
         Map<Resource, Integer> resources = new HashMap<Resource, Integer>();
-        resources.put(Resource.ANIMALKINGDOM, 1);
+        resources.put(Resource.ANIMALKINGDOM, 2);
+        resources.put(Resource.QUILLOBJECT, 2);
 
         List<Resource> lst = new ArrayList<>();
 

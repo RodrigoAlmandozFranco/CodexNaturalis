@@ -130,7 +130,7 @@ public class FirstPlayerCreateGameController implements Initializable {
             }
             case "/it/polimi/ingsw/am42/javafx/GeneralConnection.fxml" -> {
                 NormalConnectionController normalConnectionController = fxmlLoader.getController();
-                normalConnectionController.setClient(ClientHolder.getClient(), false);
+                normalConnectionController.setClient(ClientHolder.getClient());
             }
         }
 
