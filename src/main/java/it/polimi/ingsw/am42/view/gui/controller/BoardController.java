@@ -275,7 +275,7 @@ public class BoardController implements Initializable {
         player2Board.setOnAction(this::player2BoardButtonAction);
         player3Board.setOnAction(this::player3BoardButtonAction);
 
-        Platform.runLater(this::disablePickButton);
+        //Platform.runLater(this::disablePickButton);
 
 
         seeStandingsButton.setStyle("-fx-background-color: brown; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10;");;
@@ -318,7 +318,7 @@ public class BoardController implements Initializable {
         int i;
 
         for (i = 1; i < nicknames.size(); i++){
-            playersBoardButtons.get(i - 1).setDisable(true);
+            playersBoardButtons.get(i - 1).setDisable(false);
             playersBoardButtons.get(i - 1).setOpacity(1);
             playersBoardButtons.get(i - 1).setText(nicknames.get(i) + "'s board");
         }
@@ -1103,6 +1103,7 @@ public class BoardController implements Initializable {
 
         for(Button b : playersBoardButtons){
             b.setDisable(true);
+            b.setOpacity(0.5);
         }
 
         disableHandAndControlButtons();
@@ -1159,6 +1160,7 @@ public class BoardController implements Initializable {
 
                     for(Button b : playersBoardButtons){
                         b.setDisable(false);
+                        b.setOpacity(1);
                     }
 
                     if(myPlayer.equals(gameClientModel.getCurrentPlayer()) &&
@@ -1167,7 +1169,6 @@ public class BoardController implements Initializable {
                     else if (myPlayer.equals(gameClientModel.getCurrentPlayer()) &&
                             gameClientModel.getCurrentState().equals(State.PICK))
                         enablePickableButtons();
-
 //                    Platform.runLater(() -> {
 //                        if(gameClientModel.getCurrentPlayer().equals(myPlayer)){
 //                            enablePickButton();
@@ -1215,11 +1216,17 @@ public class BoardController implements Initializable {
             seeStandingsButton.setDisable(true);
             for(Button b : playersBoardButtons){
                 b.setDisable(true);
+                b.setOpacity(0.5);
             }
         } else {
             currentPlayer = gameClientModel.getCurrentPlayer().getNickname();
             text += currentPlayer + " is playing. " + currentPlayer + " has to place the starting card";
             disableAll();
+            seeStandingsButton.setDisable(true);
+            for(Button b : playersBoardButtons){
+                b.setDisable(true);
+                b.setOpacity(0.5);
+            }
         }
     }
 
@@ -1239,17 +1246,23 @@ public class BoardController implements Initializable {
             }
             disableHandAndControlButtons();
             disablePickableButtons();
-
-//            seeStandingsButton.setDisable(true);
-//            for(Button b : playersBoardButtons){
-//                b.setDisable(true);
-//            }
+            seeStandingsButton.setDisable(true);
+            for(Button b : playersBoardButtons){
+                b.setDisable(true);
+                b.setOpacity(0.5);
+            }
 
             setColor();
         } else {
             currentPlayer = gameClientModel.getCurrentPlayer().getNickname();
             text += currentPlayer + " is playing. " + currentPlayer + " has to choose the personal color";
             disableAll();
+            seeStandingsButton.setDisable(true);
+            for(Button b : playersBoardButtons){
+                b.setDisable(true);
+                b.setOpacity(0.5);
+
+            }
         }
     }
 
@@ -1268,17 +1281,22 @@ public class BoardController implements Initializable {
             }
             disableHandAndControlButtons();
             disablePickableButtons();
-
-//            seeStandingsButton.setDisable(true);
-//            for(Button b : playersBoardButtons){
-//                b.setDisable(true);
-//            }
+            seeStandingsButton.setDisable(true);
+            for(Button b : playersBoardButtons){
+                b.setDisable(true);
+                b.setOpacity(0.5);
+            }
 
             setGoal();
         } else {
             currentPlayer = gameClientModel.getCurrentPlayer().getNickname();
             text += currentPlayer + " is playing. " + currentPlayer + " has to choose the personal goal";
             disableAll();
+            seeStandingsButton.setDisable(true);
+            for(Button b : playersBoardButtons){
+                b.setDisable(true);
+                b.setOpacity(0.5);
+            }
         }
     }
 
@@ -1568,7 +1586,6 @@ Pane board;
 
         PlayerClientModel player = gameClientModel.getPlayer(name);
 
-
         boardPane.setOpacity(0);
         loadBoard(player, boardPaneOtherPlayer);
 //        List<ImageView> cardToBePlaced = new ArrayList<>();
@@ -1638,6 +1655,7 @@ Pane board;
 //            }
 //        }
         boardLabelOtherPlayer.setOpacity(1);
+        boardLabelOtherPlayer.setVisible(true);
         boardLabelOtherPlayer.setText(player.getNickname() + "'s board");
         boardLabelOtherPlayer.setStyle(playersBoardButtons.get(index).getStyle());
 
@@ -1662,6 +1680,7 @@ Pane board;
                     boardPane.setOpacity(1);
                     boardPaneOtherPlayer.getChildren().clear();
                     boardLabelOtherPlayer.setOpacity(0);
+                    boardLabelOtherPlayer.setVisible(false);
 
                     seeStandingsButton.setDisable(false);
 
@@ -1670,9 +1689,6 @@ Pane board;
         timeline.setCycleCount(1);
         timeline.play();
     }
-
-    // prendo per copia i getChildren e se si fa la resize allora non faccio nulla,
-    // altrimenti metto i getChildren precedenti avuti grazie alla copia
 
 
     public void player1BoardButtonAction(ActionEvent event) {
@@ -1716,6 +1732,11 @@ Pane board;
                         Image image = new Image(Objects.requireNonNull(getClass().getResourceAsStream(myPlayer.getPersonalGoal().getSrcImage())));
                         personalGoal.setImage(image);
                     }
+                    seeStandingsButton.setDisable(false);
+                    for(Button b : playersBoardButtons){
+                        b.setDisable(false);
+                        b.setOpacity(1);
+                    }
                 }
 
                 if (gameClientModel.getCurrentState().equals(State.SETHAND)) {
@@ -1729,6 +1750,7 @@ Pane board;
                     seeStandingsButton.setDisable(false);
                     for(Button b : playersBoardButtons){
                         b.setDisable(false);
+                        b.setOpacity(1);
                     }
                     if(gameClientModel.isTurnFinal() && gameClientModel.getCurrentPlayer().equals(gameClientModel.getPlayers().getFirst()))
                         Platform.runLater(() -> showAlert("This is the final turn. You will only be able to place a card."));

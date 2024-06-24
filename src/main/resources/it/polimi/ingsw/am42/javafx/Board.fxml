@@ -50,7 +50,6 @@
             <ImageView fx:id="pickableResource2" fitHeight="85.0" fitWidth="137.0" layoutX="23.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="pickableGold2" fitHeight="85.0" fitWidth="137.0" layoutX="190.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true" />
             <Label fx:id="updateText" layoutY="341.0" prefHeight="54.0" prefWidth="330.0" text="UpdateText" />
-            <Label fx:id="boardLabelOtherPlayer" alignment="CENTER" disable="true" layoutX="330.0" layoutY="566.0" prefHeight="97.0" prefWidth="669.0" visible="false" />
             <ImageView fitHeight="564.0" fitWidth="669.0" layoutX="331.0" layoutY="-4.0" pickOnBounds="true">
                <image>
                   <Image url="@../graphical/gameStructure/structure.png" />
@@ -139,6 +138,10 @@
             <Button fx:id="pickableGold1Button" layoutX="190.0" layoutY="120.0" mnemonicParsing="false" onAction="#pickableGold1ButtonEvent" opacity="0.0" prefHeight="85.0" prefWidth="137.0" />
             <Button fx:id="pickableResource2Button" layoutX="23.0" layoutY="218.0" mnemonicParsing="false" onAction="#pickableResource2ButtonEvent" opacity="0.0" prefHeight="85.0" prefWidth="137.0" />
             <Button fx:id="pickableGold2Button" layoutX="190.0" layoutY="218.0" mnemonicParsing="false" onAction="#pickableGold2ButtonEvent" opacity="0.0" prefHeight="85.0" prefWidth="137.0" />
+            <Label fx:id="boardLabelOtherPlayer" alignment="CENTER" disable="true" layoutX="330.0" layoutY="566.0" prefHeight="97.0" prefWidth="669.0" style="-fx-border-width: 4; -fx-border-color: lightgray;" visible="false">
+               <font>
+                  <Font size="32.0" />
+               </font></Label>
          </children>
       </AnchorPane>
    </children>
