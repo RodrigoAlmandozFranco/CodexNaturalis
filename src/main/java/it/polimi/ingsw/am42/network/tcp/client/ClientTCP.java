@@ -37,7 +37,7 @@ public class ClientTCP implements Client {
     private final Socket socket;
     private ObjectInputStream input;
     private ObjectOutputStream output;
-    private GameClientModel view;
+    private GameClientModel clientModel;
     private boolean isRunning = true;
 
     public ClientTCP(String ip, int port) throws IOException {
@@ -292,7 +292,7 @@ public class ClientTCP implements Client {
     }
 
     public void update(Change change) {
-        view.update(change);
+        clientModel.update(change);
     }
 
     @Override
@@ -301,11 +301,11 @@ public class ClientTCP implements Client {
     }
 
     public void receiveMessage(Message message){
-        view.updateMessage(message);
+        clientModel.updateMessage(message);
     }
 
     public void updateDisconnection(){
-        view.setGameAborted(true);
+        clientModel.setGameAborted(true);
     }
 
     public void playerDisconnected() {
@@ -325,7 +325,7 @@ public class ClientTCP implements Client {
     }
 
     public void serverDown() {
-        view.setServerDown(true);
+        clientModel.setServerDown(true);
         isRunning = false;
         serverHandler.closeAll();
         try {
@@ -342,11 +342,11 @@ public class ClientTCP implements Client {
 
 
 
-    public void setView(GameClientModel view) {
-        this.view = view;
+    public void setClientModel(GameClientModel clientModel) {
+        this.clientModel = clientModel;
     }
 
-    public GameClientModel getView() {
-        return view;
+    public GameClientModel getClientModel() {
+        return clientModel;
     }
 }

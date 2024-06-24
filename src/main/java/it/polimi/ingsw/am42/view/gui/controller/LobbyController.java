@@ -5,15 +5,11 @@ import it.polimi.ingsw.am42.view.gui.utils.ClientHolder;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.stage.Stage;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.util.Duration;
 
 import java.io.IOException;
 
@@ -46,7 +42,7 @@ public class LobbyController {
 
 
     private void askReady() throws IOException {
-        while (!client.getView().getReady()) {
+        while (!client.getClientModel().getReady()) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

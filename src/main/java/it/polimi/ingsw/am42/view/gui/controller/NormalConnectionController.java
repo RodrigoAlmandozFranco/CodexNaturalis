@@ -6,7 +6,6 @@ import it.polimi.ingsw.am42.model.exceptions.GameFullException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameAlreadyInUseException;
 import it.polimi.ingsw.am42.model.exceptions.NicknameInvalidException;
 import it.polimi.ingsw.am42.network.Client;
-import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.GameAlreadyCreatedErrorMessage;
 import it.polimi.ingsw.am42.view.gui.utils.ClientHolder;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -65,13 +64,13 @@ public class NormalConnectionController {
                 isGameToLoad = true;
             }
 
-            client.getView().setNickname(nickname);
+            client.getClientModel().setNickname(nickname);
             load(event);
         } catch (GameAlreadyCreatedException e ) {
             showAlert("Game has already been created. We are connecting you to the active game...");
             client.connect(nickname);
             isGameToLoad = false;
-            client.getView().setNickname(nickname);
+            client.getClientModel().setNickname(nickname);
             load(event);
         } catch (GameFullException e) {
             showAlert(e.getMessage());

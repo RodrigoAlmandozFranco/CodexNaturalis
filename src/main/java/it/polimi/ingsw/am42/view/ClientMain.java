@@ -82,9 +82,9 @@ public class ClientMain extends UnicastRemoteObject {
             }
         }
 
-        GameClientModel view = new GameClientModel();
+        GameClientModel clientModel = new GameClientModel();
 
-        client.setView(view);
+        client.setClientModel(clientModel);
 
         App app;
 
