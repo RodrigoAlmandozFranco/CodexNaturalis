@@ -1,7 +1,10 @@
 package it.polimi.ingsw.am42.view.gui;
 
+import it.polimi.ingsw.am42.controller.ConnectionState;
 import it.polimi.ingsw.am42.view.clientModel.GameClientModel;
-import it.polimi.ingsw.am42.view.gui.controller.StartingController;
+import it.polimi.ingsw.am42.view.gui.controller.FirstPlayerCreateGameController;
+import it.polimi.ingsw.am42.view.gui.controller.MenuController;
+import it.polimi.ingsw.am42.view.gui.controller.NormalConnectionController;
 import it.polimi.ingsw.am42.view.gui.utils.ClientHolder;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -14,18 +17,41 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+
 public class HelloApplication extends Application {
 
     private static Stage stage;
 
-
     @Override
     public void start(Stage stage) throws IOException {
         HelloApplication.stage = stage;
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/it/polimi/ingsw/am42/javafx/Starting.fxml"));
+
+        ConnectionState c = ClientHolder.getClient().getGameInfo();
+        String setter;
+
+        if(c.equals(ConnectionState.CREATE)){
+            setter = "/it/polimi/ingsw/am42/javafx/NicknameFirstPlayerCreateGame.fxml";
+        }
+        else if(c.equals(ConnectionState.LOAD)){
+            setter = "/it/polimi/ingsw/am42/javafx/FirstPlayerMenu.fxml";
+        } else {
+            setter = "/it/polimi/ingsw/am42/javafx/GeneralConnection.fxml";
+        }
+
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(setter));
         Scene scene = new Scene(fxmlLoader.load());
-        StartingController startingController = fxmlLoader.getController();
-        startingController.setClient(ClientHolder.getClient());
+
+        if(c.equals(ConnectionState.LOAD)) {
+            MenuController load = fxmlLoader.getController();
+            load.setClient(ClientHolder.getClient());
+        }
+        else if(c.equals(ConnectionState.CREATE)) {
+            FirstPlayerCreateGameController first = fxmlLoader.getController();
+            first.setClient(ClientHolder.getClient());
+        } else {
+            NormalConnectionController normal = fxmlLoader.getController();
+            normal.setClient(ClientHolder.getClient(), !c.equals(ConnectionState.CONNECT));
+        }
 
         new Thread(this::isGameAborted).start();
         new Thread(this::checkServerDown).start();

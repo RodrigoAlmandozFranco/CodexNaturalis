@@ -34,6 +34,7 @@ class ControllerTest {
     private Controller controller;
     MessageListener messageListener1, messageListener2;
     List<Player> players;
+    private ChatMessage message;
 
     @BeforeEach
     void setup() {
@@ -51,13 +52,14 @@ class ControllerTest {
             public void update(Change diff) throws RemoteException {
                 change = diff;
                 if(change.getPlayers() != null) {
-                    players = new ArrayList<>(change.getPlayers());
+                    players = change.getPlayers();
                 }
             }
 
             @Override
-            public void receiveMessage(Message message) throws RemoteException {
-                assertNotNull(message);
+            public void receiveMessage(Message m) throws RemoteException {
+                assertNotNull(m);
+                message = (ChatMessage) m;
             }
 
             @Override
@@ -74,7 +76,7 @@ class ControllerTest {
             @Override
             public void update(Change diff) throws RemoteException {
                 assertNotNull(diff);
-                change = diff;
+                //change = diff;
                 if(change.getPlayers() != null) {
                     players = new ArrayList<>(change.getPlayers());
                 }
@@ -145,10 +147,18 @@ class ControllerTest {
         }
 
         for(int i = 0; i < 2; i++) {
-            int id = change.getHand().getFirst().getId();
+            int id = players.get(i).getHand().getFirst().getId();
             List<PlayersColor> colors = null;
+            if(i == 0){
+                try {
+                    colors = controller.placeStarting(players.getLast().getNickname(), players.get(i).getHand().getFirst().getFront());
+                } catch (WrongTurnException e) {
+                    assertInstanceOf(WrongTurnException.class, e);
+                }
+            }
+
             try {
-                colors = controller.placeStarting(change.getCurrentPlayer(), change.getHand().getFirst().getFront());
+                colors = controller.placeStarting(players.get(i).getNickname(), players.get(i).getHand().getFirst().getFront());
             } catch (WrongTurnException e) {
                 e.printStackTrace();
             }
@@ -156,19 +166,33 @@ class ControllerTest {
             assertNotNull(colors);
             assertEquals(change.getLastPlacedFace().getId(), id);
             List<GoalCard> goals = null;
+            if(i == 0){
+                try {
+                    goals = controller.chooseColor(players.getLast().getNickname(), colors.getFirst());
+                } catch (WrongTurnException e) {
+                    assertInstanceOf(WrongTurnException.class, e);
+                }
+            }
             try {
-                goals = controller.chooseColor(change.getCurrentPlayer(), colors.getFirst());
+                goals = controller.chooseColor(players.get(i).getNickname(), colors.getFirst());
             } catch (WrongTurnException e) {
                 e.printStackTrace();
             }
             assertNotNull(goals);
+            if(i == 0){
+                try {
+                    controller.chooseGoal(players.getLast().getNickname(), goals.getFirst());
+                } catch (WrongTurnException e) {
+                    assertInstanceOf(WrongTurnException.class, e);
+                }
+            }
             try {
-                controller.chooseGoal(change.getCurrentPlayer(), goals.getFirst());
+                controller.chooseGoal(players.get(i).getNickname(), goals.getFirst());
             } catch (WrongTurnException e) {
                 e.printStackTrace();
             }
 
-            for (Player player : change.getPlayers()) {
+            for (Player player : players) {
                 if (player.getNickname().equals(change.getCurrentPlayer())) {
                     assertEquals(player.getColor(), copyColors.getFirst());
                     assertEquals(player.getPersonalGoal().getId(), goals.getFirst().getId());
@@ -180,31 +204,67 @@ class ControllerTest {
 
 
         try{
-            for(int i = 0; i < 2; i++) {
-                String player = change.getCurrentPlayer();
+            for(int i = 0; i < 4; i++) {
+                int j = i % 2;
+
+                String player = players.get(j).getNickname();
+                if(i == 0){
+                    try {
+                        controller.getAvailablePositions(players.getLast().getNickname());
+                    } catch (WrongTurnException e) {
+                        assertInstanceOf(WrongTurnException.class, e);
+                    }
+                }
                 Set<Position> availablePos = controller.getAvailablePositions(player);
                 assertNotNull(availablePos);
-                Front front = new Front("", new ArrayList<>(), Color.CYAN, new HashMap<>(), new EvaluatorPoints(points++));
+
+                Front f = players.get(j).getHand().getLast().getFront();
+
+
+
+                Front front = new Front(f.getSrcImage(), f.getCorners(), Color.CYAN, new HashMap<>(), new EvaluatorPoints(points++));
                 front.setId(150);
 
+                if(i == 0){
+                    try {
+                        controller.place(players.getLast().getNickname(), front, availablePos.iterator().next());
+                    } catch (WrongTurnException e) {
+                        assertInstanceOf(WrongTurnException.class, e);
+                    }
+                }
                 controller.place(player, front, availablePos.iterator().next());
                 assertEquals(change.getLastPlacedFace().getId(), 150);
                 int id2 = change.getFirstGoldCard().getId();
-                controller.pick(player, change.getFirstGoldCard());
-                boolean ok = false;
-                for(PlayableCard card : change.getHand())
-                    if (card.getId() == id2) {
-                        ok = true;
-                        break;
+                if(!change.isTurnFinal()){
+                    if(i == 0){
+                        try {
+                            controller.pick(players.getLast().getNickname(), change.getFirstGoldCard());
+                        } catch (WrongTurnException e) {
+                            assertInstanceOf(WrongTurnException.class, e);
+                        }
                     }
-                assertTrue(ok);
+                    controller.pick(player, change.getFirstGoldCard());
+                    boolean ok = false;
+                    for(PlayableCard card : change.getHand())
+                        if (card.getId() == id2) {
+                            ok = true;
+                            break;
+                        }
+                    assertTrue(ok);
+                }
+                if(i == 0){
+                    try {
+                        controller.getWinner();
+                    } catch (WrongTurnException e) {
+                        assertInstanceOf(WrongTurnException.class, e);
+                    }
+                }
+                if(i == 2)
+                    assertTrue(change.isTurnFinal());
             }
-
-            assertTrue(change.isTurnFinal());
 
             assertEquals(controller.getWinner().size(), 1);
             assertEquals(controller.getWinner().getFirst().getNickname(), players.getLast().getNickname());
-
         } catch (RequirementsNotMetException e) {
             e.printStackTrace();
         } catch (WrongTurnException e) {
@@ -222,7 +282,15 @@ class ControllerTest {
             e.printStackTrace();
         }
 
-        ChatMessage chatMessage = new ChatMessage("Rodri", "Matti", "Hello");
+        ChatMessage chatMessage = new ChatMessage("Hello", "Matti", "Rodri");
         controller.sendChatMessage(chatMessage);
+        assertEquals("Hello", message.getMessage());
+        assertEquals("Matti", message.getSender());
+        assertEquals("Rodri", message.getReceiver());
+        chatMessage = new ChatMessage("Hello", "Rodri");
+        controller.sendChatMessage(chatMessage);
+        assertEquals("Hello", message.getMessage());
+        assertEquals("Rodri", message.getSender());
+        assertEquals("all", message.getReceiver());
     }
 }
