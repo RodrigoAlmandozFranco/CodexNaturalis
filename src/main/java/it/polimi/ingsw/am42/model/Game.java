@@ -630,7 +630,7 @@ public class Game implements GameInterface, Serializable {
                 flag = true;
             }
         }
-        return possibleWinners.subList(0, numWinners);
+        return new ArrayList<>(possibleWinners.subList(0, numWinners));
     }
 
     /**

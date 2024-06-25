@@ -14,6 +14,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.Region;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.util.Duration;
@@ -86,13 +87,16 @@ public class WinningController {
         List<String> winnersNicknames = winners.stream().map(Player::getNickname).toList();
 
         firstPlayerLabel.setWrapText(true);
-
+        firstPlayerLabel.setMaxHeight(Double.MAX_VALUE);
+        firstPlayerLabel.setPrefHeight(Region.USE_COMPUTED_SIZE);
         int numberWinners = winners.size();
 
         if(numberWinners > 1) {
+            StringBuilder winnerNames = new StringBuilder();
             for (Player winner : winners) {
-                firstPlayerLabel.setText(winner.getNickname() + "\n");
+                winnerNames.append(winner.getNickname()).append("\n");
             }
+            firstPlayerLabel.setText(winnerNames.toString().trim());
         } else {
             firstPlayerLabel.setText(winners.getFirst().getNickname());
         }
