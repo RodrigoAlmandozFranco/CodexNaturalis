@@ -42,7 +42,7 @@ public class Change implements Serializable {
 
 
     public Change(GameInterface game, boolean gameStarted){
-        if(game.getCurrentPlayer().equals(State.INITIAL)){
+        if(game.getCurrentState().equals(State.DISCONNECTED)){
             return;
         }
         pointsPlayer = game.getCurrentPlayer().getPoints();
