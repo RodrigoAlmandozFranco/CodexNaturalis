@@ -66,8 +66,7 @@ public class ServerHandler implements Runnable {
             }
 
         } catch (IOException | ClassNotFoundException e) {
-            closeAll();
-            client.serverDown();
+            client.serverHandling();
         }
     }
 
@@ -76,10 +75,11 @@ public class ServerHandler implements Runnable {
      *
      * @throws RuntimeException if something wrong happens during the closing process
      */
-    public void closeAll() {
+    public synchronized void closeAll() {
         try{
             input.close();
             isRunning = false;
+            notify();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -95,6 +95,7 @@ public class ServerHandler implements Runnable {
     public Message getMessage() throws InterruptedException {
         synchronized (this) {
             while (message == null) {
+                if(!isRunning) return null;
                 wait();
             }
             Message msg = message;

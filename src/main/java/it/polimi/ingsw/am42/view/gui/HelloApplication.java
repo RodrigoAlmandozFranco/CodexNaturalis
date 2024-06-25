@@ -89,11 +89,13 @@ public class HelloApplication extends Application {
                 }
             }
         }
-        Platform.runLater(() -> {
-            showAlert("The game has been aborted because of server disconnection.");
-            showAlert("The application will now close.");
-            System.exit(0);
-        });
+        if(!gameClientModel.isGameAborted()) {
+            Platform.runLater(() -> {
+                showAlert("The game has been aborted because of server disconnection.");
+                showAlert("The application will now close.");
+                System.exit(0);
+            });
+        }
     }
 
     private void isGameAborted() {

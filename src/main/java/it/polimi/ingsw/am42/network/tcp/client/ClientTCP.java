@@ -18,14 +18,13 @@ import it.polimi.ingsw.am42.network.tcp.messages.PingMessage;
 import it.polimi.ingsw.am42.network.tcp.messages.clientToServer.*;
 import it.polimi.ingsw.am42.network.tcp.messages.serverToClient.*;
 import it.polimi.ingsw.am42.view.clientModel.GameClientModel;
+import javafx.geometry.Pos;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class represents the client
@@ -98,8 +97,17 @@ public class ClientTCP implements Client {
                     output.flush();
                 }
             } catch (final IOException e) {
-                serverDown();
+                serverHandling();
             }
+        }
+    }
+
+    private int times = 0;
+
+    public synchronized void serverHandling() {
+        if(times == 0) {
+            times++;
+            serverDown();
         }
     }
 
@@ -119,7 +127,9 @@ public class ClientTCP implements Client {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        return answer.getConnectionState();
+        if(answer != null)
+            return answer.getConnectionState();
+        return ConnectionState.CREATE;
     }
 
     /**
@@ -251,7 +261,8 @@ public class ClientTCP implements Client {
         } catch (ClassCastException e) {
             throw new WrongTurnException("You can't do this action now!");
         }
-        return answer.getPositions();
+        if(answer != null) return answer.getPositions();
+        return new TreeSet<>();
     }
 
     /**
@@ -275,7 +286,8 @@ public class ClientTCP implements Client {
         } catch (ClassCastException e) {
             throw new WrongTurnException("You can't do this action now!");
         }
-        return answer.getColors();
+        if(answer != null) return answer.getColors();
+        return new ArrayList<>();
     }
 
     /**
@@ -331,8 +343,8 @@ public class ClientTCP implements Client {
         } catch (ClassCastException e) {
             throw new WrongTurnException("You can't do this action now!");
         }
-
-        return answer.getGoals();
+        if(answer != null) return answer.getGoals();
+        return new ArrayList<>();
     }
 
     /**
@@ -405,8 +417,8 @@ public class ClientTCP implements Client {
         } catch (ClassCastException e) {
             throw new WrongTurnException("You can't do this action now!");
         }
-
-        return answer.getWinners();
+        if(answer != null) return answer.getWinners();
+        return new ArrayList<>();
     }
 
     /**
@@ -461,9 +473,9 @@ public class ClientTCP implements Client {
         while (isRunning) {
             try {
                sendMessage(new PingMessage());
-                Thread.sleep(5000);
+               Thread.sleep(5000);
             } catch (InterruptedException e) {
-                serverDown();
+                serverHandling();
             }
         }
     }
@@ -479,16 +491,6 @@ public class ClientTCP implements Client {
         clientModel.setServerDown(true);
         isRunning = false;
         serverHandler.closeAll();
-        try {
-            output.close();
-            socket.close();
-        } catch (IOException e) {
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException ignored) {
-                System.exit(0);
-            }
-        }
     }
 
     /**
