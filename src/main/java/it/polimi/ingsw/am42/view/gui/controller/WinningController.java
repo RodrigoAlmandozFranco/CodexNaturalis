@@ -38,10 +38,11 @@ public class WinningController {
 
     public WinningController() {}
 
-    public void setClient(Client client, PlayerClientModel myPlayer) {
+    public void setClient(Client client, PlayerClientModel myPlayer, List<Player> winners) {
         this.client = client;
         this.myPlayer = myPlayer;
         gameClientModel = client.getClientModel();
+        this.winners = winners;
         initializeMessages();
         setLabel();
         showPodium();
@@ -81,15 +82,7 @@ public class WinningController {
         List<PlayerClientModel> standings = gameClientModel.getPlayers();
 
         standings = standings.stream().sorted(Comparator.comparingInt(PlayerClientModel::getPoints).reversed()).toList();
-        try {
-            List<Player> winners = client.getWinner();
-        } catch (WrongTurnException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-        }
+
         List<String> winnersNicknames = winners.stream().map(Player::getNickname).toList();
 
         firstPlayerLabel.setWrapText(true);

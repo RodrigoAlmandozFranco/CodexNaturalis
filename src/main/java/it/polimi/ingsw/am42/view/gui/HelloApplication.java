@@ -83,7 +83,7 @@ public class HelloApplication extends Application {
                 gameInProcess = false;
             } else {
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -106,7 +106,7 @@ public class HelloApplication extends Application {
                 gameInProcess = false;
             } else {
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

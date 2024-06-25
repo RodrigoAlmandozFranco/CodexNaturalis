@@ -1,6 +1,7 @@
 package it.polimi.ingsw.am42.view.gui.controller;
 
 import it.polimi.ingsw.am42.exceptions.WrongTurnException;
+import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
@@ -1277,13 +1278,24 @@ public class BoardController implements Initializable {
     private void updateStateLast() throws IOException {
 
         messagesThread.interrupt();
+        List<Player> winners = null;
+
+        try {
+            winners = client.getWinner();
+        } catch (WrongTurnException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setHeaderText(null);
+            alert.setContentText(e.getMessage());
+            alert.showAndWait();
+        }
 
         String resource = "/it/polimi/ingsw/am42/javafx/Winning.fxml";
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
         Parent root = fxmlLoader.load();
         WinningController winningController = fxmlLoader.getController();
-        winningController.setClient(ClientHolder.getClient(), myPlayer);
+        winningController.setClient(ClientHolder.getClient(), myPlayer, winners);
 
         Platform.runLater(() -> {
             Scene scene = new Scene(root);
