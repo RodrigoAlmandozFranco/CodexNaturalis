@@ -157,7 +157,7 @@ public class ClientTCP implements Client {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
+        if(answer == null) return -1;
 
         return switch (answer) {
             case NumberPlayersWrongErrorMessage numberPlayersWrongErrorMessage ->
@@ -193,7 +193,7 @@ public class ClientTCP implements Client {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
+        if(answer == null) return false;
         return switch (answer) {
             case GameFullErrorMessage gameFullErrorMessage -> throw new GameFullException(gameFullErrorMessage.getMessage());
             case NicknameInvalidErrorMessage nicknameInvalidErrorMessage ->
@@ -227,7 +227,7 @@ public class ClientTCP implements Client {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-
+        if(answer == null) return false;
         return switch (answer) {
             case GameFullErrorMessage gameFullErrorMessage -> throw new GameFullException(gameFullErrorMessage.getMessage());
             case NicknameInvalidErrorMessage nicknameInvalidErrorMessage ->
