@@ -3,6 +3,7 @@ package it.polimi.ingsw.am42.view.app;
 import it.polimi.ingsw.am42.controller.ConnectionState;
 import it.polimi.ingsw.am42.exceptions.GameAlreadyCreatedException;
 import it.polimi.ingsw.am42.exceptions.WrongTurnException;
+import it.polimi.ingsw.am42.model.Player;
 import it.polimi.ingsw.am42.model.cards.types.Back;
 import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
@@ -654,14 +655,32 @@ public class TUIApplication extends App {
                 "/_/   /_/_/ /_/\\__,_/_/   /____/\\__/\\__,_/_/ /_/\\__,_/_/_/ /_/\\__, /____/  \n" +
                 "                                                             /____/        \n" +
                 "----------------------------------------------------------------------------\n");
+        List<Player> winners;
+        int numWinners;
+
+        try {
+            winners = client.getWinner();
+            numWinners = winners.size();
+
+        } catch (WrongTurnException e) {
+            io.print("There are no winners today");
+            selectChoice();
+            return;
+        }
+
+
 
         List<PlayerClientModel> standings = client.getClientModel().getPlayers();
         standings.sort(Comparator.comparingInt(PlayerClientModel::getPoints));
 
+
         Stack<String> colors = new Stack<>();
         List<String> medals = Arrays.asList(ColorChooser.GOLD, ColorChooser.SILVER, ColorChooser.BRONZE, ColorChooser.PURPLE);
 
-        for(int i = 0; i< client.getClientModel().getNumberPlayers(); i++) {
+        for (int i = 0; i < numWinners; i++) {
+            colors.push(medals.getFirst());
+        }
+        for(int i = numWinners; i< client.getClientModel().getNumberPlayers(); i++) {
             colors.push(medals.get(i));
         }
         long time = 1000;
