@@ -151,6 +151,7 @@ class PlayerTest {
         Front f = new Front("C://", new ArrayList<Corner>(), Color.GREEN, new HashMap<>(), new EvaluatorPoints(0));
         Back f2 = new Back("C://", new ArrayList<Corner>(), Color.CYAN, lst);
 
+        f2.setId(1);
         PlayableCard c = new GoldCard(1, f, f2);
 
         List<PlayableCard> hand = new ArrayList<PlayableCard>();
