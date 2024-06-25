@@ -461,7 +461,7 @@ public class ClientTCP implements Client {
         while (isRunning) {
             try {
                sendMessage(new PingMessage());
-                Thread.sleep(10000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 serverDown();
             }

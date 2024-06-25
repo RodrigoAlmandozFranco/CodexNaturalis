@@ -3,6 +3,7 @@ package it.polimi.ingsw.am42.network.rmi;
 
 import it.polimi.ingsw.am42.controller.ConnectionState;
 import it.polimi.ingsw.am42.controller.gameDB.Change;
+import it.polimi.ingsw.am42.exceptions.GameAlreadyCreatedException;
 import it.polimi.ingsw.am42.exceptions.WrongTurnException;
 import it.polimi.ingsw.am42.model.enumeration.PlayersColor;
 import it.polimi.ingsw.am42.model.exceptions.*;
@@ -85,13 +86,15 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
      * @throws NicknameAlreadyInUseException if the provided nickname is already in use.
      * @throws NumberPlayerWrongException if the number of players is outside the allowed range.
      */
-    public int createGame(String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException {
+    public int createGame(String nickname, int numPlayers) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, NumberPlayerWrongException, GameAlreadyCreatedException {
         try {
             int gameID = stub.createGame(this, nickname, numPlayers);
             this.nickname = nickname;
             return gameID;
         } catch (RemoteException e) {
             Throwable originalException = e.getCause();
+            if (originalException instanceof GameAlreadyCreatedException)
+                throw (GameAlreadyCreatedException) originalException;
             if (originalException instanceof GameFullException)
                 throw (GameFullException) originalException;
             if (originalException instanceof NicknameAlreadyInUseException)
@@ -147,12 +150,14 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
      * @throws NicknameInvalidException if the provided nickname is invalid, or it was not in the previous game.
      * @throws NicknameAlreadyInUseException if the provided nickname is already in use.
      */
-    public boolean reconnect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException {
+    public boolean reconnect(String nickname) throws GameFullException, NicknameInvalidException, NicknameAlreadyInUseException, GameAlreadyCreatedException {
         try {
             this.nickname = nickname;
             return stub.reconnect(this, nickname);
         } catch (RemoteException e) {
             Throwable originalException = e.getCause();
+            if (originalException instanceof GameAlreadyCreatedException)
+                throw (GameAlreadyCreatedException) originalException;
             if (originalException instanceof GameFullException)
                 throw (GameFullException) originalException;
             if (originalException instanceof NicknameAlreadyInUseException)
@@ -410,7 +415,7 @@ public class RMIClient extends UnicastRemoteObject implements Client, RMIMessage
         while (true) {
             try {
                 stub.getStatus();
-                Thread.sleep(10000);
+                Thread.sleep(5000);
             } catch (InterruptedException | RemoteException e) {
                 serverDown();
                 break;

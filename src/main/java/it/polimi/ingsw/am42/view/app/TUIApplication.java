@@ -8,6 +8,7 @@ import it.polimi.ingsw.am42.model.cards.types.Face;
 import it.polimi.ingsw.am42.model.cards.types.GoalCard;
 import it.polimi.ingsw.am42.model.cards.types.PlayableCard;
 import it.polimi.ingsw.am42.model.enumeration.*;
+import it.polimi.ingsw.am42.model.exceptions.GameFullException;
 import it.polimi.ingsw.am42.model.exceptions.RequirementsNotMetException;
 import it.polimi.ingsw.am42.model.structure.Board;
 import it.polimi.ingsw.am42.model.structure.Position;
@@ -75,7 +76,7 @@ public class TUIApplication extends App {
 
             client.getClientModel().setNickname(nickname);
             int gameid = client.createGame(nickname, numPlayers);
-        }catch(GameAlreadyCreatedException e){
+        }catch(GameAlreadyCreatedException e) {
             io.print("Someone already created a game, restarting connection");
             handleConnection();
         }
@@ -97,6 +98,10 @@ public class TUIApplication extends App {
             client.getClientModel().setNickname(TUIApplication.nickname);
             client.connect(nickname);
         }
+        catch (GameFullException e){
+        io.print(e.getMessage());
+        System.exit(0);
+        }
         catch (Exception e) {
             io.print(e.getMessage());
             connect();
@@ -116,6 +121,10 @@ public class TUIApplication extends App {
         catch(GameAlreadyCreatedException e){
             io.print("Someone already created a game, restarting connection");
             handleConnection();
+        }
+        catch (GameFullException e){
+            io.print(e.getMessage());
+            System.exit(0);
         }
         catch (Exception e) {
             io.print(e.getMessage());

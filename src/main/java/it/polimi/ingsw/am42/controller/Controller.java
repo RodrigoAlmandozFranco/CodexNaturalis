@@ -60,7 +60,7 @@ public class Controller extends Observable{
                 return ConnectionState.LOAD;
             return ConnectionState.CREATE;
         }
-        if(this.gameDB.fileExists())
+        if(this.gameDB.fileExists() && listeners.size()!=game.getNumberPlayers())
             return ConnectionState.LOADING;
         return ConnectionState.CONNECT;
     }
