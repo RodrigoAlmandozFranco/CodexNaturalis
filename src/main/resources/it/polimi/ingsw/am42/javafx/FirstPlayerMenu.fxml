@@ -9,7 +9,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="648.0" prefWidth="1152.0" style="-fx-background-color: linear-gradient(to bottom, #000000, #3533cd);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.am42.view.gui.controller.MenuController">
    <children>
-      <Label layoutX="427.0" layoutY="42.0" prefHeight="46.0" prefWidth="715.0" text="Welcome to the wonderful world of Codex Naturalis!" textFill="WHITE">
+      <Label layoutX="344.0" layoutY="39.0" prefHeight="46.0" prefWidth="779.0" text="Welcome to the wonderful world of Codex Naturalis!" textFill="WHITE">
          <font>
             <Font name="SansSerif Bold" size="30.0" />
          </font>
@@ -24,14 +24,14 @@
             <Font name="Futura Bold Italic BT" size="40.0" />
          </font>
       </Button>
-      <AnchorPane prefHeight="648.0" prefWidth="420.0" style="-fx-background-color: linear-gradient(to bottom, #000000, #3533cd);">
+      <AnchorPane layoutY="85.0" prefHeight="528.0" prefWidth="427.0" style="-fx-background-color: linear-gradient(to bottom, #000000, #3533cd);">
          <children>
-            <ImageView fitHeight="450.0" fitWidth="427.0" layoutY="55.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="450.0" fitWidth="427.0" layoutX="1.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../graphical/gameStructure/codex.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="135.0" fitWidth="94.0" layoutX="167.0" layoutY="507.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="135.0" fitWidth="94.0" layoutX="167.0" layoutY="410.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../graphical/cranio.png" />
                </image>

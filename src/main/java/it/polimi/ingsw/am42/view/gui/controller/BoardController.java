@@ -1640,7 +1640,14 @@ Pane board;
                         b.setOpacity(1);
                     }
                     if(gameClientModel.isTurnFinal() && gameClientModel.getCurrentPlayer().equals(gameClientModel.getPlayers().getFirst()))
-                        Platform.runLater(() -> showAlert("This is the final turn. You will only be able to place a card."));
+                        Platform.runLater(() -> {
+                            String message = "This is the final turn. You will only be able to place a card.";
+                            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                            alert.setTitle("Communication from the server");
+                            alert.setHeaderText(null);
+                            alert.setContentText(message);
+                            alert.showAndWait();
+                        });
                     try {
                         Thread.sleep(1000);
                     } catch (InterruptedException e) {
