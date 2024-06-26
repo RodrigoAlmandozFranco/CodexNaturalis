@@ -51,6 +51,14 @@ import java.net.URL;
 import java.util.*;
 import java.util.List;
 
+/**
+ * This class represents the GUI controller that controls all the phases of the game.
+ * It manages the choice of the Starting Card, the choice of the Color, the choice of the Goal, and
+ * it manages all the turns until the end of the Game
+ *
+ * @author Mattia Brandi
+ * @author Rodrigo Almandoz Franco
+ */
 public class BoardController implements Initializable {
 
     private Client client;
@@ -176,16 +184,19 @@ public class BoardController implements Initializable {
 
     private boolean gameToBeLoad = false;
 
-    /**
-
-     * @author Mattia Brandi
-     * @author Rodrigo Almandoz Franco
-     */
     public BoardController() {
     }
 
     //Start setup BoardController
 
+    /**
+     * This method initializes the BoardController and all its Java FX elements
+     *
+     * @param location the location used to resolve relative paths for the root object, or
+     * null if the location is not known
+     * @param resources resources used to localize the root object, or {@code null} if
+     * the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -281,6 +292,13 @@ public class BoardController implements Initializable {
 
     }
 
+    /**
+     * This method sets the Client in the Controller, and it sets the internal parameters and
+     * the cursor's shape based on its position on the screen
+     *
+     * @param client client instance
+     * @param gameToBeLoad flag that indicates if the player is connecting to a new game or to a loaded game
+     */
     public void setClient(Client client, boolean gameToBeLoad) {
         this.client = client;
         this.gameToBeLoad = gameToBeLoad;
@@ -328,6 +346,9 @@ public class BoardController implements Initializable {
         this.start();
     }
 
+    /**
+     * This method starts the BoardController, and it sets the Global Goals on the screen
+     */
     public void start() {
 
         Platform.runLater(() -> {
@@ -349,6 +370,9 @@ public class BoardController implements Initializable {
 
     //Start Chat system
 
+    /**
+     * This method continuously checks for new message sent by the players
+     */
     public void seeMessages() {
 
         while (true) {
@@ -367,6 +391,11 @@ public class BoardController implements Initializable {
         }
     }
 
+    /**
+     * This method updates the listView where are shown all the chat messages
+     *
+     * @param newMessage ChatMessage to be added to the list
+     */
     private void updateListView(List<ChatMessage> newMessage) {
         for (ChatMessage message : newMessage) {
             String sender;
@@ -389,6 +418,13 @@ public class BoardController implements Initializable {
         Platform.runLater(() -> listView.scrollTo(listView.getItems().size() - 1));
     }
 
+    /**
+     * This method sends a ChatMessage.
+     * It takes all the information from the Java FX text field
+     * and from the Java FX choice box
+     *
+     * @param e ActionEvent that triggers the method
+     */
     public void sendMessage(ActionEvent e) {
         String message = textField.getText();
         String sender = gameClientModel.getNickname();
@@ -414,6 +450,9 @@ public class BoardController implements Initializable {
 
     //Start Button control system
 
+    /**
+     * This method enables the Pickable Buttons (Pickable Cards + Button to pick)
+     */
     private void enablePickableButtons() {
         for (Button b : pickableCardsButton) {
             b.setDisable(false);
@@ -423,6 +462,9 @@ public class BoardController implements Initializable {
         enablePickButton();
     }
 
+    /**
+     * This method disables the Pickable Buttons (Pickable Cards + Button to pick)
+     */
     private void disablePickableButtons() {
         for (Button b : pickableCardsButton) {
             b.setDisable(true);
@@ -432,6 +474,10 @@ public class BoardController implements Initializable {
         disablePickButton();
     }
 
+    /**
+     * This method enables the Hand and Control Buttons (Cards in the Hand + Place Front Button + Place Back Button
+     * + See Front Button + see Back Button)
+     */
     private void enableHandAndControlButtons() {
         for (Button b : handAndControlButtons) {
             b.setDisable(false);
@@ -442,6 +488,10 @@ public class BoardController implements Initializable {
         }
     }
 
+    /**
+     * This method disables the Hand and Control Buttons (Cards in the Hand + Place Front Button + Place Back Button
+     * + See Front Button + see Back Button)
+     */
     private void disableHandAndControlButtons() {
         for (Button b : handAndControlButtons) {
             b.setDisable(true);
@@ -457,6 +507,12 @@ public class BoardController implements Initializable {
 
     //Start personal color system
 
+    /**
+     * This method sets the background of the Label, containing the nickname,
+     * with the color chosen by the Player
+     *
+     * @param color color chosen by the Player
+     */
     private void setBackgroundNickname(PlayersColor color) {
         if(color != null) {
             Platform.runLater(() -> {
@@ -470,6 +526,10 @@ public class BoardController implements Initializable {
         }
     }
 
+    /**
+     * This method sets the available colors in the Java FX choice box, and it sets
+     * everything to allow the player to choose the color
+     */
     private void setColor() {
 
         List<String> colors = new ArrayList<>();
@@ -493,6 +553,14 @@ public class BoardController implements Initializable {
         chooseColorButton.setOnMouseExited(event -> chooseColorButton.setCursor(Cursor.DEFAULT));
     }
 
+    /**
+     * This method is called once the button is clicked.
+     * It verifies that all the fields are correctly filled, and it sends to the
+     * server the chosen color.
+     * It sets the token associated to the chosen color
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void chooseColorButtonAction(ActionEvent event) {
         if (colorChoiceBox.getValue() == null) {
             showAlert("You have to choose a color");
@@ -534,18 +602,37 @@ public class BoardController implements Initializable {
 
     //Start personal goal system
 
+    /**
+     * This method is called once the button is clicked.
+     * It stores the Goal Card chosen by the Player
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void personalGoal1ButtonAction(ActionEvent event) {
         possibleGoal1.setEffect(highlightEffect);
         possibleGoal2.setEffect(null);
         chosenGoal = possibleGoals.getFirst();
     }
 
+    /**
+     * This method is called once the button is clicked.
+     * It stores the Goal Card chosen by the Player
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void personalGoal2ButtonAction(ActionEvent event) {
         possibleGoal1.setEffect(null);
         possibleGoal2.setEffect(highlightEffect);
         chosenGoal = possibleGoals.get(1);
     }
 
+    /**
+     * This method is called once the button is clicked.
+     * It verifies that all the fields are correctly filled, and it sets
+     * the Goal Card chosen by the Player
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void chooseGoalButtonAction(ActionEvent event) {
         if (chosenGoal == null) {
             showAlert("You have to choose a goal");
@@ -564,6 +651,10 @@ public class BoardController implements Initializable {
         personalGoal.setImage(new Image(Objects.requireNonNull(getClass().getResourceAsStream(chosenGoal.getSrcImage()))));
     }
 
+    /**
+     * This method sets the possible goals in the Java FX Buttons, and it sets
+     * everything to allow the player to choose the Goal Card
+     */
     private void setGoal() {
 
         for (GoalCard card : possibleGoals) {
@@ -591,6 +682,12 @@ public class BoardController implements Initializable {
 
     //Start Pickable cards system
 
+    /**
+     * This method is called once the button is clicked.
+     * It stores the Pickable Resource Card chosen by the Player
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void pickableResource1ButtonEvent(ActionEvent event) {
         for (ImageView b : pickableCardsImages) {
             b.setEffect(null);
@@ -599,6 +696,12 @@ public class BoardController implements Initializable {
         chosenCardToPick = gameClientModel.getPickableResourceCards().getFirst();
     }
 
+    /**
+     * This method is called once the button is clicked.
+     * It stores the Pickable Gold Card chosen by the Player
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void pickableGold1ButtonEvent(ActionEvent event) {
         for (ImageView b : pickableCardsImages) {
             b.setEffect(null);
@@ -607,6 +710,12 @@ public class BoardController implements Initializable {
         chosenCardToPick = gameClientModel.getPickableGoldCards().getFirst();
     }
 
+    /**
+     * This method is called once the button is clicked.
+     * It stores the Pickable Resource Card chosen by the Player
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void pickableResource2ButtonEvent(ActionEvent event) {
         for (ImageView b : pickableCardsImages) {
             b.setEffect(null);
@@ -615,6 +724,12 @@ public class BoardController implements Initializable {
         chosenCardToPick = gameClientModel.getPickableResourceCards().get(1);
     }
 
+    /**
+     * This method is called once the button is clicked.
+     * It stores the Pickable Gold Card chosen by the Player
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void pickableGold2ButtonEvent(ActionEvent event) {
         for (ImageView b : pickableCardsImages) {
             b.setEffect(null);
@@ -623,6 +738,13 @@ public class BoardController implements Initializable {
         chosenCardToPick = gameClientModel.getPickableGoldCards().get(1);
     }
 
+    /**
+     * This method is called once the button is clicked.
+     * It verifies that all the fields are correctly filled, and it sets
+     * the Pickable Card chosen by the Player
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void pickButtonAction(ActionEvent event) {
         if(gameClientModel.getCurrentState().equals(State.PICK)){
             if (chosenCardToPick == null)
@@ -645,6 +767,13 @@ public class BoardController implements Initializable {
         }
     }
 
+    /**
+     * This method is called once the button is clicked.
+     * It stores the Pickable Resource Card chosen by the Player (it's the top of the
+     * Resource Deck)
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void firstCardResourceButtonEvent(ActionEvent event) {
         for (ImageView b : pickableCardsImages) {
             b.setEffect(null);
@@ -658,6 +787,13 @@ public class BoardController implements Initializable {
         }
     }
 
+    /**
+     * This method is called once the button is clicked.
+     * It stores the Pickable Gold Card chosen by the Player (it's the top of the
+     * Gold Deck)
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void firstCardGoldButtonEvent(ActionEvent event) {
         for (ImageView b : pickableCardsImages) {
             b.setEffect(null);
@@ -676,6 +812,13 @@ public class BoardController implements Initializable {
 
     //Start hand control system
 
+    /**
+     * This method is called once the button is clicked.
+     * It verifies that all the fields are correctly filled.
+     * This method shows the Front Face of the Starting Card
+     * 
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void seeFrontButtonAction(ActionEvent event) {
         if (chosenCard == null) {
             showAlert("You have to choose a card");
@@ -689,6 +832,13 @@ public class BoardController implements Initializable {
         }
     }
 
+    /**
+     * This method is called once the button is clicked.
+     * It verifies that all the fields are correctly filled.
+     * This method shows the Back Face of the Starting Card
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void seeBackButtonAction(ActionEvent event) {
         if (chosenCard == null) {
             showAlert("You have to choose a card");
@@ -700,15 +850,25 @@ public class BoardController implements Initializable {
             modifyHandCardImage(chosenCard.getBack().getSrcImage());
         }
     }
-
+    /**
+     * This method sets the image associated to the Back Face of the Starting Card
+     */
     private void seeBackStartingCard() {
         modifyHandCardImage(chosenCard.getBack().getSrcImage());
     }
 
+    /**
+     * This method sets the image associated to the Front Face of the Starting Card
+     */
     private void seeFrontStartingCard() {
         modifyHandCardImage(chosenCard.getFront().getSrcImage());
     }
 
+    /**
+     * This method modifies the src of the Java FX ImageView
+     *
+     * @param src src to be set in the Image
+     */
     private void modifyHandCardImage(String src) {
         new Thread(() -> {
             try {
@@ -722,21 +882,46 @@ public class BoardController implements Initializable {
         }).start();
     }
 
+    /**
+     * This method is called once the button is clicked.
+     * It stores the first Card of the Hand
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void handCard1ButtonAction(ActionEvent event) {
         chosenCard = myPlayer.getHand().getFirst();
         highlightHandCard(handCard1);
     }
 
+    /**
+     * This method is called once the button is clicked.
+     * It stores the second Card of the Hand
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void handCard2ButtonAction(ActionEvent event) {
         chosenCard = myPlayer.getHand().get(1);
         highlightHandCard(handCard2);
     }
 
+    /**
+     * This method is called once the button is clicked.
+     * It stores the third Card of the Hand
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void handCard3ButtonAction(ActionEvent event) {
         chosenCard = myPlayer.getHand().get(2);
         highlightHandCard(handCard3);
     }
 
+    /**
+     * This method is called once the button is clicked.
+     * It verifies that all the fields are correctly filled, and it
+     * uses the right method to place the Card based on its dynamic type
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void placeFrontButtonAction(ActionEvent event) {
         if (checkBeforePlace()) return;
 
@@ -748,6 +933,13 @@ public class BoardController implements Initializable {
         placeCard(chosenCard.getFront());
     }
 
+    /**
+     * This method is called once the button is clicked.
+     * It verifies that all the fields are correctly filled, and it
+     * uses the right method to place the Card based on its dynamic type
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void placeBackButtonAction(ActionEvent event) {
         if (checkBeforePlace()) return;
 
@@ -760,8 +952,9 @@ public class BoardController implements Initializable {
     }
 
     /**
-     * This method places the card in the Board
+     * This method places the card in the Board.
      * This method verifies if the requirements of the card are satisfied
+     *
      * @param face the face chosen by the player
      */
     private void placeCard(Face face){
@@ -793,8 +986,9 @@ public class BoardController implements Initializable {
 
     }
     /**
-     * This method places the StartingCard and the Player's token in the Board
+     * This method places the StartingCard and the Player's token in the Board.
      * This method sets the card and the token in the centre of the boardPane
+     *
      * @param face the face chosen by the player
      */
     private void placeStartingCard(Face face) {
@@ -818,7 +1012,8 @@ public class BoardController implements Initializable {
     }
     /**
      * This method verifies if the user has selected all the values useful to move forward
-     * @return boolean
+     *
+     * @return boolean if everything ok
      */
     private boolean checkBeforePlace() {
         if (chosenCard == null) {
@@ -832,6 +1027,11 @@ public class BoardController implements Initializable {
         return false;
     }
 
+    /**
+     * This method highlights the Image View containing the chose Card
+     *
+     * @param cardImageView ImageView to be highlighted
+     */
     private void highlightHandCard(ImageView cardImageView) {
         for (ImageView handCard : hand) {
             handCard.setEffect(null);
@@ -847,7 +1047,7 @@ public class BoardController implements Initializable {
     List<Position> buttonsOutOfBounds = new ArrayList<>();
 
     /**
-     * This method gives a graphical view of the possible position represented as buttons
+     * This method gives a graphical view of the possible position represented as buttons.
      * This method stores in a list all the buttons whose dimensions
      * are out of the board's space
      */
@@ -925,10 +1125,18 @@ public class BoardController implements Initializable {
 
         }
     }
+
     /**
      * This method reduces the size of the StartingCard and
      * sets the new cards' dimensions in order to keep the
      * right proportion inside the board's pane
+     *
+     * @param pane Java FX Pane containing the Cards
+     * @param sCard Starting Card
+     * @param token token of the Player
+     * @param offX offset x used to restore proportion
+     * @param offY offset y used to restore proportion
+     * @param cardsToBePlaced List of Playable Cards to be resized
      */
     private void resize (Pane pane, ImageView sCard, ImageView token, double offX, double offY, List<ImageView> cardsToBePlaced){
         double newHeight, newWidth;
@@ -962,7 +1170,14 @@ public class BoardController implements Initializable {
 
     /**
      * This method modifies the dimensions and the layout of the Player's cards
-     * using the new parametres setted by @see resize
+     * using the new parameters set by the resize method
+     *
+     * @param newWidth new width of the ImageView
+     * @param newHeight new Height of the ImageView
+     * @param cardsToBePlaced List of Playable Cards to be resized
+     * @param offX offset x used to restore proportion
+     * @param offY offset y used to restore proportion
+     * @param start Starting Card
      */
     private void printImages (double newWidth, double newHeight, List<ImageView> cardsToBePlaced, double offX, double offY, ImageView start){
         for(ImageView image : cardsToBePlaced){
@@ -995,8 +1210,9 @@ public class BoardController implements Initializable {
 
     }
     /**
-     * This method adds the chosen face in the board's pane
+     * This method adds the chosen face in the board's pane.
      * This method verifies if all the card are inside the board's pane
+     *
      * @param face chosen by player
      */
     private void addFaceToBoard(Face face) {
@@ -1036,6 +1252,11 @@ public class BoardController implements Initializable {
 
     //Start utils
 
+    /**
+     * This method shows an alert once called
+     *
+     * @param message message of the alert
+     */
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
@@ -1044,6 +1265,12 @@ public class BoardController implements Initializable {
         alert.showAndWait();
     }
 
+    /**
+     * This method is called once the button is clicked.
+     * It shows the general standings
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void seeStandingsButtonAction(ActionEvent event) {
         seeStandingsButton.setDisable(true);
 
@@ -1126,6 +1353,9 @@ public class BoardController implements Initializable {
 
     //Start update Game
 
+    /**
+     * This method disables all the Buttons
+     */
     private void disableAll() {
         disableHandAndControlButtons();
         disablePickableButtons();
@@ -1135,16 +1365,26 @@ public class BoardController implements Initializable {
         goalPane.setDisable(true);
     }
 
+    /**
+     * This method disables the Pick Button
+     */
     private void disablePickButton() {
         pickButton.setDisable(true);
         pickButton.setOpacity(0);
     }
 
+    /**
+     * This method enables the Pick Button
+     */
     private void enablePickButton() {
         pickButton.setDisable(false);
         pickButton.setOpacity(1);
     }
 
+    /**
+     * This method manages the phase in which the player has to place the
+     * Starting Card
+     */
     private void updateStateSetHand(){
 
         text = "";
@@ -1171,7 +1411,10 @@ public class BoardController implements Initializable {
         }
     }
 
-
+    /**
+     * This method manages the phase in which the player has to choose the
+     * color
+     */
     private void updateStateSetColor(){
         text = "";
         currentPlayer = "";
@@ -1207,6 +1450,10 @@ public class BoardController implements Initializable {
         }
     }
 
+    /**
+     * This method manages the phase in which the player has to choose the
+     * Goal
+     */
     private void updateStateSetGoal() {
         text = "";
         currentPlayer = "";
@@ -1241,6 +1488,10 @@ public class BoardController implements Initializable {
         }
     }
 
+    /**
+     * This method manages the phase in which the player has to place one
+     * of the Cards that are in the Hand
+     */
     private void updateStatePlace() {
 
         text = "";
@@ -1260,6 +1511,10 @@ public class BoardController implements Initializable {
         }
     }
 
+    /**
+     * This method manages the phase in which the player has to pick the
+     * Card from the Pickable Cards
+     */
     private void updateStatePick() {
         text = "";
         currentPlayer = "";
@@ -1275,6 +1530,11 @@ public class BoardController implements Initializable {
         }
     }
 
+    /**
+     * This method sets the new Scene with the new Controller because the Game is ended
+     *
+     * @throws IOException if an error occurs during the loading process
+     */
     private void updateStateLast() throws IOException {
 
         messagesThread.interrupt();
@@ -1305,6 +1565,9 @@ public class BoardController implements Initializable {
         });
     }
 
+    /**
+     * This method manages the disconnection of a Player
+     */
     private void updateStateDisconnected() {
         disableAll();
         showAlert("A player has disconnected from the game.");
@@ -1312,6 +1575,9 @@ public class BoardController implements Initializable {
         System.exit(1);
     }
 
+    /**
+     * This method updates the Hand of the Player
+     */
     private void updateHandMyPlayer() {
         List<PlayableCard> hand = myPlayer.getHand();
         for (ImageView imageView : this.hand) imageView.setImage(null);
@@ -1327,6 +1593,9 @@ public class BoardController implements Initializable {
         }
     }
 
+    /**
+     * This method updates the Pickable Cards shown on the screen
+     */
     private void updatePickableCards() {
         List<PlayableCard> pickableResources = gameClientModel.getPickableResourceCards();
         List<PlayableCard> pickableGold = gameClientModel.getPickableGoldCards();
@@ -1359,6 +1628,10 @@ public class BoardController implements Initializable {
         }
     }
 
+    /**
+     * This method updates the color of the Button containing the player's name
+     * with the color chosen by that specific player
+     */
     private void updateColorBoardPlayers() {
         List<PlayerClientModel> tmp = new ArrayList<>();
         for(PlayerClientModel player : gameClientModel.getPlayers()) {
@@ -1376,6 +1649,16 @@ public class BoardController implements Initializable {
         }
     }
 
+    /**
+     * This method manages the conversion between positions and coordinates.
+     * The position is something abstract, and it is calculated by using a specific Reference System
+     *
+     * @param position position to be converted
+     * @param offX offset x used to restore proportion
+     * @param offY offset y used to restore proportion
+     * @param sCard Starting Card
+     * @return the corresponding coordinates
+     */
     private Coordinates switchFromPositionToCoords(Position position, double offX, double offY, ImageView sCard) {
         int x = position.getX();
         int y = position.getY();
@@ -1411,6 +1694,12 @@ public class BoardController implements Initializable {
 
     }
 
+    /**
+     * This method returns the token associated to the provided color
+     *
+     * @param color color provided
+     * @return the corresponding token
+     */
     private Image getTokenColor(PlayersColor color) {
         switch (color) {
             case RED -> {
@@ -1432,6 +1721,15 @@ public class BoardController implements Initializable {
     }
 
 Pane board;
+
+    /**
+     * This method loads the player's board.
+     * It adds inside the Pane all the Cards placed by the player and the player's token
+     *
+     * @param player PlayerClientModel reference to understand which board the method has to load
+     * @param tmpBoard player's board
+     * @return the number of resize done
+     */
     private int loadBoard (PlayerClientModel player, Pane tmpBoard){
 
         board = tmpBoard;
@@ -1525,6 +1823,13 @@ Pane board;
         }
         return counterNumberResizeDone;
     }
+
+    /**
+     * This method shows the board of another player
+     *
+     * @param name nickname of the player
+     * @param index index of the player inside the list of Players
+     */
     public void showOtherBoardPlayer(String name, int index){
         for(Button b : playersBoardButtons){
             b.setOpacity(0.5);
@@ -1577,25 +1882,45 @@ Pane board;
         timeline.play();
     }
 
-
+    /**
+     * This method is called once the button is clicked.
+     * It shows the board of the first player
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void player1BoardButtonAction(ActionEvent event) {
         String text = player1Board.getText();
         text = text.substring(0, text.length() - 8);
         showOtherBoardPlayer(text, 0);
     }
 
+    /**
+     * This method is called once the button is clicked.
+     * It shows the board of the second player
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void player2BoardButtonAction(ActionEvent event) {
         String text = player2Board.getText();
         text = text.substring(0, text.length() - 8);
         showOtherBoardPlayer(text, 1);
     }
 
+    /**
+     * This method is called once the button is clicked.
+     * It shows the board of the third player
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     */
     public void player3BoardButtonAction(ActionEvent event) {
         String text = player3Board.getText();
         text = text.substring(0, text.length() - 8);
         showOtherBoardPlayer(text, 2);
     }
 
+    /**
+     * This method loads the board of the player associated to the client
+     */
     private void loadAllBoard() {
         int counter = loadBoard(myPlayer, boardPane);
         for(int i=0; i<counter; i++){
@@ -1605,7 +1930,10 @@ Pane board;
         System.out.println("Loading my boards");
     }
 
-
+    /**
+     * This method manages the reception of the updates sent by the server, and
+     * it calls the right method based on the Current State contained in the GameClientModel
+     */
     public void updateGameView() {
         while (true) {
             if (gameClientModel.getNewUpdate()) {

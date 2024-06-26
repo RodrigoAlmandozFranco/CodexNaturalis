@@ -23,6 +23,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This class represents the GUI controller that controls the winning phase,
+ * during which the Player sees the winner(s) and
+ * the general standings of the game with all the player's points
+ *
+ * @author Mattia Brandi
+ * @author Rodrigo Almandoz Franco
+ */
 public class WinningController {
     private Client client;
     private GameClientModel gameClientModel;
@@ -39,6 +47,13 @@ public class WinningController {
 
     public WinningController() {}
 
+    /**
+     * This method sets the Client in the Controller
+     *
+     * @param client client instance
+     * @param myPlayer PlayerClientModel to be set
+     * @param winners List of winners
+     */
     public void setClient(Client client, PlayerClientModel myPlayer, List<Player> winners) {
         this.client = client;
         this.myPlayer = myPlayer;
@@ -49,6 +64,9 @@ public class WinningController {
         showPodium();
     }
 
+    /**
+     * This method sets the Label with the final standings of the Game
+     */
     private void setLabel() {
         label.setStyle("-fx-background-color: brown; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10;");
         label.setWrapText(true);
@@ -63,6 +81,10 @@ public class WinningController {
         label.setText(text);
     }
 
+    /**
+     * This method loads all the chat messages sent during the game and waits for
+     * new messages
+     */
     private void initializeMessages() {
         List<String> nicknames = gameClientModel.getPlayers().stream().map(PlayerClientModel::getNickname).collect(Collectors.toList());
         nicknames.addFirst("All");
@@ -73,6 +95,9 @@ public class WinningController {
         thread.start();
     }
 
+    /**
+     * This method shows the podium with the winner(s)
+     */
     public void showPodium() {
 
         firstPlayerLabel.setStyle("-fx-background-color: gold; -fx-text-fill: black; -fx-font-weight: bold; -fx-padding: 10;");
@@ -164,7 +189,9 @@ public class WinningController {
         timeline.play();
     }
 
-
+    /**
+     * This method continuously checks for new message sent by the players
+     */
     public void seeMessages() {
         updateListView(gameClientModel.getAllMessages());
 
@@ -186,6 +213,11 @@ public class WinningController {
 
     }
 
+    /**
+     * This method updates the listView where are shown all the chat messages
+     *
+     * @param newMessage ChatMessage to be added to the list
+     */
     private void updateListView(List<ChatMessage> newMessage) {
         for (ChatMessage message : newMessage) {
             String sender;
@@ -208,6 +240,13 @@ public class WinningController {
         Platform.runLater(() -> listView.scrollTo(listView.getItems().size() - 1));
     }
 
+    /**
+     * This method sends a ChatMessage.
+     * It takes all the information from the Java FX text field
+     * and from the Java FX choice box
+     *
+     * @param e ActionEvent that triggers the method
+     */
     public void sendMessage(ActionEvent e) {
         String message = textField.getText();
         String sender = gameClientModel.getNickname();
@@ -227,10 +266,4 @@ public class WinningController {
             chatMessage = new ChatMessage(message, sender, receiver);
         client.sendChatMessage(chatMessage);
     }
-
-
-
-
-
-
 }

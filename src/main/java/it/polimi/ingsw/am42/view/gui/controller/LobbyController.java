@@ -12,7 +12,14 @@ import javafx.scene.control.ProgressBar;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-
+/**
+ * This class represents the GUI controller that controls the Lobby,
+ * where the connected players wait until the reaching of the number chosen by
+ * the first player
+ *
+ * @author Mattia Brandi
+ * @author Rodrigo Almandoz Franco
+ */
 public class LobbyController {
 
     private Client client;
@@ -26,6 +33,14 @@ public class LobbyController {
 
     }
 
+    /**
+     * This method sets the Client, and it waits until the number of waiting players
+     * is equal to the number chosen by the first player
+     *
+     * @param client client instance
+     * @param gameToLoad flag to understand if there is a game to be loaded
+     * @throws IOException if an error occurs during the waiting process
+     */
     public void setClient(Client client, boolean gameToLoad) throws IOException {
         this.client = client;
         this.gameToLoad = gameToLoad;
@@ -39,8 +54,13 @@ public class LobbyController {
 
         thread.start();
     }
-
-
+    /**
+     * This method continues to ask the server if the number of waiting players
+     * is equal to the number chosen by the first player, and then it switches to
+     * the following scene
+     *
+     * @throws IOException if an error occurs when the client communicates with the server
+     */
     private void askReady() throws IOException {
         while (!client.getClientModel().getReady()) {
             try {
@@ -51,9 +71,14 @@ public class LobbyController {
         }
 
         this.switchScene();
-
     }
 
+    /**
+     * This method switches the Scene on the JavaFx stage, and it changes the controller,
+     * loading it from the fxmlLoader
+     *
+     * @throws IOException if an error occurs during the switching process
+     */
     public void switchScene() throws IOException {
         Platform.runLater(() -> {
             String resource = "/it/polimi/ingsw/am42/javafx/Board.fxml";

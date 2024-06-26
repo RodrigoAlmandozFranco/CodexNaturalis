@@ -14,7 +14,14 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.Objects;
-
+/**
+ * This class represents the GUI controller that controls the phase
+ * during which the first Player has to choose between two options: create a new game or
+ * load an existing game
+ *
+ * @author Mattia Brandi
+ * @author Rodrigo Almandoz Franco
+ */
 public class MenuController {
     @FXML
     private Button createGameButton;
@@ -27,7 +34,12 @@ public class MenuController {
     public MenuController(){
     }
 
-
+    /**
+     * This method sets the Client in the Controller, and it sets the cursor's shape
+     * based on its position on the screen
+     *
+     * @param client client instance
+     */
     public void setClient(Client client){
         this.client = client;
         createGameButton.setOnMouseEntered(event -> createGameButton.setCursor(Cursor.HAND));
@@ -36,6 +48,14 @@ public class MenuController {
         loadGameButton.setOnMouseExited(event -> loadGameButton.setCursor(Cursor.DEFAULT));
     }
 
+    /**
+     * This method is called once the associated button is clicked.
+     * The player clicks this button if he wants to create a new Game.
+     * This method loads the right scene and sets the new controller
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     * @throws IOException if an error occurs during loading the FXML file
+     */
     public void createGameAction(ActionEvent event) throws IOException {
         String resource = "/it/polimi/ingsw/am42/javafx/NicknameFirstPlayerCreateGame.fxml";
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(resource));
@@ -49,6 +69,14 @@ public class MenuController {
         stage.show();
     }
 
+    /**
+     * This method is called once the associated button is clicked.
+     * The player clicks this button if he wants to load a saved Game.
+     * This method loads the right scene and sets the new controller
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     * @throws IOException if an error occurs during loading the FXML file
+     */
     public void loadGameAction(ActionEvent event) throws IOException {
         boolean gameToBeLoad = true;
         String resource = "/it/polimi/ingsw/am42/javafx/GeneralConnection.fxml";

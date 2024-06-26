@@ -17,11 +17,24 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * This class is the main entry point for the JavaFX application.
+ * It manages the initial setup of the application, including setting the stage and scene.
+ * It also handles the connection state of the client and sets the appropriate scene based on the connection state.
+ * This class extends the Application class provided by JavaFX
+ */
 
 public class HelloApplication extends Application {
 
     private static Stage stage;
 
+    /**
+     * This method sets the right scene based on the ConnectionState, and it
+     * starts two different threads to manage the server's disconnection or the player's disconnection
+     *
+     * @param stage stage where the scene has to be set
+     * @throws IOException if an error occurs during the loading process
+     */
     @Override
     public void start(Stage stage) throws IOException {
         HelloApplication.stage = stage;
@@ -71,9 +84,19 @@ public class HelloApplication extends Application {
         stage.show();
     }
 
+    /**
+     * This method returns the stage
+     *
+     * @return the stage
+     */
     public static Stage getStage() {
         return stage;
     }
+
+    /**
+     * This method continues to check if the server is down.
+     * If the server is down, it shows an alert and exits the application
+     */
 
     private void checkServerDown() {
         GameClientModel gameClientModel = ClientHolder.getClient().getClientModel();
@@ -98,6 +121,10 @@ public class HelloApplication extends Application {
         }
     }
 
+    /**
+     * This method continues to check if a player has disconnected.
+     * If the game is aborted, it shows an alert and exits the application.
+     */
     private void isGameAborted() {
         GameClientModel gameClientModel = ClientHolder.getClient().getClientModel();
         boolean gameInProcess = true;
@@ -119,7 +146,12 @@ public class HelloApplication extends Application {
         });
     }
 
-    private void showAlert(String message){
+    /**
+     * This method shows an alert once called
+     *
+     * @param message message of the alert
+     */
+    private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
         alert.setHeaderText(null);
@@ -127,6 +159,9 @@ public class HelloApplication extends Application {
         alert.showAndWait();
     }
 
+    /**
+     * This method starts the Java FX application
+     */
     public void initialize() {
         launch();
     }

@@ -1,7 +1,13 @@
 package it.polimi.ingsw.am42.view.gui.utils.points;
 
 import javafx.stage.Screen;
-
+/**
+ * A utility class for managing tokens' positions on the Standing Board
+ * This method receives the points associated to each token and calculates
+ * the coordinates (x,y) that the image should have on the screen
+ *
+ * @author Mattia Brandi
+ */
 public class ScreenPosition {
     private int x;
     private int y;
@@ -18,6 +24,15 @@ public class ScreenPosition {
     // Third Player:    x += -18    y+= 16
     // Fourth Player:   x += 18     y+= 18
 
+    /**
+     * This method calculates the screen position based on the input parameters.
+     * This method starts from the coordinates of the center of the circle associated to each
+     * point, and it adds an offset based on the token's number
+     *
+     * @param number identifier of the token
+     * @param points points associated to the token
+     * @return the screen position of the token
+     */
     public ScreenPosition getScreenPosition(int number, int points) {
         this.execute(points);
         switch (number) {
@@ -41,7 +56,12 @@ public class ScreenPosition {
         return new ScreenPosition(x, y);
     }
 
-
+    /**
+     * This method sets the x and y coordinates based on the point received
+     *
+     * @param point point associated to a particular screen position on the Standing Board
+     * @return the coordinates (x,y) associated to the received point
+     */
     private ScreenPosition execute(int point) {
         switch(point) {
             case 0:
@@ -169,10 +189,19 @@ public class ScreenPosition {
         return this;
     }
 
+    /**
+     * This method returns the x coordinate of the Screen Position
+     *
+     * @return x coordinate
+     */
     public int getX() {
         return x;
     }
-
+    /**
+     * This method returns the y coordinate of the Screen Position
+     *
+     * @return y coordinate
+     */
     public int getY() {
         return y;
     }

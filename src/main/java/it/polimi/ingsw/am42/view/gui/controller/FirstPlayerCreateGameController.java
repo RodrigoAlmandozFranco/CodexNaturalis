@@ -21,6 +21,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * This class represents the GUI controller that controls the setup phase,
+ * during which the first Player has to authenticate by choosing his nickname and the
+ * number of players of the Game
+ *
+ * @author Mattia Brandi
+ * @author Rodrigo Almandoz Franco
+ */
 public class FirstPlayerCreateGameController implements Initializable {
     private Client client;
     private String nickname = "";
@@ -38,9 +46,10 @@ public class FirstPlayerCreateGameController implements Initializable {
     public FirstPlayerCreateGameController() {}
 
     /**
-     * This method set the Client in the Controller
-     * @param client
-     * @author Mattia Brandi
+     * This method sets the Client in the Controller, and it sets the cursor shape
+     * based on its position on the screen
+     *
+     * @param client client instance
      */
     public void setClient(Client client) {
         this.client = client;
@@ -50,7 +59,6 @@ public class FirstPlayerCreateGameController implements Initializable {
 
     /**
      * This method extracts the user's name from the JavaFx text box
-     * @author Mattia Brandi
      */
     public void submit() {
         this.nickname = textField.getText();
@@ -63,20 +71,22 @@ public class FirstPlayerCreateGameController implements Initializable {
     }
 
     /**
+     * This method is called once the button is clicked.
      * This method extracts the number of players from the JavaFx choice box
-     * @param event
-     * @author Mattia Brandi
+     *
+     * @param event ActionEvent triggered when the client selects a value
      */
     public void getNumber(ActionEvent event) {
         numberOfPlayers = Integer.parseInt(choiceBox.getValue());
     }
 
     /**
-     * This method is called once the button is clicked
-     * This method verifies that all the fields are filled correctly, it sends to the
+     * This method is called once the button is clicked.
+     * This method verifies that all the fields are correctly filled, and it sends to the
      * server the request to create the game
-     * @param event
-     * @author Mattia Brandi
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     * @throws IOException if an error occurs during the connection process
      */
     public void createGameAction(ActionEvent event) throws IOException {
 
@@ -92,11 +102,15 @@ public class FirstPlayerCreateGameController implements Initializable {
             connect(event);
         }
     }
+
     /**
-     * This method it sends to the server the request to create the game
-     * and sets on the JavaFx stage the new Scene with the new Controller
-     * @param event
-     * @author Mattia Brandi
+     * This method is called once the button is clicked.
+     * It asks the server to create the Game with the chosen parameters, and
+     * it sets the new Scene with the new Controller on the JavaFx stage based on
+     * the server's answer
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     * @throws IOException if an error occurs during the loading process
      */
     private void connect(ActionEvent event) throws IOException {
         String resource = "";
@@ -117,6 +131,14 @@ public class FirstPlayerCreateGameController implements Initializable {
         }
     }
 
+    /**
+     * This method creates a new Scene loading the FXML file, and it sets a new Controller
+     * based on the input resource
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     * @param resource path to the FXM file
+     * @throws IOException if an error occurs during the loading process
+     */
     private void load(String resource, ActionEvent event) throws IOException {
         FXMLLoader fxmlLoader;
         Parent root;
@@ -142,8 +164,8 @@ public class FirstPlayerCreateGameController implements Initializable {
 
     /**
      * This method shows an alert once called
-     * @param message
-     * @author Mattia Brandi
+     *
+     * @param message message of the alert
      */
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);

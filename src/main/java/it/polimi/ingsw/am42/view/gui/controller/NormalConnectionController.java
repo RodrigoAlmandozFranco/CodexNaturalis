@@ -24,6 +24,13 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.rmi.RemoteException;
 
+/**
+ * This class represents the GUI controller that controls the connection phase,
+ * during which the Player has to authenticate by choosing his nickname
+ *
+ * @author Mattia Brandi
+ * @author Rodrigo Almandoz Franco
+ */
 public class NormalConnectionController {
 
     private Client client;
@@ -38,6 +45,13 @@ public class NormalConnectionController {
 
     public NormalConnectionController() {}
 
+    /**
+     * This method sets the Client in the Controller, and it sets the cursor's shape
+     * based on its position on the screen
+     *
+     * @param client client instance
+     * @param gameToBeLoad flag that indicates if the player is connecting to a new game or to a loaded game
+     */
     public void setClient(Client client, boolean gameToBeLoad) {
         this.client = client;
         LoginButton1.setOnMouseEntered(event -> LoginButton1.setCursor(Cursor.HAND));
@@ -45,13 +59,22 @@ public class NormalConnectionController {
         this.gameToBeLoad = gameToBeLoad;
     }
 
+    /**
+     * This method extracts the user's name from the JavaFx text box
+     */
     public void submit() {
         this.nickname = textField.getText().trim();
     }
 
-
+    /**
+     * This method is called once the button is clicked.
+     * It verifies that all the fields are correctly filled, and it starts the connection process
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     * @throws IOException if an error occurs during the connection process
+     */
     public void connectGameAction(ActionEvent event) throws IOException {
-        if(nickname.trim().isEmpty() && textField.getText().trim().isEmpty()){
+        if (nickname.trim().isEmpty() && textField.getText().trim().isEmpty()) {
             showAlert("Please insert a nickname");
         } else {
             nickname = textField.getText().trim();
@@ -59,7 +82,14 @@ public class NormalConnectionController {
         }
     }
 
-
+    /**
+     * This method tries to send to the server the request to connect the player to the Game,
+     * and it sets the nickname in the GameClientModel.
+     * At the end it switches the scene
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     * @throws IOException if an error occurs during the connection process
+     */
     private void connectAction(ActionEvent event) throws IOException {
 
         try {
@@ -74,6 +104,14 @@ public class NormalConnectionController {
         }
     }
 
+    /**
+     * This method tries to send to the server the request to reconnect the player to the loaded Game,
+     * and it sets the nickname in the GameClientModel.
+     * At the end it switches the scene
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     * @throws IOException if an error occurs during the reconnection process
+     */
     private void reconnectAction(ActionEvent event) throws IOException {
         try {
             client.reconnect(nickname);
@@ -89,6 +127,12 @@ public class NormalConnectionController {
         }
     }
 
+    /**
+     * This method shows an alert with the exception message, and it closes the window
+     *
+     * @param e GameFullException thrown by the server
+     * @param event ActionEvent triggered when arrives an exception
+     */
     private void gameFull(GameFullException e, ActionEvent event){
         showAlert(e.getMessage());
         showAlert("Closing the game...");
@@ -97,19 +141,38 @@ public class NormalConnectionController {
         System.exit(1);
     }
 
+    /**
+     * This method shows an alert with the exception message
+     *
+     * @param e GameAlreadyCreatedException thrown by the server
+     * @param event ActionEvent triggered when arrives an exception
+     * @throws IOException if an error occurs during the connection process
+     */
     private void gameAlreadyCreated(GameAlreadyCreatedException e, ActionEvent event) throws IOException {
         showAlert("Game has already been created. We are connecting you to the active game...");
         connectAction(event);
     }
 
+    /**
+     * This method calls the right method in order to do a normal connection or a reconnection
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     * @throws IOException if an error occurs during the connection process
+     */
     private void connect(ActionEvent event) throws IOException {
-        if(!gameToBeLoad && !client.getGameInfo().equals(ConnectionState.LOADING)){
+        if (!gameToBeLoad && !client.getGameInfo().equals(ConnectionState.LOADING)) {
             connectAction(event);
         } else {
             reconnectAction(event);
         }
     }
 
+    /**
+     * This method creates a new Scene loading the FXML file, and it sets a new Controller
+     *
+     * @param event ActionEvent triggered when the client clicks the button
+     * @throws IOException if an error occurs during the loading process
+     */
     private void load(ActionEvent event) throws IOException {
         String resource = "/it/polimi/ingsw/am42/javafx/Lobby.fxml";
 
@@ -124,6 +187,11 @@ public class NormalConnectionController {
         stage.show();
     }
 
+    /**
+     * This method shows an alert once called
+     *
+     * @param message message of the alert
+     */
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
