@@ -51,7 +51,11 @@ class GameTest {
         List<PlayableCard> pr = game.getPickableResourceCards();
         List<PlayableCard> pg = game.getPickableGoldCards();
         List<GoalCard> gg = game.getGoals();
-        List<PlayableCard> cards = game.getPickableCards();
+        List<PlayableCard> cards = new ArrayList<>();
+        cards.addAll(game.getPickableResourceCards());
+        cards.addAll(game.getPickableGoldCards());
+        cards.add(game.getFirstGoldCard());
+        cards.add(game.getFirstResourceCard());
         assertEquals(6, cards.size());
         assertFalse(cards.contains(null));
         int resource = 0;
@@ -421,6 +425,8 @@ class GameTest {
         assertEquals(game.getCurrentPlayer(), game.getPlayers().getFirst());
         game.setCurrentPlayer(game.getNextPlayer());
         assertEquals(game.getCurrentPlayer(), game.getPlayers().getLast());
+        assertNotNull(game.getPlayer("Rodri"));
+        assertTrue(game.getPlayers().contains(game.getPlayer("Rodri")));
     }
 
     @org.junit.jupiter.api.Test
@@ -456,7 +462,11 @@ class GameTest {
         List<PlayableCard> pr = game.getPickableResourceCards();
         List<PlayableCard> pg = game.getPickableGoldCards();
         List<GoalCard> gg = game.getGoals();
-        List<PlayableCard> cards = game.getPickableCards();
+        List<PlayableCard> cards = new ArrayList<>();
+        cards.addAll(game.getPickableResourceCards());
+        cards.addAll(game.getPickableGoldCards());
+        cards.add(game.getFirstGoldCard());
+        cards.add(game.getFirstResourceCard());
         assertEquals(6, cards.size());
         assertFalse(cards.contains(null));
         int resource = 0;
@@ -479,7 +489,25 @@ class GameTest {
 
     @org.junit.jupiter.api.Test
     void chosenCardToAddInHand(){
-        //TODO
+        Game game = null;
+        try {
+            game = new Game(2);
+            game.initializeDecks();
+            game.addToGame("Rodri");
+            game.addToGame("Matti");
+            game.initializeGame();
+        } catch (NumberPlayerWrongException | GameFullException | NicknameAlreadyInUseException |
+                 NicknameInvalidException e) {
+            throw new RuntimeException(e);
+        }
+        Player currentPlayer = game.getCurrentPlayer();
+        PlayableCard card = game.getPickableResourceCards().getFirst();
+
+        game.chosenCardToAddInHand(card);
+        assertTrue(currentPlayer.getHand().contains(card));
+        assertFalse(game.getPickableResourceCards().contains(card));
+
+
     }
 
     @org.junit.jupiter.api.Test
@@ -503,6 +531,8 @@ class GameTest {
             assertNotNull(g);
             assertInstanceOf(GoalCard.class, g);
         }
+
+        assertNull(game.getPlayer("Tommy"));
     }
 
     @org.junit.jupiter.api.Test

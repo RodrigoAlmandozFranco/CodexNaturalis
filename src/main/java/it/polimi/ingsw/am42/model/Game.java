@@ -271,39 +271,6 @@ public class Game implements GameInterface, Serializable {
 
 
     /**
-     * This method returns the list of the visible cards and the top cards of resource and gold deck.
-     * If a deck is finished, it returns the top card of the other deck.
-     * If the two decks are finished, it returns only the pickable cards (pickableResourceCards, pickableGoldCards).
-     *
-     * @return the list of possible cards that the player can choose
-     */
-    public List<PlayableCard> getPickableCards() {
-        List<PlayableCard> l = new ArrayList<>();
-        l.addAll(pickableResourceCards);
-        l.addAll(pickableGoldCards);
-        if(!resourceDeck.finished()) {
-            PlayableCard r = resourceDeck.getTop();
-            l.add(r);
-        } else {
-            if(!goldDeck.finished()) {
-                PlayableCard g = goldDeck.getTop();
-                l.add(g);
-            }
-        }
-        if(!goldDeck.finished()) {
-            PlayableCard g = goldDeck.getTop();
-            l.add(g);
-        } else {
-            if(!resourceDeck.finished()) {
-                PlayableCard r = resourceDeck.getTop();
-                l.add(r);
-            }
-        }
-        return l;
-    }
-
-
-    /**
      * This method inserts the chosen card in the player's hand, and it updates the decks.
      *
      * @param c the card chosen by the player

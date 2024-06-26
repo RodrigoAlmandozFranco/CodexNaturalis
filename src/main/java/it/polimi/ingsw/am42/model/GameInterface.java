@@ -34,7 +34,6 @@ public interface GameInterface {
     Player getNextPlayer();
     void setCurrentPlayer(Player p);
     int getNumberPlayers();
-    List<PlayableCard> getPickableCards();
     List<GoalCard> getGoals();
     List<Player> getStandings();
     void chosenCardToAddInHand(PlayableCard c);
