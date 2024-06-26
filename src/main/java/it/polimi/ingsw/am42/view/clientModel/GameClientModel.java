@@ -164,10 +164,6 @@ public class GameClientModel {
         return startGame;
     }
 
-
-    public void connectionClosed() {
-    }
-
     /**
      * Main method to update the contents of the game
      * @param diff the Change message received by the server

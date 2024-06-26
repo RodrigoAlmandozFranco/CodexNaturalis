@@ -629,8 +629,8 @@ public class TUIApplication extends App {
 
     private void checkDisconnection(){
         if (client.getClientModel().isGameAborted()) {
-            if (!client.getClientModel().getCurrentState().equals(State.LAST)
-                    && !client.getClientModel().getCurrentState().equals(State.DISCONNECTED)) {
+            if (client.getClientModel().getCurrentState()==null || (!client.getClientModel().getCurrentState().equals(State.LAST)
+                    && !client.getClientModel().getCurrentState().equals(State.DISCONNECTED))) {
                 io.print("Someone disconnected to the game");
                 io.print("Exiting game...");
                 System.exit(0);

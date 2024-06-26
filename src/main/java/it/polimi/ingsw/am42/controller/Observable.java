@@ -79,7 +79,7 @@ public abstract class Observable {
         for(MessageListener l : listeners) {
             try {
                 l.update(message);
-            } catch (RemoteException e) {
+            } catch (Exception e) {
                 listeners.remove(l);
                 handleDisconnection();
             }
