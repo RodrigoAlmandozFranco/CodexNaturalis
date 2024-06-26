@@ -11,6 +11,10 @@ import it.polimi.ingsw.am42.network.tcp.messages.Message;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to store the simplified game model in the client
+ * The information are sent one by one with the Change messages from the server
+ */
 public class GameClientModel {
 
     private String nickname;
@@ -31,7 +35,9 @@ public class GameClientModel {
     private boolean isTurnFinal;
     private boolean isServerDown = false;
 
-
+    /**
+     * Constructor of the class
+     */
     public GameClientModel() {
         this.players = new ArrayList<>();
         this.globalGoals = new ArrayList<>();
@@ -52,6 +58,9 @@ public class GameClientModel {
         startGame = false;
     }
 
+    /**
+     * Method to decide which methods can be used by the (thick) client in the current state
+     */
     public void handleState() {
         usableMethods.clear();
 
@@ -109,10 +118,15 @@ public class GameClientModel {
             default -> {}
         }
     }
+
     public String getNickname() {
         return nickname;
     }
 
+    /**
+     * Adds the chat messages to the pile
+     * @param message the last message received
+     */
     public void updateMessage(Message message) {
         if (message instanceof ChatMessage) {
             allMessages.add((ChatMessage) message);
@@ -123,6 +137,10 @@ public class GameClientModel {
         }
     }
 
+    /**
+     * Method used by app to check if the server is down
+     * @return
+     */
     public boolean getServerDown(){
         return isServerDown;
     }
@@ -146,10 +164,10 @@ public class GameClientModel {
         return startGame;
     }
 
-
-    public void connectionClosed() {
-    }
-
+    /**
+     * Main method to update the contents of the game
+     * @param diff the Change message received by the server
+     */
     public void update(Change diff){
 
         if(diff.getCurrentState().equals(State.DISCONNECTED)){

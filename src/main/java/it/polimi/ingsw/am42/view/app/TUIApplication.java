@@ -629,8 +629,8 @@ public class TUIApplication extends App {
 
     private void checkDisconnection(){
         if (client.getClientModel().isGameAborted()) {
-            if (!client.getClientModel().getCurrentState().equals(State.LAST)
-                    && !client.getClientModel().getCurrentState().equals(State.DISCONNECTED)) {
+            if (client.getClientModel().getCurrentState()==null || (!client.getClientModel().getCurrentState().equals(State.LAST)
+                    && !client.getClientModel().getCurrentState().equals(State.DISCONNECTED))) {
                 io.print("Someone disconnected to the game");
                 io.print("Exiting game...");
                 System.exit(0);
@@ -660,13 +660,12 @@ public class TUIApplication extends App {
 
         try {
             winners = client.getWinner();
-            numWinners = winners.size();
-
         } catch (WrongTurnException e) {
             io.print("There are no winners today");
             selectChoice();
             return;
         }
+        numWinners = winners.size();
 
 
 

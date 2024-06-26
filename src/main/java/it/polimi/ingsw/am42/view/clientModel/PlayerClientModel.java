@@ -10,6 +10,10 @@ import it.polimi.ingsw.am42.model.structure.Board;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class to store the simplified player model in the client
+ * The information are sent one by one with the Change messages from the server
+ */
 public class PlayerClientModel {
 
     private int points;
@@ -108,7 +112,10 @@ public class PlayerClientModel {
     public String toString() {
         return nickname;
     }
-
+    /**
+     * Main method to update the contents of the game
+     * @param diff the Change message received by the server
+     */
     public void update(Change diff){
         points = diff.getPointsPlayer();
         numberGoalsAchieved = diff.getNumberGoalsAchieved();
