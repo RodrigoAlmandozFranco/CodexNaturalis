@@ -22,6 +22,14 @@ import it.polimi.ingsw.am42.view.clientModel.PlayerClientModel;
 
 import java.util.*;
 
+
+/**
+ * This class is responsible for starting the terminal user interface of the application.
+ * It extends the App class.
+ *
+ * @author Tommaso Crippa
+ * @author Alessandro Di Maria
+ */
 public class TUIApplication extends App {
 
     private static String nickname;
