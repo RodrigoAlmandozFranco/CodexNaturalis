@@ -463,7 +463,7 @@ public class Game implements GameInterface, Serializable {
      * It uses the classes in the gson package.
      */
 
-    public void initializeDecks() {
+    private void initializeDecks() {
         Gson gson = new GsonBuilder()
                 .registerTypeAdapter(Evaluator.class, new EvaluatorDeserializer())
                 .registerTypeAdapter(Front.class, new FrontDeserializer())

@@ -7,7 +7,7 @@ import java.rmi.RemoteException;
 /**
  * Exception for when a client requests to do an illegal action
  *
- * @author TUTTI <3
+ * @author TUTTI
  */
 public class WrongTurnException extends RemoteException {
     public WrongTurnException(String message) {

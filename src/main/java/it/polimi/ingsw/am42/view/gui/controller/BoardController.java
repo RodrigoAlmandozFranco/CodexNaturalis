@@ -815,7 +815,7 @@ public class BoardController implements Initializable {
     /**
      * This method is called once the button is clicked.
      * It verifies that all the fields are correctly filled.
-     * This method shows the Front Face of the Starting Card
+     * This method shows the Front Face of the selected card
      * 
      * @param event ActionEvent triggered when the client clicks the button
      */
@@ -835,7 +835,7 @@ public class BoardController implements Initializable {
     /**
      * This method is called once the button is clicked.
      * It verifies that all the fields are correctly filled.
-     * This method shows the Back Face of the Starting Card
+     * This method shows the Back Face of the selected card
      *
      * @param event ActionEvent triggered when the client clicks the button
      */

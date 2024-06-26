@@ -32,7 +32,6 @@ class GameTest {
         } catch (NumberPlayerWrongException e) {
             throw new RuntimeException(e);
         }
-        game.initializeDecks();
         try{
             try {
                 game.addToGame("Rodri");
@@ -81,7 +80,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
             game.addToGame("Rodri");
             game.addToGame("Matti");
             game.initializeGame();
@@ -99,7 +97,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
             game.addToGame("Rodri");
             game.addToGame("Matti");
             game.initializeGame();
@@ -117,7 +114,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
             game.addToGame("Tommy");
             game.addToGame("Matti");
             game.initializeGame();
@@ -138,7 +134,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
         } catch (NumberPlayerWrongException e) {
             throw new RuntimeException(e);
         }
@@ -209,7 +204,6 @@ class GameTest {
         } catch (NumberPlayerWrongException e) {
             throw new RuntimeException(e);
         }
-        game.initializeDecks();
         try{
             try {
                 game.addToGame("Rodri");
@@ -268,7 +262,6 @@ class GameTest {
 
         try {
             game = new Game(2);
-            game.initializeDecks();
         } catch (NumberPlayerWrongException e) {
             throw new RuntimeException(e);
         }
@@ -335,7 +328,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
         } catch (NumberPlayerWrongException e) {
             throw new RuntimeException(e);
         }
@@ -359,7 +351,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
         } catch (NumberPlayerWrongException e) {
             throw new RuntimeException(e);
         }
@@ -382,7 +373,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
         } catch (NumberPlayerWrongException e) {
             throw new RuntimeException(e);
         }
@@ -407,7 +397,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
         } catch (NumberPlayerWrongException e) {
             throw new RuntimeException(e);
         }
@@ -434,7 +423,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
             game.addToGame("Rodri");
             game.addToGame("Matti");
             game.initializeGame();
@@ -452,7 +440,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
             game.addToGame("Rodri");
             game.addToGame("Matti");
             game.initializeGame();
@@ -492,7 +479,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
             game.addToGame("Rodri");
             game.addToGame("Matti");
             game.initializeGame();
@@ -515,7 +501,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
             game.addToGame("Rodri");
             game.addToGame("Matti");
             game.initializeGame();
@@ -540,7 +525,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
             game.addToGame("Rodri");
             game.addToGame("Matti");
             game.initializeGame();
@@ -569,7 +553,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
             game.addToGame("Rodri");
             game.addToGame("Matti");
             game.initializeGame();
@@ -592,7 +575,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
             game.addToGame("Rodri");
             game.addToGame("Matti");
             game.initializeGame();
@@ -611,7 +593,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
             game.addToGame("Rodri");
             game.addToGame("Matti");
             game.initializeGame();
@@ -631,7 +612,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
             game.addToGame("Rodri");
             game.addToGame("Matti");
             game.initializeGame();
@@ -659,7 +639,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
             game.addToGame("Rodri");
             game.addToGame("Matti");
             game.initializeGame();
@@ -681,7 +660,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
             game.addToGame("Rodri");
             game.addToGame("Matti");
             game.initializeGame();
@@ -703,7 +681,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
             game.addToGame("Rodri");
             game.addToGame("Matti");
             game.initializeGame();
@@ -721,7 +698,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
             game.addToGame("Rodri");
             game.addToGame("Matti");
             game.initializeGame();
@@ -739,7 +715,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
             game.addToGame("Rodri");
             game.addToGame("Matti");
             game.initializeGame();
@@ -760,7 +735,6 @@ class GameTest {
         Game game = null;
         try {
             game = new Game(2);
-            game.initializeDecks();
             game.addToGame("Rodri");
             game.addToGame("Matti");
             game.initializeGame();

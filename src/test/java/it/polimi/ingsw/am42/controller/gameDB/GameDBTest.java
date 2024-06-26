@@ -22,7 +22,6 @@ class GameDBTest {
         } catch (NumberPlayerWrongException e) {
             throw new RuntimeException(e);
         }
-        game.initializeDecks();
         try{
             try {
                 game.addToGame("Rodri");

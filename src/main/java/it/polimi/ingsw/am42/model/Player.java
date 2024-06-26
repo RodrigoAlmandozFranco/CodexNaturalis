@@ -189,7 +189,7 @@ public class Player implements Serializable {
      *
      * @author Tommaso Crippa
      * @param face the face that we are checking if it can be inserted
-     * @return boolean value, if true the face can be placed, otherwise it cannot
+     * @throws RequirementsNotMetException if the requirements are not met
      */
     public void checkRequirements(Face face) throws RequirementsNotMetException{
         Map<Resource, Integer> requirements = face.getRequirements();
