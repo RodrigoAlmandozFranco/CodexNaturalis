@@ -660,13 +660,12 @@ public class TUIApplication extends App {
 
         try {
             winners = client.getWinner();
-            numWinners = winners.size();
-
         } catch (WrongTurnException e) {
             io.print("There are no winners today");
             selectChoice();
             return;
         }
+        numWinners = winners.size();
 
 
 
