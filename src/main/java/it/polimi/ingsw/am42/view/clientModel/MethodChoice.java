@@ -23,6 +23,9 @@ public enum MethodChoice {
     DISCONNECT,
     RELOAD;
 
+    /**
+     * Returns a brief description of each choice
+     */
     public String getChoice() {
         switch (this) {
             case RELOAD -> {
@@ -71,6 +74,9 @@ public enum MethodChoice {
         return "Not a valid method";
     }
 
+    /**
+     * Returns the method handle for TUI that does the selected action
+     */
     public Runnable selectChoice() {
         switch (this) {
 

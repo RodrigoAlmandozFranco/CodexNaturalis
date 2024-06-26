@@ -39,6 +39,9 @@ public class TUIApplication extends App {
 
     }
 
+    /**
+     * Prints the Codex Naturalis logo on the terminal
+     */
     private void printLogo() {
         io.print(
                 "\n" +
@@ -65,6 +68,12 @@ public class TUIApplication extends App {
         );
     }
 
+    /**
+     * TUI method to create a game
+     * if the GameAlreadyCreatedException is raised, it changes method of connection
+     * if any other exception is raised, repeat the procedure
+     * otherwise a game is successfully created
+     */
     private static void createGame() {
 
         int numPlayers = 0;
@@ -86,7 +95,12 @@ public class TUIApplication extends App {
             createGame();
         }
     }
-
+    /**
+     * TUI method to join a game
+     * if the GameFullException is raised, the program stops running
+     * if any other exception is raised, repeat the procedure
+     * otherwise the user successfully joins
+     */
     private static void connect() {
         String nickname;
         io.print("Connecting to game:");
@@ -108,7 +122,13 @@ public class TUIApplication extends App {
             connect();
         }
     }
-
+    /**
+     * TUI method to join a previously saved game
+     * if the GameAlreadyCreatedException is raised, it changes method of connection
+     * if the GameFullException is raised, the program stops running
+     * if any other exception is raised, repeat the procedure
+     * otherwise the user successfully joins the game
+     */
     private static void reconnect() {
 
 
@@ -134,9 +154,10 @@ public class TUIApplication extends App {
         }
     }
 
-
-
-
+    /**
+     * TUI method to place the initial Starting Card
+     * if any error is made during this procedure it returns to the selectChoice() method
+     */
     public static void placeStarting() {
         seeCards();
         PlayableCard startingCard = null;
@@ -159,6 +180,10 @@ public class TUIApplication extends App {
         else io.print("Starting card not found!!!");
     }
 
+    /**
+     * TUI method to select the user's color
+     * if any error is made during this procedure it returns to the selectChoice() method
+     */
     public static void chooseColor() {
         String question = "Choose one of the available colors\n";
         PlayerClientModel p = client.getClientModel().getPlayer(nickname);
@@ -180,6 +205,10 @@ public class TUIApplication extends App {
         }
     }
 
+    /**
+     * TUI method to select the user's personal goal
+     * if any error is made during this procedure it returns to the selectChoice() method
+     */
     public static void chooseGoal() {
         PlayerClientModel p = client.getClientModel().getPlayer(nickname);
         List<GoalCard> goals = p.getAvGoals();
@@ -204,6 +233,10 @@ public class TUIApplication extends App {
 
 
 
+    /**
+     * TUI method that zooms in on the board to check which corner a card would cover if placed in a given position
+     * @param pos the position to zoom in
+     */
     private static void zoom(Position pos) {
         Map<Direction, Face> nearby = client.getClientModel().getPlayer(nickname).getBoard().getNearbyFaces(pos);
         String cLeft = null;
@@ -372,6 +405,10 @@ public class TUIApplication extends App {
         }
     }
 
+    /**
+     * TUI method to see how much resources a player has
+     * @param nickname nickname of the player's resources that the user wants to check
+     */
     private static void seeResources(String nickname){
         Map<Resource, Integer> resources = client.getClientModel().getPlayer(nickname).getBoard().getTotalResources();
         String message = "These are your resources and objects\n";
@@ -380,6 +417,9 @@ public class TUIApplication extends App {
         io.print(message);
     }
 
+    /**
+     * TUI method to see the user's cards
+     */
     public static void seeCards() {
         PlayerClientModel p = client.getClientModel().getPlayer(nickname);
             for (PlayableCard c : p.getHand()) {
@@ -388,6 +428,10 @@ public class TUIApplication extends App {
             }
     }
 
+
+    /**
+     * TUI method to see the user's cards WITH INDEX
+     */
     public static void seeHand() {
         PlayerClientModel p = client.getClientModel().getPlayer(nickname);
         int i = 0;
@@ -398,6 +442,9 @@ public class TUIApplication extends App {
         }
     }
 
+    /**
+     * TUI method to see the current standings
+     */
     public static void seeStandings() {
         String message = "Scoreboard\n";
         for (PlayerClientModel p: client.getClientModel().getPlayers())
@@ -405,6 +452,9 @@ public class TUIApplication extends App {
         io.print(message);
     }
 
+    /**
+     * Method to see the user's personal goal + the global ones
+     */
     public static void seeGoals() {
         io.print("Global goals:");
         for (GoalCard g : client.getClientModel().getGlobalGoals())
@@ -414,6 +464,11 @@ public class TUIApplication extends App {
         io.print(""+client.getClientModel().getPlayer(nickname).getPersonalGoal());
     }
 
+
+    /**
+     * TUI method to place a card
+     * if any error is made during this procedure it returns to the selectChoice() method
+     */
     public static void place() {
         //Selection of the position
         List<Position> availablePositions = null;
@@ -474,6 +529,10 @@ public class TUIApplication extends App {
         }
     }
 
+
+    /**
+     * TUI method to see the cards that can currently be picked
+     */
     public static void seePickableCards() {
         List<PlayableCard> cards = new ArrayList<>();
         cards.addAll(client.getClientModel().getPickableResourceCards());
@@ -481,6 +540,10 @@ public class TUIApplication extends App {
         seePickableCards(cards);
     }
 
+    /**
+     * TUI method to see the cards that can currently be picked WITH Index
+     * @param cards the pickable cards
+     */
     private static void seePickableCards(List<PlayableCard> cards) {
         int i = 0;
         for (PlayableCard c : cards) {
@@ -491,6 +554,11 @@ public class TUIApplication extends App {
             i++;
         }
     }
+
+    /**
+     * TUI method to pick a card
+     * if any error is made during this procedure it returns to the selectChoice() method
+     */
     public static void pick() {
         seeResources(nickname);
 
@@ -514,7 +582,9 @@ public class TUIApplication extends App {
             selectChoice();
         }
     }
-
+    /**
+     * TUI method to check the chat messages
+     */
     public static void seeChat() {
         List<ChatMessage> chat = client.getClientModel().getAllMessages();
         String to_print = "";
@@ -530,7 +600,9 @@ public class TUIApplication extends App {
 
         io.print(to_print);
     }
-
+    /**
+     * TUI method to send a chat message
+     */
     public static void sendMessage() {
         String receiver = "all";
         String question = "Who do you want to write to?\n";
@@ -558,7 +630,9 @@ public class TUIApplication extends App {
         String content = io.getString("What do you want to write?");
         client.sendChatMessage(new ChatMessage(content, nickname, receiver));
     }
-
+    /**
+     * TUI method to disconnect from the game
+     */
     public static void disconnect() {
         if (client.getClientModel().getCurrentState() != null
             && !client.getClientModel().getCurrentState().equals(State.LAST)
@@ -574,7 +648,11 @@ public class TUIApplication extends App {
     }
 
 
-
+    /**
+     * TUI method to handle the player's connection
+     * it asks the server how it should connect between the
+     * createGame, connect, and reconnect method
+     */
     private static void handleConnection() {
         ConnectionState c;
         try {
@@ -603,7 +681,11 @@ public class TUIApplication extends App {
             createGame();
         }
     }
-
+    /**
+     * Main method of the TUI Application
+     * it gets from GameClientModel the actions it can currently do (THICK client)
+     * then it makes the user select which one they want to do
+     */
     public static void selectChoice() {
 
         if (client.getClientModel().getCurrentState() == null)
@@ -627,6 +709,11 @@ public class TUIApplication extends App {
         choices.get(choice).selectChoice().run();
     }
 
+    /**
+     * Method to check if a player has disconnected from the game or if the server crashed,
+     * exiting the game if true
+     *
+     */
     private void checkDisconnection(){
         if (client.getClientModel().isGameAborted()) {
             if (client.getClientModel().getCurrentState()==null || (!client.getClientModel().getCurrentState().equals(State.LAST)
@@ -643,7 +730,10 @@ public class TUIApplication extends App {
         }
     }
 
-
+    /**
+     * Shows the final standings of the game (with suspense!!!)
+     * if it isn't the end of the game it is not displayed (no spoilers)
+     */
     private void printFinalStandings() {
 
         io.print("\n" +
@@ -696,6 +786,12 @@ public class TUIApplication extends App {
         }
     }
 
+    /**
+     * Separate thread that displays updates to the player, such as:
+     * - it is your turn
+     * - it is the final turn
+     * - another player has done an action
+     */
     private void  updatePlayer() {
         while (true) {
             checkDisconnection();
@@ -749,6 +845,10 @@ public class TUIApplication extends App {
         }
     }
 
+    /**
+     * Method to start the application
+     * after handling the connection, it starts the thread to update the player
+     */
     @Override
     public void start() {
 
