@@ -5,6 +5,9 @@ import it.polimi.ingsw.am42.network.Client;
 /**
  * This class is a utility class that holds a static reference to the Client object.
  * This class provides a global point of access to the Client object
+ *
+ * @author Mattia Brandi
+ * @author Rodrigo Almandoz Franco
  */
 public class ClientHolder {
     private static Client client;

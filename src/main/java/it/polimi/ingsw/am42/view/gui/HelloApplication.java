@@ -22,6 +22,9 @@ import java.util.Objects;
  * It manages the initial setup of the application, including setting the stage and scene.
  * It also handles the connection state of the client and sets the appropriate scene based on the connection state.
  * This class extends the Application class provided by JavaFX
+ *
+ * @author Mattia Brandi
+ * @author Rodrigo Almandoz Franco
  */
 
 public class HelloApplication extends Application {
