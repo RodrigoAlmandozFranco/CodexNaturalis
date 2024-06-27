@@ -93,7 +93,6 @@ public class Controller extends Observable{
 
         System.out.println(nickname + " created new game");
 
-        //TODO return gameid;
         return 0;
     }
 

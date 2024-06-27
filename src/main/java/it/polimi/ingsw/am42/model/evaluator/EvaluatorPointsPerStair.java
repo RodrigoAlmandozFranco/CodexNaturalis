@@ -13,7 +13,7 @@ import it.polimi.ingsw.am42.view.tui.ColorChooser;
  * Example of stair:
  *           #
  *              #
- *                  #
+ *                 #
  *  This particular stair is pointed in the UPLEFT Direction (0, +1)
  */
 public class EvaluatorPointsPerStair extends Evaluator {
@@ -74,21 +74,21 @@ public class EvaluatorPointsPerStair extends Evaluator {
         String to_print = colorStr;
 
         to_print += "┌-----------------------┐\n";
-        to_print += "│   ___                 │\n";
-        to_print += "│  /   \\        " + numPoints + "       │\n";
-        to_print += "│  │ " + color.colorToResource()+colorStr + " │                │\n";
+        to_print += "│   _____               │\n";
+        to_print += "│  /     \\      " + numPoints + "       │\n";
+        to_print += "│  │  " + color.colorToResource()+colorStr + "  │              │\n";
 
         if (direction.equals(Direction.UPRIGHT)) {
-            to_print += "│  │   │          ██    │\n";
-            to_print += "│  │   │        ██      │\n";
-            to_print += "│  │   │      ██        │\n";
+            to_print += "│  │     │        ██    │\n";
+            to_print += "│  │     │      ██      │\n";
+            to_print += "│  │     │    ██        │\n";
         }
         else {
-            to_print += "│  │   │      ██        │\n";
-            to_print += "│  │   │        ██      │\n";
-            to_print += "│  │   │          ██    │\n";
+            to_print += "│  │     │    ██        │\n";
+            to_print += "│  │     │      ██      │\n";
+            to_print += "│  │     │        ██    │\n";
         }
-        to_print += "│  │   │                │\n";
+        to_print += "│  │     │              │\n";
         to_print += "└-----------------------┘";
 
         to_print += ColorChooser.RESET;

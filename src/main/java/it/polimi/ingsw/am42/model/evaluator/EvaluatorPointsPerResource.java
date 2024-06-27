@@ -66,15 +66,15 @@ public class EvaluatorPointsPerResource extends Evaluator{
 
 
         to_print += "┌-----------------------┐\n";
-        to_print += "│   ___                 │\n";
-        to_print += "│  /   \\        " + numPoints + "       │\n";
-        to_print += "│  │ " + resource+color + " │                │\n";
+        to_print += "│   _____               │\n";
+        to_print += "│  /     \\      " + numPoints + "       │\n";
+        to_print += "│  │  " + resource+color + "  │              │\n";
 
-        to_print += "│  │   │        " + resource+color+ "       │\n";
-        to_print += "│  │   │      /   \\     │\n";
-        to_print += "│  │   │     " + resource+color+ "  -  " + resource+color+ "    │\n";
+        to_print += "│  │     │      " + resource+color+ "       │\n";
+        to_print += "│  │     │    /   \\     │\n";
+        to_print += "│  │     │   " + resource+color+ "  -  " + resource+color+ "    │\n";
 
-        to_print += "│  │   │                │\n";
+        to_print += "│  │     │              │\n";
         to_print += "└-----------------------┘";
         to_print += "\n";
 
@@ -90,15 +90,15 @@ public class EvaluatorPointsPerResource extends Evaluator{
 
 
         to_print += "┌-----------------------┐\n";
-        to_print += "│   ___                 │\n";
-        to_print += "│  /   \\        " + numPoints + "       │\n";
-        to_print += "│  │ " + res + color + " │                │\n";
+        to_print += "│   _____               │\n";
+        to_print += "│  /     \\      " + numPoints + "       │\n";
+        to_print += "│  │  " + res + color + "  │              │\n";
 
-        to_print += "│  │   │                │\n";
-        to_print += "│  │   │      " + res+color + " │ " + res+color +"     │\n";
-        to_print += "│  │   │                │\n";
+        to_print += "│  │     │              │\n";
+        to_print += "│  │     │    " + res+color + " │ " + res+color +"     │\n";
+        to_print += "│  │     │              │\n";
 
-        to_print += "│  │   │                │\n";
+        to_print += "│  │     │              │\n";
         to_print += "└-----------------------┘";
 
         to_print += ColorChooser.RESET;
@@ -115,14 +115,13 @@ public class EvaluatorPointsPerResource extends Evaluator{
 
 
         to_print += "┌-----------------------┐\n";
-        to_print += "│   ___                 │\n";
-        to_print += "│  /   \\        " + numPoints + "       │\n";
-        to_print += "│  │ " + ColorChooser.WHITE + "X" + color + " │                │\n";
-        to_print += "│  │   │                │\n";
-        to_print += "│  │   │     " + first+color + " │ " + second+color + " │ " + third+color + "  │\n";
-        to_print += "│  │   │                │\n";
-
-        to_print += "│  │   │                │\n";
+        to_print += "│   _____               │\n";
+        to_print += "│  /     \\      " + numPoints + "       │\n";
+        to_print += "│  │  " + ColorChooser.WHITE + "X" + color + "  │              │\n";
+        to_print += "│  │     │              │\n";
+        to_print += "│  │     │   " + first+color + " │ " + second+color + " │ " + third+color + "  │\n";
+        to_print += "│  │     │              │\n";
+        to_print += "│  │     │              │\n";
         to_print += "└-----------------------┘";
 
         to_print += ColorChooser.RESET;
