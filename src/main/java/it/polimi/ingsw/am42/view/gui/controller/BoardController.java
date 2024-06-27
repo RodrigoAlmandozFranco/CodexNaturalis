@@ -1929,7 +1929,6 @@ Pane board;
             constOffsetX = constOffsetX * 0.8;
             constOffsetY = constOffsetY * 0.8;
         }
-        System.out.println("Loading my boards");
     }
 
     /**

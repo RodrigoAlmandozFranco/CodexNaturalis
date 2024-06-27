@@ -65,7 +65,7 @@ public class EvaluatorPointsPerResource extends Evaluator{
         String to_print = color;
 
 
-        to_print += "┌――――――――――――――┐\n";
+        to_print += "┌-----------------------┐\n";
         to_print += "│   ___                 │\n";
         to_print += "│  /   \\        " + numPoints + "       │\n";
         to_print += "│  │ " + resource+color + " │                │\n";
@@ -75,7 +75,7 @@ public class EvaluatorPointsPerResource extends Evaluator{
         to_print += "│  │   │     " + resource+color+ "  -  " + resource+color+ "    │\n";
 
         to_print += "│  │   │                │\n";
-        to_print += "└――――――――――――――┘";
+        to_print += "└-----------------------┘";
         to_print += "\n";
 
         to_print += ColorChooser.RESET;
@@ -89,7 +89,7 @@ public class EvaluatorPointsPerResource extends Evaluator{
         Resource res = resourceMap.keySet().stream().toList().get(0);
 
 
-        to_print += "┌――――――――――――――┐\n";
+        to_print += "┌-----------------------┐\n";
         to_print += "│   ___                 │\n";
         to_print += "│  /   \\        " + numPoints + "       │\n";
         to_print += "│  │ " + res + color + " │                │\n";
@@ -99,7 +99,7 @@ public class EvaluatorPointsPerResource extends Evaluator{
         to_print += "│  │   │                │\n";
 
         to_print += "│  │   │                │\n";
-        to_print += "└――――――――――――――┘";
+        to_print += "└-----------------------┘";
 
         to_print += ColorChooser.RESET;
         return to_print;
@@ -114,7 +114,7 @@ public class EvaluatorPointsPerResource extends Evaluator{
         Resource third = resourceMap.keySet().stream().toList().get(2);
 
 
-        to_print += "┌――――――――――――――┐\n";
+        to_print += "┌-----------------------┐\n";
         to_print += "│   ___                 │\n";
         to_print += "│  /   \\        " + numPoints + "       │\n";
         to_print += "│  │ " + ColorChooser.WHITE + "X" + color + " │                │\n";
@@ -123,7 +123,7 @@ public class EvaluatorPointsPerResource extends Evaluator{
         to_print += "│  │   │                │\n";
 
         to_print += "│  │   │                │\n";
-        to_print += "└――――――――――――――┘";
+        to_print += "└-----------------------┘";
 
         to_print += ColorChooser.RESET;
 

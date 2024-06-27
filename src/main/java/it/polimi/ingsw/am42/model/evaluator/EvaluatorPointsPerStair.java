@@ -73,7 +73,7 @@ public class EvaluatorPointsPerStair extends Evaluator {
         String colorStr = color.toString();
         String to_print = colorStr;
 
-        to_print += "┌――――――――――――――┐\n";
+        to_print += "┌-----------------------┐\n";
         to_print += "│   ___                 │\n";
         to_print += "│  /   \\        " + numPoints + "       │\n";
         to_print += "│  │ " + color.colorToResource()+colorStr + " │                │\n";
@@ -89,7 +89,7 @@ public class EvaluatorPointsPerStair extends Evaluator {
             to_print += "│  │   │          ██    │\n";
         }
         to_print += "│  │   │                │\n";
-        to_print += "└――――――――――――――┘";
+        to_print += "└-----------------------┘";
 
         to_print += ColorChooser.RESET;
         return to_print;
