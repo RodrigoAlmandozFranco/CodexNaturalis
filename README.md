@@ -52,8 +52,18 @@ Requirements (<a href="https://github.com/TommasoCrippa-Polimi/IS24-AM42/blob/ma
 
 ## How to Play
 
-TODO
+### Server Parameters
 
+- `-s` or `--server`: This argument is mandatory to start the server.
+- `-p` or `--port`: Specifies the port number the server should use.
+
+### Client Parameters
+
+- `-c` or `--client`: This argument is mandatory to start the client.
+- `-t` or `--tui`: (Optional) Use the Text User Interface (TUI) instead of the Graphical User Interface (GUI).
+- `-r` or `--rmi`: (Optional) Use RMI connection instead of TCP connection.
+- `-p` or `--port`: Set the port of the server.
+- `-a` or `--ip`: Set the address of the server.
 
 
 ## License
