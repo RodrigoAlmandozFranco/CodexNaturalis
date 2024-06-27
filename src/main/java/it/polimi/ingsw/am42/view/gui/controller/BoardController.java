@@ -900,6 +900,7 @@ public class BoardController implements Initializable {
      * @param event ActionEvent triggered when the client clicks the button
      */
     public void handCard2ButtonAction(ActionEvent event) {
+        if(myPlayer.getHand().size() == 1) return;
         chosenCard = myPlayer.getHand().get(1);
         highlightHandCard(handCard2);
     }
@@ -911,6 +912,7 @@ public class BoardController implements Initializable {
      * @param event ActionEvent triggered when the client clicks the button
      */
     public void handCard3ButtonAction(ActionEvent event) {
+        if(myPlayer.getHand().size() == 1) return;
         chosenCard = myPlayer.getHand().get(2);
         highlightHandCard(handCard3);
     }

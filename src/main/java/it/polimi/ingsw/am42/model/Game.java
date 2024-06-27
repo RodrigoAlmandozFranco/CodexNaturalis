@@ -250,7 +250,7 @@ public class Game implements GameInterface, Serializable {
         currentPlayer = p;
     }
     /**
-     * This method modifies the currentPlayer attribute to the next player
+     * This method returns the next player that has to play after the current player
      * @return the next player, the one that has to play now
      */
     public Player getNextPlayer() {
