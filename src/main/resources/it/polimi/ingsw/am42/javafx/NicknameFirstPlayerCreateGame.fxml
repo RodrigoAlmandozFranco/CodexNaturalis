@@ -16,48 +16,6 @@
    <children>
       <AnchorPane layoutX="427.0" prefHeight="648.0" prefWidth="784.0">
          <children>
-            <Label layoutX="347.0" layoutY="202.0" text="nickname" underline="true">
-               <font>
-                  <Font name="Futura Bold Italic BT" size="40.0" />
-               </font>
-               <textFill>
-                  <RadialGradient centerX="0.48895027624309395" centerY="0.5" radius="1.0">
-                     <stops>
-                        <Stop>
-                           <color>
-                              <Color red="0.5098039507865906" green="0.4588235318660736" blue="0.8156862854957581" />
-                           </color>
-                        </Stop>
-                        <Stop offset="1.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
-                        </Stop>
-                     </stops>
-                  </RadialGradient>
-               </textFill>
-            </Label>
-            <Label layoutX="261.0" layoutY="258.0" text="number of players" underline="true">
-               <font>
-                  <Font name="Futura Bold Italic BT" size="40.0" />
-               </font>
-               <textFill>
-                  <RadialGradient centerX="0.48895027624309395" centerY="0.5" radius="1.0">
-                     <stops>
-                        <Stop>
-                           <color>
-                              <Color red="0.5098039507865906" green="0.4588235318660736" blue="0.8156862854957581" />
-                           </color>
-                        </Stop>
-                        <Stop offset="1.0">
-                           <color>
-                              <Color red="1.0" green="1.0" blue="1.0" />
-                           </color>
-                        </Stop>
-                     </stops>
-                  </RadialGradient>
-               </textFill>
-            </Label>
             <Label layoutX="93.0" layoutY="202.0" text="Choose your nickname">
                <font>
                   <Font name="Futura Bold Italic BT" size="40.0" />
