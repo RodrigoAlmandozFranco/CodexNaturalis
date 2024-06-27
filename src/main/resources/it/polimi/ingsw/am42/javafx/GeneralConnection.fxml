@@ -9,34 +9,68 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
 <AnchorPane prefHeight="648.0" prefWidth="1152.0" style="-fx-background-color: linear-gradient(to bottom, #000000, #3533cd);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.am42.view.gui.controller.NormalConnectionController">
     <children>
       <AnchorPane layoutX="441.0" layoutY="14.0" prefHeight="659.0" prefWidth="743.0">
          <children>
-              <Label layoutX="236.0" layoutY="106.0" prefHeight="84.0" prefWidth="199.0" text="LOGIN" textFill="WHITE" underline="true">
+              <Label alignment="CENTER" layoutX="272.0" layoutY="83.0" prefHeight="84.0" prefWidth="199.0" style="-fx-border-color: #8275d0; -fx-border-width: 4;" text="LOGIN">
                   <font>
-                      <Font name="Futura Bold Italic BT" size="49.0" />
+                      <Font name="Futura Bold Italic BT" size="45.0" />
                   </font>
+               <textFill>
+                  <RadialGradient centerX="0.48342541436464087" centerY="0.49526066350710907" radius="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.5098039507865906" green="0.4588235318660736" blue="0.8156862854957581" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </RadialGradient>
+               </textFill>
               </Label>
-              <TextField fx:id="textField" layoutX="120.0" layoutY="300.0" onAction="#submit" prefHeight="72.0" prefWidth="452.0" promptText="Nickname">
+              <TextField fx:id="textField" layoutX="120.0" layoutY="322.0" onAction="#submit" prefHeight="72.0" prefWidth="452.0" promptText="Nickname">
                   <font>
                       <Font size="28.0" />
                   </font>
               </TextField>
-            <Text fill="WHITE" layoutX="120.0" layoutY="274.0" strokeType="OUTSIDE" strokeWidth="0.0" text="INSERT YOUR NICKNAME" wrappingWidth="502.591796875">
+            <Label layoutX="120.0" layoutY="238.0" text="INSERT YOUR NICKNAME">
                <font>
                   <Font name="Futura Bold Italic BT" size="36.0" />
                </font>
-            </Text>
-              <Button fx:id="LoginButton1" layoutX="594.0" layoutY="298.0" mnemonicParsing="false" onAction="#connectGameAction" prefHeight="23.0" prefWidth="103.0" style="-fx-background-color: teal;" text="OK!" textFill="WHITE">
+               <textFill>
+                  <RadialGradient centerX="0.5" centerY="0.5" radius="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.5098039507865906" green="0.4588235318660736" blue="0.8156862854957581" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </RadialGradient>
+               </textFill>
+            </Label>
+              <Button fx:id="LoginButton1" layoutX="594.0" layoutY="322.0" mnemonicParsing="false" onAction="#connectGameAction" prefHeight="23.0" prefWidth="103.0" style="-fx-background-color: teal;" text="OK!" textFill="WHITE">
                   <font>
                       <Font size="34.0" />
                   </font>
               </Button>
-            <ImageView fitHeight="176.0" fitWidth="154.0" layoutX="295.0" layoutY="404.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
+            <ImageView fitHeight="150.0" fitWidth="103.0" layoutX="332.0" layoutY="437.0" pickOnBounds="true" preserveRatio="true" rotate="90.0">
                <image>
                   <Image url="@../graphical/profile_icon.png" />
                </image>
@@ -51,6 +85,27 @@
                   <Cursor fx:constant="DEFAULT" />
                </cursor>
             </ImageView>
+            <Label layoutX="371.0" layoutY="238.0" text="NICKNAME" underline="true">
+               <font>
+                  <Font name="Futura Bold Italic BT" size="36.0" />
+               </font>
+               <textFill>
+                  <RadialGradient centerX="0.5" centerY="0.5" radius="1.0">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.5098039507865906" green="0.4588235318660736" blue="0.8156862854957581" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="1.0" green="1.0" blue="1.0" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </RadialGradient>
+               </textFill>
+            </Label>
          </children>
       </AnchorPane>
       <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="208.0" layoutY="509.0" pickOnBounds="true" preserveRatio="true">

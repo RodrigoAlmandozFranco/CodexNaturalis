@@ -24,7 +24,7 @@
             <Font name="Futura Bold Italic BT" size="40.0" />
          </font>
       </Button>
-      <AnchorPane layoutY="85.0" prefHeight="528.0" prefWidth="427.0" style="-fx-background-color: linear-gradient(to bottom, #000000, #3533cd);">
+      <AnchorPane layoutY="85.0" prefHeight="528.0" prefWidth="427.0">
          <children>
             <ImageView fitHeight="450.0" fitWidth="427.0" layoutX="1.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
