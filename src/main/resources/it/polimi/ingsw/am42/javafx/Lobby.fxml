@@ -3,20 +3,55 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.RadialGradient?>
+<?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
 <AnchorPane prefHeight="648.0" prefWidth="1152.0" style="-fx-background-color: linear-gradient(to bottom, #000000, #3533cd);" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.am42.view.gui.controller.LobbyController">
    <children>
-      <Label layoutX="169.0" layoutY="70.0" prefHeight="108.0" prefWidth="832.0" text="Waiting for players..." textFill="WHITE">
+      <Label alignment="CENTER" layoutX="160.0" layoutY="73.0" prefHeight="108.0" prefWidth="832.0" text="Waiting for players...">
          <font>
-            <Font name="Bodoni MT" size="88.0" />
+            <Font name="Futura Bold Italic BT" size="71.0" />
          </font>
+         <textFill>
+            <RadialGradient centerX="0.5" centerY="0.5" radius="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.5098039507865906" green="0.4588235318660736" blue="0.8156862854957581" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </color>
+                  </Stop>
+               </stops>
+            </RadialGradient>
+         </textFill>
       </Label>
-      <Label layoutX="160.0" layoutY="216.0" prefHeight="108.0" prefWidth="832.0" text="Be ready to destroy the others" textFill="WHITE">
+      <Label alignment="CENTER" layoutX="160.0" layoutY="216.0" prefHeight="108.0" prefWidth="832.0" text="Be ready to destroy the others">
          <font>
-            <Font name="Bodoni MT" size="45.0" />
+            <Font name="Futura Bold Italic BT" size="47.0" />
          </font>
+         <textFill>
+            <RadialGradient centerX="0.5" centerY="0.5" radius="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.5098039507865906" green="0.4588235318660736" blue="0.8156862854957581" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="1.0" blue="1.0" />
+                     </color>
+                  </Stop>
+               </stops>
+            </RadialGradient>
+         </textFill>
       </Label>
-      <ProgressBar fx:id="progressBar" layoutX="275.0" layoutY="388.0" prefHeight="30.0" prefWidth="466.0" style="-fx-accent: Lime;" />
+      <ProgressBar fx:id="progressBar" layoutX="343.0" layoutY="386.0" prefHeight="41.0" prefWidth="466.0" style="-fx-accent: #8275d0;" />
    </children>
 </AnchorPane>

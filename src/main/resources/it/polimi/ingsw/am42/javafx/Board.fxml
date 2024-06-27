@@ -49,7 +49,7 @@
             <ImageView fx:id="pickableGold1" fitHeight="85.0" fitWidth="137.0" layoutX="190.0" layoutY="120.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="pickableResource2" fitHeight="85.0" fitWidth="137.0" layoutX="23.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="pickableGold2" fitHeight="85.0" fitWidth="137.0" layoutX="190.0" layoutY="218.0" pickOnBounds="true" preserveRatio="true" />
-            <Label fx:id="updateText" layoutY="341.0" prefHeight="54.0" prefWidth="330.0" text="UpdateText" />
+            <Label fx:id="updateText" layoutX="3.0" layoutY="341.0" prefHeight="54.0" prefWidth="320.0" text="UpdateText" />
             <ImageView fitHeight="564.0" fitWidth="669.0" layoutX="331.0" layoutY="-4.0" pickOnBounds="true">
                <image>
                   <Image url="@../graphical/gameStructure/structure.png" />
@@ -64,7 +64,7 @@
             <Button fx:id="handCard1Button" layoutX="343.0" layoutY="567.0" mnemonicParsing="false" onAction="#handCard1ButtonAction" opacity="0.0" prefHeight="85.0" prefWidth="137.0" />
             <Button fx:id="handCard2Button" layoutX="503.0" layoutY="567.0" mnemonicParsing="false" onAction="#handCard2ButtonAction" opacity="0.0" prefHeight="85.0" prefWidth="137.0" />
             <Button fx:id="handCard3Button" layoutX="663.0" layoutY="567.0" mnemonicParsing="false" onAction="#handCard3ButtonAction" opacity="0.0" prefHeight="85.0" prefWidth="137.0" />
-            <Label fx:id="personalNickname" layoutX="10.0" layoutY="396.0" prefHeight="46.0" prefWidth="318.0" text="Label" />
+            <Label fx:id="personalNickname" layoutX="3.0" layoutY="396.0" prefHeight="45.0" prefWidth="320.0" text="Label" />
             <Pane fx:id="boardPane" disable="true" layoutX="331.0" layoutY="2.0" prefHeight="525.0" prefWidth="669.0">
                <children>
                   <ImageView fx:id="startingCard" fitHeight="70.0" fitWidth="110.0" layoutX="236.5" layoutY="212.5" pickOnBounds="true" preserveRatio="true" />
@@ -84,35 +84,35 @@
             <ImageView fx:id="tokenPlayer1" disable="true" fitHeight="59.0" fitWidth="42.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="tokenPlayer4" disable="true" fitHeight="59.0" fitWidth="42.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="tokenPlayer2" disable="true" fitHeight="59.0" fitWidth="42.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" />
-            <Pane fx:id="goalPane" disable="true" layoutX="335.0" layoutY="7.0" opacity="0.0" prefHeight="510.0" prefWidth="682.0" style="-fx-background-color: lightgreen;">
+            <Pane fx:id="goalPane" disable="true" layoutX="330.0" opacity="0.0" prefHeight="564.0" prefWidth="674.0" style="-fx-background-color: #b87333; -fx-border-color: white; -fx-border-width: 4;">
                <children>
-                  <Button fx:id="chooseGoalButton" layoutX="229.0" layoutY="390.0" mnemonicParsing="false" onAction="#chooseGoalButtonAction" prefHeight="84.0" prefWidth="195.0" text="Choose Goal">
+                  <Button fx:id="chooseGoalButton" layoutX="229.0" layoutY="390.0" mnemonicParsing="false" onAction="#chooseGoalButtonAction" prefHeight="84.0" prefWidth="195.0" text="Choose Goal" textFill="#6e4b23">
                      <font>
-                        <Font size="24.0" />
+                        <Font name="Futura Bold Italic BT" size="24.0" />
                      </font>
                   </Button>
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="6.0" layoutY="81.0" prefHeight="35.0" prefWidth="674.0" style="-fx-background-color: red;" text="Choose your personal goal ">
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="3.0" layoutY="81.0" prefHeight="35.0" prefWidth="668.0" style="-fx-background-color: snow;" text="Choose your personal goal " textFill="#6e4b23">
                      <font>
-                        <Font size="24.0" />
+                        <Font name="Futura Bold Italic BT" size="24.0" />
                      </font>
                   </Label>
                   <ImageView fx:id="possibleGoal1" fitHeight="150.0" fitWidth="200.0" layoutX="75.0" layoutY="145.0" pickOnBounds="true" preserveRatio="true" />
-                  <ImageView fx:id="possibleGoal2" fitHeight="150.0" fitWidth="200.0" layoutX="391.0" layoutY="161.0" pickOnBounds="true" preserveRatio="true" />
+                  <ImageView fx:id="possibleGoal2" fitHeight="150.0" fitWidth="200.0" layoutX="391.0" layoutY="145.0" pickOnBounds="true" preserveRatio="true" />
                   <Button fx:id="personalGoal1Button" layoutX="75.0" layoutY="145.0" mnemonicParsing="false" onAction="#personalGoal1ButtonAction" opacity="0.0" prefHeight="150.0" prefWidth="200.0" />
-                  <Button fx:id="personalGoal2Button" layoutX="391.0" layoutY="161.0" mnemonicParsing="false" onAction="#personalGoal2ButtonAction" opacity="0.0" prefHeight="150.0" prefWidth="200.0" />
+                  <Button fx:id="personalGoal2Button" layoutX="391.0" layoutY="145.0" mnemonicParsing="false" onAction="#personalGoal2ButtonAction" opacity="0.0" prefHeight="150.0" prefWidth="200.0" />
                </children>
             </Pane>
-            <Pane fx:id="colorPane" disable="true" layoutX="325.0" layoutY="-3.0" opacity="0.0" prefHeight="525.0" prefWidth="682.0" style="-fx-background-color: lightgreen;">
+            <Pane fx:id="colorPane" disable="true" layoutX="330.0" opacity="0.0" prefHeight="564.0" prefWidth="674.0" style="-fx-background-color: #b87333; -fx-border-color: white; -fx-border-width: 4;">
                <children>
                   <ChoiceBox fx:id="colorChoiceBox" layoutX="113.0" layoutY="221.0" prefHeight="45.0" prefWidth="145.0" />
-                  <Button fx:id="chooseColorButton" layoutX="409.0" layoutY="202.0" mnemonicParsing="false" onAction="#chooseColorButtonAction" prefHeight="84.0" prefWidth="195.0" text="Choose Color">
+                  <Button fx:id="chooseColorButton" layoutX="409.0" layoutY="202.0" mnemonicParsing="false" onAction="#chooseColorButtonAction" prefHeight="84.0" prefWidth="195.0" text="Choose Color" textFill="#6e4b23">
                      <font>
-                        <Font size="24.0" />
+                        <Font name="Futura Bold Italic BT" size="24.0" />
                      </font>
                   </Button>
-                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="6.0" layoutY="81.0" prefHeight="35.0" prefWidth="674.0" style="-fx-background-color: red;" text="Choose a color for your player">
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="3.0" layoutY="81.0" prefHeight="35.0" prefWidth="668.0" style="-fx-background-color: snow;" text="Choose a color for your player" textFill="#6e4b23">
                      <font>
-                        <Font size="24.0" />
+                        <Font name="Futura Bold Italic BT" size="24.0" />
                      </font>
                   </Label>
                </children>
