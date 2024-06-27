@@ -84,7 +84,7 @@
             <ImageView fx:id="tokenPlayer1" disable="true" fitHeight="59.0" fitWidth="42.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="tokenPlayer4" disable="true" fitHeight="59.0" fitWidth="42.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" />
             <ImageView fx:id="tokenPlayer2" disable="true" fitHeight="59.0" fitWidth="42.0" opacity="0.0" pickOnBounds="true" preserveRatio="true" />
-            <Pane fx:id="goalPane" disable="true" layoutX="330.0" opacity="0.0" prefHeight="564.0" prefWidth="674.0" style="-fx-background-color: #b87333; -fx-border-color: white; -fx-border-width: 4;">
+            <Pane fx:id="goalPane" disable="true" layoutX="330.0" opacity="0.0" prefHeight="525.0" prefWidth="674.0" style="-fx-background-color: #b87333; -fx-border-color: white; -fx-border-width: 4;">
                <children>
                   <Button fx:id="chooseGoalButton" layoutX="229.0" layoutY="390.0" mnemonicParsing="false" onAction="#chooseGoalButtonAction" prefHeight="84.0" prefWidth="195.0" text="Choose Goal" textFill="#6e4b23">
                      <font>
@@ -102,7 +102,7 @@
                   <Button fx:id="personalGoal2Button" layoutX="391.0" layoutY="145.0" mnemonicParsing="false" onAction="#personalGoal2ButtonAction" opacity="0.0" prefHeight="150.0" prefWidth="200.0" />
                </children>
             </Pane>
-            <Pane fx:id="colorPane" disable="true" layoutX="330.0" opacity="0.0" prefHeight="564.0" prefWidth="674.0" style="-fx-background-color: #b87333; -fx-border-color: white; -fx-border-width: 4;">
+            <Pane fx:id="colorPane" disable="true" layoutX="330.0" opacity="0.0" prefHeight="525.0" prefWidth="674.0" style="-fx-background-color: #b87333; -fx-border-color: white; -fx-border-width: 4;">
                <children>
                   <ChoiceBox fx:id="colorChoiceBox" layoutX="113.0" layoutY="221.0" prefHeight="45.0" prefWidth="145.0" />
                   <Button fx:id="chooseColorButton" layoutX="409.0" layoutY="202.0" mnemonicParsing="false" onAction="#chooseColorButtonAction" prefHeight="84.0" prefWidth="195.0" text="Choose Color" textFill="#6e4b23">
