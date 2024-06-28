@@ -1245,6 +1245,7 @@ public class BoardController implements Initializable {
                 b.setEffect(null);
             }
             availablePositionsButtons.clear();
+            buttonsOutOfBounds.clear();
         });
 
     }
