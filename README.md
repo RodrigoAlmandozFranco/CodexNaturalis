@@ -2,7 +2,7 @@
 
 <h1 align="center">
   <br>
-  <a href="https://www.craniocreations.it/prodotto/codex-naturalis"><img src=https://azure.wgp-cdn.co.uk/app-table-top-gaming/posts/CODEX_BoardgameShot-Mateusz-Zajda-1-1-1024x681.jpg?&format=webp&webp.quality=40&scale=both" alt="Codex Naturalis" width="700"></a>
+  <a href="https://www.craniocreations.it/prodotto/codex-naturalis"><img src="https://azure.wgp-cdn.co.uk/app-table-top-gaming/posts/CODEX_BoardgameShot-Mateusz-Zajda-1-1-1024x681.jpg?&format=webp&webp.quality=40&scale=both" alt="Codex Naturalis" width="700"></a>
   <br>
   Progetto Finale di Ingegneria del Software<br>
 </h1>
@@ -96,7 +96,7 @@ Requirements (<a href="https://github.com/RodrigoAlmandozFranco/CodexNaturalis/b
 
 - **Socket Programming TCP/IP**  
   For network communication.
-  
+
 - **JavaFX 21**  
   For building the graphical user interface (GUI).
 
