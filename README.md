@@ -51,6 +51,9 @@ Requirements (<a href="https://github.com/RodrigoAlmandozFranco/CodexNaturalis/b
 
 
 ## How to Play
+**Prerequisites:**  
+- Java JDK 21 or newer must be installed. 
+- Download the `codexNaturalis.jar`
 
 ### Server Parameters
 
@@ -63,7 +66,39 @@ Requirements (<a href="https://github.com/RodrigoAlmandozFranco/CodexNaturalis/b
 - `-t` or `--tui`: (Optional) Use the Text User Interface (TUI) instead of the Graphical User Interface (GUI).
 - `-r` or `--rmi`: (Optional) Use RMI connection instead of TCP connection.
 - `-p` or `--port`: Set the port of the server.
-- `-a` or `--ip`: Set the address of the server.
+- `-a` or `--ip`: (Optional) Set the address of the server. The default is localhost. 
+
+### Example
+
+- Server: `java -jar codexNaturalis.jar --server --port 5000`
+- Client1: `java -jar codexNaturalis.jar --client  --port 5000 --rmi`
+- Client2: `java -jar codexNaturalis.jar --client --port 5001 --tui`
+
+## Technologies Used
+
+- **Java 21**  
+  Main programming language and runtime environment.
+
+- **Maven**  
+  Build automation and dependency management tool.
+
+- **JUnit 5**  
+  Framework for unit testing.
+
+- **Mockito**  
+  Library for mocking objects in tests.
+
+- **Gson**  
+  Library for JSON serialization and deserialization.
+
+- **RMI (Remote Method Invocation)**  
+  For distributed communication between server and client.
+
+- **Socket Programming TCP/IP**  
+  For network communication.
+  
+- **JavaFX 21**  
+  For building the graphical user interface (GUI).
 
 
 ## License
